@@ -1,4 +1,2 @@
-node_modules/
 assets/*
 .env.local
-.DS_Store
