@@ -1,7 +1,6 @@
 {
   "private": true,
-  "workspaces": [
-    "thor",
-    "thor-music"
-  ]
+  "scripts": {
+    "setup": "cd thor && yarn && cd ../thor-music && yarn && cd .."
+  }
 }
