@@ -26,7 +26,7 @@ export default function helpCommand(
             .setColor(color)
             .addFields(
               manual.map(({ name, usage, value, subcommands }) => ({
-                name: `${name}: \`${prefix}${usage}${
+                name: `${name}: \`${prefix}${usage || name}${
                   subcommands
                     ? ` <${subcommands.map(({ name }) => name).join('|')}>`
                     : ''
