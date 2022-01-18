@@ -1,9 +1,6 @@
-import { MessageEmbed } from 'discord.js';
+import helpCommand from '../../../help';
 
-import '../env';
-import type Command from './command';
-
-const manual: { name: string; usage?: string; value: string }[] = [
+const help = helpCommand('Thor', 'thor ', 'ORANGE', [
   {
     name: 'help',
     usage: 'help [command?]',
@@ -97,37 +94,5 @@ const manual: { name: string; usage?: string; value: string }[] = [
     usage: 'cipher encrypt|decrypt [offset] [message]',
     value: 'Encrypts or decrypts a message'
   }
-];
-
-const help: Command = async ({ channel }, args) => {
-  if (!args.length)
-    return channel.send({
-      embeds: [
-        new MessageEmbed()
-          .setTitle('Thor Help')
-          .setDescription('Commands')
-          .addFields(
-            manual.map(({ name, usage, value }) => ({
-              name: usage || name,
-              value
-            }))
-          )
-      ]
-    });
-
-  const command = args[0];
-  const commandManual = manual.find(({ name }) => name === command);
-  if (!commandManual)
-    return channel.send(`No help found for command \`${command}\``);
-
-  return channel.send({
-    embeds: [
-      new MessageEmbed()
-        .setTitle(`Thor Help: ${commandManual.name}`)
-        .addField('Usage', `\`${commandManual.usage || commandManual.name}\``)
-        .addField('Description', commandManual.value)
-    ]
-  });
-};
-
+]);
 export default help;

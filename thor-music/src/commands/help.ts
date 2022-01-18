@@ -1,15 +1,7 @@
-import { MessageEmbed } from 'discord.js';
-
+import helpCommand from '../../../help';
 import { color } from '../config';
-import type Command from './command';
 
-interface CommandManual {
-  name: string;
-  usage: string;
-  value: string;
-  subcommands?: CommandManual[];
-}
-const manual: CommandManual[] = [
+const help = helpCommand('Thor Music', '-', color, [
   {
     name: 'help',
     usage: 'help/h <command?>',
@@ -101,57 +93,5 @@ const manual: CommandManual[] = [
       }
     ]
   }
-];
-
-const prefix = '-';
-
-const help: Command = async ({ channel }, args) => {
-  if (!args.length)
-    return channel.send({
-      embeds: [
-        new MessageEmbed()
-          .setTitle('Thor Music Help')
-          .setDescription('Commands')
-          .setColor(color)
-          .addFields(
-            manual.map(({ name, usage, value, subcommands }) => ({
-              name: `${name}: \`${prefix}${usage}${
-                subcommands
-                  ? ` <${subcommands.map(({ name }) => name).join('|')}>`
-                  : ''
-              }\``,
-              value
-            }))
-          )
-      ]
-    });
-
-  let commandManual: CommandManual | undefined;
-  let commandManuals = manual;
-  const usage: string[] = [];
-  const commands = args.map(arg => arg.toLowerCase());
-  for (const command of commands) {
-    commandManual = commandManuals.find(({ name }) => name === command);
-    if (!commandManual) {
-      commandManual = undefined;
-      break;
-    }
-    commandManuals = commandManual.subcommands || [];
-    usage.push(commandManual.usage);
-  }
-  if (!commandManual)
-    return channel.send(`No help found for command \`${commands.join(' ')}\``);
-
-  const embed = new MessageEmbed()
-    .setTitle(`Thor Music Help: ${commands.join(' ')}`)
-    .setDescription(commandManual.value)
-    .setColor(color)
-    .addField('Usage', `\`${prefix}${usage.join(' ')}\``);
-  if (commandManual.subcommands)
-    embed.addField(
-      'Subcommands',
-      commandManual.subcommands.map(({ name }) => `\`${name}\``).join(', ')
-    );
-  return channel.send({ embeds: [embed] });
-};
+]);
 export default help;
