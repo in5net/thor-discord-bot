@@ -1,8 +1,5 @@
-import { config } from 'dotenv';
-
+import '../env';
 import type Command from './command';
-
-config();
 
 const ban: Command = async (
   { author, channel, guild },

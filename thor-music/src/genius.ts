@@ -1,7 +1,5 @@
 import { Client } from 'genius-lyrics';
-import { config } from 'dotenv';
-
-config();
+import './env';
 
 const client = new Client(process.env.GENIUS_TOKEN);
 

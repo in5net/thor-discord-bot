@@ -1,5 +1,3 @@
-import { config } from 'dotenv';
-
 import client from './client';
 import {
   help,
@@ -18,8 +16,7 @@ import {
   stop
 } from './commands';
 import players from './players';
-
-config();
+import './env';
 
 client
   .on('messageCreate', async message => {

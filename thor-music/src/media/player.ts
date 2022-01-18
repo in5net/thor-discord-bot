@@ -24,7 +24,6 @@ import {
   TextChannel,
   VoiceChannel
 } from 'discord.js';
-import { config } from 'dotenv';
 import { shuffle } from '@limitlesspc/limitless';
 import type { AudioResource } from '@discordjs/voice';
 
@@ -34,9 +33,8 @@ import { getLyrics } from '../genius';
 import { SoundCloudMedia, SpotifyMedia, URLMedia, YouTubeMedia } from './media';
 import * as playlist from './playlist';
 import { addOwnerUsername, color } from '../config';
+import '../env';
 import type { MediaType } from './media';
-
-config();
 
 export default class Player {
   private player = createAudioPlayer({

@@ -1,12 +1,12 @@
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
-import dotenv from 'dotenv';
+import { config, parse } from 'dotenv';
 
-dotenv.config();
+config({ path: join(__dirname, '../.env') });
 
 const localEnvPath = join(__dirname, '../.env.local');
 if (existsSync(localEnvPath)) {
-  const env = dotenv.parse(readFileSync(localEnvPath));
+  const env = parse(readFileSync(localEnvPath));
   Object.entries(env).forEach(([key, value]) => {
     process.env[key] = value;
   });

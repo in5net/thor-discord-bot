@@ -1,8 +1,7 @@
 import { youtube } from '@googleapis/youtube';
 import { extractID } from 'play-dl';
-import { config } from 'dotenv';
 
-config();
+import './env';
 
 const api = youtube({
   version: 'v3',
