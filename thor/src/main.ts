@@ -92,6 +92,7 @@ client.on('messageCreate', async message => {
         await help(message, params);
         break;
       case 'img':
+      case 'pic':
         await img(message, params);
         break;
       case 'gif':

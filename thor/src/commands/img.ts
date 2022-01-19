@@ -45,17 +45,21 @@ const img: Command = async ({ channel, author }, args) => {
       time: 60_000
     })
     .on('collect', async i => {
-      const embed = new MessageEmbed().setImage(
-        i.customId === 'prev' ? await search.prev() : await search.next()
-      );
-      row.components[0]?.setDisabled(!search.hasPrev());
-      await msg.edit({
-        embeds: [embed],
-        components: [row]
-      });
-      await i.update({
-        files: []
-      });
+      try {
+        const embed = new MessageEmbed().setImage(
+          i.customId === 'prev' ? await search.prev() : await search.next()
+        );
+        row.components[0]?.setDisabled(!search.hasPrev());
+        await msg.edit({
+          embeds: [embed],
+          components: [row]
+        });
+        await i.update({
+          files: []
+        });
+      } catch {
+        await msg.edit('Some error occurred...imagine').catch();
+      }
     });
 };
 
