@@ -15,6 +15,10 @@ export default class Queue extends Array<Media> {
   loop = false;
   collector: InteractionCollector<MessageComponentInteraction> | undefined;
 
+  get size(): number {
+    return this.length + (this.current ? 1 : 0);
+  }
+
   getMedias(): Media[] {
     const medias = [...this];
     const { current } = this;
@@ -38,10 +42,13 @@ export default class Queue extends Array<Media> {
     this.current = undefined;
   }
 
-  next(): Media | undefined {
+  next(n = 1): Media | undefined {
     const { current, loop } = this;
     if (loop && current) this.push(current);
-    return (this.current = this.shift());
+    for (let i = 0; i < n; i++) {
+      this.current = this.shift();
+    }
+    return this.current;
   }
 
   shuffle(): void {

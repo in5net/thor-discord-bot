@@ -40,6 +40,7 @@ client
           await queue(message, params);
           break;
         case 'next':
+        case 'n':
         case 'skip':
           await next(message, params);
           break;
@@ -57,6 +58,7 @@ client
           await loop(message, params);
           break;
         case 'move':
+        case 'mv':
           await move(message, params);
           break;
         case 'remove':

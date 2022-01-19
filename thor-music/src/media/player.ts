@@ -204,7 +204,7 @@ export default class Player {
     return this.play();
   }
 
-  async next(uid?: string): Promise<void> {
+  async next(uid?: string, n?: number): Promise<void> {
     if (
       uid &&
       this.queue.current?.requester === process.env.DISCORD_UID &&
@@ -216,7 +216,7 @@ export default class Player {
       return;
     }
 
-    await this.play(true);
+    await this.play(n);
     await this.channel?.send('⏩ Next');
   }
 
@@ -354,7 +354,7 @@ export default class Player {
     }
   }
 
-  private async play(skip = false): Promise<void> {
+  private async play(skipAmount = 0): Promise<void> {
     const { player, queue } = this;
 
     if (this.soundboardCollector) {
@@ -364,9 +364,10 @@ export default class Player {
 
     this.joinVoice();
 
-    if (player.state.status === AudioPlayerStatus.Playing && !skip) return;
+    if (player.state.status === AudioPlayerStatus.Playing && !skipAmount)
+      return;
 
-    const media = queue.next();
+    const media = queue.next(skipAmount);
     if (!media) {
       await this.send('📭 Queue is empty');
       return this.stop();
