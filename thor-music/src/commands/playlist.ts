@@ -31,6 +31,11 @@ const playlist: Command = (message, args) => {
       if (!name) return message.channel.send('Please provide a name');
       return player.playlistLoad(message, name);
     }
+    case 'loads': {
+      const name = args[1];
+      if (!name) return message.channel.send('Please provide a name');
+      return player.playlistLoads(message, name);
+    }
     case 'remove':
     case 'rm': {
       const name = args[1];

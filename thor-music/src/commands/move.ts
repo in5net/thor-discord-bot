@@ -12,8 +12,9 @@ const move: Command = (message, args) => {
     return message.reply(`${woof()}, you are not in a voice channel`);
 
   const [fromStr = '', toStr = ''] = args;
-  const from = parseInt(fromStr) - 2;
-  const to = parseInt(toStr) - 2;
+  const from =
+    fromStr === 'last' ? player.queue.length - 1 : parseInt(fromStr) - 2;
+  const to = toStr === 'last' ? player.queue.length - 1 : parseInt(toStr) - 2;
 
   if (
     isNaN(from) ||

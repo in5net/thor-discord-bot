@@ -20,8 +20,7 @@ const help = helpCommand('Thor Music', '-', color, [
   {
     name: 'next',
     usage: 'next/n/skip <n?>',
-    value:
-      'Skips the current song or any number of songs and plays the next one'
+    value: 'Skips one or more songs and plays the next one'
   },
   { name: 'pause', usage: 'pause', value: 'Pauses/unpauses the player' },
   { name: 'shuffle', usage: 'shuffle', value: 'Shuffles the queue' },
@@ -34,12 +33,14 @@ const help = helpCommand('Thor Music', '-', color, [
   {
     name: 'move',
     usage: 'move/mv <i> <j>',
-    value: 'Moves song #i to position #j in the queue'
+    value:
+      'Moves song #i to position #j in the queue. You may use `last` to refer to the last song in the queue'
   },
   {
     name: 'remove',
     usage: 'remove/rm <i>',
-    value: 'Removes song #i from the queue'
+    value:
+      'Removes song #i from the queue. You may use `last` to refer to the last song in the queue'
   },
   {
     name: 'stop',
@@ -86,6 +87,11 @@ const help = helpCommand('Thor Music', '-', color, [
         name: 'load',
         usage: 'load <name>',
         value: 'Loads your named playlist into the queue'
+      },
+      {
+        name: 'loads',
+        usage: 'loads <name>',
+        value: 'Loads and shuffles your named playlist into the queue'
       },
       {
         name: 'remove',

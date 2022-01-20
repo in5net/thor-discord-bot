@@ -570,6 +570,20 @@ export default class Player {
     return this.play();
   }
 
+  async playlistLoads(message: Message, name: string): Promise<void> {
+    this.setChannels(message);
+    const { author, member } = message;
+    const medias = await playlist.get(
+      {
+        uid: author.id,
+        name: member?.nickname || author.username
+      },
+      name
+    );
+    this.queue.enqueue(...shuffle(medias));
+    return this.play();
+  }
+
   async playlistRemove(
     { author: { id: uid }, channel }: Message,
     name: string
