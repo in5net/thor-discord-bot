@@ -11,7 +11,7 @@ import { PNG } from 'pngjs';
 import { createCanvas } from 'canvas';
 import GIFEncoder from 'gifencoder';
 import ffmpegPath from 'ffmpeg-static';
-import { getAudioDurationInSeconds } from 'get-audio-duration';
+import { parseFile } from 'music-metadata';
 import type { ReadonlyMat2, ReadonlyMat3, ReadonlyMat4 } from 'gl-matrix';
 
 import Texture from './texture';
@@ -613,7 +613,8 @@ export default class GL {
       ).once('exit', resolve)
     );
 
-    const audioSeconds = await getAudioDurationInSeconds(audioPath);
+    const metadata = await parseFile(audioPath);
+    const audioSeconds = (metadata.format.duration || 0) / 1000;
     const videoSeconds = frames / fps;
     const loop = Math.floor(audioSeconds / videoSeconds);
 
