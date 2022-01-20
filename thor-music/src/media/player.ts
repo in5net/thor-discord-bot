@@ -354,7 +354,7 @@ export default class Player {
     }
   }
 
-  private async play(skipAmount = 0): Promise<void> {
+  private async play(skipAmount?: number): Promise<void> {
     const { player, queue } = this;
 
     if (this.soundboardCollector) {
