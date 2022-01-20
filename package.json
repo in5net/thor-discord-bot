@@ -1,13 +1,14 @@
 {
   "private": true,
   "scripts": {
-    "setup": "yarn && cd thor && yarn && cd ../thor-music && yarn && cd ..",
+    "setup": "pnpm i && cd thor && pnpm i && cd ../thor-music && pnpm i && cd ..",
     "start": "multiview [ts-node thor/src/main.ts] [ts-node thor-music/src/main.ts]"
   },
   "dependencies": {
     "discord.js": "^13.6.0"
   },
   "devDependencies": {
+    "@types/node": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",
     "eslint": "^8.7.0",
@@ -17,7 +18,6 @@
     "eslint-plugin-import": "^2.25.4",
     "multiview": "^3.0.1",
     "ts-node": "^10.4.0",
-    "tslib": "^2.3.1",
     "typescript": "^4.5.4"
   }
 }
