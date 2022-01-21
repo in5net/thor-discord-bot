@@ -204,7 +204,7 @@ export default class Player {
     return this.play();
   }
 
-  async next(uid?: string, n?: number): Promise<void> {
+  async next(uid?: string): Promise<void> {
     if (
       uid &&
       this.queue.current?.requester === process.env.DISCORD_UID &&
@@ -216,7 +216,7 @@ export default class Player {
       return;
     }
 
-    await this.play(n);
+    await this.play(true);
     await this.channel?.send('⏩ Next');
   }
 
@@ -354,7 +354,7 @@ export default class Player {
     }
   }
 
-  private async play(skipAmount?: number): Promise<void> {
+  private async play(skip = false): Promise<void> {
     const { player, queue } = this;
 
     if (this.soundboardCollector) {
@@ -364,10 +364,9 @@ export default class Player {
 
     this.joinVoice();
 
-    if (player.state.status === AudioPlayerStatus.Playing && !skipAmount)
-      return;
+    if (player.state.status === AudioPlayerStatus.Playing && !skip) return;
 
-    const media = queue.next(skipAmount);
+    const media = queue.next();
     if (!media) {
       await this.send('📭 Queue is empty');
       return this.stop();
@@ -380,12 +379,16 @@ export default class Player {
     }
     if (media instanceof YouTubeMedia || media instanceof SoundCloudMedia) {
       const { url } = media;
-      const stream = await play.stream(url);
-      resource = createAudioResource(stream.stream);
+      const stream = await play.stream(url, {
+        discordPlayerCompatibility: true
+      });
+      resource = createAudioResource(stream.stream, { inputType: stream.type });
       console.log(`▶️ Playing ${url}`);
     } else if (media instanceof SpotifyMedia) {
-      const stream = await play.stream(media.youtubeURL);
-      resource = createAudioResource(stream.stream);
+      const stream = await play.stream(media.youtubeURL, {
+        discordPlayerCompatibility: true
+      });
+      resource = createAudioResource(stream.stream, { inputType: stream.type });
       console.log(`▶️ Playing ${media.url}`);
     } else if (media instanceof URLMedia) {
       const stream = Downloader.download(media.url);

@@ -19,8 +19,8 @@ const help = helpCommand('Thor Music', '-', color, [
   },
   {
     name: 'next',
-    usage: 'next/n/skip <n?>',
-    value: 'Skips one or more songs and plays the next one'
+    usage: 'next/n/skip',
+    value: 'Skips a song and plays the next one'
   },
   { name: 'pause', usage: 'pause', value: 'Pauses/unpauses the player' },
   { name: 'shuffle', usage: 'shuffle', value: 'Shuffles the queue' },

@@ -2,7 +2,7 @@ import { getPlayer } from '../players';
 import woof from '../woof';
 import type Command from './command';
 
-const next: Command = (message, [nStr]) => {
+const next: Command = message => {
   const { guildId } = message;
   if (!guildId) return;
   const player = getPlayer(guildId);
@@ -11,13 +11,6 @@ const next: Command = (message, [nStr]) => {
   if (channel?.type !== 'GUILD_VOICE')
     return message.reply(`${woof()}, you are not in a voice channel`);
 
-  let n: number | undefined;
-  if (nStr) {
-    const n = parseInt(nStr);
-    if (isNaN(n) || n < 1 || n >= player.queue.size)
-      return message.reply(`${woof()}, please provide a valid number`);
-  }
-
-  return player.next(message.author.id, n);
+  return player.next(message.author.id);
 };
 export default next;

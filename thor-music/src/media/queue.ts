@@ -42,13 +42,10 @@ export default class Queue extends Array<Media> {
     this.current = undefined;
   }
 
-  next(n = 1): Media | undefined {
+  next(): Media | undefined {
     const { current, loop } = this;
     if (loop && current) this.push(current);
-    for (let i = 0; i < n; i++) {
-      this.current = this.shift();
-    }
-    return this.current;
+    return (this.current = this.shift());
   }
 
   shuffle(): void {
