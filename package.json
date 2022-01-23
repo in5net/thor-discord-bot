@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "setup": "pnpm i && cd thor && pnpm i && cd ../thor-music && pnpm i && cd ..",
-    "start": "multiview [ ts-node thor/src/main.ts ] [ ts-node thor-music/src/main.ts ]",
+    "start": "tmuxinator start",
     "thor": "cd thor && pnpm run start",
     "thor-music": "cd thor-music && pnpm run start"
   },
@@ -18,7 +18,6 @@
     "eslint-config-airbnb-typescript": "^16.1.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.4",
-    "multiview": "^3.0.1",
     "ts-node": "^10.4.0",
     "typescript": "4.5.5"
   }
