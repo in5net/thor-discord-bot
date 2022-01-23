@@ -2,7 +2,9 @@
   "private": true,
   "scripts": {
     "setup": "pnpm i && cd thor && pnpm i && cd ../thor-music && pnpm i && cd ..",
-    "start": "multiview [ ts-node thor/src/main.ts ] [ ts-node thor-music/src/main.ts ]"
+    "start": "multiview [ ts-node thor/src/main.ts ] [ ts-node thor-music/src/main.ts ]",
+    "thor": "cd thor && pnpm run start",
+    "thor-music": "cd thor-music && pnpm run start"
   },
   "dependencies": {
     "discord.js": "^13.6.0"
