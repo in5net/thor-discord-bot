@@ -1,3 +1,4 @@
+import EventEmitter from 'node:events';
 import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
 import type {
   InteractionCollector,
@@ -14,6 +15,7 @@ export default class Queue extends Array<Media> {
   current?: Media;
   loop = false;
   collector: InteractionCollector<MessageComponentInteraction> | undefined;
+  changeEmitter = new EventEmitter();
 
   get size(): number {
     return this.length + (this.current ? 1 : 0);
@@ -35,31 +37,38 @@ export default class Queue extends Array<Media> {
       const index = this.indexOf(media);
       if (index > -1) this.splice(index, 1);
     } else this.shift();
+    this.changeEmitter.emit('change');
   }
 
   clear(): void {
     this.length = 0;
     this.current = undefined;
+    this.changeEmitter.emit('change');
   }
 
   next(): Media | undefined {
-    const { current, loop } = this;
+    const { current, loop, changeEmitter } = this;
     if (loop && current) this.push(current);
-    return (this.current = this.shift());
+    this.current = this.shift();
+    changeEmitter.emit('change');
+    return this.current;
   }
 
   shuffle(): void {
     this.sort(() => Math.random() - 0.5);
+    this.changeEmitter.emit('change');
   }
 
   move(from: number, to: number): void {
     if (from === to) return;
     const item = this.splice(from, 1)[0];
     if (item) this.splice(to, 0, item);
+    this.changeEmitter.emit('change');
   }
 
   remove(index: number): void {
     this.splice(index, 1);
+    this.changeEmitter.emit('change');
   }
 
   toggleLoop(): void {
@@ -111,16 +120,31 @@ export default class Queue extends Array<Media> {
     generateEmbed();
 
     const message = await channel.send({ embeds: [embed], components: [row] });
+    const send = async () => {
+      generateEmbed();
+      try {
+        console.log('Updating queue embed');
+        await message.edit({ embeds: [embed], components: [row] });
+      } catch (error) {
+        console.error(error);
+        await channel.send('Failed to update queue embed, try `-queue` again');
+        this.collector?.stop();
+        this.collector = undefined;
+        this.changeEmitter.removeAllListeners();
+      }
+    };
+    this.changeEmitter.removeAllListeners();
+    this.changeEmitter.on('change', send);
+
     this.collector?.stop();
     this.collector = message
-      .createMessageComponentCollector({ time: 60_000 })
+      .createMessageComponentCollector()
       .on('collect', async i => {
         const { customId } = i;
         if (customId === 'back') page--;
         else if (customId === 'next') page++;
-        generateEmbed();
-        await message.edit({ embeds: [embed], components: [row] });
-        await i.update({ files: [] });
+        send();
+        await i.update({ files: [] }).catch();
       });
   }
 
