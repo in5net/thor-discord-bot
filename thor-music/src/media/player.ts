@@ -286,6 +286,7 @@ export default class Player {
       this.soundboardCollector =
         undefined;
     client.user?.setActivity();
+    this.queue.changeEmitter.removeAllListeners();
     onStop();
   }
 
