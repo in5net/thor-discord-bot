@@ -9,6 +9,7 @@ import {
   gif,
   graph,
   help,
+  hex,
   img,
   kick,
   mast,
@@ -155,6 +156,9 @@ client.on('messageCreate', async message => {
         break;
       case 'zen':
         await zen(message, params);
+        break;
+      case 'hex':
+        await hex(message, params);
         break;
       case 'kick':
         await kick(message, params);

@@ -3,12 +3,12 @@ import helpCommand from '../../../help';
 const help = helpCommand('Thor', 'thor ', 'ORANGE', [
   {
     name: 'help',
-    usage: 'help [command?]',
+    usage: 'help <command?>',
     value: 'Shows this help message or for a specific command'
   },
   {
     name: 'img',
-    usage: 'img/pic [search?]',
+    usage: 'img/pic <search?>',
     value:
       'Sends an image from the best website on the internet, yyyyyyy.info, or from Google Search'
   },
@@ -58,12 +58,12 @@ const help = helpCommand('Thor', 'thor ', 'ORANGE', [
   },
   {
     name: 'owo',
-    usage: 'owo [message]',
+    usage: 'owo <message>',
     value: 'Owoifies a message'
   },
   {
     name: 'chaos',
-    usage: 'chaos [num pts=3] [stride=0.5]',
+    usage: 'chaos <num pts=3> <stride=0.5>',
     value: 'Creates chaos'
   },
   {
@@ -72,12 +72,12 @@ const help = helpCommand('Thor', 'thor ', 'ORANGE', [
   },
   {
     name: 'sort',
-    usage: 'sort [algorithm=quick] [size=50]',
+    usage: 'sort <algorithm=quick> <size=50>',
     value: 'Sorts a random array of numbers'
   },
   {
     name: 'graph',
-    usage: 'graph [equation]',
+    usage: 'graph <equation>',
     value: 'Makes a 2D xy graph'
   },
   {
@@ -91,8 +91,16 @@ const help = helpCommand('Thor', 'thor ', 'ORANGE', [
   },
   {
     name: 'cipher',
-    usage: 'cipher encrypt|decrypt [offset] [message]',
+    usage: 'cipher encrypt|decrypt <offset> <message>',
     value: 'Encrypts or decrypts a message'
+  },
+  {
+    name: 'zen',
+    value: 'Gets a random zen quote from https://api.github.com/zen'
+  },
+  {
+    name: 'hex <#code>',
+    value: 'Gives you a 16x16 image of a hex code'
   }
 ]);
 export default help;
