@@ -22,7 +22,8 @@ import {
   react,
   sort,
   text,
-  uptime
+  uptime,
+  zen
 } from './commands';
 import './env';
 
@@ -151,6 +152,9 @@ client.on('messageCreate', async message => {
         break;
       case 'cipher':
         await cipher(message, params);
+        break;
+      case 'zen':
+        await zen(message, params);
         break;
       case 'kick':
         await kick(message, params);
