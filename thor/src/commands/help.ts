@@ -99,7 +99,8 @@ const help = helpCommand('Thor', 'thor ', 'ORANGE', [
     value: 'Gets a random zen quote from https://api.github.com/zen'
   },
   {
-    name: 'hex <#code>',
+    name: 'hex',
+    usage: 'hex <#code>',
     value: 'Gives you a 16x16 image of a hex code'
   }
 ]);
