@@ -1,5 +1,6 @@
 export { default as help } from './help';
 export { default as play } from './play';
+export { default as playnow } from './playnow';
 export { default as queue } from './queue';
 export { default as next } from './next';
 export { default as pause } from './pause';

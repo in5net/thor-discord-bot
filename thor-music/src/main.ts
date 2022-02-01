@@ -8,6 +8,7 @@ import {
   pause,
   play,
   playlist,
+  playnow,
   playshuffle,
   queue,
   remove,
@@ -34,6 +35,10 @@ client
         case 'play':
         case 'p':
           await play(message, params);
+          break;
+        case 'playnow':
+        case 'pn':
+          await playnow(message, params);
           break;
         case 'queue':
         case 'q':

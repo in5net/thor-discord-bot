@@ -204,6 +204,27 @@ export default class Player {
     return this.play();
   }
 
+  async playnow(message: Message, query?: string): Promise<void> {
+    this.setChannels(message);
+
+    const { queue, channel } = this;
+
+    const medias = await this.getMedias(message, query);
+    queue.enqueueNow(...medias);
+
+    if (medias.length)
+      await channel?.send(
+        `⏏️ Added ${medias
+          .map(media => media.title)
+          .slice(0, 10)
+          .join(', ')}${
+          medias.length > 10 ? ', ...' : ''
+        } to the front of the queue`
+      );
+
+    return this.play(true);
+  }
+
   async next(uid?: string): Promise<void> {
     if (
       uid &&

@@ -13,6 +13,12 @@ const help = helpCommand('Thor Music', '-', color, [
     value: 'Adds a song url or YouTube search, and files if given, to the queue'
   },
   {
+    name: 'playnow',
+    usage: 'playnow/pn <url or YouTube search>',
+    value:
+      'Adds a song url or YouTube search, and files if given, to the front of the queue and starts playing it'
+  },
+  {
     name: 'queue',
     usage: 'queue/q <n?>',
     value: "Shows what's in the queue or details about song #n"

@@ -31,6 +31,9 @@ export default class Queue extends Array<Media> {
   enqueue(...medias: Media[]): void {
     this.push(...medias);
   }
+  enqueueNow(...medias: Media[]) {
+    this.unshift(...medias);
+  }
 
   dequeue(media?: Media): void {
     if (media) {
