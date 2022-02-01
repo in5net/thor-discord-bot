@@ -11,8 +11,10 @@ const cmd: Command = async ({ channel }, [hex]) => {
   const canvas = createCanvas(size, size);
   const ctx = canvas.getContext('2d');
 
-  if (!hex.startsWith('#')) hex = `#${hex}`;
-  ctx.fillStyle = hex;
+  if (hex.startsWith('#')) hex = hex.slice(1);
+  if (hex.length !== 6) return channel.send('Invalid hex code');
+
+  ctx.fillStyle = `#${hex}`;
   ctx.fillRect(0, 0, size, size);
 
   return channel.send({
