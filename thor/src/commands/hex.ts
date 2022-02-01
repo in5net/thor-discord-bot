@@ -12,7 +12,7 @@ const cmd: Command = async ({ channel }, [hex]) => {
   const ctx = canvas.getContext('2d');
 
   if (hex.startsWith('#')) hex = hex.slice(1);
-  if ([3, 4, 6, 8].includes(hex.length))
+  if (![3, 4, 6, 8].includes(hex.length))
     return channel.send('Invalid hex code');
 
   ctx.fillStyle = `#${hex}`;
