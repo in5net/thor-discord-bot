@@ -582,7 +582,6 @@ export default class Player {
   }
 
   async playlistLoad(message: Message, name: string): Promise<void> {
-    this.setChannels(message);
     const { author, member } = message;
     const medias = await playlist.get(
       {
@@ -596,7 +595,6 @@ export default class Player {
   }
 
   async playlistLoads(message: Message, name: string): Promise<void> {
-    this.setChannels(message);
     const { author, member } = message;
     const medias = await playlist.get(
       {
@@ -610,10 +608,22 @@ export default class Player {
   }
 
   async playlistRemove(
-    { author: { id: uid }, channel }: Message,
-    name: string
+    { author, member, channel }: Message,
+    name: string,
+    n?: number
   ): Promise<void> {
-    await playlist.remove(uid, name);
-    await channel.send(`Removed playlist ${name}`);
+    await playlist.remove(
+      {
+        uid: author.id,
+        name: member?.nickname || author.username
+      },
+      name,
+      n
+    );
+    await channel.send(
+      n === undefined
+        ? `Removed playlist ${name}`
+        : `Removed #${n} from playlist ${name}`
+    );
   }
 }

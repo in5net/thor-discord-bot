@@ -101,8 +101,9 @@ const help = helpCommand('Thor Music', '-', color, [
       },
       {
         name: 'remove',
-        usage: 'remove/rm <name>',
-        value: 'Removes your saved named playlist'
+        usage: 'remove/rm <name> <#n?>',
+        value:
+          'Removes your saved named playlist or track #n from that playlist'
       }
     ]
   }

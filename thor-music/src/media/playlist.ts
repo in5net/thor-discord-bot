@@ -78,7 +78,19 @@ export async function add(
   return writeFile(filePath, str, 'utf8');
 }
 
-export function remove(uid: string, name: string): Promise<void> {
-  const filePath = getFilePath(uid, name);
-  return unlink(filePath);
+export async function remove(
+  requester: {
+    uid: string;
+    name: string;
+  },
+  name: string,
+  n?: number
+): Promise<void> {
+  if (n === undefined) {
+    const filePath = getFilePath(requester.uid, name);
+    return unlink(filePath);
+  }
+  const medias = await get(requester, name);
+  medias.splice(n - 1, 1);
+  await save(requester.uid, name, medias);
 }

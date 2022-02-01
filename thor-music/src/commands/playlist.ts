@@ -40,7 +40,13 @@ const playlist: Command = (message, args) => {
     case 'rm': {
       const name = args[1];
       if (!name) return message.channel.send('Please provide a name');
-      return player.playlistRemove(message, name);
+      const nStr = args[2];
+      let n: number | undefined;
+      if (nStr !== undefined) {
+        n = parseInt(nStr);
+        if (isNaN(n)) return message.channel.send(`${nStr} isn't valid number`);
+      }
+      return player.playlistRemove(message, name, n);
     }
     default:
       return help(message, ['playlist']);
