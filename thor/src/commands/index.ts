@@ -7,7 +7,7 @@ export { default as random } from './random';
 export { default as noise } from './noise';
 export { default as react } from './react';
 export { default as ping } from './ping';
-export { default as uptime } from './uptime';
+export { default as status } from './status';
 export { default as members } from './members';
 export { default as mast } from './mast';
 export { default as cube } from './cube';

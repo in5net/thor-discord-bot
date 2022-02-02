@@ -41,8 +41,8 @@ const help = helpCommand('Thor', 'thor ', 'ORANGE', [
     value: 'Pings the bot'
   },
   {
-    name: 'uptime',
-    value: 'Shows the bot uptime'
+    name: 'status',
+    value: 'Shows a bunch of technical information about the bot'
   },
   {
     name: 'members',

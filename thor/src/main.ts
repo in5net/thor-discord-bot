@@ -21,8 +21,8 @@ import {
   random,
   react,
   sort,
+  status,
   text,
-  uptime,
   zen
 } from './commands';
 import './env';
@@ -117,8 +117,8 @@ client.on('messageCreate', async message => {
       case 'ping':
         await ping(message, params);
         break;
-      case 'uptime':
-        await uptime(message, params);
+      case 'status':
+        await status(message, params);
         break;
       case 'members':
         await members(message, params);
