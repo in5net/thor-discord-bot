@@ -1,7 +1,6 @@
 import client from './client';
 import {
   ao3,
-  ban,
   chaos,
   cipher,
   cube,
@@ -11,7 +10,6 @@ import {
   help,
   hex,
   img,
-  kick,
   mast,
   members,
   noise,
@@ -163,12 +161,6 @@ client.on('messageCreate', async message => {
         break;
       case 'pfp':
         await pfp(message, params);
-        break;
-      case 'kick':
-        await kick(message, params);
-        break;
-      case 'ban':
-        await ban(message, params);
         break;
       default:
         await message.channel.send(

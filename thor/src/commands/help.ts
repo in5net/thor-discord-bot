@@ -105,7 +105,7 @@ const help = helpCommand('Thor', 'thor ', 'ORANGE', [
   },
   {
     name: 'pfp',
-    usage: 'pfp <@user>',
+    usage: 'pfp <@user?>',
     value: "Gets a user's profile picture"
   }
 ]);
