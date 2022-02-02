@@ -81,14 +81,19 @@ export default class Player {
 
   async getMedias(message: Message, query?: string): Promise<MediaType[]> {
     const { player, queue } = this;
-    const { author, member } = message;
+    const { author, member, attachments } = message;
     const requester = {
       uid: author.id,
       name: member?.nickname || author.username
     };
 
-    for (const { url } of message.attachments.values()) {
-      const media = await URLMedia.fromURL(url, requester);
+    const urlMediasCache = new Map<string, URLMedia>();
+    for (const { url } of attachments.values()) {
+      let media = urlMediasCache.get(url);
+      if (!media) {
+        media = await URLMedia.fromURL(url, requester);
+        urlMediasCache.set(url, media);
+      }
       queue.enqueue(media);
       media.log();
       if (player.state.status === AudioPlayerStatus.Playing)
@@ -117,13 +122,20 @@ export default class Player {
     console.log('Queries:', queries);
 
     const medias: MediaType[] = [];
+    const mediasCache = new Map<string, MediaType[]>();
     if (play.is_expired()) await play.refreshToken();
     for (const query of queries) {
+      const mds = mediasCache.get(query);
+      if (mds) {
+        medias.push(...mds);
+        continue;
+      }
       if (play.yt_validate(query) === 'playlist') {
         const id = play.extractID(query);
         try {
           const videos = await YouTubeMedia.fromPlaylistId(id, requester);
           medias.push(...videos);
+          mediasCache.set(query, videos);
         } catch (error) {
           await this.send('🚫 Invalid YouTube playlist url');
         }
@@ -131,6 +143,7 @@ export default class Player {
         try {
           const media = await YouTubeMedia.fromURL(query, requester);
           medias.push(media);
+          mediasCache.set(query, [media]);
         } catch {
           await this.send('🚫 Invalid YouTube video url');
         }
@@ -138,6 +151,7 @@ export default class Player {
         try {
           const media = await SpotifyMedia.fromURL(query, requester);
           medias.push(media);
+          mediasCache.set(query, [media]);
         } catch {
           await this.send('🚫 Invalid Spotify song url');
         }
@@ -147,6 +161,7 @@ export default class Player {
         try {
           const songs = await SpotifyMedia.fromListURL(query, requester);
           medias.push(...songs);
+          mediasCache.set(query, songs);
         } catch {
           await this.send('🚫 Invalid Spotify album/playlist url');
         }
@@ -154,6 +169,7 @@ export default class Player {
         try {
           const media = await SoundCloudMedia.fromURL(query, requester);
           medias.push(media);
+          mediasCache.set(query, [media]);
         } catch {
           await this.send('🚫 Invalid SoundCloud song url');
         }
@@ -161,6 +177,7 @@ export default class Player {
         try {
           const medias = await SoundCloudMedia.fromListURL(query, requester);
           medias.push(...medias);
+          mediasCache.set(query, medias);
         } catch {
           await this.send('🚫 Invalid SoundCloud playlist url');
         }
@@ -168,6 +185,7 @@ export default class Player {
         try {
           const media = await URLMedia.fromURL(query, requester);
           medias.push(media);
+          mediasCache.set(query, [media]);
         } catch {
           await this.send('🚫 Invalid song url');
         }
@@ -175,6 +193,7 @@ export default class Player {
         try {
           const media = await YouTubeMedia.fromSearch(query, requester);
           medias.push(media);
+          mediasCache.set(query, [media]);
         } catch {
           this.send('🚫 Invalid YouTube query');
         }

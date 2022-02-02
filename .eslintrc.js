@@ -36,6 +36,7 @@ module.exports = {
     'default-case': 'off',
     'class-methods-use-this': 'off',
     radix: ['error', 'as-needed'],
+    'no-continue': 'off',
     '@typescript-eslint/lines-between-class-members': 'off',
     '@typescript-eslint/no-shadow': 'off',
     '@typescript-eslint/no-use-before-define': ['error', 'nofunc'],
