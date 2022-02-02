@@ -23,17 +23,17 @@ export default cipher;
 
 const letters = 'abcdefghijklmnopqrstuvwxyz';
 
-function encrypt(message: string, offset: number) {
+function encrypt(message: string, offset: number, idx = 1) {
   return message
     .toLowerCase()
     .split('')
     .map((char, i) => {
       const index = letters.indexOf(char);
       if (index === -1) return char;
-      return letters[(index + offset + i) % letters.length];
+      return letters[(index + offset + i * idx) % letters.length];
     })
     .join('');
 }
 function decrypt(message: string, offset: number) {
-  return encrypt(message, -offset);
+  return encrypt(message, -offset, -1);
 }
