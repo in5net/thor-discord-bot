@@ -21,6 +21,7 @@ export { default as ao3 } from './ao3';
 export { default as cipher } from './cipher';
 export { default as zen } from './zen';
 export { default as hex } from './hex';
+export { default as pfp } from './pfp';
 
 export { default as kick } from './kick';
 export { default as ban } from './ban';

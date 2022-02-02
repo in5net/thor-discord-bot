@@ -16,6 +16,7 @@ import {
   members,
   noise,
   owo,
+  pfp,
   ping,
   pixelsort,
   quest,
@@ -159,6 +160,9 @@ client.on('messageCreate', async message => {
         break;
       case 'hex':
         await hex(message, params);
+        break;
+      case 'pfp':
+        await pfp(message, params);
         break;
       case 'kick':
         await kick(message, params);

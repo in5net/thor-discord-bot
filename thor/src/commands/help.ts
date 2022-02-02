@@ -102,6 +102,11 @@ const help = helpCommand('Thor', 'thor ', 'ORANGE', [
     name: 'hex',
     usage: 'hex <#code>',
     value: 'Gives you a 16x16 image of a hex code'
+  },
+  {
+    name: 'pfp',
+    usage: 'pfp <@user>',
+    value: "Gets a user's profile picture"
   }
 ]);
 export default help;
