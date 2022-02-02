@@ -27,10 +27,10 @@ function encrypt(message: string, offset: number) {
   return message
     .toLowerCase()
     .split('')
-    .map(char => {
+    .map((char, i) => {
       const index = letters.indexOf(char);
       if (index === -1) return char;
-      return letters[(index + offset) % letters.length];
+      return letters[(index + offset + i) % letters.length];
     })
     .join('');
 }
