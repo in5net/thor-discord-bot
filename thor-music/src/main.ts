@@ -1,6 +1,7 @@
 import client from './client';
 import {
   help,
+  hz,
   loop,
   lyrics,
   move,
@@ -86,6 +87,9 @@ client
         case 'playlist':
         case 'pl':
           await playlist(message, params);
+          break;
+        case 'hz':
+          await hz(message, params);
       }
     } catch (error) {
       await message.channel.send(`Error: ${error}`);

@@ -13,3 +13,4 @@ export { default as stop } from './stop';
 export { default as soundboard } from './soundboard';
 export { default as lyrics } from './lyrics';
 export { default as playlist } from './playlist';
+export { default as hz } from './hz';

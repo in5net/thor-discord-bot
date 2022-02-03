@@ -106,6 +106,11 @@ const help = helpCommand('Thor Music', '-', color, [
           'Removes your saved named playlist or track #n from that playlist'
       }
     ]
+  },
+  {
+    name: 'hz',
+    usage: 'hz <frequency>',
+    value: 'Plays a sound at a given frequency for 1 second'
   }
 ]);
 export default help;
