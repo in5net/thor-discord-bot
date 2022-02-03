@@ -7,8 +7,7 @@
     "thor-music": "cd thor-music && pnpm run start"
   },
   "dependencies": {
-    "discord.js": "^13.6.0",
-    "speaker": "^0.5.3"
+    "discord.js": "^13.6.0"
   },
   "devDependencies": {
     "@types/node": "17.0.14",
