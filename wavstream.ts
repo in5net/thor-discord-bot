@@ -1,5 +1,4 @@
 import { Readable } from 'node:stream';
-import Speaker from 'speaker';
 
 import header from './waveheader';
 
@@ -13,16 +12,6 @@ export class PCMStream extends Readable {
 
   constructor(readonly frequency: number, readonly duration = Infinity) {
     super();
-  }
-
-  speaker() {
-    this.pipe(
-      new Speaker({
-        channels,
-        bitDepth,
-        sampleRate
-      })
-    );
   }
 
   // eslint-disable-next-line no-underscore-dangle
