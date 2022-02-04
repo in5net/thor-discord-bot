@@ -109,8 +109,8 @@ const help = helpCommand('Thor Music', '-', color, [
   },
   {
     name: 'hz',
-    usage: 'hz <frequency>',
-    value: 'Plays a sound at a given frequency for 1 second'
+    usage: 'hz <frequency> <duration?=1>',
+    value: 'Plays a sound at a given frequency for a given duration'
   }
 ]);
 export default help;

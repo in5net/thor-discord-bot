@@ -2,9 +2,9 @@ import { Readable } from 'node:stream';
 
 import header from './waveheader';
 
-const channels = 2;
-const sampleRate = 48000;
-const bitDepth = 16;
+const channels = 1;
+const sampleRate = 44100;
+const bitDepth = 8;
 const amplitude = 2 ** (bitDepth - 1) - 1;
 
 export class PCMStream extends Readable {
@@ -31,7 +31,7 @@ export class PCMStream extends Readable {
         const s = this.samplesGenerated + i;
         const val = Math.round(amplitude * Math.sin(t * s)); // sine wave
         const offset = i * sampleSize * channels + channel * sampleSize;
-        buffer.writeInt16LE(val, offset);
+        buffer.writeInt8(val + 128, offset);
       }
     }
 

@@ -33,7 +33,6 @@ import { getLyrics } from '../genius';
 import { SoundCloudMedia, SpotifyMedia, URLMedia, YouTubeMedia } from './media';
 import * as playlist from './playlist';
 import { addOwnerUsername, color } from '../config';
-import { PCMStream } from '../../../wavstream';
 import '../env';
 import type { MediaType } from './media';
 
@@ -222,15 +221,6 @@ export default class Player {
       );
 
     return this.play();
-  }
-
-  hz(message: Message, hz: number): void {
-    this.setChannels(message);
-    this.joinVoice();
-
-    const stream = new PCMStream(hz, 2);
-    const resource = createAudioResource(stream, { inputType: StreamType.Raw });
-    this.player.play(resource);
   }
 
   async playnow(message: Message, query?: string): Promise<void> {
