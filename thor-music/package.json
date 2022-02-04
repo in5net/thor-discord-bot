@@ -13,17 +13,16 @@
   },
   "dependencies": {
     "@discord-player/downloader": "^3.0.1",
-    "@discordjs/opus": "^0.7.0",
     "@discordjs/voice": "0.8.0",
     "@googleapis/youtube": "^2.0.0",
     "@limitlesspc/limitless": "^0.1.1",
     "chalk": "4",
     "discord.js": "^13.6.0",
-    "dotenv": "15.0.0",
+    "dotenv": "16.0.0",
     "ffmpeg-static": "4.4.1",
     "genius-lyrics": "^4.3.5",
     "libsodium-wrappers": "^0.7.9",
-    "play-dl": "1.8.4",
+    "play-dl": "1.8.6",
     "ts-node": "^10.4.0"
   },
   "devDependencies": {
