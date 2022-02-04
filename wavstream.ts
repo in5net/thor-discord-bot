@@ -31,7 +31,7 @@ export class PCMStream extends Readable {
         const s = this.samplesGenerated + i;
         const val = Math.round(amplitude * Math.sin(t * s)); // sine wave
         const offset = i * sampleSize * channels + channel * sampleSize;
-        buffer.writeInt8(val + 128, offset);
+        buffer.writeUInt8(val + 128, offset);
       }
     }
 
