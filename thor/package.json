@@ -19,7 +19,7 @@
     "canvas": "^2.9.0",
     "decode-gif": "^1.0.1",
     "discord.js": "^13.6.0",
-    "dotenv": "15.0.0",
+    "dotenv": "16.0.0",
     "ffmpeg-static": "^4.4.1",
     "gifencoder": "^2.0.1",
     "gl": "^5.0.0",
