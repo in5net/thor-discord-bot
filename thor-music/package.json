@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@discord-player/downloader": "^3.0.1",
+    "@discordjs/opus": "^0.7.0",
     "@discordjs/voice": "0.8.0",
     "@googleapis/youtube": "^2.0.0",
     "@limitlesspc/limitless": "^0.1.1",
