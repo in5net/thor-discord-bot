@@ -601,6 +601,7 @@ export default class Player {
   }
 
   async playlistLoad(message: Message, name: string): Promise<void> {
+    this.setChannels(message);
     const { author, member } = message;
     const medias = await playlist.get(
       {
@@ -614,6 +615,7 @@ export default class Player {
   }
 
   async playlistLoads(message: Message, name: string): Promise<void> {
+    this.setChannels(message);
     const { author, member } = message;
     const medias = await playlist.get(
       {
