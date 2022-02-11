@@ -7,12 +7,12 @@ const gif: Command = async ({ channel }) => {
   while (true) {
     try {
       const src = await getGif();
-      await channel.send({
+      return await channel.send({
         files: [new MessageAttachment(src)]
       });
-      return;
     } catch {
       console.log('Error sending gif, trying again');
+      return channel.send('So sad, looks like yyyyyyy.info is down ):');
     }
   }
 };

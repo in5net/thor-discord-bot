@@ -16,10 +16,13 @@ let collector: InteractionCollector<MessageComponentInteraction> | undefined;
 const img: Command = async ({ channel, author }, args) => {
   if (!args.length) {
     const src = await getImg();
-    await channel.send({
-      files: [new MessageAttachment(src)]
-    });
-    return;
+    try {
+      return channel.send({
+        files: [new MessageAttachment(src)]
+      });
+    } catch {
+      return channel.send('So sad, looks like yyyyyyy.info is down ):');
+    }
   }
 
   const query = args.join(' ');
@@ -61,6 +64,7 @@ const img: Command = async ({ channel, author }, args) => {
         await msg.edit('Some error occurred...imagine').catch();
       }
     });
+  return;
 };
 
 export default img;

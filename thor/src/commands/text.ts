@@ -3,6 +3,10 @@ import type Command from './command';
 
 const text: Command = async ({ channel }) => {
   const src = await getText();
-  await channel.send(src);
+  try {
+    return channel.send(src);
+  } catch {
+    return channel.send('So sad, looks like yyyyyyy.info is down ):');
+  }
 };
 export default text;
