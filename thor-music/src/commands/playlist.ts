@@ -1,11 +1,14 @@
 import help from './help';
 import { getPlayer } from '../players';
+import woof from '../../../woof';
 import type Command from './command';
 
 const playlist: Command = (message, args) => {
   const { guildId } = message;
   if (!guildId) return;
   const player = getPlayer(guildId);
+
+  const channel = message.member?.voice.channel;
 
   const subcommand = args[0];
   switch (subcommand) {
@@ -27,11 +30,15 @@ const playlist: Command = (message, args) => {
       return player.playlistAdd(message, name, args.slice(2).join(' '));
     }
     case 'load': {
+      if (channel?.type !== 'GUILD_VOICE')
+        return message.reply(`${woof()}, you are not in a voice channel`);
       const name = args[1];
       if (!name) return message.channel.send('Please provide a name');
       return player.playlistLoad(message, name);
     }
     case 'loads': {
+      if (channel?.type !== 'GUILD_VOICE')
+        return message.reply(`${woof()}, you are not in a voice channel`);
       const name = args[1];
       if (!name) return message.channel.send('Please provide a name');
       return player.playlistLoads(message, name);

@@ -1,5 +1,5 @@
 import { getPlayer } from '../players';
-import woof from '../woof';
+import woof from '../../../woof';
 import type Command from './command';
 
 const remove: Command = (message, args) => {

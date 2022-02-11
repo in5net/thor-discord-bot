@@ -1,5 +1,4 @@
 {
-  "name": "discord-bots",
   "private": true,
   "scripts": {
     "setup": "pnpm i && cd thor && pnpm i && cd ../thor-music && pnpm i && cd ..",
