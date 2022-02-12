@@ -29,7 +29,6 @@ import './env';
 
 client.on('messageCreate', async message => {
   const { content } = message;
-  console.log('Got msg:', content);
   const args = message.content.split(' ');
   if (message.author.bot) return;
   if (message.author.id === process.env.LIMITLESS_PC_ID)
