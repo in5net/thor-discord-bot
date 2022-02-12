@@ -30,8 +30,7 @@ import './env';
 client.on('messageCreate', async message => {
   const { content } = message;
   const args = message.content.split(' ');
-  if (!message.guildId || message.author.bot) return;
-  if (message.channel.type === 'DM') return;
+  if (message.author.bot) return;
   if (message.author.id === process.env.LIMITLESS_PC_ID)
     await message.react('🖥');
   if (args[0]?.toLowerCase() !== process.env.PREFIX) {
@@ -39,7 +38,10 @@ client.on('messageCreate', async message => {
     let lowercase = content.toLowerCase();
     // Remove @mentions
     lowercase = lowercase.replace(/<@!?\d+>/g, '');
-    if (!message.channel.name.includes('thor')) {
+    if (
+      message.channel.type !== 'DM' &&
+      !message.channel.name.includes('thor')
+    ) {
       if (message.channel.name.includes('general')) {
         if (Math.random() > 0.5) return;
       } else return;

@@ -22,7 +22,6 @@ import './env';
 
 client
   .on('messageCreate', async message => {
-    if (!message.guildId) return;
     if (!message.content.startsWith('-')) return;
     const args = message.content.slice(1).split(' ');
 
