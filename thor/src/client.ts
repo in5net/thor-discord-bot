@@ -5,9 +5,9 @@ const client = new Client({
     'GUILDS',
     'GUILD_MESSAGES',
     'GUILD_MESSAGE_REACTIONS',
-    'DIRECT_MESSAGES',
-    'DIRECT_MESSAGE_REACTIONS'
-  ]
+    'DIRECT_MESSAGES'
+  ],
+  partials: ['CHANNEL']
 }).once('ready', () => console.log('✅ Thor Bot is ready!'));
 
 export default client;
