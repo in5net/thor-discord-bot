@@ -17,7 +17,7 @@ const img: Command = async ({ channel, author }, args) => {
   if (!args.length) {
     const src = await getImg();
     try {
-      return channel.send({
+      return await channel.send({
         files: [new MessageAttachment(src)]
       });
     } catch {
@@ -64,7 +64,7 @@ const img: Command = async ({ channel, author }, args) => {
         await msg.edit('Some error occurred...imagine').catch();
       }
     });
-  return;
+  return undefined;
 };
 
 export default img;
