@@ -22,14 +22,23 @@ const cipher: Command = async (message, [subcmd, offsetStr = '', ...words]) => {
 };
 export default cipher;
 
+const spaceCode = ' '.charCodeAt(0);
+const tildeCode = '~'.charCodeAt(0);
+const codeRange = tildeCode - spaceCode;
+
 export function encrypt(message: string, offset: number) {
   const codes = message.split('').map((char, i) => {
     const code = char.charCodeAt(0);
-    const encryptedCode = code + offset + (offset > 0 ? i : -i);
-    return encryptedCode;
+    const codeFromSpace = code - spaceCode;
+    const encryptedCode = codeFromSpace + offset + (offset > 0 ? i : -i);
+    return mod(encryptedCode, codeRange) + spaceCode;
   });
   return String.fromCharCode(...codes);
 }
 export function decrypt(message: string, offset: number) {
   return encrypt(message, -offset);
+}
+
+export function mod(n: number, m: number) {
+  return ((n % m) + m) % m;
 }

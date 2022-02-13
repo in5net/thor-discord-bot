@@ -1,4 +1,5 @@
 import { randomInt } from '@limitlesspc/limitless';
+
 import type Command from './command';
 
 const rng: Command = async ({ channel }, [minStr, maxStr]) => {
