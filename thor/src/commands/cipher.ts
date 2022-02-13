@@ -1,20 +1,21 @@
 import type Command from './command';
 
-const cipher: Command = async (
-  { channel },
-  [subcmd, offsetStr = '', ...words]
-) => {
+const cipher: Command = async (message, [subcmd, offsetStr = '', ...words]) => {
+  const { channel } = message;
   const offset = parseInt(offsetStr);
   if (isNaN(offset)) return channel.send('Must provide an offset');
 
-  const message = words.join(' ');
-  if (!message) return channel.send('Must provide a message');
+  const text = words.join(' ');
+  if (!text) return channel.send('Must provide a message');
 
   switch (subcmd) {
     case 'encrypt':
-      return channel.send(encrypt(message, offset));
+      return channel.send(encrypt(text, offset));
+    case 'iencrypt':
+      await message.delete();
+      return channel.send(encrypt(text, offset));
     case 'decrypt':
-      return channel.send(decrypt(message, offset));
+      return channel.send(decrypt(text, offset));
     default:
       return channel.send(`IDK what cipher ${subcmd} is`);
   }

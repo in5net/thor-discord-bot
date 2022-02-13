@@ -100,6 +100,12 @@ const help = helpCommand('Thor', 'thor ', 'ORANGE', [
         value: 'Encrypts a message'
       },
       {
+        name: 'iencrypt',
+        usage: 'iencrypt <offset> <message>',
+        value:
+          "Encrypts a message in place (removes the original message so others can't see it)"
+      },
+      {
         name: 'decrypt',
         usage: 'decrypt <offset> <message>',
         value: 'Decrypts a message'
