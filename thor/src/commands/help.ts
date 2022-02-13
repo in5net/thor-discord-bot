@@ -91,8 +91,20 @@ const help = helpCommand('Thor', 'thor ', 'ORANGE', [
   },
   {
     name: 'cipher',
-    usage: 'cipher encrypt|decrypt <offset> <message>',
-    value: 'Encrypts or decrypts a message'
+    value:
+      'Encrypts or decrypts a message using a Caesar cipher with an indexed offset',
+    subcommands: [
+      {
+        name: 'encrypt',
+        usage: 'encrypt <offset> <message>',
+        value: 'Encrypts a message'
+      },
+      {
+        name: 'decrypt',
+        usage: 'decrypt <offset> <message>',
+        value: 'Decrypts a message'
+      }
+    ]
   },
   {
     name: 'zen',

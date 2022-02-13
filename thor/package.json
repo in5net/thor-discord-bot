@@ -1,15 +1,8 @@
 {
   "name": "discord-bot",
-  "version": "1.0.0",
   "private": true,
-  "author": {
-    "name": "Izaak Brown",
-    "email": "izaakbthunderbird@gmail.com"
-  },
-  "repository": "https://github.com/limitlesspc/discord-bot.git",
   "scripts": {
-    "start": "ts-node src/main.ts",
-    "lint": "eslint --ignore-path .gitignore ."
+    "start": "ts-node src/main.ts"
   },
   "dependencies": {
     "@googleapis/customsearch": "^0.2.0",

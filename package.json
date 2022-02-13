@@ -1,10 +1,16 @@
 {
   "private": true,
+  "author": {
+    "name": "Izaak Brown",
+    "email": "izaakbthunderbird@gmail.com"
+  },
+  "repository": "github:limitlesspc/discord-bots",
   "scripts": {
     "setup": "pnpm i && cd thor && pnpm i && cd ../thor-music && pnpm i && cd ..",
     "start": "tmuxinator start",
     "thor": "cd thor && pnpm run start",
-    "thor-music": "cd thor-music && pnpm run start"
+    "thor-music": "cd thor-music && pnpm run start",
+    "lint": "eslint --ignore-path .gitignore ."
   },
   "dependencies": {
     "discord.js": "^13.6.0"

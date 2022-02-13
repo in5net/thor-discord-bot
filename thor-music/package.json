@@ -1,15 +1,8 @@
 {
   "name": "music-bot",
-  "version": "1.0.0",
   "private": true,
-  "author": {
-    "name": "Izaak Brown",
-    "email": "izaakbthunderbird@gmail.com"
-  },
-  "repository": "github:limitlesspc/music-bot",
   "scripts": {
-    "start": "ts-node src/main.ts",
-    "lint": "eslint --ignore-path .gitignore ."
+    "start": "ts-node src/main.ts"
   },
   "dependencies": {
     "@discord-player/downloader": "^3.0.1",
