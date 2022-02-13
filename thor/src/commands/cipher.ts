@@ -21,18 +21,16 @@ const cipher: Command = async (
 };
 export default cipher;
 
-const letters = 'abcdefghijklmnopqrstuvwxyz';
-
 function encrypt(message: string, offset: number) {
-  return message
+  const codes = message
     .toLowerCase()
     .split('')
     .map(char => {
-      const index = letters.indexOf(char);
-      if (index === -1) return char;
-      return letters[(index + offset) % letters.length];
-    })
-    .join('');
+      const code = char.charCodeAt(0);
+      const encryptedCode = code + offset;
+      return encryptedCode;
+    });
+  return String.fromCharCode(...codes);
 }
 function decrypt(message: string, offset: number) {
   return encrypt(message, -offset);
