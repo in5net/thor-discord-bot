@@ -25,6 +25,7 @@ import {
   text,
   zen
 } from './commands';
+import rng from './commands/rng';
 import './env';
 
 client.on('messageCreate', async message => {
@@ -163,6 +164,9 @@ client.on('messageCreate', async message => {
         break;
       case 'pfp':
         await pfp(message, params);
+        break;
+      case 'rng':
+        await rng(message, params);
         break;
       default:
         await message.channel.send(
