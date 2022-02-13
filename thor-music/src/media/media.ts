@@ -46,6 +46,7 @@ abstract class Media {
 interface YouTubeJSON extends MediaJSON {
   type: 'youtube';
   id: string;
+  time?: number;
   description: string;
   thumbnail: string;
   channel: Channel;
@@ -61,7 +62,8 @@ export class YouTubeMedia extends Media {
     requester: {
       uid: string;
       name: string;
-    }
+    },
+    public time?: number
   ) {
     super(title, duration, requester);
   }
@@ -71,7 +73,7 @@ export class YouTubeMedia extends Media {
   }
 
   get url(): string {
-    return `https://youtu.be/${this.id}`;
+    return `https://youtu.be/${this.id}${this.time ? `?t=${this.time}` : ''}`;
   }
 
   get channelURL(): string {
@@ -90,10 +92,11 @@ ${title} (${url})
   }
 
   toJSON(): YouTubeJSON {
-    const { id, description, thumbnail, channel, title, duration } = this;
+    const { id, time, description, thumbnail, channel, title, duration } = this;
     return {
       type: 'youtube',
       id,
+      time,
       description,
       thumbnail,
       channel,
@@ -102,7 +105,7 @@ ${title} (${url})
     };
   }
   static fromJSON(
-    { id, description, thumbnail, channel, title, duration }: YouTubeJSON,
+    { id, time, description, thumbnail, channel, title, duration }: YouTubeJSON,
     requester: {
       uid: string;
       name: string;
@@ -115,7 +118,8 @@ ${title} (${url})
       channel,
       title,
       duration,
-      requester
+      requester,
+      time
     );
   }
 
@@ -184,7 +188,7 @@ ${title} (${url})
     }
   }
 
-  static fromURL(
+  static async fromURL(
     url: string,
     requester: {
       uid: string;
@@ -192,7 +196,11 @@ ${title} (${url})
     }
   ): Promise<YouTubeMedia> {
     const id = play.extractID(url);
-    return this.fromId(id, requester);
+    const media = await this.fromId(id, requester);
+    const timeRegex = /\?t=(\d+)/;
+    const matches = url.match(timeRegex) || [];
+    if (matches[1]) media.time = parseInt(matches[1]);
+    return media;
   }
 
   static async fromSearch(
