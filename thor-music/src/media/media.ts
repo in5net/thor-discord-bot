@@ -73,7 +73,9 @@ export class YouTubeMedia extends Media {
   }
 
   get url(): string {
-    return `https://youtu.be/${this.id}${this.time ? `?t=${this.time}` : ''}`;
+    return `https://www.youtube.com/watch?v=${this.id}${
+      this.time ? `&t=${this.time}` : ''
+    }`;
   }
 
   get channelURL(): string {

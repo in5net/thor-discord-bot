@@ -421,14 +421,12 @@ export default class Player {
     if (media instanceof YouTubeMedia || media instanceof SoundCloudMedia) {
       const { url } = media;
       const stream = await play.stream(url, {
-        discordPlayerCompatibility: true
+        seek: media instanceof YouTubeMedia ? media.time : undefined
       });
       resource = createAudioResource(stream.stream, { inputType: stream.type });
       console.log(`▶️ Playing ${url}`);
     } else if (media instanceof SpotifyMedia) {
-      const stream = await play.stream(media.youtubeURL, {
-        discordPlayerCompatibility: true
-      });
+      const stream = await play.stream(media.youtubeURL);
       resource = createAudioResource(stream.stream, { inputType: stream.type });
       console.log(`▶️ Playing ${media.url}`);
     } else if (media instanceof URLMedia) {
