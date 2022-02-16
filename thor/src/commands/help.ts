@@ -131,6 +131,10 @@ const help = helpCommand('Thor', 'thor ', 'ORANGE', [
     usage: 'rng <min> <max> | rng <max> | rng',
     value:
       'Generates a random number between min and max, 1 to a max, or from 1 to 10'
+  },
+  {
+    name: 'ratio',
+    value: 'Get ratioed'
   }
 ]);
 export default help;

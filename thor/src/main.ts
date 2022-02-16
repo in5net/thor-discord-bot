@@ -19,6 +19,7 @@ import {
   pixelsort,
   quest,
   random,
+  ratio,
   react,
   sort,
   status,
@@ -167,6 +168,9 @@ client.on('messageCreate', async message => {
         break;
       case 'rng':
         await rng(message, params);
+        break;
+      case 'ratio':
+        await ratio(message, params);
         break;
       default:
         await message.channel.send(

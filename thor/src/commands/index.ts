@@ -22,3 +22,4 @@ export { default as cipher } from './cipher';
 export { default as zen } from './zen';
 export { default as hex } from './hex';
 export { default as pfp } from './pfp';
+export { default as ratio } from './ratio';
