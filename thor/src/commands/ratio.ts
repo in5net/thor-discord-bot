@@ -1,4 +1,3 @@
-import { chunk } from '@limitlesspc/limitless';
 import type Command from './command';
 
 const ratios = [
@@ -65,7 +64,19 @@ const ratios = [
   'lol',
   'lmao',
   'glhf',
-  'stay pressed'
+  'stay pressed',
+  'addressed leaked',
+  'dad works for fbi',
+  'can hack',
+  'netflix & chill',
+  "can't win",
+  'ur done',
+  "can't recover",
+  'xoxo',
+  'rekt',
+  'still in 2010',
+  "can't fathom",
+  'opinion'
 ];
 const numRatios = 20;
 
@@ -75,11 +86,7 @@ const ratio: Command = async ({ channel }) => {
     indices.add(Math.floor(Math.random() * ratios.length));
   }
   const ratioStrings = [...indices].map(i => ratios[i] || '');
-  return channel.send(
-    chunk(ratioStrings, 5)
-      .map(arr => arr.join(' + '))
-      .join('\n+ ')
-  );
+  return channel.send(ratioStrings.join(' + '));
 };
 
 export default ratio;
