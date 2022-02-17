@@ -86,7 +86,7 @@ const ratios = [
   "can't fathom",
   'opinion'
 ];
-const numRatios = 20;
+const numRatios = 50;
 const size = 256;
 
 const ratio: Command = async ({ channel }) => {
