@@ -133,7 +133,8 @@ const help = helpCommand('Thor', 'thor ', 'ORANGE', [
       'Generates a random number between min and max, 1 to a max, or from 1 to 10'
   },
   {
-    name: 'ratio img?',
+    name: 'ratio',
+    usage: 'ratio img?',
     value: 'Get ratioed'
   }
 ]);
