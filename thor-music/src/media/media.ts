@@ -164,29 +164,45 @@ ${title} (${url})
         requester
       );
     } catch {
-      const {
-        video_details: {
-          id: videoId = '',
-          title = '',
-          description = '',
-          durationInSec: duration,
-          thumbnails: [thumbnail],
-          channel
-        }
-      } = await play.video_basic_info(id);
-      return new YouTubeMedia(
-        videoId,
-        description,
-        thumbnail?.url || '',
-        {
-          id: channel?.id || '',
-          title: channel?.name || '',
-          thumbnail: channel?.iconURL() || ''
-        },
-        title,
-        duration,
-        requester
-      );
+      try {
+        const {
+          video_details: {
+            id: videoId = '',
+            title = '',
+            description = '',
+            durationInSec: duration,
+            thumbnails: [thumbnail],
+            channel
+          }
+        } = await play.video_basic_info(id);
+        return new YouTubeMedia(
+          videoId,
+          description,
+          thumbnail?.url || '',
+          {
+            id: channel?.id || '',
+            title: channel?.name || '',
+            thumbnail: channel?.iconURL() || ''
+          },
+          title,
+          duration,
+          requester
+        );
+      } catch {
+        return new YouTubeMedia(
+          id,
+          '',
+          '',
+          {
+            id: '',
+            title: '',
+            thumbnail: ''
+          },
+          '',
+          NaN,
+          requester
+        );
+      }
     }
   }
 
