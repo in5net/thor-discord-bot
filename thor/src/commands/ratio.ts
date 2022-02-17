@@ -89,12 +89,16 @@ const ratios = [
 const numRatios = 50;
 const size = 256;
 
-const ratio: Command = async ({ channel }) => {
-  const canvas = generateCanvas();
-  return channel.send({
-    content: null,
-    files: [new MessageAttachment(canvas.toBuffer())]
-  });
+const ratio: Command = async ({ channel }, [arg]) => {
+  if (arg === 'img') {
+    const canvas = generateCanvas();
+    return channel.send({
+      content: null,
+      files: [new MessageAttachment(canvas.toBuffer())]
+    });
+  }
+  const text = generateStr();
+  return channel.send(text);
 };
 
 function generateCanvas() {
