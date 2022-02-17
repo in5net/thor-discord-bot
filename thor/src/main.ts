@@ -33,8 +33,7 @@ client.on('messageCreate', async message => {
   const { content } = message;
   const args = message.content.split(' ');
   if (message.author.bot) return;
-  if (message.author.id === process.env.LIMITLESS_PC_ID)
-    await message.react('🖥');
+
   if (args[0]?.toLowerCase() !== process.env.PREFIX) {
     const msgs: string[] = [];
     let lowercase = content.toLowerCase();

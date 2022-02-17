@@ -1,4 +1,12 @@
+import { join } from 'node:path';
+import { MessageAttachment } from 'discord.js';
+import { createCanvas, registerFont } from 'canvas';
+
+import { createWriteStream } from 'node:fs';
 import type Command from './command';
+
+const fontPath = join(__dirname, './Whitney-400.woff');
+registerFont(fontPath, { family: 'Whitney', weight: '400' });
 
 const ratios = [
   'L',
@@ -79,14 +87,66 @@ const ratios = [
   'opinion'
 ];
 const numRatios = 20;
+const size = 256;
 
 const ratio: Command = async ({ channel }) => {
+  const canvas = generateCanvas();
+  return channel.send({
+    content: null,
+    files: [new MessageAttachment(canvas.toBuffer())]
+  });
+};
+
+function generateCanvas() {
+  const text = generateStr();
+
+  const canvas = createCanvas(size, size);
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#dcddde';
+  ctx.font = '16px Whitney';
+  ctx.textBaseline = 'top';
+  wrapText(ctx, text, 0, 0, size, 24);
+
+  return canvas;
+}
+
+function wrapText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  x: number,
+  y: number,
+  maxWidth: number,
+  lineHeight: number
+) {
+  const words = text.split(' ');
+  let line = '';
+
+  for (let n = 0; n < words.length; n++) {
+    const testLine = `${line + words[n]} `;
+    const metrics = ctx.measureText(testLine);
+    const testWidth = metrics.width;
+    if (testWidth > maxWidth && n > 0) {
+      ctx.fillText(line, x, y);
+      line = `${words[n]} `;
+      y += lineHeight;
+    } else line = testLine;
+  }
+  ctx.fillText(line, x, y);
+}
+
+function generateStr() {
   const indices = new Set<number>();
   while (indices.size < numRatios) {
     indices.add(Math.floor(Math.random() * ratios.length));
   }
   const ratioStrings = [...indices].map(i => ratios[i] || '');
-  return channel.send(ratioStrings.join(' + '));
-};
+  return ratioStrings.join(' + ');
+}
+
+if (require.main === module) {
+  console.log('Running as a standalone script');
+  const imgPath = join(__dirname, './ratio.png');
+  generateCanvas().createPNGStream().pipe(createWriteStream(imgPath));
+}
 
 export default ratio;
