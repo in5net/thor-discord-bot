@@ -9,6 +9,7 @@ import {
   graph,
   help,
   hex,
+  hiragana,
   img,
   mast,
   members,
@@ -170,6 +171,9 @@ client.on('messageCreate', async message => {
         break;
       case 'ratio':
         await ratio(message, params);
+        break;
+      case 'hiragana':
+        await hiragana(message, params);
         break;
       default:
         await message.channel.send(

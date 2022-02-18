@@ -136,6 +136,11 @@ const help = helpCommand('Thor', 'thor ', 'ORANGE', [
     name: 'ratio',
     usage: 'ratio img?',
     value: 'Get ratioed'
+  },
+  {
+    name: 'hiragana',
+    usage: 'hiragana <length?=100>',
+    value: 'Sends a bunch of random hiragana characters to practice reading'
   }
 ]);
 export default help;
