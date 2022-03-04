@@ -646,7 +646,7 @@ export class URLMedia extends Media {
       name: string;
     }
   ) {
-    super(url.slice(0, 100), NaN, requester);
+    super(new URL(url).pathname.split('/').pop() || 'Unknown', NaN, requester);
   }
 
   get iconURL() {
