@@ -1,6 +1,5 @@
 import { MessageEmbed } from 'discord.js';
 import play from 'play-dl';
-import { Downloader as downloader } from '@discord-player/downloader';
 import chalk from 'chalk';
 import type {
   SoundCloudPlaylist,
@@ -642,14 +641,12 @@ interface URLJSON extends MediaJSON {
 export class URLMedia extends Media {
   constructor(
     public url: string,
-    title: string,
-    duration: number,
     requester: {
       uid: string;
       name: string;
     }
   ) {
-    super(title, duration, requester);
+    super(url, NaN, requester);
   }
 
   get iconURL() {
@@ -671,13 +668,13 @@ ${title} (${url})`);
     return { type: 'url', url, title, duration };
   }
   static fromJSON(
-    { url, title, duration }: URLJSON,
+    { url }: URLJSON,
     requester: {
       uid: string;
       name: string;
     }
   ): URLMedia {
-    return new URLMedia(url, title, duration, requester);
+    return new URLMedia(url, requester);
   }
 
   getEmbed() {
@@ -691,11 +688,7 @@ ${title} (${url})`);
       name: string;
     }
   ): Promise<URLMedia> {
-    const response = await downloader.getInfo(url);
-    const info = response.info[0];
-    if (!info) return Promise.reject();
-
-    return new URLMedia(url, info.title, info.duration / 1000, requester);
+    return new URLMedia(url, requester);
   }
 }
 
