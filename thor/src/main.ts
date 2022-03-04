@@ -25,15 +25,20 @@ import {
   sort,
   status,
   text,
-  zen
+  zen,
+  wordle,
+  rng
 } from './commands';
-import rng from './commands/rng';
+import { handleMessage } from './commands/wordle';
 import './env';
 
 client.on('messageCreate', async message => {
-  const { content } = message;
-  const args = message.content.split(' ');
   if (message.author.bot) return;
+
+  const { content } = message;
+  if (content.length === 5) await handleMessage(message);
+
+  const args = message.content.split(' ');
 
   if (args[0]?.toLowerCase() !== process.env.PREFIX) {
     const msgs: string[] = [];
@@ -174,6 +179,9 @@ client.on('messageCreate', async message => {
         break;
       case 'hiragana':
         await hiragana(message, params);
+        break;
+      case 'wordle':
+        await wordle(message, params);
         break;
       default:
         await message.channel.send(
