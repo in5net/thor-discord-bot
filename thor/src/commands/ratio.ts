@@ -109,7 +109,7 @@ function generateCanvas() {
   ctx.fillStyle = '#dcddde';
   ctx.font = '16px Whitney';
   ctx.textBaseline = 'top';
-  wrapText(ctx, text, 0, 0, size, 24);
+  wrapText(ctx as CanvasRenderingContext2D, text, 0, 0, size, 24);
 
   return canvas;
 }
