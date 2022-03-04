@@ -557,7 +557,7 @@ export default class GL {
       postrender?.();
       imageData.data.set(this.buffer());
       ctx.putImageData(imageData, 0, 0);
-      encoder.addFrame(ctx);
+      // encoder.addFrame(ctx);
 
       await new Promise(resolve => setImmediate(resolve));
     }

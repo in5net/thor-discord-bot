@@ -30,6 +30,7 @@ module.exports = {
     'no-restricted-syntax': 'off',
     'no-cond-assign': 'off',
     'no-nested-ternary': 'off',
+    'no-restricted-exports': 'off',
     'consistent-return': 'off',
     'no-promise-executor-return': 'off',
     'max-classes-per-file': 'off',
