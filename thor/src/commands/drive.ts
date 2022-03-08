@@ -1,6 +1,5 @@
 import type Command from './command';
 
-// https://drive.google.com/file/d/1g54Rri8alz4XuvGchp75C9hGDAjkBLQB/view
 const googleDriveURLRegex =
   /^https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)\/view$/;
 
