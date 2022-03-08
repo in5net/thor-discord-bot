@@ -141,6 +141,15 @@ const help = helpCommand('Thor', 'thor ', 'ORANGE', [
     name: 'hiragana',
     usage: 'hiragana <length?=100>',
     value: 'Sends a bunch of random hiragana characters to practice reading'
+  },
+  {
+    name: 'wordle',
+    value: 'Play Wordle!'
+  },
+  {
+    name: 'drive',
+    usage: 'drive <url>',
+    value: 'Generates a url of a Google Drive file'
   }
 ]);
 export default help;

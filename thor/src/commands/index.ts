@@ -26,3 +26,4 @@ export { default as rng } from './rng';
 export { default as ratio } from './ratio';
 export { default as hiragana } from './hiragana';
 export { default as wordle } from './wordle';
+export { default as drive } from './drive';
