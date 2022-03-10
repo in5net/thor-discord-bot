@@ -46,6 +46,10 @@ client.on('messageCreate', async message => {
     let lowercase = content.toLowerCase();
     // Remove @mentions
     lowercase = lowercase.replace(/<@!?\d+>/g, '');
+    if (lowercase.replace(' ', '') === 'no way') {
+      await message.channel.send('no way');
+      return;
+    }
     if (
       message.channel.type !== 'DM' &&
       !message.channel.name.includes('thor')
