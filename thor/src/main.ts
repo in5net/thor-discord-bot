@@ -46,7 +46,7 @@ client.on('messageCreate', async message => {
     let lowercase = content.toLowerCase();
     // Remove @mentions
     lowercase = lowercase.replace(/<@!?\d+>/g, '');
-    if (lowercase.replace(' ', '') === 'no way') {
+    if (lowercase.replace(' ', '') === 'noway') {
       await message.channel.send('no way');
       return;
     }
