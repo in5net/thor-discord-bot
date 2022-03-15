@@ -32,6 +32,7 @@ import {
 } from './commands';
 import { handleMessage } from './commands/wordle';
 import './env';
+import responses from './responses';
 
 client.on('messageCreate', async message => {
   if (message.author.bot) return;
@@ -59,40 +60,10 @@ client.on('messageCreate', async message => {
       } else return;
     }
 
-    if (lowercase.includes('69')) msgs.push('nice');
-    if (lowercase.includes('420')) msgs.push('BLAZE IT!!!');
-    if (lowercase.includes('stuff'))
-      msgs.push("you know what stuffs, you're right");
-    if (lowercase.includes('thor')) msgs.push('wuz gud');
-    if (lowercase.includes('band')) msgs.push('im in a band 🥁');
-    else if (lowercase.includes('ban')) msgs.push('i donut like banning');
-    if (lowercase.includes('bruh')) msgs.push('bruh');
-    if (lowercase.includes('hotel')) msgs.push('❗️ red roof inn 🔴');
-    if (lowercase.includes('bone')) msgs.push('i want that bone 🦴');
-    if (lowercase.includes('dank')) msgs.push('dank memes');
-    if (lowercase.includes('ball'))
-      msgs.push('i would enjoy that ball of yours ➡️ 🎾');
-    if (lowercase.includes('thanks') || lowercase.includes('thx'))
-      msgs.push('your welcome');
-    if (
-      lowercase.includes('sus') ||
-      lowercase.includes('imposter') ||
-      lowercase.includes('among') ||
-      lowercase.includes('amogus')
-    )
-      msgs.push('😳😳😳');
-    if (lowercase.includes('kick')) msgs.push('i like kicking');
-    if (lowercase.includes('shankstorm'))
-      msgs.push(
-        '🍖🍗🍖🍗🍗🍖🍖🍖🍗🍖🍖🍗🍖🍗🍗🍖🍖🍗🍖🍗🍗🍖🍗🍖🍗🍗🍗🍖🍖🍗🍖🍖🍗🍗🍗🍖🍗🍖🍗🍗🍖🍗🍖🍖🍖🍗🍖🍖🍗🍗🍖🍖🍖🍗🍖🍖🍗'
-      );
-    else if (lowercase.includes('shank')) msgs.push('🍖');
-    if (lowercase.includes('water')) msgs.push("bo'oh' o' wa'er");
-    if (lowercase.includes('boss')) msgs.push('ey, boss');
-    if (lowercase.includes('!!')) msgs.push('no yelling.');
-    if (lowercase.includes('magine')) msgs.push('imagine dragons 🔥🐉');
-    if (lowercase.includes('ti-84'))
-      msgs.push('Integwate a TI-84 emuwatow into Thow pwease');
+    for (const [words, msg] of responses.entries()) {
+      const included = words.some(word => lowercase.includes(word));
+      if (included) msgs.push(msg);
+    }
 
     if (msgs.length) await message.channel.send(msgs.join(' '));
     return;
