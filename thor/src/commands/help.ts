@@ -37,8 +37,9 @@ const help = helpCommand('Thor', 'thor ', 'ORANGE', [
     value: 'Reacts to your message with random emojis'
   },
   {
-    name: 'ping',
-    value: 'Pings the bot'
+    name: 'ping <@user> <times> <msg>',
+    value:
+      'Ping a user a certain number of times with a message at random intervals'
   },
   {
     name: 'status',
