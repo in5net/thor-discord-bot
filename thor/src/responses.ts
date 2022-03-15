@@ -34,7 +34,7 @@ responses.set(['girl', 'woman', 'gal', 'bitch'], 'no bitches?');
 responses.set(['noah'], 'noah manoah');
 responses.set(['dragon', 'born'], 'dragonborn comes');
 responses.set(['doom'], 'doom');
-responses.set(['hiri'], 'ひりがな');
+responses.set(['hira'], 'ひらがな');
 responses.set(['kata'], 'カタカナ');
 responses.set(['kan'], '漢字');
 responses.set(['kana'], 'かな');
