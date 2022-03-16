@@ -27,3 +27,4 @@ export { default as ratio } from './ratio';
 export { default as hiragana } from './hiragana';
 export { default as wordle } from './wordle';
 export { default as drive } from './drive';
+export { default as hash } from './hash';

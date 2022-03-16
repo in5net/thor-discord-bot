@@ -29,5 +29,4 @@ const random: Command = async ({ channel }) => {
     files: [new MessageAttachment(canvas.toBuffer())]
   });
 };
-
 export default random;

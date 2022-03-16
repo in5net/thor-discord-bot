@@ -28,7 +28,8 @@ import {
   zen,
   wordle,
   rng,
-  drive
+  drive,
+  hash
 } from './commands';
 import { handleMessage } from './commands/wordle';
 import './env';
@@ -161,6 +162,9 @@ client.on('messageCreate', async message => {
         break;
       case 'drive':
         await drive(message, params);
+        break;
+      case 'hash':
+        await hash(message, params);
         break;
       default:
         await message.channel.send(
