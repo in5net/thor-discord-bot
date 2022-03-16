@@ -8,10 +8,9 @@ const size = 16;
 const zoom = 4;
 const width = size * zoom;
 
-const hash = createHash('sha256');
-
 const cmd: Command = async ({ channel }, words) => {
   const input = words.join(' ');
+  const hash = createHash('sha256');
   hash.update(input);
   const digest = hash.digest('hex');
 
