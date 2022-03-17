@@ -74,13 +74,18 @@ const kana = [
   'ぽ'
 ];
 
-const hiragana: Command = async ({ channel }, [lengthStr = '100']) => {
-  const length = parseInt(lengthStr);
-  if (isNaN(length) || length < 1) channel.send('Invalid length');
-  const text = new Array(100)
-    .fill(0)
-    .map(() => kana[Math.floor(Math.random() * kana.length)])
-    .join('');
-  return channel.send(text);
+const cmd: Command = {
+  name: 'hiragana',
+  desc: 'Sends a bunch of random hiragana characters to practice reading',
+  usage: 'hiragana <length?=100>',
+  async exec({ channel }, [lengthStr = '100']) {
+    const length = parseInt(lengthStr);
+    if (isNaN(length) || length < 1) channel.send('Invalid length');
+    const text = new Array(100)
+      .fill(0)
+      .map(() => kana[Math.floor(Math.random() * kana.length)])
+      .join('');
+    return channel.send(text);
+  }
 };
-export default hiragana;
+export default cmd;

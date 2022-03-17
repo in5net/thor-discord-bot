@@ -7,11 +7,15 @@ import type Command from './command';
 let word = '';
 let channelId = '';
 
-const cmd: Command = async ({ channel }) => {
-  word = random(wordle);
-  channelId = channel.id;
-  console.log('Wordle word:', word);
-  return channel.send('Picked word, time to guess!');
+const cmd: Command = {
+  name: 'wordle',
+  desc: 'Play Wordle!',
+  async exec({ channel }) {
+    word = random(wordle);
+    channelId = channel.id;
+    console.log('Wordle word:', word);
+    return channel.send('Picked word, time to guess!');
+  }
 };
 export default cmd;
 

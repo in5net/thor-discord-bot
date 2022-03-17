@@ -76,95 +76,95 @@ client.on('messageCreate', async message => {
   try {
     switch (command) {
       case 'help':
-        await help(message, params);
+        await help.exec(message, params);
         break;
       case 'img':
       case 'pic':
-        await img(message, params);
+        await img.exec(message, params);
         break;
       case 'gif':
-        await gif(message, params);
+        await gif.exec(message, params);
         break;
       case 'text':
-        await text(message, params);
+        await text.exec(message, params);
         break;
       case 'fractal':
-        await fractal(message, params);
+        await fractal.exec(message, params);
         break;
       case 'random':
-        await random(message, params);
+        await random.exec(message, params);
         break;
       case 'noise':
-        await noise(message, params);
+        await noise.exec(message, params);
         break;
       case 'react':
-        await react(message, params);
+        await react.exec(message, params);
         break;
       case 'ping':
-        await ping(message, params);
+        await ping.exec(message, params);
         break;
       case 'status':
-        await status(message, params);
+        await status.exec(message, params);
         break;
       case 'members':
-        await members(message, params);
+        await members.exec(message, params);
         break;
       case 'mast':
-        await mast(message, params);
+        await mast.exec(message, params);
         break;
       case 'cube':
-        await cube(message, params);
+        await cube.exec(message, params);
         break;
       case 'owo':
-        await owo(message, params);
+        await owo.exec(message, params);
         break;
       case 'chaos':
-        await chaos(message, params);
+        await chaos.exec(message, params);
         break;
       case 'pixelsort':
-        await pixelsort(message, params);
+        await pixelsort.exec(message, params);
         break;
       case 'sort':
-        await sort(message, params);
+        await sort.exec(message, params);
         break;
       case 'graph':
-        await graph(message, params);
+        await graph.exec(message, params);
         break;
       case 'quest':
-        await quest(message, params);
+        await quest.exec(message, params);
         break;
       case 'ao3':
-        await ao3(message, params);
+        await ao3.exec(message, params);
         break;
       case 'cipher':
-        await cipher(message, params);
+        await cipher.exec(message, params);
         break;
       case 'zen':
-        await zen(message, params);
+        await zen.exec(message, params);
         break;
       case 'hex':
-        await hex(message, params);
+        await hex.exec(message, params);
         break;
       case 'pfp':
-        await pfp(message, params);
+        await pfp.exec(message, params);
         break;
       case 'rng':
-        await rng(message, params);
+        await rng.exec(message, params);
         break;
       case 'ratio':
-        await ratio(message, params);
+        await ratio.exec(message, params);
         break;
       case 'hiragana':
-        await hiragana(message, params);
+        await hiragana.exec(message, params);
         break;
       case 'wordle':
-        await wordle(message, params);
+        await wordle.exec(message, params);
         break;
       case 'drive':
-        await drive(message, params);
+        await drive.exec(message, params);
         break;
       case 'hash':
-        await hash(message, params);
+        await hash.exec(message, params);
         break;
       default:
         await message.channel.send(

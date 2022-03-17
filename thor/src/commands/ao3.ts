@@ -10,103 +10,110 @@ import type { Work } from '@limitlesspc/limitless/api/ao3/work';
 
 import type Command from './command';
 
-const ao3: Command = async ({ channel }, args) => {
-  const url = args[0];
-  if (!url) return channel.send('Please provide a url');
+const cmd: Command = {
+  name: 'ao3',
+  desc: 'Gets data of a work on Archive of Our Own',
+  usage: 'ao3 <url>',
+  async exec({ channel }, args) {
+    const url = args[0];
+    if (!url) return channel.send('Please provide a url');
 
-  try {
-    const id = getWorkId(url);
-    const {
-      title,
-      url: workUrl,
-      author,
-      rating,
-      warnings,
-      categories,
-      relationships,
-      characters,
-      tags,
-      language,
-      series,
-      stats: { published, updated, words, chapters, kudos, bookmarks, hits },
-      symbols
-    } = await getWork(id);
-    const { url: authorUrl, iconUrl } = await getUser(author);
+    try {
+      const id = getWorkId(url);
+      const {
+        title,
+        url: workUrl,
+        author,
+        rating,
+        warnings,
+        categories,
+        relationships,
+        characters,
+        tags,
+        language,
+        series,
+        stats: { published, updated, words, chapters, kudos, bookmarks, hits },
+        symbols
+      } = await getWork(id);
+      const { url: authorUrl, iconUrl } = await getUser(author);
 
-    const canvas = await drawLegendarySquare(symbols);
-    const squareFile = new MessageAttachment(
-      canvas.toBuffer(),
-      'legendary-square.png'
-    );
-
-    const embed = new MessageEmbed()
-      .setColor('#990000')
-      .setTitle(title)
-      .setAuthor(author, iconUrl, authorUrl)
-      .setURL(workUrl)
-      .setThumbnail('attachment://legendary-square.png')
-      .setFooter(
-        'Archive of Our Own',
-        'https://upload.wikimedia.org/wikipedia/commons/8/88/Archive_of_Our_Own_logo.png'
+      const canvas = await drawLegendarySquare(symbols);
+      const squareFile = new MessageAttachment(
+        canvas.toBuffer(),
+        'legendary-square.png'
       );
-    if (rating) embed.addField('Rating', ao3Ratings[rating]);
-    if (warnings?.length)
+
+      const embed = new MessageEmbed()
+        .setColor('#990000')
+        .setTitle(title)
+        .setAuthor({ name: author, url: authorUrl, iconURL: iconUrl })
+        .setURL(workUrl)
+        .setThumbnail('attachment://legendary-square.png')
+        .setFooter({
+          text: 'Archive of Our Own',
+          iconURL:
+            'https://upload.wikimedia.org/wikipedia/commons/8/88/Archive_of_Our_Own_logo.png'
+        });
+      if (rating) embed.addField('Rating', ao3Ratings[rating]);
+      if (warnings?.length)
+        embed.addField(
+          'Warnings',
+          warnings.map(warning => contentWarnings[warning]).join(', ')
+        );
+      else
+        embed.addField('Warnings', 'Creator Chose Not To Use Archive Warnings');
+      if (categories.length)
+        embed.addField(
+          'Categories',
+          categories
+            .map(category => relationshipOrientations[category])
+            .join(', ')
+        );
+      if (relationships.length)
+        embed.addField('Relationships', relationships.join(', '));
+      if (characters.length)
+        embed.addField('Characters', characters.join(', '));
+      if (tags.length) embed.addField('Tags', tags.join(', '));
+      embed.addField('Language', language);
+      if (series)
+        embed.addField(
+          'Series',
+          `[${series.title}](https://archiveofourown.org/series/${series.id})`
+        );
+
       embed.addField(
-        'Warnings',
-        warnings.map(warning => contentWarnings[warning]).join(', ')
-      );
-    else
-      embed.addField('Warnings', 'Creator Chose Not To Use Archive Warnings');
-    if (categories.length)
-      embed.addField(
-        'Categories',
-        categories
-          .map(category => relationshipOrientations[category])
-          .join(', ')
-      );
-    if (relationships.length)
-      embed.addField('Relationships', relationships.join(', '));
-    if (characters.length) embed.addField('Characters', characters.join(', '));
-    if (tags.length) embed.addField('Tags', tags.join(', '));
-    embed.addField('Language', language);
-    if (series)
-      embed.addField(
-        'Series',
-        `[${series.title}](https://archiveofourown.org/series/${series.id})`
-      );
-
-    embed.addField(
-      'Stats:',
-      `* Published: ${published.toLocaleString('en-US', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      })}${
-        updated
-          ? `* Updated: ${updated.toLocaleString('en-US', {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit'
-            })}`
-          : ''
-      }
+        'Stats:',
+        `* Published: ${published.toLocaleString('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        })}${
+          updated
+            ? `* Updated: ${updated.toLocaleString('en-US', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+              })}`
+            : ''
+        }
 * Words: ${words}
 * Chapters: ${chapters[0]}/${chapters[1] || '?'}
 * Kudos: ${kudos}
 * Bookmarks: ${bookmarks}
 * Hits: ${hits}`
-    );
+      );
 
-    return await channel.send({
-      embeds: [embed],
-      files: [squareFile]
-    });
-  } catch (error) {
-    console.error(error);
-    return channel.send('Invalid AO3 url');
+      return await channel.send({
+        embeds: [embed],
+        files: [squareFile]
+      });
+    } catch (error) {
+      console.error(error);
+      return channel.send('Invalid AO3 url');
+    }
   }
 };
-export default ao3;
+export default cmd;
 
 async function drawLegendarySquare({
   rating,

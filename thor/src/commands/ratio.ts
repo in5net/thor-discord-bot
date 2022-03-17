@@ -89,17 +89,23 @@ const ratios = [
 const numRatios = 50;
 const size = 256;
 
-const ratio: Command = async ({ channel }, [arg]) => {
-  if (arg === 'img') {
-    const canvas = generateCanvas();
-    return channel.send({
-      content: null,
-      files: [new MessageAttachment(canvas.toBuffer())]
-    });
+const cmd: Command = {
+  name: 'ratio',
+  desc: 'Get ratioed',
+  usage: 'ratio img?',
+  async exec({ channel }, [arg]) {
+    if (arg === 'img') {
+      const canvas = generateCanvas();
+      return channel.send({
+        content: null,
+        files: [new MessageAttachment(canvas.toBuffer())]
+      });
+    }
+    const text = generateStr();
+    return channel.send(text);
   }
-  const text = generateStr();
-  return channel.send(text);
 };
+export default cmd;
 
 function generateCanvas() {
   const text = generateStr();
@@ -152,5 +158,3 @@ if (require.main === module) {
   const imgPath = join(__dirname, './ratio.png');
   generateCanvas().createPNGStream().pipe(createWriteStream(imgPath));
 }
-
-export default ratio;

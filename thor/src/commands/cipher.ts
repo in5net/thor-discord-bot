@@ -1,26 +1,62 @@
 import type Command from './command';
+import help from './help';
 
-const cipher: Command = async (message, [subcmd, offsetStr = '', ...words]) => {
-  const { channel } = message;
-  const offset = parseInt(offsetStr);
-  if (isNaN(offset)) return channel.send('Must provide an offset');
+const cmd: Command = {
+  name: 'cipher',
+  desc: 'Encrypts or decrypts a message using a Caesar cipher with an indexed offset',
+  async exec(message) {
+    return help.exec(message, [this.name]);
+  },
+  subcommands: [
+    {
+      name: 'encrypt',
+      desc: 'Encrypts a message',
+      usage: 'encrypt <offset> <message>',
+      async exec(message, [offsetStr = '', ...words]) {
+        const { channel } = message;
+        const offset = parseInt(offsetStr);
+        if (isNaN(offset)) return channel.send('Must provide an offset');
 
-  const text = words.join(' ');
-  if (!text) return channel.send('Must provide a message');
+        const text = words.join(' ');
+        if (!text) return channel.send('Must provide a message');
 
-  switch (subcmd) {
-    case 'encrypt':
-      return channel.send(encrypt(text, offset));
-    case 'iencrypt':
-      await message.delete();
-      return channel.send(encrypt(text, offset));
-    case 'decrypt':
-      return channel.send(decrypt(text, offset));
-    default:
-      return channel.send(`IDK what cipher ${subcmd} is`);
-  }
+        return channel.send(encrypt(text, offset));
+      }
+    },
+    {
+      name: 'iencrypt',
+      desc: "Encrypts a message in place (removes the original message so others can't see it)",
+      usage: 'iencrypt <offset> <message>',
+      async exec(message, [offsetStr = '', ...words]) {
+        const { channel } = message;
+        const offset = parseInt(offsetStr);
+        if (isNaN(offset)) return channel.send('Must provide an offset');
+
+        const text = words.join(' ');
+        if (!text) return channel.send('Must provide a message');
+
+        await message.delete();
+        return channel.send(encrypt(text, offset));
+      }
+    },
+    {
+      name: 'decrypt',
+      desc: 'Decrypts a message',
+      usage: 'decrypt <offset> <message>',
+      async exec(message, [offsetStr = '', ...words]) {
+        const { channel } = message;
+        const offset = parseInt(offsetStr);
+        if (isNaN(offset)) return channel.send('Must provide an offset');
+
+        const text = words.join(' ');
+        if (!text) return channel.send('Must provide a message');
+
+        return channel.send(decrypt(text, offset));
+      }
+    }
+  ]
 };
-export default cipher;
+export default cmd;
 
 const spaceCode = ' '.charCodeAt(0);
 const tildeCode = '~'.charCodeAt(0);
