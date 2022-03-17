@@ -103,7 +103,7 @@ const cmd: Command = {
 * Hits: ${hits}`
       );
 
-      return await channel.send({
+      return channel.send({
         embeds: [embed],
         files: [squareFile]
       });

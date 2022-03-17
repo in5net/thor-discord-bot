@@ -1,11 +1,17 @@
 import { getPlayer } from '../players';
 import type Command from './command';
 
-const lyrics: Command = (message, args) => {
-  const { guildId } = message;
-  if (!guildId) return;
-  const player = getPlayer(guildId);
+const cmd: Command = {
+  name: 'lyrics',
+  desc: 'Gives you the lyrics of the current song or song by name',
+  usage: 'lyrics/l <song name?>',
+  aliases: ['l'],
+  async exec(message, args) {
+    const { guildId } = message;
+    if (!guildId) return;
+    const player = getPlayer(guildId);
 
-  return player.lyrics(message, args.join(' '));
+    return player.lyrics(message, args.join(' '));
+  }
 };
-export default lyrics;
+export default cmd;

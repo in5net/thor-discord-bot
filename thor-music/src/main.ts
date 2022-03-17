@@ -1,98 +1,45 @@
 import client from './client';
-import {
-  help,
-  hz,
-  loop,
-  lyrics,
-  move,
-  next,
-  pause,
-  play,
-  playlist,
-  playnow,
-  playshuffle,
-  queue,
-  remove,
-  shuffle,
-  soundboard,
-  stop
-} from './commands';
 import players from './players';
+import help from './commands/help';
+import commands from './commands';
 import './env';
+import type Command from '../../command';
+
+const allCommands = [help, ...commands];
 
 client
   .on('messageCreate', async message => {
     if (!message.content.startsWith('-')) return;
     const args = message.content.slice(1).split(' ');
 
-    const params = args.slice(1);
-    try {
-      switch (args[0]?.toLowerCase()) {
-        case 'help':
-        case 'h':
-          await help(message, params);
-          break;
-        case 'play':
-        case 'p':
-          await play(message, params);
-          break;
-        case 'playnow':
-        case 'pn':
-          await playnow(message, params);
-          break;
-        case 'queue':
-        case 'q':
-          await queue(message, params);
-          break;
-        case 'next':
-        case 'n':
-        case 'skip':
-          await next(message, params);
-          break;
-        case 'pause':
-          await pause(message, params);
-          break;
-        case 'shuffle':
-          await shuffle(message, params);
-          break;
-        case 'playshuffle':
-        case 'ps':
-          await playshuffle(message, params);
-          break;
-        case 'loop':
-          await loop(message, params);
-          break;
-        case 'move':
-        case 'mv':
-          await move(message, params);
-          break;
-        case 'remove':
-        case 'rm':
-          await remove(message, params);
-          break;
-        case 'stop':
-        case 'clear':
-        case 'leave':
-          await stop(message, params);
-          break;
-        case 'soundboard':
-        case 'sb':
-          await soundboard(message, params);
-          break;
-        case 'lyrics':
-        case 'l':
-          await lyrics(message, params);
-          break;
-        case 'playlist':
-        case 'pl':
-          await playlist(message, params);
-          break;
-        case 'hz':
-          await hz(message, params);
-      }
-    } catch (error) {
-      await message.channel.send(`Error: ${error}`);
+    const commandNames = args.slice(1);
+    if (!commandNames.length) return;
+    const trueArgs = commandNames.slice(1);
+
+    let command: Command | undefined;
+    let commands = allCommands;
+    for (const commandName of commandNames) {
+      const subcommand = commands.find(
+        ({ name, aliases }) =>
+          name === commandName.toLowerCase() ||
+          aliases?.includes(commandName.toLowerCase())
+      );
+      if (!subcommand) break;
+      trueArgs.shift();
+      command = subcommand;
+      commands = subcommand.subcommands || [];
     }
+
+    try {
+      if (!command)
+        await message.channel.send(
+          Math.random() < 0.1 ? 'No.' : `IDK what ${command} is`
+        );
+      else await command.exec(message, args.slice(2));
+    } catch (err) {
+      await message.channel.send(`Error ): ${err}`);
+    }
+    client.user?.setActivity();
   })
   .on('voiceStateUpdate', oldState => {
     if (oldState.channel?.members.size === 1) {

@@ -13,6 +13,7 @@ export default function helpCommand(
     name: 'help',
     desc: 'Shows help for a/all command(s)',
     usage: 'help <command?>',
+    aliases: ['h'],
     async exec({ channel }, args) {
       if (!args.length)
         return channel.send({

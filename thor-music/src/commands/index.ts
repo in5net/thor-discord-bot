@@ -1,16 +1,35 @@
-export { default as help } from './help';
-export { default as play } from './play';
-export { default as playnow } from './playnow';
-export { default as queue } from './queue';
-export { default as next } from './next';
-export { default as pause } from './pause';
-export { default as shuffle } from './shuffle';
-export { default as playshuffle } from './playshuffle';
-export { default as loop } from './loop';
-export { default as move } from './move';
-export { default as remove } from './remove';
-export { default as stop } from './stop';
-export { default as soundboard } from './soundboard';
-export { default as lyrics } from './lyrics';
-export { default as playlist } from './playlist';
-export { default as hz } from './hz';
+import play from './play';
+import playnow from './playnow';
+import queue from './queue';
+import next from './next';
+import pause from './pause';
+import shuffle from './shuffle';
+import playshuffle from './playshuffle';
+import loop from './loop';
+import move from './move';
+import remove from './remove';
+import stop from './stop';
+import soundboard from './soundboard';
+import lyrics from './lyrics';
+import playlist from './playlist';
+import hz from './hz';
+import type Command from './command';
+
+const commands: Command[] = [
+  play,
+  playnow,
+  queue,
+  next,
+  pause,
+  shuffle,
+  playshuffle,
+  loop,
+  move,
+  remove,
+  stop,
+  soundboard,
+  lyrics,
+  playlist,
+  hz
+];
+export default commands;

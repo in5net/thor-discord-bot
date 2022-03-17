@@ -52,7 +52,8 @@ client.on('messageCreate', async message => {
   for (const commandName of commandNames) {
     const subcommand = commands.find(
       ({ name, aliases }) =>
-        name === commandName || aliases?.includes(commandName)
+        name === commandName.toLowerCase() ||
+        aliases?.includes(commandName.toLowerCase())
     );
     if (!subcommand) break;
     trueArgs.shift();

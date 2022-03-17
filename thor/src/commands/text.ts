@@ -7,7 +7,7 @@ const cmd: Command = {
   async exec({ channel }) {
     const src = await getText();
     try {
-      return await channel.send(src);
+      return channel.send(src);
     } catch {
       return channel.send('So sad, looks like yyyyyyy.info is down ):');
     }

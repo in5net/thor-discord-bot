@@ -22,7 +22,7 @@ const cmd: Command = {
     if (!args.length) {
       const src = await getImg();
       try {
-        return await channel.send({
+        return channel.send({
           files: [new MessageAttachment(src)]
         });
       } catch {

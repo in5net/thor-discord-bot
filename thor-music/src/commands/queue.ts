@@ -1,15 +1,21 @@
 import { getPlayer } from '../players';
 import type Command from './command';
 
-const queue: Command = (message, [numStr]) => {
-  const { channel, guildId } = message;
-  if (!guildId) return;
-  const player = getPlayer(guildId);
-  if (numStr) {
-    const embed = player.songQueueEmbed(parseInt(numStr || '1'));
-    if (embed) return channel.send({ embeds: [embed] });
-    return channel.send(`Song #${numStr} not found in queue`);
+const cmd: Command = {
+  name: 'queue',
+  desc: "Shows what's in the queue or details about song #n",
+  usage: 'queue/q <n?>',
+  aliases: ['q'],
+  async exec(message, [numStr]) {
+    const { channel, guildId } = message;
+    if (!guildId) return;
+    const player = getPlayer(guildId);
+    if (numStr) {
+      const embed = player.songQueueEmbed(parseInt(numStr || '1'));
+      if (embed) return channel.send({ embeds: [embed] });
+      return channel.send(`Song #${numStr} not found in queue`);
+    }
+    return player.queueEmbed(message);
   }
-  return player.queueEmbed(message);
 };
-export default queue;
+export default cmd;

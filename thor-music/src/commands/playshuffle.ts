@@ -2,15 +2,20 @@ import { getPlayer } from '../players';
 import woof from '../../../woof';
 import type Command from './command';
 
-const playshuffle: Command = (message, args) => {
-  const { guildId } = message;
-  if (!guildId) return;
-  const player = getPlayer(guildId);
+const cmd: Command = {
+  name: 'playshuffle',
+  desc: 'Adds and shuffles the queue',
+  usage: 'playshuffle/ps <url or YouTube search>',
+  async exec(message, args) {
+    const { guildId } = message;
+    if (!guildId) return;
+    const player = getPlayer(guildId);
 
-  const channel = message.member?.voice.channel;
-  if (channel?.type !== 'GUILD_VOICE')
-    return message.reply(`${woof()}, you are not in a voice channel`);
+    const channel = message.member?.voice.channel;
+    if (channel?.type !== 'GUILD_VOICE')
+      return message.reply(`${woof()}, you are not in a voice channel`);
 
-  return player.add(message, args.join(' '), true);
+    return player.add(message, args.join(' '), true);
+  }
 };
-export default playshuffle;
+export default cmd;
