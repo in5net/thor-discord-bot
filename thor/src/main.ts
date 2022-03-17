@@ -1,39 +1,12 @@
+import type Command from '../../command';
+import help from './commands/help';
 import client from './client';
-import {
-  ao3,
-  chaos,
-  cipher,
-  cube,
-  fractal,
-  gif,
-  graph,
-  help,
-  hex,
-  hiragana,
-  img,
-  mast,
-  members,
-  noise,
-  owo,
-  pfp,
-  ping,
-  pixelsort,
-  quest,
-  random,
-  ratio,
-  react,
-  sort,
-  status,
-  text,
-  zen,
-  wordle,
-  rng,
-  drive,
-  hash
-} from './commands';
+import commands from './commands';
 import { handleMessage } from './commands/wordle';
 import './env';
 import responses from './responses';
+
+const allCommands = [help, ...commands];
 
 client.on('messageCreate', async message => {
   if (message.author.bot) return;
@@ -70,111 +43,31 @@ client.on('messageCreate', async message => {
     return;
   }
 
-  const params = args.slice(2);
-  const command = args[1]?.toLowerCase();
-  if (!command) return;
+  const commandNames = args.slice(1);
+  if (!commandNames.length) return;
+
+  let command: Command | undefined;
+  let commands = allCommands;
+  for (const commandName of commandNames) {
+    const subcommand = commands.find(
+      ({ name, aliases }) =>
+        commandName === name || aliases?.includes(commandName)
+    );
+    if (!subcommand) break;
+    command = subcommand;
+    commands = subcommand.subcommands || [];
+  }
+
   try {
-    switch (command) {
-      case 'help':
-        await help.exec(message, params);
-        break;
-      case 'img':
-      case 'pic':
-        await img.exec(message, params);
-        break;
-      case 'gif':
-        await gif.exec(message, params);
-        break;
-      case 'text':
-        await text.exec(message, params);
-        break;
-      case 'fractal':
-        await fractal.exec(message, params);
-        break;
-      case 'random':
-        await random.exec(message, params);
-        break;
-      case 'noise':
-        await noise.exec(message, params);
-        break;
-      case 'react':
-        await react.exec(message, params);
-        break;
-      case 'ping':
-        await ping.exec(message, params);
-        break;
-      case 'status':
-        await status.exec(message, params);
-        break;
-      case 'members':
-        await members.exec(message, params);
-        break;
-      case 'mast':
-        await mast.exec(message, params);
-        break;
-      case 'cube':
-        await cube.exec(message, params);
-        break;
-      case 'owo':
-        await owo.exec(message, params);
-        break;
-      case 'chaos':
-        await chaos.exec(message, params);
-        break;
-      case 'pixelsort':
-        await pixelsort.exec(message, params);
-        break;
-      case 'sort':
-        await sort.exec(message, params);
-        break;
-      case 'graph':
-        await graph.exec(message, params);
-        break;
-      case 'quest':
-        await quest.exec(message, params);
-        break;
-      case 'ao3':
-        await ao3.exec(message, params);
-        break;
-      case 'cipher':
-        await cipher.exec(message, params);
-        break;
-      case 'zen':
-        await zen.exec(message, params);
-        break;
-      case 'hex':
-        await hex.exec(message, params);
-        break;
-      case 'pfp':
-        await pfp.exec(message, params);
-        break;
-      case 'rng':
-        await rng.exec(message, params);
-        break;
-      case 'ratio':
-        await ratio.exec(message, params);
-        break;
-      case 'hiragana':
-        await hiragana.exec(message, params);
-        break;
-      case 'wordle':
-        await wordle.exec(message, params);
-        break;
-      case 'drive':
-        await drive.exec(message, params);
-        break;
-      case 'hash':
-        await hash.exec(message, params);
-        break;
-      default:
-        await message.channel.send(
-          Math.random() < 0.1 ? 'No.' : `IDK what ${command} is`
-        );
-    }
-    client.user?.setActivity();
+    if (!command)
+      await message.channel.send(
+        Math.random() < 0.1 ? 'No.' : `IDK what ${command} is`
+      );
+    else await command.exec(message, args.slice(2));
   } catch (err) {
     await message.channel.send(`Error ): ${err}`);
   }
+  client.user?.setActivity();
 });
 
 client.login(process.env.TOKEN).then(() => client.user?.setActivity());

@@ -1,11 +1,10 @@
 import type Command from './command';
-import help from './help';
 
 const cmd: Command = {
   name: 'cipher',
   desc: 'Encrypts or decrypts a message using a Caesar cipher with an indexed offset',
   async exec(message) {
-    return help.exec(message, [this.name]);
+    return message.channel.send('See `thor help cipher`');
   },
   subcommands: [
     {

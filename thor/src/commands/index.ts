@@ -1,30 +1,63 @@
-export { default as help } from './help';
-export { default as img } from './img';
-export { default as gif } from './gif';
-export { default as text } from './text';
-export { default as fractal } from './fractal';
-export { default as random } from './random';
-export { default as noise } from './noise';
-export { default as react } from './react';
-export { default as ping } from './ping';
-export { default as status } from './status';
-export { default as members } from './members';
-export { default as mast } from './mast';
-export { default as cube } from './cube';
-export { default as owo } from './owo';
-export { default as chaos } from './chaos';
-export { default as pixelsort } from './pixelsort';
-export { default as sort } from './sort';
-export { default as graph } from './graph';
-export { default as quest } from './quest';
-export { default as ao3 } from './ao3';
-export { default as cipher } from './cipher';
-export { default as zen } from './zen';
-export { default as hex } from './hex';
-export { default as pfp } from './pfp';
-export { default as rng } from './rng';
-export { default as ratio } from './ratio';
-export { default as hiragana } from './hiragana';
-export { default as wordle } from './wordle';
-export { default as drive } from './drive';
-export { default as hash } from './hash';
+import img from './img';
+import gif from './gif';
+import text from './text';
+import fractal from './fractal';
+import random from './random';
+import noise from './noise';
+import react from './react';
+import ping from './ping';
+import status from './status';
+import members from './members';
+import mast from './mast';
+import cube from './cube';
+import owo from './owo';
+import chaos from './chaos';
+import pixelsort from './pixelsort';
+import sort from './sort';
+import graph from './graph';
+import quest from './quest';
+import ao3 from './ao3';
+import cipher from './cipher';
+import zen from './zen';
+import hex from './hex';
+import pfp from './pfp';
+import rng from './rng';
+import ratio from './ratio';
+import hiragana from './hiragana';
+import wordle from './wordle';
+import drive from './drive';
+import hash from './hash';
+import type Command from '../../../command';
+
+const commands: Command[] = [
+  img,
+  gif,
+  text,
+  fractal,
+  random,
+  noise,
+  react,
+  ping,
+  status,
+  members,
+  mast,
+  cube,
+  owo,
+  chaos,
+  pixelsort,
+  sort,
+  graph,
+  quest,
+  ao3,
+  cipher,
+  zen,
+  hex,
+  pfp,
+  rng,
+  ratio,
+  hiragana,
+  wordle,
+  drive,
+  hash
+];
+export default commands;

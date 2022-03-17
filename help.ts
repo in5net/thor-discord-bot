@@ -3,18 +3,11 @@ import type { ColorResolvable } from 'discord.js';
 
 import type Command from './command';
 
-interface CommandManual {
-  name: string;
-  usage?: string;
-  value: string;
-  subcommands?: CommandManual[];
-}
-
 export default function helpCommand(
   title: string,
   prefix: string,
   color: ColorResolvable,
-  manual: CommandManual[]
+  manual: Command[]
 ): Command {
   return {
     name: 'help',
@@ -29,19 +22,19 @@ export default function helpCommand(
               .setDescription('Commands')
               .setColor(color)
               .addFields(
-                manual.map(({ name, usage, value, subcommands }) => ({
+                manual.map(({ name, desc, usage, subcommands }) => ({
                   name: `${name}: \`${prefix}${usage || name}${
                     subcommands
                       ? ` <${subcommands.map(({ name }) => name).join('|')}>`
                       : ''
                   }\``,
-                  value
+                  value: desc
                 }))
               )
           ]
         });
 
-      let commandManual: CommandManual | undefined;
+      let commandManual: Command | undefined;
       let commandManuals = manual;
       const usage: string[] = [];
       const commands = args.map(arg => arg.toLowerCase());
@@ -61,7 +54,7 @@ export default function helpCommand(
 
       const embed = new MessageEmbed()
         .setTitle(`${title} Help: ${commands.join(' ')}`)
-        .setDescription(commandManual.value)
+        .setDescription(commandManual.desc)
         .setColor(color)
         .addField('Usage', `\`${prefix}${usage.join(' ')}\``);
       if (commandManual.subcommands)
