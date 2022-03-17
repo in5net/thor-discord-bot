@@ -2,8 +2,7 @@
   "name": "discord-bot",
   "private": true,
   "scripts": {
-    "start": "ts-node src/main.ts",
-    "gen-cmd": "ts-node ./gen-cmd.ts"
+    "start": "ts-node src/main.ts"
   },
   "dependencies": {
     "@googleapis/customsearch": "^0.2.0",

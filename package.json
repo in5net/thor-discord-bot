@@ -11,8 +11,7 @@
     "start": "tmuxinator start",
     "thor": "cd thor && pnpm run start",
     "thor-music": "cd thor-music && pnpm run start",
-    "lint": "eslint --ignore-path .gitignore .",
-    "gen-cmd": "cd thor && pnpm run gen-cmd && cd .."
+    "lint": "eslint --ignore-path .gitignore ."
   },
   "dependencies": {
     "discord.js": "^13.6.0"
