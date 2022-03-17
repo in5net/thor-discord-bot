@@ -39,7 +39,9 @@ export default function helpCommand(
       const usage: string[] = [];
       const commands = args.map(arg => arg.toLowerCase());
       for (const command of commands) {
-        commandManual = commandManuals.find(({ name }) => name === command);
+        commandManual = commandManuals.find(
+          ({ name, aliases }) => name === command || aliases?.includes(command)
+        );
         if (!commandManual) {
           commandManual = undefined;
           break;

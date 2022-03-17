@@ -45,15 +45,17 @@ client.on('messageCreate', async message => {
 
   const commandNames = args.slice(1);
   if (!commandNames.length) return;
+  const trueArgs = commandNames.slice(1);
 
   let command: Command | undefined;
   let commands = allCommands;
   for (const commandName of commandNames) {
     const subcommand = commands.find(
       ({ name, aliases }) =>
-        commandName === name || aliases?.includes(commandName)
+        name === commandName || aliases?.includes(commandName)
     );
     if (!subcommand) break;
+    trueArgs.shift();
     command = subcommand;
     commands = subcommand.subcommands || [];
   }
