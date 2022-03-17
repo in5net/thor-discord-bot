@@ -12,9 +12,21 @@ client.on('messageCreate', async message => {
   if (message.author.bot) return;
 
   const { content } = message;
+  if (
+    ['among', 'imposter', 'imposta', 'amogus', 'mongus'].some(str =>
+      content.toLowerCase().includes(str)
+    )
+  ) {
+    await message.delete().catch();
+    let msg = 'salad mundus detected';
+    if (Math.random() < 0.3) msg += ` gave 1 strike to <@${message.author.id}>`;
+    await message.channel.send(msg).catch();
+    return;
+  }
+
   if (content.length === 5) await handleMessage(message);
 
-  const args = message.content.split(' ');
+  const args = content.split(' ');
 
   if (args[0]?.toLowerCase() !== process.env.PREFIX) {
     const msgs: string[] = [];
