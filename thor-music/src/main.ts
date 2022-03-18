@@ -12,13 +12,12 @@ client
     if (!message.content.startsWith('-')) return;
     const args = message.content.slice(1).split(' ');
 
-    const commandNames = args.slice(1);
-    if (!commandNames.length) return;
-    const trueArgs = commandNames.slice(1);
+    if (!args.length) return;
+    const trueArgs = args.slice(1);
 
     let command: Command | undefined;
     let commands = allCommands;
-    for (const commandName of commandNames) {
+    for (const commandName of args) {
       const subcommand = commands.find(
         ({ name, aliases }) =>
           name === commandName.toLowerCase() ||
