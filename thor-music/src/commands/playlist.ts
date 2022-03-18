@@ -4,8 +4,9 @@ import type Command from './command';
 
 const cmd: Command = {
   name: 'playlist',
-  desc: 'Plays a sound at a given frequency for a given duration',
-  usage: 'hz <frequency> <duration?=1>',
+  desc: 'Manage your personal playlists',
+  usage: 'playlist/pl',
+  aliases: ['pl'],
   async exec(message) {
     return message.channel.send('See `-help playlist`');
   },

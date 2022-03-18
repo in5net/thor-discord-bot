@@ -9,20 +9,19 @@ const allCommands = [help, ...commands];
 
 client
   .on('messageCreate', async message => {
-    if (!message.content.startsWith('-')) return;
-    const args = message.content.slice(1).split(' ');
+    const { content } = message;
+    if (!content.startsWith('-')) return;
 
-    const commandNames = args;
-    if (!commandNames.length) return;
-    const trueArgs = commandNames.slice(1);
+    const args = content.slice(1).split(' ');
+    if (!args.length) return;
 
+    const trueArgs = [...args];
     let command: Command | undefined;
     let commands = allCommands;
-    for (const commandName of commandNames) {
+    for (const arg of args) {
       const subcommand = commands.find(
         ({ name, aliases }) =>
-          name === commandName.toLowerCase() ||
-          aliases?.includes(commandName.toLowerCase())
+          name === arg.toLowerCase() || aliases?.includes(arg.toLowerCase())
       );
       if (!subcommand) break;
       trueArgs.shift();

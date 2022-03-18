@@ -57,7 +57,7 @@ client.on('messageCreate', async message => {
 
   const commandNames = args.slice(1);
   if (!commandNames.length) return;
-  const trueArgs = commandNames.slice(1);
+  const trueArgs = [...commandNames];
 
   let command: Command | undefined;
   let commands = allCommands;
