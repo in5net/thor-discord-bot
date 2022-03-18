@@ -78,7 +78,7 @@ client.on('messageCreate', async message => {
       await message.channel.send(
         Math.random() < 0.1 ? 'No.' : `IDK what ${command} is`
       );
-    else await command.exec(message, args.slice(2));
+    else await command.exec(message, trueArgs);
   } catch (err) {
     await message.channel.send(`Error ): ${err}`);
   }

@@ -12,12 +12,13 @@ client
     if (!message.content.startsWith('-')) return;
     const args = message.content.slice(1).split(' ');
 
-    if (!args.length) return;
-    const trueArgs = args.slice(1);
+    const commandNames = args;
+    if (!commandNames.length) return;
+    const trueArgs = commandNames.slice(1);
 
     let command: Command | undefined;
     let commands = allCommands;
-    for (const commandName of args) {
+    for (const commandName of commandNames) {
       const subcommand = commands.find(
         ({ name, aliases }) =>
           name === commandName.toLowerCase() ||
@@ -34,7 +35,7 @@ client
         await message.channel.send(
           Math.random() < 0.1 ? 'No.' : `IDK what ${command} is`
         );
-      else await command.exec(message, args.slice(2));
+      else await command.exec(message, trueArgs);
     } catch (err) {
       await message.channel.send(`Error ): ${err}`);
     }
