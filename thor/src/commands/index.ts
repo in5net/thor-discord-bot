@@ -27,6 +27,7 @@ import hiragana from './hiragana';
 import wordle from './wordle';
 import drive from './drive';
 import hash from './hash';
+import catboys from './catboys';
 import type Command from '../../../command';
 
 const commands: Command[] = [
@@ -58,6 +59,7 @@ const commands: Command[] = [
   hiragana,
   wordle,
   drive,
-  hash
+  hash,
+  catboys
 ];
 export default commands;

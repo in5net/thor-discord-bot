@@ -12,6 +12,7 @@ specifiers:
   '@types/uuid': ^8.3.4
   axios: 0.26.1
   canvas: ^2.9.0
+  catboys: ^1.0.4
   decode-gif: ^1.0.1
   discord.js: ^13.6.0
   dotenv: 16.0.0
@@ -33,6 +34,7 @@ dependencies:
   '@types/uuid': 8.3.4
   axios: 0.26.1
   canvas: 2.9.0
+  catboys: 1.0.4
   decode-gif: 1.0.1
   discord.js: 13.6.0
   dotenv: 16.0.0
@@ -476,6 +478,10 @@ packages:
 
   /caseless/0.12.0:
     resolution: {integrity: sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=}
+    dev: false
+
+  /catboys/1.0.4:
+    resolution: {integrity: sha512-GMYP43HrFo3O8N8Msm3XfFR4fAlVVNnSNKukzjmWlOCopHzDoGQRMM+NPa0yCd/SJSswj50Y6owSTvITbAfhgg==}
     dev: false
 
   /cheerio-select/1.5.0:
