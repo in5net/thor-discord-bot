@@ -1,5 +1,5 @@
 import { getPlayer } from '../players';
-import woof from '../../../woof';
+import woof from '../../../services/woof';
 import type Command from './command';
 
 const cmd: Command = {
