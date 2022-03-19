@@ -1,4 +1,3 @@
-import { MessageAttachment } from 'discord.js';
 import axios from 'axios';
 
 import type Command from './command';
@@ -25,9 +24,7 @@ const cmd: Command = {
     const image = response.data.images[0];
     if (!image) return channel.send('No waifu found');
 
-    return channel.send({
-      files: [new MessageAttachment(image.url)]
-    });
+    return channel.send(image.url);
   }
 };
 export default cmd;

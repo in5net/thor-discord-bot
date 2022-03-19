@@ -23,6 +23,7 @@ specifiers:
   glslify: ^7.1.1
   jsdom: ^19.0.0
   music-metadata: 7.12.2
+  nekos-best.js: ^5.0.0
   owofy: ^1.0.2
   pngjs: ^6.0.0
   typescript: 4.6.2
@@ -44,6 +45,7 @@ dependencies:
   glslify: 7.1.1
   jsdom: 19.0.0_canvas@2.9.0
   music-metadata: 7.12.2
+  nekos-best.js: 5.0.0
   owofy: 1.0.2
   pngjs: 6.0.0
 
@@ -1678,6 +1680,13 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
+  /nekos-best.js/5.0.0:
+    resolution: {integrity: sha512-JiRlI2Y6MEg49ZWRuevRRLcG9VdtFDcKNLDaUYYzSlbidqEjWT4y3p2XDkNVw5eRlT4hyNkE/Ca9znU3uLiN+g==}
+    engines: {node: '>=15.14.0'}
+    dependencies:
+      petitio: 1.4.0
+    dev: false
+
   /node-abi/3.5.0:
     resolution: {integrity: sha512-LtHvNIBgOy5mO8mPEUtkCW/YCRWYEKshIvqhe1GHHyXEHEB5mgICyYnAcl4qan3uFeRROErKGzatFHPf6kDxWw==}
     engines: {node: '>=10'}
@@ -1855,6 +1864,11 @@ packages:
   /peek-readable/4.0.2:
     resolution: {integrity: sha512-9fMaz6zoxw9ypO1KZy5RDJgSupEtu0Q+g/OqqsVHX3rKGR8qehRLYzsFARZ4bVvdvfknKiXvuDbkMnO1g6cRpQ==}
     engines: {node: '>=8'}
+    dev: false
+
+  /petitio/1.4.0:
+    resolution: {integrity: sha512-9LaVd/5BLmbNU8Q4Ax8NezihiPt2ISNqi2vKilEchSSf+YSOXxfsLUb0SUmDskm1WkBOVTsqdyuyYI0RYKqr0Q==}
+    engines: {node: '>=12.3.0'}
     dev: false
 
   /pngjs/6.0.0:
