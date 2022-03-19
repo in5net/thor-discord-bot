@@ -28,6 +28,7 @@ import wordle from './wordle';
 import drive from './drive';
 import hash from './hash';
 import catboys from './catboys';
+import waifu from './waifu';
 import type Command from '../../../command';
 
 const commands: Command[] = [
@@ -60,6 +61,7 @@ const commands: Command[] = [
   wordle,
   drive,
   hash,
-  catboys
+  catboys,
+  waifu
 ];
 export default commands;

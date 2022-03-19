@@ -1,17 +1,17 @@
 import { MessageAttachment } from 'discord.js';
-import CatboysClient from 'catboys';
+import axios from 'axios';
 
 import type Command from './command';
-
-const catboys = new CatboysClient();
 
 const cmd: Command = {
   name: 'catboys',
   desc: 'Sends a random catboys.com image',
   async exec({ channel }) {
-    const { url } = await catboys.sfw.catboy();
+    const response = await axios.get<{ url: string }>(
+      'https://api.catboys.com/img'
+    );
     return channel.send({
-      files: [new MessageAttachment(url)]
+      files: [new MessageAttachment(response.data.url)]
     });
   }
 };

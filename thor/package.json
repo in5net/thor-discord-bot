@@ -7,7 +7,6 @@
     "@types/uuid": "^8.3.4",
     "axios": "0.26.1",
     "canvas": "^2.9.0",
-    "catboys": "^1.0.4",
     "decode-gif": "^1.0.1",
     "discord.js": "^13.6.0",
     "dotenv": "16.0.0",
