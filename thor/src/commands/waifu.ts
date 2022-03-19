@@ -9,7 +9,10 @@ const cmd: Command = {
   usage: 'gif?|nsfw?',
   async exec({ channel }, args) {
     const nsfw = args.includes('nsfw');
-    if (nsfw && channel.type === 'GUILD_TEXT' && !channel.nsfw) return;
+    if (nsfw && channel.type === 'GUILD_TEXT' && !channel.nsfw) {
+      await channel.send('This channel is not marked as NSFW you cheeky boi.');
+      return;
+    }
 
     const response = await axios.get<{ images: { url: string }[] }>(
       'https://api.waifu.im/random',
