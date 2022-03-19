@@ -8,7 +8,7 @@ const size = 16;
 const cmd: Command = {
   name: 'hex',
   desc: 'Gives you a 16x16 image of a hex code',
-  usage: 'hex <#code>',
+  usage: '<#code>',
   async exec({ channel }, [hex]) {
     if (!hex) return channel.send('You need to provide a hex code');
 

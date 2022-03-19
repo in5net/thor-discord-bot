@@ -13,7 +13,7 @@ const gridSize = size / ticks;
 const cmd: Command = {
   name: 'graph',
   desc: 'Makes a 2D xy graph',
-  usage: 'graph <equation>',
+  usage: '<equation>',
   async exec({ channel }, args) {
     const canvas = createCanvas(size, size);
     const ctx = canvas.getContext('2d');

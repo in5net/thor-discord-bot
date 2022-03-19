@@ -5,7 +5,7 @@ import type Command from './command';
 const cmd: Command = {
   name: 'ping',
   desc: 'Ping a user a certain number of times with a message at random intervals',
-  usage: 'ping <@user> <times> <msg>',
+  usage: '<@user> <times> <msg>',
   async exec({ channel, mentions }, [, timesStr, ...msg]) {
     const user = mentions.users?.first();
     if (!user) return channel.send('No user mentioned');

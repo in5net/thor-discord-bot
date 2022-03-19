@@ -5,7 +5,7 @@ import type Command from './command';
 const cmd: Command = {
   name: 'play',
   desc: 'Plays a song by name or URL',
-  usage: 'play/p <url or YouTube search>',
+  usage: '<url or YouTube search>',
   aliases: ['p'],
   async exec(message, args) {
     const { guildId } = message;

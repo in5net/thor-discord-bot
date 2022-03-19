@@ -5,7 +5,7 @@ import type Command from './command';
 const cmd: Command = {
   name: 'rng',
   desc: 'Generates a random number between min and max, 1 to a max, or from 1 to 10',
-  usage: 'rng <min> <max> | rng <max> | rng',
+  usage: '<min> <max> | rng <max> | rng',
   async exec({ channel }, [minStr, maxStr]) {
     let n: number;
     if (minStr === undefined) n = randomInt(1, 11);

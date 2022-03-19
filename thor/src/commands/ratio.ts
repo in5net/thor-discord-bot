@@ -92,7 +92,7 @@ const size = 256;
 const cmd: Command = {
   name: 'ratio',
   desc: 'Get ratioed',
-  usage: 'ratio img?',
+  usage: 'img?',
   async exec({ channel }, [arg]) {
     if (arg === 'img') {
       const canvas = generateCanvas();

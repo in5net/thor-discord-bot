@@ -5,7 +5,7 @@ import type Command from './command';
 const cmd: Command = {
   name: 'playnow',
   desc: 'Adds a song url or YouTube search, and files if given, to the front of the queue and starts playing it',
-  usage: 'playnow/pn <url or YouTube search>',
+  usage: '<url or YouTube search>',
   aliases: ['pn'],
   async exec(message, args) {
     const { guildId } = message;

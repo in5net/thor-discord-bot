@@ -4,7 +4,7 @@ import type Command from './command';
 const cmd: Command = {
   name: 'pfp',
   desc: "Gets a user's profile picture",
-  usage: 'pfp <@user?>',
+  usage: '<@user?>',
   async exec(message) {
     const user = message.mentions.users.first() || message.author;
     const avatar = user.avatarURL({ format: 'png', dynamic: true, size: 1024 });

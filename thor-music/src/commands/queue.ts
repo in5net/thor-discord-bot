@@ -4,7 +4,7 @@ import type Command from './command';
 const cmd: Command = {
   name: 'queue',
   desc: "Shows what's in the queue or details about song #n",
-  usage: 'queue/q <n?>',
+  usage: '<n?>',
   aliases: ['q'],
   async exec(message, [numStr]) {
     const { channel, guildId } = message;

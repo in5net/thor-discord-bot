@@ -10,7 +10,7 @@ const cmd: Command = {
     {
       name: 'encrypt',
       desc: 'Encrypts a message',
-      usage: 'encrypt <offset> <message>',
+      usage: '<offset> <message>',
       async exec(message, [offsetStr = '', ...words]) {
         const { channel } = message;
         const offset = parseInt(offsetStr);
@@ -25,7 +25,7 @@ const cmd: Command = {
     {
       name: 'iencrypt',
       desc: "Encrypts a message in place (removes the original message so others can't see it)",
-      usage: 'iencrypt <offset> <message>',
+      usage: '<offset> <message>',
       async exec(message, [offsetStr = '', ...words]) {
         const { channel } = message;
         const offset = parseInt(offsetStr);
@@ -41,7 +41,7 @@ const cmd: Command = {
     {
       name: 'decrypt',
       desc: 'Decrypts a message',
-      usage: 'decrypt <offset> <message>',
+      usage: '<offset> <message>',
       async exec(message, [offsetStr = '', ...words]) {
         const { channel } = message;
         const offset = parseInt(offsetStr);

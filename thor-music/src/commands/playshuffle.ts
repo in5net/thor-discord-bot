@@ -5,7 +5,7 @@ import type Command from './command';
 const cmd: Command = {
   name: 'playshuffle',
   desc: 'Adds and shuffles the queue',
-  usage: 'playshuffle/ps <url or YouTube search>',
+  usage: '<url or YouTube search>',
   async exec(message, args) {
     const { guildId } = message;
     if (!guildId) return;

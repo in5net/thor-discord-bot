@@ -6,7 +6,7 @@ const googleDriveURLRegex =
 const cmd: Command = {
   name: 'drive',
   desc: 'Generates a url of a Google Drive file',
-  usage: 'drive <url>',
+  usage: '<url>',
   async exec({ channel }, [urlStr]) {
     if (!urlStr || !googleDriveURLRegex.test(urlStr))
       return channel.send('You must provide a Google Drive file url');

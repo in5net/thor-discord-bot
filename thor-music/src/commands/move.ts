@@ -5,7 +5,7 @@ import type Command from './command';
 const cmd: Command = {
   name: 'move',
   desc: 'Moves song #i to position #j in the queue. You may use `last` to refer to the last song in the queue',
-  usage: 'move/mv <i> <j>',
+  usage: '<i> <j>',
   aliases: ['mv'],
   async exec(message, args) {
     const { guildId } = message;

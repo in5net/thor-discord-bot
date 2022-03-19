@@ -6,7 +6,7 @@ import type Command from './command';
 const cmd: Command = {
   name: 'hz',
   desc: 'Plays a sound at a given frequency for a given duration',
-  usage: 'hz <frequency> <duration?=1>',
+  usage: '<frequency> <duration?=1>',
   async exec(message, args) {
     const [hzStr, durationStr] = args;
     if (!hzStr)

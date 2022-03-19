@@ -77,7 +77,7 @@ const kana = [
 const cmd: Command = {
   name: 'hiragana',
   desc: 'Sends a bunch of random hiragana characters to practice reading',
-  usage: 'hiragana <length?=100>',
+  usage: '<length?=100>',
   async exec({ channel }, [lengthStr = '100']) {
     const length = parseInt(lengthStr);
     if (isNaN(length) || length < 1) channel.send('Invalid length');

@@ -5,7 +5,6 @@ import type Command from './command';
 const cmd: Command = {
   name: 'soundboard',
   desc: 'Gives you a bunch of buttons to play random sounds!',
-  usage: 'soundboard/sb',
   aliases: ['sb'],
   async exec(message) {
     const { guildId } = message;

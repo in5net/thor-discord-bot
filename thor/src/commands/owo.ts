@@ -7,7 +7,7 @@ import type Command from './command';
 const cmd: Command = {
   name: 'owo',
   desc: 'Owoifies a message',
-  usage: 'owo <message>',
+  usage: '<message>',
   async exec(message, args) {
     await message.delete();
 

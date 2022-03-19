@@ -14,7 +14,7 @@ const frames = 1000;
 const cmd: Command = {
   name: 'chaos',
   desc: 'Creates chaos',
-  usage: 'chaos <num pts=3> <stride=0.5>',
+  usage: '<num pts=3> <stride=0.5>',
   async exec({ channel }, args) {
     const canvas = createCanvas(size, size);
     const ctx = canvas.getContext('2d');

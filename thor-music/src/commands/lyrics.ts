@@ -4,7 +4,7 @@ import type Command from './command';
 const cmd: Command = {
   name: 'lyrics',
   desc: 'Gives you the lyrics of the current song or song by name',
-  usage: 'lyrics/l <song name?>',
+  usage: '<song name?>',
   aliases: ['l'],
   async exec(message, args) {
     const { guildId } = message;

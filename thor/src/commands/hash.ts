@@ -11,7 +11,7 @@ const width = size * zoom;
 const cmd: Command = {
   name: 'hash',
   desc: 'Converts the binary of a SHA-256 hash of a message to a 16x16 image',
-  usage: 'hash <message>',
+  usage: '<message>',
   async exec({ channel }, words) {
     const input = words.join(' ');
     const hash = createHash('sha256');

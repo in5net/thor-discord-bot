@@ -5,7 +5,6 @@ import type Command from './command';
 const cmd: Command = {
   name: 'playlist',
   desc: 'Manage your personal playlists',
-  usage: 'playlist/pl',
   aliases: ['pl'],
   async exec(message) {
     return message.channel.send('See `-help playlist`');
@@ -14,7 +13,7 @@ const cmd: Command = {
     {
       name: 'get',
       desc: 'Shows the songs in your named playlist',
-      usage: 'get <name>',
+      usage: '<name>',
       aliases: ['show'],
       async exec(message, [name]) {
         const { guildId } = message;
@@ -39,7 +38,7 @@ const cmd: Command = {
     {
       name: 'save',
       desc: 'Saves the songs from a query or the queue to your named playlist',
-      usage: 'save <name> <query?>',
+      usage: '<name> <query?>',
       async exec(message, [name, ...query]) {
         const { guildId } = message;
         if (!guildId) return;
@@ -52,7 +51,7 @@ const cmd: Command = {
     {
       name: 'add',
       desc: 'Adds the songs from a query or the queue to your named playlist',
-      usage: 'add <name> <query?>',
+      usage: '<name> <query?>',
       async exec(message, [name, ...query]) {
         const { guildId } = message;
         if (!guildId) return;
@@ -65,7 +64,7 @@ const cmd: Command = {
     {
       name: 'load',
       desc: 'Loads your named playlist into the queue',
-      usage: 'load <name>',
+      usage: '<name>',
       async exec(message, [name]) {
         const { guildId } = message;
         if (!guildId) return;
@@ -82,7 +81,7 @@ const cmd: Command = {
     {
       name: 'loads',
       desc: 'Loads and shuffles your named playlist into the queue',
-      usage: 'loads <name>',
+      usage: '<name>',
       async exec(message, [name]) {
         const { guildId } = message;
         if (!guildId) return;
@@ -99,7 +98,7 @@ const cmd: Command = {
     {
       name: 'remove',
       desc: 'Removes your saved named playlist or track #n from that playlist',
-      usage: 'remove/rm <name> <#n?>',
+      usage: '<name> <#n?>',
       aliases: ['rm'],
       async exec(message, [name, nStr]) {
         const { guildId } = message;

@@ -13,7 +13,7 @@ import type Command from './command';
 const cmd: Command = {
   name: 'ao3',
   desc: 'Gets data of a work on Archive of Our Own',
-  usage: 'ao3 <url>',
+  usage: '<url>',
   async exec({ channel }, args) {
     const url = args[0];
     if (!url) return channel.send('Please provide a url');
@@ -103,7 +103,7 @@ const cmd: Command = {
 * Hits: ${hits}`
       );
 
-      return channel.send({
+      return await channel.send({
         embeds: [embed],
         files: [squareFile]
       });

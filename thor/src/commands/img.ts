@@ -16,13 +16,13 @@ let collector: InteractionCollector<MessageComponentInteraction> | undefined;
 const cmd: Command = {
   name: 'img',
   desc: 'Sends an image from the best website on the internet, yyyyyyy.info, or from Google Search',
-  usage: 'img/pic <search?>',
+  usage: '<search?>',
   aliases: ['pic'],
   async exec({ channel, author }, args) {
     if (!args.length) {
       const src = await getImg();
       try {
-        return channel.send({
+        return await channel.send({
           files: [new MessageAttachment(src)]
         });
       } catch {

@@ -12,7 +12,7 @@ export default function helpCommand(
   return {
     name: 'help',
     desc: 'Shows help for a/all command(s)',
-    usage: 'help <command?>',
+    usage: '<command?>',
     aliases: ['h'],
     async exec({ channel }, args) {
       if (!args.length)
@@ -48,7 +48,10 @@ export default function helpCommand(
           break;
         }
         commandManuals = commandManual.subcommands || [];
-        usage.push(commandManual.usage || commandManual.name);
+        usage.push(
+          commandManual.usage ||
+            [commandManual.name, ...(commandManual.aliases || [])].join('/')
+        );
       }
       if (!commandManual)
         return channel.send(

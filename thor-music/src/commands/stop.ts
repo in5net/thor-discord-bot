@@ -5,7 +5,6 @@ import type Command from './command';
 const cmd: Command = {
   name: 'stop',
   desc: 'Leaves the voice channel and clears the queue',
-  usage: 'stop/clear/leave',
   aliases: ['clear', 'leave'],
   async exec(message) {
     const { guildId } = message;

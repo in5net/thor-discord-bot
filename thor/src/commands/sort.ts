@@ -28,7 +28,7 @@ const size = 512;
 const cmd: Command = {
   name: 'sort',
   desc: 'Sorts a random array of numbers',
-  usage: 'sort <algorithm=quick> <size=50>',
+  usage: '<algorithm=quick> <size=50>',
   async exec({ channel }, args) {
     const text = 'Sorting...';
     client.user?.setActivity(text);
