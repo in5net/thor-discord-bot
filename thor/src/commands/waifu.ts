@@ -9,10 +9,8 @@ const cmd: Command = {
   usage: 'gif?|nsfw?',
   async exec({ channel }, args) {
     const nsfw = args.includes('nsfw');
-    if (nsfw && channel.type === 'GUILD_TEXT' && !channel.nsfw) {
-      await channel.send('This channel is not marked as NSFW you cheeky boi.');
-      return;
-    }
+    if (nsfw && channel.type === 'GUILD_TEXT' && !channel.nsfw)
+      return channel.send('This channel is not marked as NSFW you cheeky boi.');
 
     const response = await axios.get<{ images: { url: string }[] }>(
       'https://api.waifu.im/random',
@@ -25,9 +23,9 @@ const cmd: Command = {
       }
     );
     const image = response.data.images[0];
-    if (!image) return;
+    if (!image) return channel.send('No waifu found');
 
-    await channel.send({
+    return channel.send({
       files: [new MessageAttachment(image.url)]
     });
   }
