@@ -1,10 +1,10 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { createReadStream, ReadStream } from 'fs';
-import { mkdir, readFile, writeFile } from 'fs/promises';
-import { resolve } from 'path';
-import { tmpdir } from 'os';
-import { exec } from 'child_process';
+import { createReadStream, ReadStream } from 'node:fs';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { tmpdir } from 'node:os';
+import { exec } from 'node:child_process';
 
 import createContext from 'gl';
 import { PNG } from 'pngjs';

@@ -1,6 +1,6 @@
-import { mkdir, readdir, readFile, unlink, writeFile } from 'fs/promises';
-import { join } from 'path';
+import { FieldValue } from 'firebase-admin/firestore';
 
+import { db } from '$services/firebase';
 import {
   FileMedia,
   MediaJSONType,
@@ -11,11 +11,28 @@ import {
   YouTubeMedia
 } from './media';
 
-const playlistsPath = join(__dirname, '../../playlists');
+interface Playlist {
+  owner: string; // uid
+  name: string;
+  songs: MediaJSONType[];
+}
 
-const getDirPath = (uid: string) => join(playlistsPath, uid);
-const getFilePath = (uid: string, name: string) =>
-  join(getDirPath(uid), `${name}.json`);
+const playlistsRef = db.collection(
+  'playlists'
+) as FirebaseFirestore.CollectionReference<Playlist>;
+
+async function getPlaylist(
+  uid: string,
+  name: string
+): Promise<(Playlist & { id: string }) | undefined> {
+  const queryRef = playlistsRef
+    .where('owner', '==', uid)
+    .where('name', '==', name)
+    .limit(1);
+  const snapshot = await queryRef.get();
+  const doc = snapshot.docs[0];
+  return doc && { ...doc.data(), id: doc.id };
+}
 
 export async function get(
   requester: {
@@ -24,10 +41,10 @@ export async function get(
   },
   name: string
 ): Promise<MediaType[]> {
-  const filePath = getFilePath(requester.uid, name);
-  const str = await readFile(filePath, 'utf8');
-  const json = JSON.parse(str) as MediaJSONType[];
-  return json.map(mediaJSON => {
+  const playlist = await getPlaylist(requester.uid, name);
+  if (!playlist) throw new Error('Playlist not found');
+
+  return playlist.songs.map(mediaJSON => {
     switch (mediaJSON.type) {
       case 'youtube':
         return YouTubeMedia.fromJSON(mediaJSON, requester);
@@ -44,9 +61,10 @@ export async function get(
 }
 
 export async function list(uid: string): Promise<string[]> {
-  const dirPath = getDirPath(uid);
-  const files = await readdir(dirPath);
-  return files.map(file => file.replace('.json', ''));
+  const queryRef = playlistsRef.where('owner', '==', uid);
+  const snapshot = await queryRef.get();
+  const names = snapshot.docs.map(doc => doc.data().name);
+  return names;
 }
 
 export async function save(
@@ -54,11 +72,17 @@ export async function save(
   name: string,
   medias: MediaType[]
 ): Promise<void> {
-  const dirPath = getDirPath(uid);
-  await mkdir(dirPath, { recursive: true });
-  const filePath = getFilePath(uid, name);
-  const str = JSON.stringify(medias.map(media => media.toJSON()));
-  return writeFile(filePath, str, 'utf8');
+  const playlist = await getPlaylist(uid, name);
+  const songs = medias.map(media => media.toJSON());
+  if (playlist) {
+    const playlistRef = playlistsRef.doc(playlist.id);
+    await playlistRef.update('songs', songs);
+  } else
+    await playlistsRef.add({
+      owner: uid,
+      name,
+      songs
+    });
 }
 
 export async function add(
@@ -69,13 +93,17 @@ export async function add(
   name: string,
   medias: MediaType[]
 ): Promise<void> {
-  const dirPath = getDirPath(requester.uid);
-  await mkdir(dirPath, { recursive: true });
-  const filePath = getFilePath(requester.uid, name);
-  const currentMedias = await get(requester, name);
-  const newMedias = [...currentMedias, ...medias];
-  const str = JSON.stringify(newMedias.map(media => media.toJSON()));
-  return writeFile(filePath, str, 'utf8');
+  const playlist = await getPlaylist(requester.uid, name);
+  const songs = medias.map(media => media.toJSON());
+  if (playlist) {
+    const playlistRef = playlistsRef.doc(playlist.id);
+    await playlistRef.update('songs', FieldValue.arrayUnion(songs));
+  } else
+    await playlistsRef.add({
+      owner: requester.uid,
+      name,
+      songs
+    });
 }
 
 export async function remove(
@@ -86,11 +114,14 @@ export async function remove(
   name: string,
   n?: number
 ): Promise<void> {
-  if (n === undefined) {
-    const filePath = getFilePath(requester.uid, name);
-    return unlink(filePath);
+  const playlist = await getPlaylist(requester.uid, name);
+  if (!playlist) return;
+
+  const playlistRef = playlistsRef.doc(playlist.id);
+
+  if (n === undefined) await playlistRef.delete();
+  else {
+    playlist.songs.splice(n - 1, 1);
+    await playlistRef.update('songs', playlist.songs);
   }
-  const medias = await get(requester, name);
-  medias.splice(n - 1, 1);
-  await save(requester.uid, name, medias);
 }

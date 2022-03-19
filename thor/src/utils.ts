@@ -1,8 +1,8 @@
-import { createReadStream, ReadStream } from 'fs';
-import { mkdir, writeFile } from 'fs/promises';
-import { exec } from 'child_process';
-import { resolve } from 'path';
-import { tmpdir } from 'os';
+import { createReadStream, ReadStream } from 'node:fs';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { exec } from 'node:child_process';
+import { resolve } from 'node:path';
+import { tmpdir } from 'node:os';
 
 import ffmpegPath from 'ffmpeg-static';
 import type { Message } from 'discord.js';

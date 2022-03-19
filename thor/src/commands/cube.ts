@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 
 import { MessageAttachment } from 'discord.js';
 import { mat4 } from 'gl-matrix';
