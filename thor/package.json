@@ -1,9 +1,6 @@
 {
   "name": "discord-bot",
   "private": true,
-  "scripts": {
-    "start": "ts-node src/main.ts"
-  },
   "dependencies": {
     "@googleapis/customsearch": "^0.2.0",
     "@limitlesspc/limitless": "^0.1.1",
@@ -22,8 +19,7 @@
     "jsdom": "^19.0.0",
     "music-metadata": "7.12.2",
     "owofy": "^1.0.2",
-    "pngjs": "^6.0.0",
-    "ts-node": "10.7.0"
+    "pngjs": "^6.0.0"
   },
   "devDependencies": {
     "@types/ffmpeg-static": "^3.0.1",
