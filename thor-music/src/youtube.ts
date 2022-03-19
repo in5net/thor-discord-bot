@@ -39,35 +39,31 @@ export async function getDetails(id: string): Promise<Video> {
   const title = videoItem?.snippet?.title || '';
   const description = videoItem?.snippet?.description || '';
   const thumbnail = videoItem?.snippet?.thumbnails?.default?.url || '';
-  let str = videoItem?.contentDetails?.duration || '';
+  const duration = videoItem?.contentDetails?.duration || '';
+  console.log('YouTube duration str:', duration);
 
   const channel = await getChannel(videoItem?.snippet?.channelId || '');
 
-  console.log('YouTube duration str:', str);
-  str = str?.slice(2, -1); // remove the 'PT' and 'S'
-  const parts = str.split('M');
-
-  if (parts.length === 1) {
-    const [seconds = '0'] = parts;
-    return {
-      title,
-      description,
-      thumbnail,
-      duration: parseInt(seconds),
-      channel,
-      id
-    };
-  }
-  const [minutes = '0', seconds = '0'] = parts;
-  const duration = parseInt(minutes) * 60 + parseInt(seconds);
   return {
     title,
     description,
     thumbnail,
-    duration,
+    duration: durationStr2Sec(duration),
     channel,
     id
   };
+}
+
+function durationStr2Sec(duration: string) {
+  const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/) || [];
+
+  const parts = match.slice(1).map(str => str.replace(/\D/, ''));
+
+  const hours = parseInt(parts[0] || '') || 0;
+  const minutes = parseInt(parts[1] || '') || 0;
+  const seconds = parseInt(parts[2] || '') || 0;
+
+  return hours * 3600 + minutes * 60 + seconds;
 }
 
 export async function getPlaylist(id: string): Promise<Video[]> {
