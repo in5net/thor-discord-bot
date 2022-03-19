@@ -97,7 +97,7 @@ export async function add(
   const songs = medias.map(media => media.toJSON());
   if (playlist) {
     const playlistRef = playlistsRef.doc(playlist.id);
-    await playlistRef.update('songs', FieldValue.arrayUnion(songs));
+    await playlistRef.update('songs', FieldValue.arrayUnion(...songs));
   } else
     await playlistsRef.add({
       owner: requester.uid,
