@@ -13,7 +13,7 @@
     "discord.js": "^13.6.0",
     "dotenv": "16.0.0",
     "ffmpeg-static": "5.0.0",
-    "genius-lyrics": "^4.3.5",
+    "genius-lyrics": "4.3.6",
     "libsodium-wrappers": "^0.7.9",
     "play-dl": "1.9.2",
     "ts-node": "10.7.0"

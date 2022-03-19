@@ -10,7 +10,7 @@ specifiers:
   discord.js: ^13.6.0
   dotenv: 16.0.0
   ffmpeg-static: 5.0.0
-  genius-lyrics: ^4.3.5
+  genius-lyrics: 4.3.6
   libsodium-wrappers: ^0.7.9
   play-dl: 1.9.2
   ts-node: 10.7.0
@@ -25,7 +25,7 @@ dependencies:
   discord.js: 13.6.0
   dotenv: 16.0.0
   ffmpeg-static: 5.0.0
-  genius-lyrics: 4.3.5
+  genius-lyrics: 4.3.6
   libsodium-wrappers: 0.7.9
   play-dl: 1.9.2
   ts-node: 10.7.0_e79e62fe450383fd2d418267dc75e645
@@ -615,8 +615,8 @@ packages:
       - supports-color
     dev: false
 
-  /genius-lyrics/4.3.5:
-    resolution: {integrity: sha512-q2VvH0mJJ9w4tJx3nEkwsK6dXWdYRHqbCm0siGaeuaH7iD+5Hk6sxvBB2mKd6+auChnvNu9JkL0IsNoR20C8xw==}
+  /genius-lyrics/4.3.6:
+    resolution: {integrity: sha512-wLvB0kfOcxPqCeDIIcI2wUaq+AH+E2j48bHga5UbOrLb03UNrVMHwoAzxTrpPc/hg9IWRce1QGMLpCpxvNbhVA==}
     dependencies:
       cheerio: 1.0.0-rc.10
       got: 11.8.3
