@@ -13,6 +13,7 @@ import soundboard from './soundboard';
 import lyrics from './lyrics';
 import playlist from './playlist';
 import hz from './hz';
+import playnext from './playnext';
 import type Command from './command';
 
 const commands: Command[] = [
@@ -30,6 +31,7 @@ const commands: Command[] = [
   soundboard,
   lyrics,
   playlist,
-  hz
+  hz,
+  playnext
 ];
 export default commands;
