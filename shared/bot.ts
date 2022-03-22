@@ -6,6 +6,7 @@ import type Command from './command';
 export default class DiscordBot {
   client: Client;
   commands: Command[] = [];
+  onMessageFn?: (message: Message) => any;
 
   constructor(
     readonly name: string,
@@ -24,14 +25,21 @@ export default class DiscordBot {
     return this;
   }
 
-  onMessage(onMessage: (message: Message) => any) {
-    const { client, prefix } = this;
-    client.on('message', async message => {
+  onMessage(onMessageFn: (message: Message) => any) {
+    this.onMessageFn = onMessageFn;
+    return this;
+  }
+
+  async run() {
+    const { client, prefix, token, onMessageFn } = this;
+    client.on('messageCreate', async message => {
       if (message.author.bot) return;
 
-      let value = onMessage(message);
-      if (value instanceof Promise) value = await value;
-      if (value) return;
+      if (onMessageFn) {
+        let value = onMessageFn(message);
+        if (value instanceof Promise) value = await value;
+        if (value) return;
+      }
 
       const { content, channel } = message;
       if (!content.startsWith(prefix)) return;
@@ -45,9 +53,10 @@ export default class DiscordBot {
       const commandNames: string[] = [];
       for (const arg of args) {
         commandNames.push(arg);
+        const lowerArg = arg.toLowerCase();
         const subcommand = commands.find(
           ({ name, aliases }) =>
-            name === arg.toLowerCase() || aliases?.includes(arg.toLowerCase())
+            name === lowerArg || aliases?.includes(lowerArg)
         );
         if (!subcommand) break;
         trueArgs.shift();
@@ -79,11 +88,6 @@ export default class DiscordBot {
       }
       client.user?.setActivity();
     });
-    return this;
-  }
-
-  async run() {
-    const { client, token } = this;
     await client.login(token);
     client.user?.setActivity();
   }

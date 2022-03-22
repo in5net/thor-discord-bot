@@ -49,8 +49,9 @@ export default function helpCommand(
         }
         commandManuals = commandManual.subcommands || [];
         usage.push(
-          commandManual.usage ||
-            [commandManual.name, ...(commandManual.aliases || [])].join('/')
+          commandManual.usage
+            ? `${commandManual.name} ${commandManual.usage}`
+            : [commandManual.name, ...(commandManual.aliases || [])].join('/')
         );
       }
       if (!commandManual)

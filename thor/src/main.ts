@@ -7,7 +7,7 @@ import './env';
 
 new DiscordBot(
   'Thor',
-  'thor ',
+  `${process.env.PREFIX} `,
   ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'DIRECT_MESSAGES'],
   process.env.TOKEN
 )
