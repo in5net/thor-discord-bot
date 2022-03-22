@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Client } from 'nekos-best.js';
+import { MessageEmbed } from 'discord.js';
 
 import { incWeebCount } from '$services/users';
 import type Command from './command';
@@ -13,8 +15,15 @@ const cmd: Command = {
   async exec({ channel, author: { id } }) {
     const client = await clientPromise;
     const response = await client.fetchRandom('neko');
-    const url = response.results[0]?.url;
-    if (url) {
+    const result = response.results[0];
+    if (result) {
+      const { url, artist_name, artist_href, source_url, anime_name } = result;
+      const embed = new MessageEmbed();
+      embed.setImage(url);
+      if (artist_name && artist_href)
+        embed.setAuthor({ name: artist_name, url: artist_href });
+      if (source_url) embed.setURL(source_url);
+      if (anime_name) embed.setTitle(anime_name);
       await channel.send(url);
       return incWeebCount(id);
     }

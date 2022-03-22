@@ -1,16 +1,36 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import axios from 'axios';
+import { MessageEmbed } from 'discord.js';
 
 import { incWeebCount } from '$services/users';
 import type Command from './command';
+
+interface Response {
+  url: string;
+  artist: string;
+  artist_url: string;
+  source_url: string;
+  error: string;
+}
 
 const cmd: Command = {
   name: 'catboy',
   desc: 'Sends a random catboys.com image',
   async exec({ channel, author: { id } }) {
-    const response = await axios.get<{ url: string }>(
-      'https://api.catboys.com/img'
-    );
-    await channel.send(response.data.url);
+    const response = await axios.get<Response>('https://api.catboys.com/img');
+    const { url, artist, artist_url, source_url } = response.data;
+
+    const embed = new MessageEmbed()
+      .setTitle('Catboy')
+      .setURL(source_url)
+      .setAuthor({ name: artist, url: artist_url })
+      .setImage(url)
+      .setFooter({
+        text: 'Powered by catboys.com',
+        iconURL: 'https://catboys.com/favicon.png'
+      });
+
+    await channel.send({ embeds: [embed] });
     return incWeebCount(id);
   }
 };
