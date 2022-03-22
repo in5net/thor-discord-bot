@@ -42,7 +42,7 @@ export default class DiscordBot {
       }
 
       const { content, channel } = message;
-      if (!content.startsWith(prefix)) return;
+      if (!content.startsWith(prefix.toLowerCase())) return;
 
       const args = content.slice(prefix.length).split(' ');
       if (!args.length) return;
