@@ -2,14 +2,14 @@ import DiscordBot from '$shared/bot';
 import help from './commands/help';
 import commands from './commands';
 import { handleMessage } from './commands/wordle';
-import './env';
 import responses from './responses';
+import './env';
 
 new DiscordBot(
   'Thor',
   'thor ',
   ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'DIRECT_MESSAGES'],
-  process.env.DISCORD_TOKEN
+  process.env.TOKEN
 )
   .addCommands([help, ...commands])
   .onMessage(async message => {
@@ -58,4 +58,5 @@ new DiscordBot(
       return 0;
     }
     return undefined;
-  });
+  })
+  .run();
