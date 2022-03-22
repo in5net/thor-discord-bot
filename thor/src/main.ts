@@ -4,6 +4,7 @@ import commands from './commands';
 import { handleMessage } from './commands/wordle';
 import responses from './responses';
 import './env';
+import { incSaladMundusCount } from '$services/users';
 
 new DiscordBot(
   'Thor',
@@ -13,7 +14,7 @@ new DiscordBot(
 )
   .addCommands([help, ...commands])
   .onMessage(async message => {
-    const { content } = message;
+    const { content, channel, author } = message;
     if (
       ['among', 'imposter', 'imposta', 'amogus', 'mongus'].some(str =>
         content.toLowerCase().includes(str)
@@ -23,7 +24,8 @@ new DiscordBot(
       let msg = 'salad mundus detected';
       if (Math.random() < 0.3)
         msg += ` gave 1 strike to <@${message.author.id}>`;
-      await message.channel.send(msg).catch();
+      await channel.send(msg).catch();
+      await incSaladMundusCount(author.id);
       return;
     }
 
@@ -37,14 +39,11 @@ new DiscordBot(
       // Remove @mentions
       lowercase = lowercase.replace(/<@!?\d+>/g, '');
       if (lowercase.replace(' ', '') === 'noway') {
-        await message.channel.send('no way');
+        await channel.send('no way');
         return 0;
       }
-      if (
-        message.channel.type !== 'DM' &&
-        !message.channel.name.includes('thor')
-      ) {
-        if (message.channel.name.includes('general')) {
+      if (channel.type !== 'DM' && !channel.name.includes('thor')) {
+        if (channel.name.includes('general')) {
           if (Math.random() > 0.5) return;
         } else return;
       }
@@ -54,7 +53,7 @@ new DiscordBot(
         if (included) msgs.push(msg);
       }
 
-      if (msgs.length) await message.channel.send(msgs.join(' '));
+      if (msgs.length) await channel.send(msgs.join(' '));
       return 0;
     }
     return undefined;

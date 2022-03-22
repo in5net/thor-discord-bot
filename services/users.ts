@@ -10,10 +10,15 @@ export const usersRef = db.collection(
   'users'
 ) as FirebaseFirestore.CollectionReference<User>;
 
-export const incWeebCount = (uid: string) =>
+const incCount = (uid: string, name: string) =>
   (usersRef as FirebaseFirestore.CollectionReference).doc(uid).set(
     {
-      weebCount: FieldValue.increment(1)
+      [`counts.${name}`]: FieldValue.increment(1)
     },
     { merge: true }
   );
+
+export const incWeebCount = (uid: string) => incCount(uid, 'weeb');
+export const incSaladMundusCount = (uid: string) =>
+  incCount(uid, 'saladMundus');
+export const incNoWayCount = (uid: string) => incCount(uid, 'noWay');
