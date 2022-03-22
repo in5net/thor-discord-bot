@@ -3,7 +3,7 @@ import players from './players';
 import help from './commands/help';
 import commands from './commands';
 import './env';
-import type Command from '../../command';
+import type Command from '../../shared/command';
 
 const allCommands = [help, ...commands];
 

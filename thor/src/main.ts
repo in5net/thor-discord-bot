@@ -1,4 +1,4 @@
-import type Command from '../../command';
+import type Command from '../../shared/command';
 import help from './commands/help';
 import client from './client';
 import commands from './commands';
