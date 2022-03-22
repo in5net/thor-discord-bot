@@ -24,7 +24,7 @@ const cmd: Command = {
         embed.setAuthor({ name: artist_name, url: artist_href });
       if (source_url) embed.setURL(source_url);
       if (anime_name) embed.setTitle(anime_name);
-      await channel.send(url);
+      await channel.send({ embeds: [embed] });
       return incWeebCount(id);
     }
     return channel.send('No neko found');
