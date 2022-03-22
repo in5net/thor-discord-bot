@@ -1,4 +1,4 @@
-import { Client } from 'discord.js';
+import { Client, MessageEmbed } from 'discord.js';
 import type { IntentsString, Message } from 'discord.js';
 
 import type Command from './command';
@@ -33,7 +33,7 @@ export default class DiscordBot {
       if (value instanceof Promise) value = await value;
       if (value) return;
 
-      const { content } = message;
+      const { content, channel } = message;
       if (!content.startsWith(prefix)) return;
 
       const args = content.slice(prefix.length).split(' ');
@@ -42,7 +42,9 @@ export default class DiscordBot {
       const trueArgs = [...args];
       let command: Command | undefined;
       let { commands } = this;
+      const commandNames: string[] = [];
       for (const arg of args) {
+        commandNames.push(arg);
         const subcommand = commands.find(
           ({ name, aliases }) =>
             name === arg.toLowerCase() || aliases?.includes(arg.toLowerCase())
@@ -55,12 +57,25 @@ export default class DiscordBot {
 
       try {
         if (!command)
-          await message.channel.send(
-            Math.random() < 0.1 ? 'No.' : `IDK what ${command} is`
+          await channel.send(
+            Math.random() < 0.1
+              ? 'No.'
+              : `IDK what \`${commandNames.join(' ')}\` is`
           );
         else await command.exec(message, trueArgs, client);
       } catch (err) {
-        await message.channel.send(`Error ): ${err}`);
+        try {
+          await channel.send({
+            embeds: [
+              new MessageEmbed()
+                .setTitle('Error')
+                .setDescription(`${err}`)
+                .setColor('RED')
+            ]
+          });
+        } catch {
+          console.error('Failed to send error:', err);
+        }
       }
       client.user?.setActivity();
     });
