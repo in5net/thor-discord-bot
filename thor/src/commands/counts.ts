@@ -6,10 +6,9 @@ import type Command from './command';
 const cmd: Command = {
   name: 'counts',
   desc: 'Displays the number of times a user has used certain commands',
-  async exec({ channel, mentions }) {
-    const mention = mentions.users.first();
-    if (!mention) return channel.send('You need to mention a user');
-
+  usage: '<@user>',
+  async exec({ channel, author, mentions }) {
+    const mention = mentions.users.first() || author;
     const user = await getUser(mention.id);
     return channel.send({
       embeds: [
