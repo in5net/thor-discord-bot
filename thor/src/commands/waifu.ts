@@ -6,6 +6,7 @@ const cmd: Command = {
   name: 'waifu',
   desc: 'Sends a random waifu.im image',
   usage: 'gif?|nsfw?',
+  aliases: ['ワイフ', 'わいふ'],
   async exec({ channel }, args) {
     const nsfw = args.includes('nsfw');
     if (nsfw && channel.type === 'GUILD_TEXT' && !channel.nsfw)

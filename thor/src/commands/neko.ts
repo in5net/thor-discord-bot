@@ -8,6 +8,7 @@ const clientPromise = nekosBest.init();
 const cmd: Command = {
   name: 'neko',
   desc: 'Sends a random nekos.best image',
+  aliases: ['猫', 'ねこ'],
   async exec({ channel }) {
     const client = await clientPromise;
     const response = await client.fetchRandom('neko');

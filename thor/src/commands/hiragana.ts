@@ -78,6 +78,7 @@ const cmd: Command = {
   name: 'hiragana',
   desc: 'Sends a bunch of random hiragana characters to practice reading',
   usage: '<length?=100>',
+  aliases: ['ひりがな'],
   async exec({ channel }, [lengthStr = '100']) {
     const length = parseInt(lengthStr);
     if (isNaN(length) || length < 1) channel.send('Invalid length');
