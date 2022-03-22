@@ -3,8 +3,8 @@ import help from './commands/help';
 import commands from './commands';
 import { handleMessage } from './commands/wordle';
 import responses from './responses';
+import { incNoWayCount, incSaladMundusCount } from '$services/users';
 import './env';
-import { incSaladMundusCount } from '$services/users';
 
 new DiscordBot(
   'Thor',
@@ -40,6 +40,7 @@ new DiscordBot(
       lowercase = lowercase.replace(/<@!?\d+>/g, '');
       if (lowercase.replace(' ', '') === 'noway') {
         await channel.send('no way');
+        await incNoWayCount(author.id);
         return 0;
       }
       if (channel.type !== 'DM' && !channel.name.includes('thor')) {

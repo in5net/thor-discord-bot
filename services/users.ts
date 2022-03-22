@@ -2,18 +2,14 @@ import { FieldValue } from 'firebase-admin/firestore';
 
 import { db } from './firebase';
 
-export interface User {
-  weebCount: number;
-}
-
-export const usersRef = db.collection(
-  'users'
-) as FirebaseFirestore.CollectionReference<User>;
+export const usersRef = db.collection('users');
 
 const incCount = (uid: string, name: string) =>
-  (usersRef as FirebaseFirestore.CollectionReference).doc(uid).set(
+  usersRef.doc(uid).set(
     {
-      [`counts.${name}`]: FieldValue.increment(1)
+      counts: {
+        [name]: FieldValue.increment(1)
+      }
     },
     { merge: true }
   );
