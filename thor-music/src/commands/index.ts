@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import play from './play';
 import playnow from './playnow';
 import queue from './queue';

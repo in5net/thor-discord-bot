@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle
 import { getPlayer } from '../players';
 import type Command from './command';
 

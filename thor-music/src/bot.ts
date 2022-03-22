@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import DiscordBot from '$shared/bot';
 import commands from './commands';
 import help from './commands/help';
