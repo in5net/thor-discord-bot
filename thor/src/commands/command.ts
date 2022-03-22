@@ -1,1 +1,1 @@
-export type { default } from '../../../shared/command';
+export type { default } from '$shared/command';

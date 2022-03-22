@@ -30,7 +30,7 @@ import hash from './hash';
 import catboys from './catboy';
 import waifu from './waifu';
 import neko from './neko';
-import type Command from '../../../shared/command';
+import type Command from '$shared/command';
 
 const commands: Command[] = [
   img,

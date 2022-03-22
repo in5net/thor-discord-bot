@@ -1,6 +1,6 @@
 import { MessageAttachment } from 'discord.js';
-import wav from '../../../wavstream';
-import woof from '../../../services/woof';
+import wav from '$services/wavstream';
+import woof from '$services/woof';
 import type Command from './command';
 
 const cmd: Command = {
