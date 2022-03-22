@@ -3,7 +3,6 @@ import { resolve } from 'node:path';
 import { MessageAttachment } from 'discord.js';
 import { mat4 } from 'gl-matrix';
 
-import client from '../client';
 import GL from '../gl';
 import { getImageUrl } from '../utils';
 import Progress from '../progress';
@@ -15,7 +14,7 @@ const frames = 20;
 const cmd: Command = {
   name: 'cube',
   desc: 'Makes your profile or attachment spin on a cube',
-  async exec(message) {
+  async exec(message, _, client) {
     const text = `Generating cube...`;
     console.log(text);
     const msg = await message.channel.send(text);

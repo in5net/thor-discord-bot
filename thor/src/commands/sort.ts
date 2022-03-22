@@ -19,7 +19,6 @@ import {
   shuffle
 } from '@limitlesspc/limitless';
 
-import client from '../client';
 import { pngs2mp4 } from '../utils';
 import type Command from './command';
 
@@ -29,7 +28,7 @@ const cmd: Command = {
   name: 'sort',
   desc: 'Sorts a random array of numbers',
   usage: '<algorithm=quick> <size=50>',
-  async exec({ channel }, args) {
+  async exec({ channel }, args, client) {
     const text = 'Sorting...';
     client.user?.setActivity(text);
     const msg = await channel.send(text);

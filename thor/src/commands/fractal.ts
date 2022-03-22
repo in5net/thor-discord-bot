@@ -5,7 +5,6 @@ import { resolve } from 'node:path';
 import { MessageAttachment } from 'discord.js';
 import { randomInt } from '@limitlesspc/limitless';
 
-import client from '../client';
 import GL from '../gl';
 import { getImageUrl } from '../utils';
 import type Command from './command';
@@ -16,7 +15,7 @@ const iterations = 32;
 const cmd: Command = {
   name: 'fractal',
   desc: 'Generates a random fractal image',
-  async exec(message) {
+  async exec(message, _, client) {
     const shapeSize = Math.random() < 0.01 ? 10 : randomInt(2, 6);
     const sizeText = `${shapeSize}x${shapeSize}`;
     const text = `Generating a ${sizeText} fractal...`;

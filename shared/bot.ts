@@ -11,7 +11,7 @@ export default class DiscordBot {
     readonly name: string,
     readonly prefix: string,
     intents: IntentsString[],
-    private token: string
+    private token?: string
   ) {
     this.client = new Client({
       intents,
@@ -21,6 +21,7 @@ export default class DiscordBot {
 
   addCommands(commands: Command[]) {
     this.commands.push(...commands);
+    return this;
   }
 
   onMessage(onMessage: (message: Message) => any) {
@@ -57,12 +58,13 @@ export default class DiscordBot {
           await message.channel.send(
             Math.random() < 0.1 ? 'No.' : `IDK what ${command} is`
           );
-        else await command.exec(message, trueArgs);
+        else await command.exec(message, trueArgs, client);
       } catch (err) {
         await message.channel.send(`Error ): ${err}`);
       }
       client.user?.setActivity();
     });
+    return this;
   }
 
   async run() {

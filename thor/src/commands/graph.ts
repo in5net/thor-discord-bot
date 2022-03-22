@@ -2,7 +2,6 @@ import { MessageAttachment } from 'discord.js';
 import { createCanvas } from 'canvas';
 import { map } from '@limitlesspc/limitless';
 
-import client from '../client';
 import runner from '../equation';
 import type Command from './command';
 
@@ -14,7 +13,7 @@ const cmd: Command = {
   name: 'graph',
   desc: 'Makes a 2D xy graph',
   usage: '<equation>',
-  async exec({ channel }, args) {
+  async exec({ channel }, args, client) {
     const canvas = createCanvas(size, size);
     const ctx = canvas.getContext('2d');
 

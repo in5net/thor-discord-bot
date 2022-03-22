@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle
 import Player from './media/player';
 
 const players = new Map<string, Player>();

@@ -2,7 +2,6 @@ import { MessageAttachment } from 'discord.js';
 import { createCanvas } from 'canvas';
 import { clamp, randomInt, vec2, Vector2 } from '@limitlesspc/limitless';
 
-import client from '../client';
 import Progress from '../progress';
 import type Command from './command';
 
@@ -15,7 +14,7 @@ const cmd: Command = {
   name: 'chaos',
   desc: 'Creates chaos',
   usage: '<num pts=3> <stride=0.5>',
-  async exec({ channel }, args) {
+  async exec({ channel }, args, client) {
     const canvas = createCanvas(size, size);
     const ctx = canvas.getContext('2d');
 

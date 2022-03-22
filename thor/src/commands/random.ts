@@ -1,7 +1,6 @@
 import { MessageAttachment } from 'discord.js';
 import { createCanvas } from 'canvas';
 
-import client from '../client';
 import type Command from './command';
 
 const size = 128;
@@ -9,7 +8,7 @@ const size = 128;
 const cmd: Command = {
   name: 'zen',
   desc: 'Gets a random zen quote from https://api.github.com/zen',
-  async exec({ channel }) {
+  async exec({ channel }, _, client) {
     const canvas = createCanvas(size, size);
     const ctx = canvas.getContext('2d');
 

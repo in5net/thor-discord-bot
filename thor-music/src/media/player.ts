@@ -28,11 +28,12 @@ import { shuffle } from '@limitlesspc/limitless';
 import type { AudioResource } from '@discordjs/voice';
 
 import Queue, { secondsToTime } from './queue';
-import client from '../client';
 import { getLyrics } from '../genius';
 import { SoundCloudMedia, SpotifyMedia, URLMedia, YouTubeMedia } from './media';
 import * as playlist from './playlist';
 import { addOwnerUsername, color } from '../config';
+// eslint-disable-next-line import/no-cycle
+import bot from '../bot';
 import '../env';
 import type { MediaType } from './media';
 
@@ -325,7 +326,7 @@ export default class Player {
       this.connection =
       this.soundboardCollector =
         undefined;
-    client.user?.setActivity();
+    bot.client.user?.setActivity();
     this.queue.changeEmitter.removeAllListeners();
     onStop();
   }
@@ -443,7 +444,7 @@ export default class Player {
     player.once(AudioPlayerStatus.Playing, () => {
       this.timestamp = this.connection?.receiver.connectionData.timestamp || 0;
     });
-    client.user?.setActivity(title);
+    bot.client.user?.setActivity(title);
 
     const embed = media.getEmbed().setTitle(`▶️ Playing: ${title}`);
     addOwnerUsername(embed);

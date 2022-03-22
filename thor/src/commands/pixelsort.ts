@@ -2,14 +2,13 @@
 import { MessageAttachment } from 'discord.js';
 import { createCanvas, loadImage } from 'canvas';
 
-import client from '../client';
 import { getImageUrl } from '../utils';
 import type Command from './command';
 
 const cmd: Command = {
   name: 'pixelsort',
   desc: 'Sorts the pixels in an image',
-  async exec(message) {
+  async exec(message, _, client) {
     const text = 'Sorting image...';
     console.log(text);
     const msg = await message.channel.send(text);

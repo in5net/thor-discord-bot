@@ -5,7 +5,6 @@ import { MessageAttachment } from 'discord.js';
 // @ts-ignore
 import glsl from 'glslify';
 
-import client from '../client';
 import GL from '../gl';
 import Progress from '../progress';
 import type Command from './command';
@@ -17,7 +16,7 @@ const frames = 24;
 const cmd: Command = {
   name: 'noise',
   desc: 'Generates a image with Perlin noise',
-  async exec({ channel }, args) {
+  async exec({ channel }, args, client) {
     const text = `Generating noise...`;
     console.log(text);
     const msg = await channel.send(text);
