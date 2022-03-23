@@ -1,7 +1,6 @@
 import {
   InteractionCollector,
   MessageActionRow,
-  MessageAttachment,
   MessageButton,
   MessageComponentInteraction,
   MessageEmbed
@@ -22,9 +21,7 @@ const cmd: Command = {
     if (!args.length) {
       const src = await getImg();
       try {
-        return await channel.send({
-          files: [new MessageAttachment(src)]
-        });
+        return await channel.send(src);
       } catch {
         return channel.send('So sad, looks like yyyyyyy.info is down ):');
       }
