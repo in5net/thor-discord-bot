@@ -1,7 +1,7 @@
 import { random } from '@limitlesspc/limitless';
 import type { Message } from 'discord.js';
 
-import wordle from './wordle-words';
+import wordle from './wordle-words.json';
 import type Command from './command';
 
 let word = '';

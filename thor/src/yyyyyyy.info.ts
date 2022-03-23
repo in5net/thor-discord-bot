@@ -6,7 +6,7 @@ import { JSDOM } from 'jsdom';
 const texts = new Set<string>();
 const images = new Set<string>();
 const gifs = new Set<string>();
-const nsfw = new Set<string>(['https://files.yyyyyyy.info/images/0071-1.gif']);
+const nsfw = new Set(['https://files.yyyyyyy.info/images/0071-1.gif']);
 
 export async function getText(): Promise<string> {
   if (!texts.size) {

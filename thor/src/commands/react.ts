@@ -8,7 +8,7 @@ const cmd: Command = {
   desc: 'Reacts to your message with random emojis',
   exec(message) {
     return Promise.all(
-      new Array(12).fill(0).map(() => message.react(random(emojis) || ''))
+      new Array(12).fill(0).map(() => message.react(random(emojis)))
     );
   }
 };

@@ -8,7 +8,7 @@ const cmd: Command = {
   usage: '<min> <max> | rng <max> | rng',
   async exec({ channel }, [minStr, maxStr]) {
     let n: number;
-    if (minStr === undefined) n = randomInt(1, 11);
+    if (minStr === undefined) n = randomInt(10) + 1;
     else {
       const min = parseInt(minStr);
       if (maxStr === undefined) {

@@ -31,6 +31,7 @@ import catboys from './catboy';
 import waifu from './waifu';
 import neko from './neko';
 import counts from './counts';
+import norway from './norway';
 import type Command from '$shared/command';
 
 const commands: Command[] = [
@@ -66,6 +67,7 @@ const commands: Command[] = [
   catboys,
   waifu,
   neko,
-  counts
+  counts,
+  norway
 ];
 export default commands;

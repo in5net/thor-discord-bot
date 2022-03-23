@@ -43,10 +43,10 @@ new DiscordBot(
       // Remove @mentions
       lowercase = lowercase.replace(/<@!?\d+>/g, '');
       if (lowercase.includes('ratio')) await incRatioCount(author.id);
-      if (lowercase.replace(' ', '') === 'noway') {
+      if (['noway', 'norway'].includes(lowercase.replace(' ', ''))) {
         await channel.send(Math.random() < 0.1 ? 'Norway' : 'no way');
         await incNoWayCount(author.id);
-        return 0;
+        return;
       }
       if (channel.type !== 'DM' && !channel.name.includes('thor')) {
         if (channel.name.includes('general')) {

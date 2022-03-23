@@ -7,8 +7,8 @@ import type Command from './command';
 const cmd: Command = {
   name: 'status',
   desc: 'Shows a bunch of technical information about the bot',
-  exec(message) {
-    return message.channel.send({
+  exec({ channel }) {
+    return channel.send({
       embeds: [
         new MessageEmbed()
           .setTitle('Status')
