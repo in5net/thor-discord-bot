@@ -39,7 +39,7 @@ new DiscordBot(
       // Remove @mentions
       lowercase = lowercase.replace(/<@!?\d+>/g, '');
       if (lowercase.replace(' ', '') === 'noway') {
-        await channel.send('no way');
+        await channel.send(Math.random() < 0.1 ? 'Norway' : 'no way');
         await incNoWayCount(author.id);
         return 0;
       }
