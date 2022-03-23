@@ -34,3 +34,4 @@ export const incWeebCount = (uid: string) => incCount(uid, 'weeb');
 export const incSaladMundusCount = (uid: string) =>
   incCount(uid, 'saladMundus');
 export const incNoWayCount = (uid: string) => incCount(uid, 'noWay');
+export const incRatioCount = (uid: string) => incCount(uid, 'ratio');

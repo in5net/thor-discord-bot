@@ -3,7 +3,11 @@ import help from './commands/help';
 import commands from './commands';
 import { handleMessage } from './commands/wordle';
 import responses from './responses';
-import { incNoWayCount, incSaladMundusCount } from '$services/users';
+import {
+  incNoWayCount,
+  incRatioCount,
+  incSaladMundusCount
+} from '$services/users';
 import './env';
 
 new DiscordBot(
@@ -38,6 +42,7 @@ new DiscordBot(
       let lowercase = content.toLowerCase();
       // Remove @mentions
       lowercase = lowercase.replace(/<@!?\d+>/g, '');
+      if (lowercase.includes('ratio')) await incRatioCount(author.id);
       if (lowercase.replace(' ', '') === 'noway') {
         await channel.send(Math.random() < 0.1 ? 'Norway' : 'no way');
         await incNoWayCount(author.id);
