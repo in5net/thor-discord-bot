@@ -1,7 +1,7 @@
 import { random } from '@limitlesspc/limitless';
 import decodeGif from 'decode-gif';
 import axios from 'axios';
-import { JSDOM } from 'jsdom';
+import { load } from 'cheerio';
 
 const texts = new Set<string>();
 const images = new Set<string>();
@@ -11,10 +11,11 @@ const nsfw = new Set(['https://files.yyyyyyy.info/images/0071-1.gif']);
 export async function getText(): Promise<string> {
   if (!texts.size) {
     const response = await axios('https://www.yyyyyyy.info/');
-    const dom = new JSDOM(response.data);
-    const spans = dom.window.document.querySelectorAll('span');
-    spans.forEach(({ textContent }) => {
-      if (textContent) texts.add(textContent);
+    const $ = load(response.data);
+    const spans = $('span');
+    spans.each((_, span) => {
+      const text = $(span).text();
+      if (text) texts.add(text);
     });
   }
   const src = random([...texts.values()]);
@@ -26,9 +27,10 @@ export async function getText(): Promise<string> {
 export async function getImg(): Promise<string> {
   if (!images.size) {
     const response = await axios('https://www.yyyyyyy.info/');
-    const dom = new JSDOM(response.data);
-    const imgs = dom.window.document.querySelectorAll('img');
-    imgs.forEach(({ src }) => {
+    const $ = load(response.data);
+    const imgs = $('img');
+    imgs.each((_, img) => {
+      const src = $(img).attr('src') || '';
       if (
         src.startsWith('https://files.yyyyyyy.info/') &&
         !src.endsWith('.gif')
@@ -60,9 +62,10 @@ export async function getGif(): Promise<string> {
 async function getGIFs(): Promise<void> {
   console.log('Getting GIFs...');
   const response = await axios('https://www.yyyyyyy.info/');
-  const dom = new JSDOM(response.data);
-  const imgs = dom.window.document.querySelectorAll('img');
-  imgs.forEach(({ src }) => {
+  const $ = load(response.data);
+  const imgs = $('img');
+  imgs.each((_, img) => {
+    const src = $(img).attr('src') || '';
     if (
       src.startsWith('https://files.yyyyyyy.info/') &&
       src.endsWith('.gif') &&

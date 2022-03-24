@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { JSDOM } from 'jsdom';
+import { load } from 'cheerio';
 
 import type Command from './command';
 
@@ -8,11 +8,9 @@ const cmd: Command = {
   desc: 'Tells you if the U.S. flag is at half or full mast today',
   async exec({ channel }) {
     const response = await axios('https://halfstaff.org');
-    const dom = new JSDOM(response.data);
-    const element = dom.window.document.querySelector(
-      '#text-center > div > strong > br:nth-child(3)'
-    );
-    const text = element?.textContent || '';
+    const $ = load(response.data);
+    const element = $('#text-center > div > strong > br:nth-child(3)');
+    const text = element.text();
     return channel.send(
       `The U.S. flag is at ${
         text.includes('half staff') ? 'half' : 'full'
