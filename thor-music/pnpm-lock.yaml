@@ -5,7 +5,6 @@ specifiers:
   '@discordjs/voice': 0.8.0
   '@googleapis/youtube': 4.2.0
   '@limitlesspc/limitless': ^0.1.1
-  '@types/node': 17.0.23
   chalk: '4'
   discord.js: ^13.6.0
   dotenv: 16.0.0
@@ -13,7 +12,6 @@ specifiers:
   genius-lyrics: 4.3.6
   libsodium-wrappers: 0.7.10
   play-dl: 1.9.2
-  typescript: 4.6.2
 
 dependencies:
   '@discord-player/downloader': 3.0.1
@@ -27,10 +25,6 @@ dependencies:
   genius-lyrics: 4.3.6
   libsodium-wrappers: 0.7.10
   play-dl: 1.9.2
-
-devDependencies:
-  '@types/node': 17.0.23
-  typescript: 4.6.2
 
 packages:
 
@@ -157,6 +151,7 @@ packages:
 
   /@types/node/17.0.23:
     resolution: {integrity: sha512-UxDxWn7dl97rKVeVS61vErvw086aCYhDLyvRQZ5Rk65rZKepaFdm53GeqXaKBuOhED4e9uWq34IC3TdSdJJ2Gw==}
+    dev: false
 
   /@types/responselike/1.0.0:
     resolution: {integrity: sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==}
@@ -1067,12 +1062,6 @@ packages:
   /typedarray/0.0.6:
     resolution: {integrity: sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=}
     dev: false
-
-  /typescript/4.6.2:
-    resolution: {integrity: sha512-HM/hFigTBHZhLXshn9sN37H085+hQGeJHJ/X7LpBWLID/fbc2acUMfU+lGD98X81sKP+pFa9f0DZmCwB9GnbAg==}
-    engines: {node: '>=4.2.0'}
-    hasBin: true
-    dev: true
 
   /url-template/2.0.8:
     resolution: {integrity: sha1-/FZaPMy/93MMd19WQflVV5FDnyE=}
