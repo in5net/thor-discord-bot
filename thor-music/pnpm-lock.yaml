@@ -4,7 +4,7 @@ specifiers:
   '@discord-player/downloader': ^3.0.1
   '@discordjs/voice': 0.8.0
   '@googleapis/youtube': 4.2.0
-  '@limitlesspc/limitless': ^0.1.1
+  '@limitlesspc/limitless': 0.2.4
   chalk: '4'
   discord.js: ^13.6.0
   dotenv: 16.0.0
@@ -17,7 +17,7 @@ dependencies:
   '@discord-player/downloader': 3.0.1
   '@discordjs/voice': 0.8.0_ffmpeg-static@5.0.0
   '@googleapis/youtube': 4.2.0
-  '@limitlesspc/limitless': 0.1.1
+  '@limitlesspc/limitless': 0.2.4
   chalk: 4.1.2
   discord.js: 13.6.0
   dotenv: 16.0.0
@@ -91,13 +91,14 @@ packages:
       - supports-color
     dev: false
 
-  /@limitlesspc/limitless/0.1.1:
-    resolution: {integrity: sha512-LcbINNkgAuqmIoY0+Xf201sHqqbu189JzzZpME3qIZ3H2ArHrBXfpfNlF46bu0XMo155MK+4U0Bqf2I1PiEL+g==, tarball: download/@limitlesspc/limitless/0.1.1/0fd646b8a6a962292fdb81a209baafc5c09763cab6f83f1980c4a164f1fb3a51}
+  /@limitlesspc/limitless/0.2.4:
+    resolution: {integrity: sha512-LdWHSbWp2ZPskaG8xsDOk4fqYoeuL1l7XCUr7S4bs0PVfuTgxFyAdRccBkU0yUzRu8UHnJGve5AuWuTOj+9G+A==, tarball: download/@limitlesspc/limitless/0.2.4/ae93a2dbf9f1befb3cfb1257f4804ea3373f821535266d3aa32170e51e5a5704}
     dependencies:
-      axios: 0.24.0
+      axios: 0.26.1
       cheerio: 1.0.0-rc.10
       gl-matrix: 3.4.3
-      p5: 1.4.0
+      p5: 1.4.1
+      tslib: 2.3.1
     transitivePeerDependencies:
       - debug
     dev: false
@@ -197,10 +198,10 @@ packages:
     resolution: {integrity: sha1-x57Zf380y48robyXkLzDZkdLS3k=}
     dev: false
 
-  /axios/0.24.0:
-    resolution: {integrity: sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==}
+  /axios/0.26.1:
+    resolution: {integrity: sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==}
     dependencies:
-      follow-redirects: 1.14.7
+      follow-redirects: 1.14.9
     transitivePeerDependencies:
       - debug
     dev: false
@@ -499,8 +500,8 @@ packages:
       - supports-color
     dev: false
 
-  /follow-redirects/1.14.7:
-    resolution: {integrity: sha512-+hbxoLbFMbRKDwohX8GkTataGqO6Jb7jGwpAlwgy2bIz25XtRm7KEzJM76R1WiNT5SwZkX4Y75SwBolkpmE7iQ==}
+  /follow-redirects/1.14.9:
+    resolution: {integrity: sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -889,8 +890,8 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /p5/1.4.0:
-    resolution: {integrity: sha512-U888W2ChcIzPhRhnv4FkNhaa4f5BDIWZfLhzvx9ZrQ5KtkZr/+o1UPIicV3yWTRy0HEG23NviHyDR3kgjaJ9wA==}
+  /p5/1.4.1:
+    resolution: {integrity: sha512-3/X+qb0bK2Cg8nuZNpZZvzxkeUSRghOf0S+l8c+U8yIkUTVSbbcV0R8y96rx3InVBVhk8cH9kFC93VlZZElqSw==}
     dev: false
 
   /parse-cache-control/1.0.1:

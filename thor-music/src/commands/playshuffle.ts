@@ -7,6 +7,7 @@ const cmd: Command = {
   name: 'playshuffle',
   desc: 'Adds and shuffles the queue',
   usage: '<url or YouTube search>',
+  aliases: ['ps'],
   async exec(message, args) {
     const { guildId } = message;
     if (!guildId) return;

@@ -2,7 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@googleapis/customsearch': ^0.2.0
-  '@limitlesspc/limitless': ^0.1.1
+  '@limitlesspc/limitless': 0.2.4
   '@types/ffmpeg-static': ^3.0.1
   '@types/gifencoder': ^2.0.1
   '@types/gl': ^4.1.0
@@ -26,7 +26,7 @@ specifiers:
 
 dependencies:
   '@googleapis/customsearch': 0.2.0
-  '@limitlesspc/limitless': 0.1.1
+  '@limitlesspc/limitless': 0.2.4
   axios: 0.26.1
   canvas: 2.9.1
   cheerio: 1.0.0-rc.10
@@ -99,13 +99,14 @@ packages:
       - supports-color
     dev: false
 
-  /@limitlesspc/limitless/0.1.1:
-    resolution: {integrity: sha512-LcbINNkgAuqmIoY0+Xf201sHqqbu189JzzZpME3qIZ3H2ArHrBXfpfNlF46bu0XMo155MK+4U0Bqf2I1PiEL+g==, tarball: download/@limitlesspc/limitless/0.1.1/0fd646b8a6a962292fdb81a209baafc5c09763cab6f83f1980c4a164f1fb3a51}
+  /@limitlesspc/limitless/0.2.4:
+    resolution: {integrity: sha512-LdWHSbWp2ZPskaG8xsDOk4fqYoeuL1l7XCUr7S4bs0PVfuTgxFyAdRccBkU0yUzRu8UHnJGve5AuWuTOj+9G+A==, tarball: download/@limitlesspc/limitless/0.2.4/ae93a2dbf9f1befb3cfb1257f4804ea3373f821535266d3aa32170e51e5a5704}
     dependencies:
-      axios: 0.24.0
+      axios: 0.26.1
       cheerio: 1.0.0-rc.10
       gl-matrix: 3.4.3
-      p5: 1.4.0
+      p5: 1.4.1
+      tslib: 2.3.1
     transitivePeerDependencies:
       - debug
     dev: false
@@ -292,14 +293,6 @@ packages:
 
   /asynckit/0.4.0:
     resolution: {integrity: sha1-x57Zf380y48robyXkLzDZkdLS3k=}
-    dev: false
-
-  /axios/0.24.0:
-    resolution: {integrity: sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==}
-    dependencies:
-      follow-redirects: 1.14.7
-    transitivePeerDependencies:
-      - debug
     dev: false
 
   /axios/0.26.1:
@@ -776,16 +769,6 @@ packages:
 
   /file-uri-to-path/1.0.0:
     resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
-    dev: false
-
-  /follow-redirects/1.14.7:
-    resolution: {integrity: sha512-+hbxoLbFMbRKDwohX8GkTataGqO6Jb7jGwpAlwgy2bIz25XtRm7KEzJM76R1WiNT5SwZkX4Y75SwBolkpmE7iQ==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
     dev: false
 
   /follow-redirects/1.14.9:
@@ -1654,8 +1637,8 @@ packages:
       aggregate-error: 3.1.0
     dev: false
 
-  /p5/1.4.0:
-    resolution: {integrity: sha512-U888W2ChcIzPhRhnv4FkNhaa4f5BDIWZfLhzvx9ZrQ5KtkZr/+o1UPIicV3yWTRy0HEG23NviHyDR3kgjaJ9wA==}
+  /p5/1.4.1:
+    resolution: {integrity: sha512-3/X+qb0bK2Cg8nuZNpZZvzxkeUSRghOf0S+l8c+U8yIkUTVSbbcV0R8y96rx3InVBVhk8cH9kFC93VlZZElqSw==}
     dev: false
 
   /parse-cache-control/1.0.1:
