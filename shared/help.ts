@@ -19,19 +19,18 @@ export default function helpCommand(
         return channel.send({
           embeds: [
             new MessageEmbed()
-              .setTitle(`${title} Help`)
-              .setDescription('Commands')
-              .setColor(color)
-              .addFields(
-                manual.map(({ name, desc, usage, subcommands }) => ({
-                  name: `${name}: \`${prefix}${usage || name}${
-                    subcommands
-                      ? ` <${subcommands.map(({ name }) => name).join('|')}>`
-                      : ''
-                  }\``,
-                  value: desc
-                }))
+              .setTitle(`${title} Commands`)
+              .setDescription(
+                manual
+                  .map(({ name, subcommands }) =>
+                    [
+                      name,
+                      ...(subcommands?.map(({ name }) => name) || [])
+                    ].join('|')
+                  )
+                  .join(', ')
               )
+              .setColor(color)
           ]
         });
 
