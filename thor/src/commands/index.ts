@@ -32,6 +32,7 @@ import waifu from './waifu';
 import neko from './neko';
 import counts from './counts';
 import norway from './norway';
+import lifehash from './lifehash';
 import type Command from '$shared/command';
 
 const commands: Command[] = [
@@ -68,6 +69,7 @@ const commands: Command[] = [
   waifu,
   neko,
   counts,
-  norway
+  norway,
+  lifehash
 ];
 export default commands;
