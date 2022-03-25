@@ -22,11 +22,8 @@ export default function helpCommand(
               .setTitle(`${title} Commands`)
               .setDescription(
                 manual
-                  .map(({ name, subcommands }) =>
-                    [
-                      name,
-                      ...(subcommands?.map(({ name }) => name) || [])
-                    ].join('|')
+                  .map(({ name, aliases }) =>
+                    [name, ...(aliases?.map(alias => alias) || [])].join('|')
                   )
                   .join(', ')
               )
