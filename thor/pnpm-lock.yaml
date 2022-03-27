@@ -20,7 +20,7 @@ specifiers:
   glsl-noise: ^0.0.0
   glslify: ^7.1.1
   music-metadata: 7.12.2
-  nekos-best.js: ^5.0.0
+  nekos-best.js: 5.0.1
   owofy: ^1.0.2
   pngjs: ^6.0.0
 
@@ -40,7 +40,7 @@ dependencies:
   glsl-noise: 0.0.0
   glslify: 7.1.1
   music-metadata: 7.12.2
-  nekos-best.js: 5.0.0
+  nekos-best.js: 5.0.1
   owofy: 1.0.2
   pngjs: 6.0.0
 
@@ -1487,8 +1487,8 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
-  /nekos-best.js/5.0.0:
-    resolution: {integrity: sha512-JiRlI2Y6MEg49ZWRuevRRLcG9VdtFDcKNLDaUYYzSlbidqEjWT4y3p2XDkNVw5eRlT4hyNkE/Ca9znU3uLiN+g==}
+  /nekos-best.js/5.0.1:
+    resolution: {integrity: sha512-UqLyEVTUHObjEjiix/l+4wgXBOBilE0/h9NhAwh9YC9z5igRXWdatXPHH9sn4xbgri9XNM/TJnH6rn053lKAkQ==}
     engines: {node: '>=15.14.0'}
     dependencies:
       petitio: 1.4.0
