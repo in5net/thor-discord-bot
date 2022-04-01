@@ -11,7 +11,7 @@ specifiers:
   ffmpeg-static: 5.0.0
   genius-lyrics: 4.3.6
   libsodium-wrappers: 0.7.10
-  play-dl: 1.9.2
+  play-dl: 1.9.3
 
 dependencies:
   '@discord-player/downloader': 3.0.1
@@ -24,7 +24,7 @@ dependencies:
   ffmpeg-static: 5.0.0
   genius-lyrics: 4.3.6
   libsodium-wrappers: 0.7.10
-  play-dl: 1.9.2
+  play-dl: 1.9.3
 
 packages:
 
@@ -917,8 +917,8 @@ packages:
     resolution: {integrity: sha512-ZAqHUKkQLix2Iga7pPbsf1LpUoBjcpwU93F1l3qBIfxYddQLhxS6GKmS0d3jV8kSVaUbr6NnOEcEMFvuX93SWQ==}
     dev: false
 
-  /play-dl/1.9.2:
-    resolution: {integrity: sha512-rhTt3ap4Oajl6NULOOWe35nysT2PwNNuaIrpLF7EPQhZrjBqaJfwiqtr60hn8b46fPR9utNsEnDv6dkTRNYr6Q==}
+  /play-dl/1.9.3:
+    resolution: {integrity: sha512-eDiqO0KZ2ngGrPmlIrOWClDAQ2KDyrGJHNjlrreyDZlm6GrB0+FXc1UN+R7JnZZ6T1eXbn0a1CxBlJGL6tAKhw==}
     engines: {node: '>=16.0.0'}
     dependencies:
       play-audio: 0.5.2
