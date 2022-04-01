@@ -2,7 +2,7 @@
 import { Client } from 'nekos-best.js';
 import { MessageEmbed } from 'discord.js';
 
-import { incWeebCount } from '$services/users';
+import { incCount } from '$services/users';
 import type Command from './command';
 
 const nekosBest = new Client();
@@ -25,7 +25,7 @@ const cmd: Command = {
       if (source_url) embed.setURL(source_url);
       if (anime_name) embed.setTitle(anime_name);
       await channel.send({ embeds: [embed] });
-      return incWeebCount(id);
+      return incCount(id, 'weeb');
     }
     return channel.send('No neko found');
   }

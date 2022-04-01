@@ -20,7 +20,7 @@ export async function getUser(uid: string): Promise<User | undefined> {
   }
 }
 
-const incCount = (uid: string, name: string) =>
+export const incCount = (uid: string, name: string) =>
   (usersRef as FirebaseFirestore.CollectionReference).doc(uid).set(
     {
       counts: {
@@ -29,9 +29,3 @@ const incCount = (uid: string, name: string) =>
     },
     { merge: true }
   );
-
-export const incWeebCount = (uid: string) => incCount(uid, 'weeb');
-export const incSaladMundusCount = (uid: string) =>
-  incCount(uid, 'saladMundus');
-export const incNoWayCount = (uid: string) => incCount(uid, 'noWay');
-export const incRatioCount = (uid: string) => incCount(uid, 'ratio');

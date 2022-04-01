@@ -2,7 +2,12 @@
   "ts-node": {
     "require": ["tsconfig-paths/register"]
   },
-  "include": ["shared/*", "services/*", "thor/**/*", "thor-music/**/*"],
+  "include": [
+    "shared/*.ts",
+    "services/*.ts",
+    "thor/**/*.ts",
+    "thor-music/**/*.ts"
+  ],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 

@@ -11,7 +11,7 @@
     "start": "tmuxinator start",
     "thor": "ts-node thor/src/main.ts",
     "thor-music": "ts-node thor-music/src/main.ts",
-    "lint": "eslint --ignore-path .gitignore ."
+    "lint": "eslint ."
   },
   "dependencies": {
     "discord.js": "^13.6.0",

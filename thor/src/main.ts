@@ -3,11 +3,7 @@ import help from './commands/help';
 import commands from './commands';
 import { handleMessage } from './commands/wordle';
 import responses from './responses';
-import {
-  incNoWayCount,
-  incRatioCount,
-  incSaladMundusCount
-} from '$services/users';
+import { incCount } from '$services/users';
 import './env';
 
 new DiscordBot(
@@ -29,7 +25,7 @@ new DiscordBot(
       if (Math.random() < 0.3)
         msg += ` gave 1 strike to <@${message.author.id}>`;
       await channel.send(msg).catch();
-      await incSaladMundusCount(author.id);
+      await incCount(author.id, 'saladMundus');
       return;
     }
 
@@ -42,10 +38,10 @@ new DiscordBot(
       let lowercase = content.toLowerCase();
       // Remove @mentions
       lowercase = lowercase.replace(/<@!?\d+>/g, '');
-      if (lowercase.includes('ratio')) await incRatioCount(author.id);
+      if (lowercase.includes('ratio')) await incCount(author.id, 'ratio');
       if (['noway', 'norway'].includes(lowercase.replace(' ', ''))) {
         await channel.send(Math.random() < 0.1 ? 'Norway' : 'no way');
-        await incNoWayCount(author.id);
+        await incCount(author.id, 'noWay');
         return;
       }
       if (channel.type !== 'DM' && !channel.name.includes('thor')) {

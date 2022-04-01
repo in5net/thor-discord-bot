@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { MessageEmbed } from 'discord.js';
 
-import { incWeebCount } from '$services/users';
+import { incCount } from '$services/users';
 import type Command from './command';
 
 interface Response {
@@ -32,7 +32,7 @@ const cmd: Command = {
       embed.setAuthor({ name: artist, url: artist_url });
 
     await channel.send({ embeds: [embed] });
-    return incWeebCount(id);
+    return incCount(id, 'weeb');
   }
 };
 export default cmd;
