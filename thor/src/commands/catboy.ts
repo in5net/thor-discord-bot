@@ -22,13 +22,14 @@ const cmd: Command = {
 
     const embed = new MessageEmbed()
       .setTitle('Catboy')
-      .setURL(source_url)
-      .setAuthor({ name: artist, url: artist_url })
       .setImage(url)
       .setFooter({
         text: 'Powered by catboys.com',
         iconURL: 'https://catboys.com/favicon.png'
       });
+    if (source_url.startsWith('http')) embed.setURL(source_url);
+    if (artist_url.startsWith('http'))
+      embed.setAuthor({ name: artist, url: artist_url });
 
     await channel.send({ embeds: [embed] });
     return incWeebCount(id);
