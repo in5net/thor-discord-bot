@@ -24,6 +24,7 @@ import pfp from './pfp';
 import rng from './rng';
 import ratio from './ratio';
 import hiragana from './hiragana';
+import katakana from './katakana';
 import wordle from './wordle';
 import drive from './drive';
 import hash from './hash';
@@ -62,6 +63,7 @@ const commands: Command[] = [
   rng,
   ratio,
   hiragana,
+  katakana,
   wordle,
   drive,
   hash,
