@@ -19,7 +19,7 @@ specifiers:
   gl-matrix: ^3.4.3
   glsl-noise: ^0.0.0
   glslify: ^7.1.1
-  music-metadata: 7.12.2
+  music-metadata: 7.12.3
   nekos-best.js: 5.0.1
   owofy: ^1.0.2
   pngjs: ^6.0.0
@@ -39,7 +39,7 @@ dependencies:
   gl-matrix: 3.4.3
   glsl-noise: 0.0.0
   glslify: 7.1.1
-  music-metadata: 7.12.2
+  music-metadata: 7.12.3
   nekos-best.js: 5.0.1
   owofy: 1.0.2
   pngjs: 6.0.0
@@ -526,6 +526,18 @@ packages:
       ms: 2.1.2
     dev: false
 
+  /debug/4.3.4:
+    resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+    dependencies:
+      ms: 2.1.2
+    dev: false
+
   /decode-gif/1.0.1:
     resolution: {integrity: sha512-L0MT527mwlkil9TiN1xwnJXzUxCup55bUT91CPmQlc9zYejXJ8xp17d5EVnwM80JOIGImBUk1ptJQ+hDihyzwg==}
     engines: {node: '>=10'}
@@ -763,7 +775,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       readable-web-to-node-stream: 3.0.2
-      strtok3: 6.2.4
+      strtok3: 6.3.0
       token-types: 4.2.0
     dev: false
 
@@ -1459,16 +1471,16 @@ packages:
     resolution: {integrity: sha1-sGJ44h/Gw3+lMTcysEEry2rhX1E=}
     dev: false
 
-  /music-metadata/7.12.2:
-    resolution: {integrity: sha512-KO1L6q30b6HfGlDQk1VAdrZqCKi4Gy7pN7eZOZ0YZQkhF/KCLHxKCjKKli9ao9kIBC/9s+uXHvjW3bDIBWuGew==}
+  /music-metadata/7.12.3:
+    resolution: {integrity: sha512-6pZngaroNxGBf8KZjE8reGZJiS533eJq7dBFsyoiEAZIORQAxmVVx20ABh9W2tsLT+5mKYyDzcNi5GuHf3jitg==}
     engines: {node: '>=10'}
     dependencies:
       '@tokenizer/token': 0.3.0
       content-type: 1.0.4
-      debug: 4.3.3
+      debug: 4.3.4
       file-type: 16.5.3
       media-typer: 1.1.0
-      strtok3: 6.2.4
+      strtok3: 6.3.0
       token-types: 4.2.0
     transitivePeerDependencies:
       - supports-color
@@ -1664,8 +1676,8 @@ packages:
     resolution: {integrity: sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==}
     dev: false
 
-  /peek-readable/4.0.2:
-    resolution: {integrity: sha512-9fMaz6zoxw9ypO1KZy5RDJgSupEtu0Q+g/OqqsVHX3rKGR8qehRLYzsFARZ4bVvdvfknKiXvuDbkMnO1g6cRpQ==}
+  /peek-readable/4.1.0:
+    resolution: {integrity: sha512-ZI3LnwUv5nOGbQzD9c2iDG6toheuXSZP5esSHBjopsXH4dg19soufvpUGA3uohi5anFtGb2lhAVdHzH6R/Evvg==}
     engines: {node: '>=8'}
     dev: false
 
@@ -1982,12 +1994,12 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
 
-  /strtok3/6.2.4:
-    resolution: {integrity: sha512-GO8IcFF9GmFDvqduIspUBwCzCbqzegyVKIsSymcMgiZKeCfrN9SowtUoi8+b59WZMAjIzVZic/Ft97+pynR3Iw==}
+  /strtok3/6.3.0:
+    resolution: {integrity: sha512-fZtbhtvI9I48xDSywd/somNqgUHl2L2cstmXCCif0itOf96jeW18MBSyrLuNicYQVkvpOxkZtkzujiTJ9LW5Jw==}
     engines: {node: '>=10'}
     dependencies:
       '@tokenizer/token': 0.3.0
-      peek-readable: 4.0.2
+      peek-readable: 4.1.0
     dev: false
 
   /supports-preserve-symlinks-flag/1.0.0:
