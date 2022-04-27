@@ -6,6 +6,7 @@ import type Command from './command';
 export default class DiscordBot {
   client: Client;
   commands: Command[] = [];
+  onReadyFn?: () => any;
   onMessageFn?: (message: Message) => any;
 
   constructor(
@@ -17,11 +18,19 @@ export default class DiscordBot {
     this.client = new Client({
       intents,
       partials: ['CHANNEL']
-    }).once('ready', () => console.log(`✅ ${name} is ready!`));
+    }).once('ready', () => {
+      console.log(`✅ ${name} is ready!`);
+      this.onReadyFn?.();
+    });
   }
 
   addCommands(commands: Command[]) {
     this.commands.push(...commands);
+    return this;
+  }
+
+  onReady(onReadyFn: () => any) {
+    this.onReadyFn = onReadyFn;
     return this;
   }
 

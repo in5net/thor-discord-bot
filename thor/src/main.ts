@@ -78,4 +78,4 @@ async function setNickname() {
   const nickname = random(nicknames);
   member.setNickname(nickname);
 }
-setInterval(setNickname, 1000 * 60 * 60);
+bot.onReady(() => setInterval(setNickname, 1000 * 60 * 60));
