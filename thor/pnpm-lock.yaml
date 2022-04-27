@@ -21,7 +21,7 @@ specifiers:
   glslify: ^7.1.1
   music-metadata: 7.12.3
   nekos-best.js: 5.0.1
-  owofy: 2.0.0
+  owofy: 1.0.2
   pngjs: ^6.0.0
 
 dependencies:
@@ -41,7 +41,7 @@ dependencies:
   glslify: 7.1.1
   music-metadata: 7.12.3
   nekos-best.js: 5.0.1
-  owofy: 2.0.0
+  owofy: 1.0.2
   pngjs: 6.0.0
 
 devDependencies:
@@ -1647,8 +1647,8 @@ packages:
       word-wrap: 1.2.3
     dev: false
 
-  /owofy/2.0.0:
-    resolution: {integrity: sha512-UTbqKFJUd7zI8vURweITz+eF3IQW2eXAHMbJg3SsXCCWx/I6Gr1TYMN7I8EDkNg+TSUQWDMz+J7wz3pEy7ZD3w==}
+  /owofy/1.0.2:
+    resolution: {integrity: sha512-FycxdoexDL9EyYzwUTH/4ST/WiaqpKMXxqVd4LygdtVNQHcBFiYH5dEt7M4zWaVGAWRbLcn7LHHMK4qv2sb4SQ==}
     dev: false
 
   /p-map/4.0.0:
