@@ -1,3 +1,5 @@
+import { random } from '@limitlesspc/limitless';
+
 import DiscordBot from '$shared/bot';
 import help from './commands/help';
 import commands from './commands';
@@ -6,7 +8,7 @@ import responses from './responses';
 import { incCount } from '$services/users';
 import './env';
 
-new DiscordBot(
+const bot = new DiscordBot(
   'Thor',
   `${process.env.PREFIX} `,
   ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'DIRECT_MESSAGES'],
@@ -59,5 +61,21 @@ new DiscordBot(
       return 0;
     }
     return undefined;
-  })
-  .run();
+  });
+bot.run();
+
+const nicknames = [
+  'CGI Macintosh',
+  'CGI MacOS',
+  "Cam o' shanter",
+  'Camo',
+  "Cam'o'Shantero",
+  'CJ Big Mac'
+];
+async function setNickname() {
+  const guild = await bot.client.guilds.fetch(process.env.SHRINE_ID || '');
+  const member = await guild.members.fetch(process.env.CG_MACKIE_ID || '');
+  const nickname = random(nicknames);
+  member.setNickname(nickname);
+}
+setInterval(setNickname, 1000 * 60 * 60);
