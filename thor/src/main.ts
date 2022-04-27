@@ -70,20 +70,60 @@ const nicknames = [
   "Cam o' shanter",
   'Camo',
   "Cam'o'Shantero",
-  'CJ Big Mac'
+  'CJ Big Mac',
+  'Cameraman'
 ];
-async function setNickname() {
+
+const { SHRINE_ID = '', LIMITLESS_PC_ID = '', CG_MACKIE_ID = '' } = process.env;
+
+async function getMember(memberId: string) {
+  let guild = bot.client.guilds.cache.get(SHRINE_ID);
+  if (!guild)
+    guild = await bot.client.guilds.fetch({
+      guild: SHRINE_ID,
+      withCounts: false,
+      cache: true
+    });
+  let member = guild.members.cache.get(memberId);
+  if (!member)
+    member = await guild.members.fetch({
+      user: memberId,
+      cache: true
+    });
+  return member;
+}
+
+async function setCGNickname() {
   try {
-    const guild = await bot.client.guilds.fetch(process.env.SHRINE_ID || '');
-    const member = await guild.members.fetch(process.env.CG_MACKIE_ID || '');
+    const member = await getMember(CG_MACKIE_ID);
     const nickname = random(nicknames);
-    member.setNickname(nickname);
+    await member.setNickname(nickname);
     console.log(`${nickname} set`);
   } catch (error) {
     console.error(error);
   }
 }
-bot.onReady(() => {
-  setInterval(setNickname, 1000 * 60 * 60);
-  setNickname();
+async function setLimitlessNickname() {
+  try {
+    const member = await getMember(LIMITLESS_PC_ID);
+
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const time = `${hours.toString().padStart(2, '0')}:${minutes
+      .toString()
+      .padStart(2, '0')}`;
+
+    const nickname = `In${time}Net`;
+    await member.setNickname(nickname);
+    console.log(`${nickname} set`);
+  } catch (error) {
+    console.error(error);
+  }
+}
+bot.onReady(async () => {
+  setInterval(setCGNickname, 1000 * 60 * 60);
+  setInterval(setLimitlessNickname, 1000 * 60);
+  await setCGNickname();
+  await setLimitlessNickname();
 });
