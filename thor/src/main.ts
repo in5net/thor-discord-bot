@@ -73,9 +73,17 @@ const nicknames = [
   'CJ Big Mac'
 ];
 async function setNickname() {
-  const guild = await bot.client.guilds.fetch(process.env.SHRINE_ID || '');
-  const member = await guild.members.fetch(process.env.CG_MACKIE_ID || '');
-  const nickname = random(nicknames);
-  member.setNickname(nickname);
+  try {
+    const guild = await bot.client.guilds.fetch(process.env.SHRINE_ID || '');
+    const member = await guild.members.fetch(process.env.CG_MACKIE_ID || '');
+    const nickname = random(nicknames);
+    member.setNickname(nickname);
+    console.log(`${nickname} set`);
+  } catch (error) {
+    console.error(error);
+  }
 }
-bot.onReady(() => setInterval(setNickname, 1000 * 60 * 60));
+bot.onReady(() => {
+  setInterval(setNickname, 1000 * 60 * 60);
+  setNickname();
+});
