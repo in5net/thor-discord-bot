@@ -4,7 +4,7 @@
   "dependencies": {
     "@googleapis/customsearch": "^0.2.0",
     "@limitlesspc/limitless": "0.2.4",
-    "axios": "0.26.1",
+    "axios": "0.27.2",
     "canvas": "2.9.1",
     "cheerio": "^1.0.0-rc.10",
     "decode-gif": "^1.0.1",
@@ -18,7 +18,7 @@
     "glslify": "^7.1.1",
     "music-metadata": "7.12.3",
     "nekos-best.js": "5.0.1",
-    "owofy": "^1.0.2",
+    "owofy": "2.0.0",
     "pngjs": "^6.0.0"
   },
   "devDependencies": {
