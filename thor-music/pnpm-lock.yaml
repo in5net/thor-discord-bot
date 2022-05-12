@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 specifiers:
   '@discord-player/downloader': ^3.0.1
@@ -7,9 +7,9 @@ specifiers:
   '@limitlesspc/limitless': 0.2.4
   chalk: '4'
   discord.js: ^13.6.0
-  dotenv: 16.0.0
+  dotenv: 16.0.1
   ffmpeg-static: 5.0.0
-  genius-lyrics: 4.3.6
+  genius-lyrics: 4.3.8
   libsodium-wrappers: 0.7.10
   play-dl: 1.9.4
 
@@ -20,9 +20,9 @@ dependencies:
   '@limitlesspc/limitless': 0.2.4
   chalk: 4.1.2
   discord.js: 13.6.0
-  dotenv: 16.0.0
+  dotenv: 16.0.1
   ffmpeg-static: 5.0.0
-  genius-lyrics: 4.3.6
+  genius-lyrics: 4.3.8
   libsodium-wrappers: 0.7.10
   play-dl: 1.9.4
 
@@ -443,8 +443,8 @@ packages:
       domhandler: 4.3.0
     dev: false
 
-  /dotenv/16.0.0:
-    resolution: {integrity: sha512-qD9WU0MPM4SWLPJy/r2Be+2WgQj8plChsyrCNQzW/0WjvcJQiKQJ9mH3ZgB3fxbUUxgc/11ZJ0Fi5KiimWGz2Q==}
+  /dotenv/16.0.1:
+    resolution: {integrity: sha512-1K6hR6wtk2FviQ4kEiSjFiH5rpzEVi8WW0x96aztHVMhEspNpc4DVOUTEHtEva5VThQ8IaBX1Pe4gSzpVVUsKQ==}
     engines: {node: '>=12'}
     dev: false
 
@@ -567,8 +567,8 @@ packages:
       - supports-color
     dev: false
 
-  /genius-lyrics/4.3.6:
-    resolution: {integrity: sha512-wLvB0kfOcxPqCeDIIcI2wUaq+AH+E2j48bHga5UbOrLb03UNrVMHwoAzxTrpPc/hg9IWRce1QGMLpCpxvNbhVA==}
+  /genius-lyrics/4.3.8:
+    resolution: {integrity: sha512-Gy5JrSoWQKAWK54qfmgJFJIgbHDhfq3vXvYRJdh5QpX0DFic+7NxA88HVtkF7NdhCGtCCS2F9YeNGDiXYXMVIw==}
     dependencies:
       cheerio: 1.0.0-rc.10
       got: 11.8.3

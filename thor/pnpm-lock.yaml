@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 specifiers:
   '@googleapis/customsearch': ^0.2.0
@@ -12,7 +12,7 @@ specifiers:
   cheerio: ^1.0.0-rc.10
   decode-gif: ^1.0.1
   discord.js: ^13.6.0
-  dotenv: 16.0.0
+  dotenv: 16.0.1
   ffmpeg-static: 5.0.0
   gifencoder: ^2.0.1
   gl: ^5.0.0
@@ -20,7 +20,7 @@ specifiers:
   glsl-noise: ^0.0.0
   glslify: ^7.1.1
   music-metadata: 7.12.3
-  nekos-best.js: 5.0.1
+  nekos-best.js: 5.1.0
   owofy: 1.0.2
   pngjs: ^6.0.0
 
@@ -32,7 +32,7 @@ dependencies:
   cheerio: 1.0.0-rc.10
   decode-gif: 1.0.1
   discord.js: 13.6.0
-  dotenv: 16.0.0
+  dotenv: 16.0.1
   ffmpeg-static: 5.0.0
   gifencoder: 2.0.1
   gl: 5.0.0
@@ -40,7 +40,7 @@ dependencies:
   glsl-noise: 0.0.0
   glslify: 7.1.1
   music-metadata: 7.12.3
-  nekos-best.js: 5.0.1
+  nekos-best.js: 5.1.0
   owofy: 1.0.2
   pngjs: 6.0.0
 
@@ -397,6 +397,8 @@ packages:
       ssri: 8.0.1
       tar: 6.1.11
       unique-filename: 1.1.1
+    transitivePeerDependencies:
+      - bluebird
     dev: false
 
   /call-bind/1.0.2:
@@ -649,8 +651,8 @@ packages:
       domhandler: 4.3.0
     dev: false
 
-  /dotenv/16.0.0:
-    resolution: {integrity: sha512-qD9WU0MPM4SWLPJy/r2Be+2WgQj8plChsyrCNQzW/0WjvcJQiKQJ9mH3ZgB3fxbUUxgc/11ZJ0Fi5KiimWGz2Q==}
+  /dotenv/16.0.1:
+    resolution: {integrity: sha512-1K6hR6wtk2FviQ4kEiSjFiH5rpzEVi8WW0x96aztHVMhEspNpc4DVOUTEHtEva5VThQ8IaBX1Pe4gSzpVVUsKQ==}
     engines: {node: '>=12'}
     dev: false
 
@@ -956,6 +958,7 @@ packages:
       node-gyp: 8.4.1
       prebuild-install: 7.0.0
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: false
 
@@ -1358,6 +1361,7 @@ packages:
       socks-proxy-agent: 6.1.1
       ssri: 8.0.1
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: false
 
@@ -1508,8 +1512,8 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
-  /nekos-best.js/5.0.1:
-    resolution: {integrity: sha512-UqLyEVTUHObjEjiix/l+4wgXBOBilE0/h9NhAwh9YC9z5igRXWdatXPHH9sn4xbgri9XNM/TJnH6rn053lKAkQ==}
+  /nekos-best.js/5.1.0:
+    resolution: {integrity: sha512-KUREmvMKLdSeJOkKUlk3cmkSe+5ywY7lHNcRErvzAVlKywxRUD1i++CCpSxxDYRMvUbff+IjW+fOgU1FuxC7ng==}
     engines: {node: '>=15.14.0'}
     dependencies:
       petitio: 1.4.0
@@ -1555,6 +1559,7 @@ packages:
       tar: 6.1.11
       which: 2.0.2
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: false
 
@@ -1736,6 +1741,11 @@ packages:
 
   /promise-inflight/1.0.1:
     resolution: {integrity: sha1-mEcocL8igTL8vdhoEputEsPAKeM=}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
     dev: false
 
   /promise-retry/2.0.1:
