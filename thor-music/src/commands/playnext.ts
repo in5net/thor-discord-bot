@@ -18,7 +18,7 @@ const cmd: Command = {
       return message.reply(`${woof()}, you are not in a voice channel`);
 
     await player.add(message, args.join(' '));
-    return player.move(2, player.queue.length - 1);
+    return player.move(player.queue.length - 1, 0);
   }
 };
 export default cmd;

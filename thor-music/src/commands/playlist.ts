@@ -65,8 +65,8 @@ const cmd: Command = {
     {
       name: 'load',
       desc: 'Loads your named playlist into the queue',
-      usage: '<name>',
-      async exec(message, [name]) {
+      usage: '<names>',
+      async exec(message, names) {
         const { guildId } = message;
         if (!guildId) return;
         const player = getPlayer(guildId);
@@ -74,16 +74,16 @@ const cmd: Command = {
         if (message.member?.voice.channel?.type !== 'GUILD_VOICE')
           return message.reply(`${woof()}, you are not in a voice channel`);
 
-        if (!name) return message.channel.send('Please provide a name');
+        if (!names.length) return message.channel.send('Please provide a name');
 
-        return player.playlistLoad(message, name);
+        return player.playlistLoad(message, names);
       }
     },
     {
       name: 'loads',
       desc: 'Loads and shuffles your named playlist into the queue',
-      usage: '<name>',
-      async exec(message, [name]) {
+      usage: '<names>',
+      async exec(message, names) {
         const { guildId } = message;
         if (!guildId) return;
         const player = getPlayer(guildId);
@@ -91,9 +91,9 @@ const cmd: Command = {
         if (message.member?.voice.channel?.type !== 'GUILD_VOICE')
           return message.reply(`${woof()}, you are not in a voice channel`);
 
-        if (!name) return message.channel.send('Please provide a name');
+        if (!names.length) return message.channel.send('Please provide a name');
 
-        return player.playlistLoads(message, name);
+        return player.playlistLoads(message, names);
       }
     },
     {

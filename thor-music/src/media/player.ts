@@ -599,31 +599,47 @@ export default class Player {
     await channel.send(`Added to playlist ${name}`);
   }
 
-  async playlistLoad(message: Message, name: string): Promise<void> {
+  async playlistLoad(message: Message, names: string[]): Promise<void> {
     this.setChannels(message);
     const { author, member } = message;
-    const medias = await playlist.get(
-      {
-        uid: author.id,
-        name: member?.nickname || author.username
-      },
-      name
-    );
-    this.queue.enqueue(...medias);
+    const allMedias: MediaType[] = [];
+    const cache = new Map<string, MediaType[]>();
+    for (const name of names) {
+      let medias = cache.get(name);
+      if (!medias) {
+        medias = await playlist.get(
+          {
+            uid: author.id,
+            name: member?.nickname || author.username
+          },
+          name
+        );
+      }
+      allMedias.push(...medias);
+    }
+    this.queue.enqueue(...allMedias);
     return this.play();
   }
 
-  async playlistLoads(message: Message, name: string): Promise<void> {
+  async playlistLoads(message: Message, names: string[]): Promise<void> {
     this.setChannels(message);
     const { author, member } = message;
-    const medias = await playlist.get(
-      {
-        uid: author.id,
-        name: member?.nickname || author.username
-      },
-      name
-    );
-    this.queue.enqueue(...shuffle(medias));
+    const allMedias: MediaType[] = [];
+    const cache = new Map<string, MediaType[]>();
+    for (const name of names) {
+      let medias = cache.get(name);
+      if (!medias) {
+        medias = await playlist.get(
+          {
+            uid: author.id,
+            name: member?.nickname || author.username
+          },
+          name
+        );
+      }
+      allMedias.push(...medias);
+    }
+    this.queue.enqueue(...shuffle(allMedias));
     return this.play();
   }
 
