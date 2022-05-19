@@ -86,7 +86,7 @@ function wrapText(
 
 function generateStr() {
   const indices = new Set<number>();
-  while (indices.size < numRatios) {
+  while (indices.size < Math.min(numRatios, ratios.data.length)) {
     indices.add(Math.floor(Math.random() * ratios.data.length));
   }
   const ratioStrings = [...indices].map(i => ratios.data[i] || '');
