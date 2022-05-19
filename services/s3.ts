@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import { appendFileSync, readFileSync } from 'node:fs';
+import { appendFileSync, existsSync, readFileSync } from 'node:fs';
 
 import { DATABASE_PATH } from './path';
 
@@ -9,13 +9,12 @@ export default class S3 {
   private lines: string[] = [];
 
   constructor(readonly name: string) {
-    this.path = join(DATABASE_PATH, `${name}.txt`);
-    try {
-      const str = readFileSync(this.path, 'utf8');
+    const path = join(DATABASE_PATH, `${name}.txt`);
+    if (existsSync(path)) {
+      const str = readFileSync(path, 'utf8');
       this.lines = str.split('\n');
-    } catch (error) {
-      console.error(error);
     }
+    this.path = path;
   }
 
   get data(): readonly string[] {
