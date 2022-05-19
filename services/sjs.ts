@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { join } from 'node:path';
 import { readFileSync, writeFileSync } from 'node:fs';
 
@@ -5,12 +6,20 @@ import { DATABASE_PATH } from './path';
 
 export default class SimpleJSONStorage<T extends Record<string, any>> {
   private path: string;
-  private data: T;
+  private _data = {} as T;
 
   constructor(readonly name: string) {
     this.path = join(DATABASE_PATH, `${name}.json`);
-    const str = readFileSync(this.path, 'utf8');
-    this.data = JSON.parse(str);
+    try {
+      const str = readFileSync(this.path, 'utf8');
+      this._data = JSON.parse(str);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  get data(): T {
+    return this._data;
   }
 
   save() {
@@ -18,12 +27,8 @@ export default class SimpleJSONStorage<T extends Record<string, any>> {
     writeFileSync(this.path, str, 'utf8');
   }
 
-  get(): T {
-    return this.data;
-  }
-
   update(updater: (data: T) => T) {
-    this.data = updater(this.data);
+    this._data = updater(this._data);
     this.save();
   }
 }

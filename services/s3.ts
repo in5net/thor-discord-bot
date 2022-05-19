@@ -6,12 +6,16 @@ import { DATABASE_PATH } from './path';
 // SimpleStringStorage
 export default class S3 {
   private path: string;
-  private lines: string[];
+  private lines: string[] = [];
 
   constructor(readonly name: string) {
     this.path = join(DATABASE_PATH, `${name}.txt`);
-    const str = readFileSync(this.path, 'utf8');
-    this.lines = str.split('\n');
+    try {
+      const str = readFileSync(this.path, 'utf8');
+      this.lines = str.split('\n');
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   get data(): readonly string[] {
