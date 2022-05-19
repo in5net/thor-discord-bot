@@ -3,9 +3,7 @@ import type Command from './command';
 const cmd: Command = {
   name: 'cipher',
   desc: 'Encrypts or decrypts a message using a Caesar cipher with an indexed offset',
-  async exec(message) {
-    return message.channel.send('See `thor help cipher`');
-  },
+  exec: message => message.channel.send('See `thor help cipher`'),
   subcommands: [
     {
       name: 'encrypt',

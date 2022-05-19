@@ -7,9 +7,7 @@ const cmd: Command = {
   name: 'playlist',
   desc: 'Manage your personal playlists',
   aliases: ['pl'],
-  async exec(message) {
-    return message.channel.send('See `-help playlist`');
-  },
+  exec: message => message.channel.send('See `-help playlist`'),
   subcommands: [
     {
       name: 'get',

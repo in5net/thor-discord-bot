@@ -16,6 +16,7 @@ const frames = 24;
 const cmd: Command = {
   name: 'noise',
   desc: 'Generates a image with Perlin noise',
+  aliases: ['perlin', '音'],
   async exec({ channel }, args, client) {
     const text = `Generating noise...`;
     console.log(text);

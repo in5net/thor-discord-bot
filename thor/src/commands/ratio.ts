@@ -2,108 +2,48 @@ import { join } from 'node:path';
 import { MessageAttachment } from 'discord.js';
 import { createCanvas, registerFont } from 'canvas';
 
-import { createWriteStream } from 'node:fs';
+import S3 from '$services/s3';
 import type Command from './command';
 
 const fontPath = join(__dirname, './Whitney-400.woff');
 registerFont(fontPath, { family: 'Whitney', weight: '400' });
 
-const ratios = [
-  'L',
-  'ratio',
-  'get gud',
-  'cry abt it',
-  'ur mom',
-  "didn't ask",
-  'get real',
-  'minecraft > fortnite',
-  'i know ur ip',
-  'get got',
-  "don't care",
-  'stay mad',
-  'cope harder',
-  'hoes mad',
-  'skill issue',
-  'basic',
-  'audacity',
-  'try harder',
-  'any askers',
-  'triggered',
-  'twitter user',
-  'discord mod',
-  'based',
-  'cringe',
-  'touch grass',
-  'gg ez',
-  'ok and?',
-  'get a life',
-  'professional loser',
-  'reported',
-  'your problem',
-  'straight cash',
-  'no friends',
-  'done for',
-  'rip bozo',
-  'league player',
-  'no bitches?',
-  'ask deez',
-  'irrelevant',
-  'where?',
-  'problematic',
-  'go ahead and whine',
-  'redpilled',
-  'you fell off',
-  'ez clap',
-  'mad free',
-  'counter ratio',
-  'final ratio',
-  "didn't ask again",
-  'counter-counter ratio',
-  'spell check',
-  'grammar mistake',
-  'baby dragon user',
-  'too easy',
-  'wahh',
-  'look at ur face',
-  'jealous',
-  'cancelled',
-  'banned',
-  'kicked',
-  'lol',
-  'lmao',
-  'glhf',
-  'stay pressed',
-  'addressed leaked',
-  'dad works for fbi',
-  'can hack',
-  'netflix & chill',
-  "can't win",
-  'ur done',
-  "can't recover",
-  'xoxo',
-  'rekt',
-  'still in 2010',
-  "can't fathom",
-  'opinion'
-];
+const ratios = new S3('ratios');
+
 const numRatios = 50;
 const size = 256;
 
 const cmd: Command = {
   name: 'ratio',
   desc: 'Get ratioed',
-  usage: 'img?',
-  async exec({ channel }, [arg]) {
-    if (arg === 'img') {
-      const canvas = generateCanvas();
-      return channel.send({
-        content: null,
-        files: [new MessageAttachment(canvas.toBuffer())]
-      });
-    }
+  async exec({ channel }) {
     const text = generateStr();
     return channel.send(text);
-  }
+  },
+  subcommands: [
+    {
+      name: 'img',
+      desc: 'Get ratioed',
+      async exec({ channel }) {
+        const canvas = generateCanvas();
+        return channel.send({
+          content: null,
+          files: [new MessageAttachment(canvas.toBuffer())]
+        });
+      }
+    },
+    {
+      name: 'add',
+      desc: 'Adds a ratio to the list',
+      usage: "<...ratios> ('+' separated)",
+      async exec({ channel }, args) {
+        const argStrs = args.join(' ');
+        const ratioStrs = argStrs.split('+').map(s => s.trim());
+        ratios.add(...ratioStrs);
+        return channel.send('Added to ratios');
+      }
+    }
+  ]
 };
 export default cmd;
 
@@ -147,14 +87,11 @@ function wrapText(
 function generateStr() {
   const indices = new Set<number>();
   while (indices.size < numRatios) {
-    indices.add(Math.floor(Math.random() * ratios.length));
+    indices.add(Math.floor(Math.random() * ratios.data.length));
   }
-  const ratioStrings = [...indices].map(i => ratios[i] || '');
-  return ratioStrings.join(' + ');
-}
-
-if (require.main === module) {
-  console.log('Running as a standalone script');
-  const imgPath = join(__dirname, './ratio.png');
-  generateCanvas().createPNGStream().pipe(createWriteStream(imgPath));
+  const ratioStrings = [...indices].map(i => ratios.data[i] || '');
+  return (
+    ratioStrings.join(' + ') ||
+    'Looks like there are no ratios, see `thor help ratio add` to find out how to add some'
+  );
 }

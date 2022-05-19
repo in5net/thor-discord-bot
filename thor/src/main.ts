@@ -64,14 +64,24 @@ const bot = new DiscordBot(
   });
 bot.run();
 
-const nicknames = [
-  'CGI Macintosh',
-  'CGI MacOS',
-  "Cam o' shanter",
-  'Camo',
-  "Cam'o'Shantero",
-  'CJ Big Mac',
-  'Cameraman'
+const first = [
+  'CG',
+  'CGI',
+  'Cam',
+  "Cam o'",
+  "Cam'o'",
+  'CJ',
+  'Cameraman',
+  'Cheese touch'
+];
+const last = [
+  'Macintosh',
+  'MacOS',
+  'shanter',
+  'Shantero',
+  'Big Mac',
+  'Macaroon',
+  'Macaronie'
 ];
 
 const { SHRINE_ID = '', LIMITLESS_PC_ID = '', CG_MACKIE_ID = '' } = process.env;
@@ -96,7 +106,7 @@ async function getMember(memberId: string) {
 async function setCGNickname() {
   try {
     const member = await getMember(CG_MACKIE_ID);
-    const nickname = random(nicknames);
+    const nickname = random(first) + random(last);
     await member.setNickname(nickname);
     console.log(`${nickname} set`);
   } catch (error) {
@@ -123,7 +133,15 @@ async function setLimitlessNickname() {
 }
 bot.onReady(async () => {
   setInterval(setCGNickname, 1000 * 60 * 60);
-  setInterval(setLimitlessNickname, 1000 * 60);
+  callNextMin(() => setInterval(setLimitlessNickname, 1000 * 60));
   await setCGNickname();
   await setLimitlessNickname();
 });
+
+function callNextMin(callback: () => void) {
+  const now = new Date();
+  const minutes = now.getMinutes();
+  const nextMinuteTime = new Date(now.setMinutes(minutes + 1));
+  const timeToNextMinute = nextMinuteTime.getTime() - now.getTime();
+  setTimeout(callback, timeToNextMinute);
+}
