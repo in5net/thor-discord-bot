@@ -10,9 +10,11 @@ export default class SimpleJSONStorage<T extends Record<string, any>> {
 
   constructor(readonly name: string) {
     const path = join(DATABASE_PATH, `${name}.json`);
-    if (existsSync(path)) {
+    try {
       const str = readFileSync(path, 'utf8');
       this._data = JSON.parse(str);
+    } catch {
+      //
     }
     this.path = path;
   }
