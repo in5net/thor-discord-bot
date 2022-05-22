@@ -1,5 +1,6 @@
 import { join } from 'node:path';
-import { appendFileSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { appendFile } from 'node:fs/promises';
 
 import { DATABASE_PATH } from './path';
 
@@ -25,6 +26,6 @@ export default class S3 {
 
   add(...items: string[]) {
     this.lines.push(...items);
-    appendFileSync(this.path, `${items.join('\n')}\n`, 'utf8');
+    return appendFile(this.path, `${items.join('\n')}\n`, 'utf8');
   }
 }

@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { join } from 'node:path';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { writeFile } from 'node:fs/promises';
 
 import { DATABASE_PATH } from './path';
 
@@ -25,7 +26,7 @@ export default class SimpleJSONStorage<T extends Record<string, any>> {
 
   save() {
     const str = JSON.stringify(this.data);
-    writeFileSync(this.path, str, 'utf8');
+    return writeFile(this.path, str, 'utf8');
   }
 
   update(updater: (data: T) => T) {

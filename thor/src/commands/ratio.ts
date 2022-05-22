@@ -39,7 +39,7 @@ const cmd: Command = {
       async exec({ channel }, args) {
         const argStrs = args.join(' ');
         const ratioStrs = argStrs.split('+').map(s => s.trim());
-        ratios.add(...ratioStrs);
+        await ratios.add(...ratioStrs);
         return channel.send('Added to ratios');
       }
     }
