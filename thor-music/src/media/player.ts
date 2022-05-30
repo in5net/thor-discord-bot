@@ -43,8 +43,16 @@ export default class Player {
       noSubscriber: NoSubscriberBehavior.Stop
     }
   })
-    .on(AudioPlayerStatus.Idle, () => {
-      if (!this.soundboardCollector) this.play();
+    .on(AudioPlayerStatus.Idle, async () => {
+      if (!this.soundboardCollector) {
+        try {
+          await this.play();
+        } catch (error) {
+          console.error('⚠️ Player error:', error);
+          await this.send('⚠️ Error');
+          await this.next();
+        }
+      }
     })
     .on('error', async error => {
       console.error('⚠️ Player error:', error);
