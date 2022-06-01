@@ -12,7 +12,10 @@ const bot = new DiscordBot(
   process.env.TOKEN
 ).addCommands([help, ...commands]);
 bot.client.on('voiceStateUpdate', oldState => {
-  if (oldState.channel?.members.size === 1) {
+  if (
+    oldState.channel?.members.has(process.env.DISCORD_BOT_ID || '') &&
+    oldState.channel?.members.size === 1
+  ) {
     const guildId = oldState.guild.id;
     const player = players.get(guildId);
     player?.stop();

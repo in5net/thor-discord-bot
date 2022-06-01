@@ -40,13 +40,14 @@ import type { MediaType } from './media';
 export default class Player {
   private player = createAudioPlayer({
     behaviors: {
-      noSubscriber: NoSubscriberBehavior.Stop
+      noSubscriber: NoSubscriberBehavior.Pause
     }
   })
     .on(AudioPlayerStatus.Idle, async () => {
+      console.log('Idle');
       if (!this.soundboardCollector) {
         try {
-          await this.play();
+          await this.joinVoice();
         } catch (error) {
           console.error('⚠️ Player error:', error);
           await this.send('⚠️ Error');
@@ -56,14 +57,19 @@ export default class Player {
     })
     .on('error', async error => {
       console.error('⚠️ Player error:', error);
-      await this.send('⚠️ Error');
-      await this.next();
+      try {
+        await this.send('⚠️ Error');
+        await this.next();
+      } catch (error) {
+        console.error('⚠️ Error:', error);
+      }
     });
 
   private channel?: TextChannel;
   private voiceChannel?: VoiceChannel;
   private connection?: VoiceConnection;
   private message?: Message;
+
   private soundboardCollector:
     | InteractionCollector<MessageComponentInteraction>
     | undefined;
@@ -254,6 +260,7 @@ export default class Player {
   }
 
   async next(uid?: string): Promise<void> {
+    console.log('next()');
     if (
       uid &&
       this.queue.current?.requester === process.env.DISCORD_UID &&
@@ -309,6 +316,7 @@ export default class Player {
   }
 
   async stop(uid?: string): Promise<void> {
+    console.log('stop()');
     const { player, connection, queue, onStop } = this;
     if (
       uid &&
@@ -390,21 +398,38 @@ export default class Player {
   }
 
   private joinVoice() {
-    const { player, voiceChannel } = this;
+    console.log('joinVoice()');
+    const { player, voiceChannel, connection } = this;
     if (!voiceChannel) return;
-    if (!this.connection) {
-      this.connection = joinVoiceChannel({
-        channelId: voiceChannel.id,
-        guildId: voiceChannel.guild.id,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        adapterCreator: voiceChannel.guild.voiceAdapterCreator
-      }).once(VoiceConnectionStatus.Disconnected, () => this.stop());
-      this.connection.subscribe(player);
+
+    console.log(`From: voice connection ${connection?.state.status || 'gone'}`);
+
+    switch (connection?.state.status) {
+      case VoiceConnectionStatus.Ready:
+      case VoiceConnectionStatus.Signalling:
+      case VoiceConnectionStatus.Connecting:
+        break;
+      default:
+        connection?.destroy();
+        this.connection = joinVoiceChannel({
+          channelId: voiceChannel.id,
+          guildId: voiceChannel.guild.id,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          adapterCreator: voiceChannel.guild.voiceAdapterCreator
+        });
+        this.connection
+          .on(VoiceConnectionStatus.Disconnected, () => this.joinVoice())
+          .subscribe(player);
     }
+
+    console.log(
+      `To: voice connection ${this.connection?.state.status || 'gone'}`
+    );
   }
 
   private async play(skip = false): Promise<void> {
+    console.log('play()');
     const { player, queue } = this;
 
     if (this.soundboardCollector) {
