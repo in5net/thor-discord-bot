@@ -66,13 +66,13 @@ bot.run();
 
 const first = [
   'CG',
-  'CGI',
-  'Cam',
+  'CGI ',
+  'Cam ',
   "Cam o'",
   "Cam'o'",
-  'CJ',
-  'Cameraman',
-  'Cheese touch'
+  'CJ ',
+  'Cameraman ',
+  'Cheese touch '
 ];
 const last = [
   'Macintosh',
