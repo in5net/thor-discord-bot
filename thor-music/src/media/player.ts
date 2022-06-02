@@ -48,6 +48,7 @@ export default class Player {
       if (!this.soundboardCollector) {
         try {
           await this.joinVoice();
+          if (this.queue.size) await this.play();
         } catch (error) {
           console.error('⚠️ Player error:', error);
           await this.send('⚠️ Error');

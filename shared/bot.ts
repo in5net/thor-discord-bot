@@ -15,10 +15,13 @@ export default class DiscordBot {
     intents: IntentsString[],
     private token?: string
   ) {
+    console.log(`⏳ ${name} is starting...`);
+    console.time(name);
     this.client = new Client({
       intents,
       partials: ['CHANNEL']
     }).once('ready', () => {
+      console.timeEnd(name);
       console.log(`✅ ${name} is ready!`);
       this.onReadyFn?.();
     });
