@@ -9,7 +9,7 @@ const cmd: Command = {
   usage: '<i> <j>',
   aliases: ['mv'],
   async exec(message, args) {
-    const { guildId } = message;
+    const { guildId, author } = message;
     if (!guildId) return;
     const player = getPlayer(guildId);
 
@@ -32,7 +32,7 @@ const cmd: Command = {
     )
       return message.reply(`${woof()}, please provide valid numbers`);
 
-    return player.move(from, to);
+    return player.move(from, to, author.id);
   }
 };
 export default cmd;

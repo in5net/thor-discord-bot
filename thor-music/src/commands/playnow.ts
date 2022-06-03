@@ -9,7 +9,7 @@ const cmd: Command = {
   usage: '<url or YouTube search>',
   aliases: ['pn'],
   async exec(message, args) {
-    const { guildId } = message;
+    const { guildId, author } = message;
     if (!guildId) return;
     const player = getPlayer(guildId);
 
@@ -17,7 +17,7 @@ const cmd: Command = {
     if (channel?.type !== 'GUILD_VOICE')
       return message.reply(`${woof()}, you are not in a voice channel`);
 
-    return player.playnow(message, args.join(' '));
+    return player.playnow(author.id, message, args.join(' '));
   }
 };
 export default cmd;

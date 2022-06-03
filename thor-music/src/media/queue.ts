@@ -28,14 +28,18 @@ export default class Queue extends Array<Media> {
     return medias;
   }
 
-  enqueue(...medias: Media[]): void {
+  anyNotRequestedBy(uid: string): boolean {
+    return this.getMedias().some(media => media.requester.uid !== uid);
+  }
+
+  enqueue(...medias: Media[]) {
     this.push(...medias);
   }
   enqueueNow(...medias: Media[]) {
     this.unshift(...medias);
   }
 
-  dequeue(media?: Media): void {
+  dequeue(media?: Media) {
     if (media) {
       const index = this.indexOf(media);
       if (index > -1) this.splice(index, 1);
@@ -43,7 +47,7 @@ export default class Queue extends Array<Media> {
     this.changeEmitter.emit('change');
   }
 
-  clear(): void {
+  clear() {
     this.length = 0;
     this.current = undefined;
     this.changeEmitter.emit('change');
@@ -62,23 +66,23 @@ export default class Queue extends Array<Media> {
     this.changeEmitter.emit('change');
   }
 
-  move(from: number, to: number): void {
+  move(from: number, to: number) {
     if (from === to) return;
     const item = this.splice(from, 1)[0];
     if (item) this.splice(to, 0, item);
     this.changeEmitter.emit('change');
   }
 
-  remove(index: number): void {
+  remove(index: number) {
     this.splice(index, 1);
     this.changeEmitter.emit('change');
   }
 
-  toggleLoop(): void {
+  toggleLoop() {
     this.loop = !this.loop;
   }
 
-  async embed(channel: TextChannel, timestamp: number): Promise<void> {
+  async embed(channel: TextChannel, timestamp: number) {
     const embed = new MessageEmbed()
       .setTitle(`Queue ${this.loop ? '🔁' : ''}`)
       .setColor(color);

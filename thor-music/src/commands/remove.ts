@@ -9,7 +9,7 @@ const cmd: Command = {
   usage: '<n>',
   aliases: ['rm'],
   async exec(message, args) {
-    const { guildId } = message;
+    const { guildId, author } = message;
     if (!guildId) return;
     const player = getPlayer(guildId);
 
@@ -23,7 +23,7 @@ const cmd: Command = {
     if (isNaN(index) || index < 0 || index >= player.queue.length)
       return message.reply(`${woof()}, please provide a valid number`);
 
-    return player.remove(index);
+    return player.remove(author.id, index);
   }
 };
 export default cmd;

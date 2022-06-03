@@ -44,16 +44,17 @@ export default class Player {
     }
   })
     .on(AudioPlayerStatus.Idle, async () => {
-      console.log('Idle');
-      if (!this.soundboardCollector) {
-        try {
+      if (this.soundboardCollector) return;
+
+      try {
+        if (this.queue.size) {
           await this.joinVoice();
-          if (this.queue.size) await this.play();
-        } catch (error) {
-          console.error('⚠️ Player error:', error);
-          await this.send('⚠️ Error');
-          await this.next();
-        }
+          await this.play();
+        } else await this.stop();
+      } catch (error) {
+        console.error('⚠️ Player error:', error);
+        await this.send('⚠️ Error');
+        await this.next();
       }
     })
     .on('error', async error => {
@@ -239,7 +240,18 @@ export default class Player {
     return this.play();
   }
 
-  async playnow(message: Message, query?: string): Promise<void> {
+  async playnow(uid: string, message: Message, query?: string): Promise<void> {
+    if (
+      uid &&
+      this.queue.current?.requester.uid === uid &&
+      uid !== process.env.DISCORD_UID
+    ) {
+      await this.channel?.send(
+        "The currently playing song ain't requested by you, so no."
+      );
+      return;
+    }
+
     this.setChannels(message);
 
     const { queue, channel } = this;
@@ -261,14 +273,13 @@ export default class Player {
   }
 
   async next(uid?: string): Promise<void> {
-    console.log('next()');
     if (
       uid &&
-      this.queue.current?.requester === process.env.DISCORD_UID &&
+      this.queue.current?.requester.uid === uid &&
       uid !== process.env.DISCORD_UID
     ) {
       await this.channel?.send(
-        'My boss requested the currently playing song, so no.'
+        "The currently playing song ain't requested by you, so no."
       );
       return;
     }
@@ -280,11 +291,11 @@ export default class Player {
   async pause(uid: string): Promise<void> {
     if (
       uid &&
-      this.queue.current?.requester === process.env.DISCORD_UID &&
+      this.queue.current?.requester.uid === uid &&
       uid !== process.env.DISCORD_UID
     ) {
       await this.channel?.send(
-        'My boss requested the currently playing song, so no.'
+        "The currently playing song ain't requested by you, so no."
       );
       return;
     }
@@ -306,26 +317,37 @@ export default class Player {
     return this.send('🔀 Shuffled queue');
   }
 
-  move(from: number, to: number): Promise<void> {
+  async move(from: number, to: number, uid?: string): Promise<void> {
+    const { queue } = this;
+    if (uid && queue[from]?.requester.uid !== uid) {
+      await this.channel?.send(
+        "The song you are trying to move isn't requested by you, so no."
+      );
+      return;
+    }
     this.queue.move(from, to);
     return this.send(`➡️ Moved #${from + 2} to #${to + 2}`);
   }
 
-  remove(index: number): Promise<void> {
+  async remove(uid: string, index: number): Promise<void> {
+    const { queue } = this;
+    if (queue[index]?.requester.uid !== uid) {
+      await this.channel?.send("This song isn't requested by you, so no.");
+      return;
+    }
     this.queue.remove(index);
     return this.send(`✂️ Removed #${index + 2}`);
   }
 
   async stop(uid?: string): Promise<void> {
-    console.log('stop()');
     const { player, connection, queue, onStop } = this;
     if (
       uid &&
-      queue.current?.requester === process.env.DISCORD_UID &&
+      queue.anyNotRequestedBy(uid) &&
       uid !== process.env.DISCORD_UID
     ) {
       await this.channel?.send(
-        'My boss requested the currently playing song, so no.'
+        "There are songs in the queue that aren't requested by you, so no."
       );
       return;
     }
@@ -399,7 +421,6 @@ export default class Player {
   }
 
   private joinVoice() {
-    console.log('joinVoice()');
     const { player, voiceChannel, connection } = this;
     if (!voiceChannel) return;
 
@@ -430,7 +451,6 @@ export default class Player {
   }
 
   private async play(skip = false): Promise<void> {
-    console.log('play()');
     const { player, queue } = this;
 
     if (this.soundboardCollector) {
