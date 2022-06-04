@@ -9,8 +9,8 @@
     "setup": "pnpm i && cd thor && pnpm i && cd ../thor-music && pnpm i && cd ..",
     "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u && cd thor && npm-check -u && cd ../thor-music && npm-check -u && cd ..",
     "start": "tmuxinator start",
-    "thor": "ts-node thor/src/main.ts",
-    "thor-music": "ts-node thor-music/src/main.ts",
+    "thor": "node -r @swc-node/register thor/src/main.ts",
+    "thor-music": "node -r @swc-node/register thor-music/src/main.ts",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -20,16 +20,16 @@
   "devDependencies": {
     "@firebase/app-compat": "^0.1.26",
     "@firebase/app-types": "^0.7.0",
-    "@types/node": "17.0.38",
+    "@swc-node/register": "^1.5.1",
+    "@types/node": "17.0.39",
     "@typescript-eslint/eslint-plugin": "5.27.0",
     "@typescript-eslint/parser": "5.27.0",
-    "eslint": "8.16.0",
+    "eslint": "8.17.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "17.0.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.26.0",
-    "ts-node": "10.8.0",
     "tsconfig-paths": "4.0.0",
-    "typescript": "4.7.2"
+    "typescript": "4.7.3"
   }
 }

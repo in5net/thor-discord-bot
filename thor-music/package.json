@@ -3,7 +3,7 @@
   "private": true,
   "dependencies": {
     "@discord-player/downloader": "^3.0.1",
-    "@discordjs/voice": "0.9.0",
+    "@discordjs/voice": "0.10.0",
     "@googleapis/youtube": "4.2.0",
     "@limitlesspc/limitless": "0.2.4",
     "chalk": "4",
