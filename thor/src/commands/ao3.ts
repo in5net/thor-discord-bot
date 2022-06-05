@@ -8,16 +8,21 @@ import {
 } from '@limitlesspc/limitless/api/ao3/work';
 import type { Work } from '@limitlesspc/limitless/api/ao3/work';
 
-import type Command from './command';
+import { createCommand } from '$shared/command';
 
-const cmd: Command = {
-  name: 'ao3',
-  desc: 'Gets data of a work on Archive of Our Own',
-  usage: '<url>',
-  async exec({ channel }, args) {
-    const url = args[0];
-    if (!url) return channel.send('Please provide a url');
-
+export default createCommand(
+  {
+    name: 'ao3',
+    desc: 'Gets data of a work on Archive of Our Own',
+    args: [
+      {
+        name: 'url',
+        type: 'string',
+        desc: 'The url of the work to get info on'
+      }
+    ] as const
+  },
+  async ({ channel }, [url]) => {
     try {
       const id = getWorkId(url);
       const {
@@ -112,8 +117,7 @@ const cmd: Command = {
       return channel.send('Invalid AO3 url');
     }
   }
-};
-export default cmd;
+);
 
 async function drawLegendarySquare({
   rating,

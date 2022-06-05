@@ -1,10 +1,13 @@
 import { getGif } from '../yyyyyyy.info';
-import type Command from './command';
+import { createCommand } from '$shared/command';
 
-const cmd: Command = {
-  name: 'gif',
-  desc: 'Sends a gif from the best website on the internet: yyyyyyy.info',
-  async exec({ channel }) {
+export default createCommand(
+  {
+    name: 'gif',
+    desc: 'Sends a gif from the best website on the internet: yyyyyyy.info',
+    args: [] as const
+  },
+  async ({ channel }) => {
     // eslint-disable-next-line no-constant-condition
     while (true) {
       try {
@@ -20,5 +23,4 @@ const cmd: Command = {
       }
     }
   }
-};
-export default cmd;
+);

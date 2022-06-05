@@ -1,59 +1,85 @@
-import type Command from './command';
+import { createCommand } from '$shared/command';
 
-const cmd: Command = {
-  name: 'cipher',
-  desc: 'Encrypts or decrypts a message using a Caesar cipher with an indexed offset',
-  exec: message => message.channel.send('See `thor help cipher`'),
-  subcommands: [
-    {
-      name: 'encrypt',
-      desc: 'Encrypts a message',
-      usage: '<offset> <message>',
-      async exec(message, [offsetStr = '', ...words]) {
+export default createCommand(
+  {
+    name: 'cipher',
+    desc: 'Encrypts or decrypts a message using a Caesar cipher with an indexed offset',
+    args: [] as const
+  },
+  ({ channel }) => channel.send('See `thor help cipher`'),
+  [
+    createCommand(
+      {
+        name: 'encrypt',
+        desc: 'Encrypts a message',
+        args: [
+          {
+            name: 'offset',
+            type: 'int',
+            desc: 'The offset to use'
+          },
+          {
+            name: 'message',
+            type: 'string[]',
+            desc: 'The message to encrypt'
+          }
+        ] as const
+      },
+      ({ channel }, [offset, words]) =>
+        channel.send(encrypt(words.join(' '), offset))
+    ),
+    createCommand(
+      {
+        name: 'iencrypt',
+        desc: "Encrypts a message in place (removes the original message so others can't see it)",
+        args: [
+          {
+            name: 'offset',
+            type: 'int',
+            desc: 'The offset to use'
+          },
+          {
+            name: 'message',
+            type: 'string[]',
+            desc: 'The message to encrypt'
+          }
+        ] as const
+      },
+      async (message, [offset, ...words]) => {
         const { channel } = message;
-        const offset = parseInt(offsetStr);
-        if (isNaN(offset)) return channel.send('Must provide an offset');
-
-        const text = words.join(' ');
-        if (!text) return channel.send('Must provide a message');
-
-        return channel.send(encrypt(text, offset));
-      }
-    },
-    {
-      name: 'iencrypt',
-      desc: "Encrypts a message in place (removes the original message so others can't see it)",
-      usage: '<offset> <message>',
-      async exec(message, [offsetStr = '', ...words]) {
-        const { channel } = message;
-        const offset = parseInt(offsetStr);
-        if (isNaN(offset)) return channel.send('Must provide an offset');
-
         const text = words.join(' ');
         if (!text) return channel.send('Must provide a message');
 
         await message.delete();
         return channel.send(encrypt(text, offset));
       }
-    },
-    {
-      name: 'decrypt',
-      desc: 'Decrypts a message',
-      usage: '<offset> <message>',
-      async exec(message, [offsetStr = '', ...words]) {
-        const { channel } = message;
-        const offset = parseInt(offsetStr);
-        if (isNaN(offset)) return channel.send('Must provide an offset');
-
+    ),
+    createCommand(
+      {
+        name: 'decrypt',
+        desc: 'Decrypts a message',
+        args: [
+          {
+            name: 'offset',
+            type: 'int',
+            desc: 'The offset to use'
+          },
+          {
+            name: 'message',
+            type: 'string[]',
+            desc: 'The message to dencrypt'
+          }
+        ] as const
+      },
+      async ({ channel }, [offset, words]) => {
         const text = words.join(' ');
         if (!text) return channel.send('Must provide a message');
 
         return channel.send(decrypt(text, offset));
       }
-    }
+    )
   ]
-};
-export default cmd;
+);
 
 const spaceCode = ' '.charCodeAt(0);
 const tildeCode = '~'.charCodeAt(0);

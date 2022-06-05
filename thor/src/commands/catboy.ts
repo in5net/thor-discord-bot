@@ -3,7 +3,7 @@ import axios from 'axios';
 import { MessageEmbed } from 'discord.js';
 
 import { incCount } from '$services/users';
-import type Command from './command';
+import { createCommand } from '$shared/command';
 
 interface Response {
   url: string;
@@ -13,10 +13,13 @@ interface Response {
   error: string;
 }
 
-const cmd: Command = {
-  name: 'catboy',
-  desc: 'Sends a random catboys.com image',
-  async exec({ channel, author: { id } }) {
+export default createCommand(
+  {
+    name: 'catboy',
+    desc: 'Sends a random catboys.com image',
+    args: [] as const
+  },
+  async ({ channel, author: { id } }) => {
     const response = await axios.get<Response>('https://api.catboys.com/img');
     const { url, artist, artist_url, source_url } = response.data;
 
@@ -34,5 +37,4 @@ const cmd: Command = {
     await channel.send({ embeds: [embed] });
     return incCount(id, 'weeb');
   }
-};
-export default cmd;
+);

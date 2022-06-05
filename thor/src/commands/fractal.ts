@@ -7,15 +7,18 @@ import { randomInt } from '@limitlesspc/limitless';
 
 import GL from '../gl';
 import { getImageUrl } from '../utils';
-import type Command from './command';
+import { createCommand } from '$shared/command';
 
 const pixels = 512;
 const iterations = 32;
 
-const cmd: Command = {
-  name: 'fractal',
-  desc: 'Generates a random fractal image',
-  async exec(message, _, client) {
+export default createCommand(
+  {
+    name: 'fractal',
+    desc: 'Generates a random fractal image',
+    args: [] as const
+  },
+  async (message, _, client) => {
     const shapeSize = Math.random() < 0.01 ? 10 : randomInt(2, 6);
     const sizeText = `${shapeSize}x${shapeSize}`;
     const text = `Generating a ${sizeText} fractal...`;
@@ -63,5 +66,4 @@ const cmd: Command = {
       files: [new MessageAttachment(gl.pngBuffer(), 'fractal.png')]
     });
   }
-};
-export default cmd;
+);

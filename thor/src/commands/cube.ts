@@ -6,15 +6,18 @@ import { mat4 } from 'gl-matrix';
 import GL from '../gl';
 import { getImageUrl } from '../utils';
 import Progress from '../progress';
-import type Command from './command';
+import { createCommand } from '$shared/command';
 
 const size = 512;
 const frames = 20;
 
-const cmd: Command = {
-  name: 'cube',
-  desc: 'Makes your profile or attachment spin on a cube',
-  async exec(message, _, client) {
+export default createCommand(
+  {
+    name: 'cube',
+    desc: 'Makes your profile or attachment spin on a cube',
+    args: [] as const
+  },
+  async (message, _, client) => {
     const text = `Generating cube...`;
     console.log(text);
     const msg = await message.channel.send(text);
@@ -73,5 +76,4 @@ const cmd: Command = {
       files: [attachment]
     });
   }
-};
-export default cmd;
+);

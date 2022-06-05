@@ -3,17 +3,25 @@ import { createCanvas } from 'canvas';
 import { map } from '@limitlesspc/limitless';
 
 import runner from '../equation';
-import type Command from './command';
+import { createCommand } from '$shared/command';
 
 const size = 512;
 const ticks = 20;
 const gridSize = size / ticks;
 
-const cmd: Command = {
-  name: 'graph',
-  desc: 'Makes a 2D xy graph',
-  usage: '<equation>',
-  async exec({ channel }, args, client) {
+export default createCommand(
+  {
+    name: 'graph',
+    desc: 'Makes a 2D xy graph',
+    args: [
+      {
+        name: 'equation',
+        type: 'string[]',
+        desc: 'The equation to graph'
+      }
+    ] as const
+  },
+  async ({ channel }, [words], client) => {
     const canvas = createCanvas(size, size);
     const ctx = canvas.getContext('2d');
 
@@ -44,7 +52,7 @@ const cmd: Command = {
     line(0, size / 2, size, size / 2);
     line(size / 2, 0, size / 2, size);
 
-    const sides = args.join(' ').split('=');
+    const sides = words.join(' ').split('=');
     const equation = sides[sides.length - 1] || '';
     const run = runner(equation);
 
@@ -66,5 +74,4 @@ const cmd: Command = {
       files: [new MessageAttachment(canvas.toBuffer())]
     });
   }
-};
-export default cmd;
+);

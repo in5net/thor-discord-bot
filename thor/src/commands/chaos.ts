@@ -3,18 +3,33 @@ import { createCanvas } from 'canvas';
 import { clamp, randomInt, vec2, Vector2 } from '@limitlesspc/limitless';
 
 import Progress from '../progress';
-import type Command from './command';
+import { createCommand } from '$shared/command';
 
 const size = 1024;
 const r = size / 2;
 const itersPerFrame = 1000;
 const frames = 1000;
 
-const cmd: Command = {
-  name: 'chaos',
-  desc: 'Creates chaos',
-  usage: '<num pts=3> <stride=0.5>',
-  async exec({ channel }, args, client) {
+export default createCommand(
+  {
+    name: 'chaos',
+    desc: 'Creates chaos',
+    args: [
+      {
+        name: 'num points',
+        type: 'int',
+        desc: 'How many points to run with',
+        default: 3
+      },
+      {
+        name: 'stride',
+        type: 'float',
+        desc: 'How far to move towards a point',
+        default: 0.5
+      }
+    ] as const
+  },
+  async ({ channel }, [n, s], client) => {
     const canvas = createCanvas(size, size);
     const ctx = canvas.getContext('2d');
 
@@ -23,8 +38,8 @@ const cmd: Command = {
     const msg = await channel.send(text);
     client.user?.setActivity(`something chaotic`);
 
-    const numPts = clamp(parseInt(args[0] || '') || 3, 2, 16);
-    const stride = clamp(parseInt(args[1] || '') || 0.5, 0, 1);
+    const numPts = clamp(n, 2, 16);
+    const stride = clamp(s, 0, 1);
 
     const points: Vector2[] = [];
     for (let a = 0; a < Math.PI * 2; a += (Math.PI * 2) / numPts) {
@@ -59,5 +74,4 @@ const cmd: Command = {
       files: [new MessageAttachment(canvas.toBuffer())]
     });
   }
-};
-export default cmd;
+);
