@@ -90,7 +90,7 @@ export default command(
   },
   async ({ channel }, [length]) => {
     if (length < 1) channel.send('Invalid length');
-    const text = new Array(100)
+    const text = new Array(length)
       .fill(0)
       .map(() => kana[Math.floor(Math.random() * kana.length)])
       .join('');

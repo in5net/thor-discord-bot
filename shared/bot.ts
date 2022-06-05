@@ -108,7 +108,7 @@ export default class DiscordBot {
                     const num = parseInt(argStr);
                     if (isNaN(num))
                       throw new Error(
-                        `Argument \`${arg.name}\` must be an integer`
+                        `Argument \`${arg.name}\` must be an integer, got \`${argStr}\``
                       );
                     value = num;
                   }
@@ -121,7 +121,7 @@ export default class DiscordBot {
                     const num = parseFloat(argStr);
                     if (isNaN(num))
                       throw new Error(
-                        `Argument \`${arg.name}\` must be an float`
+                        `Argument \`${arg.name}\` must be an float, got \`${argStr}\``
                       );
                     value = num;
                   }

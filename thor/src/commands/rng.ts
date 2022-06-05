@@ -10,12 +10,14 @@ export default command(
       {
         name: 'min or max',
         type: 'int',
-        desc: 'The minimum or maximum number to generate'
+        desc: 'The minimum or maximum (no 2nd number passed) number to generate',
+        optional: true
       },
       {
         name: 'max',
         type: 'int',
-        desc: 'The maximum number to generate'
+        desc: 'The maximum number to generate',
+        optional: true
       }
     ]
   },

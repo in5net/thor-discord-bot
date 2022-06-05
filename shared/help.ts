@@ -19,12 +19,13 @@ export default function helpCommand(
         {
           name: 'command',
           type: 'string[]',
-          desc: 'The command to show help for'
+          desc: 'The command to show help for',
+          optional: true
         }
       ] as const
     },
     async ({ channel }, [args]) => {
-      if (!args.length)
+      if (!args)
         return channel.send({
           embeds: [
             new MessageEmbed()
@@ -41,7 +42,7 @@ export default function helpCommand(
         });
 
       let commandManual: Command | undefined;
-      let commandManuals = manual;
+      let commandManuals = manual as readonly Command[];
       const usage: string[] = [];
       const commands = args.map(arg => arg.toLowerCase());
       for (const command of commands) {
