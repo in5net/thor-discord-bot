@@ -3,12 +3,15 @@ import { MessageAttachment } from 'discord.js';
 import { createCanvas, loadImage } from 'canvas';
 
 import { getImageUrl } from '../utils';
-import type Command from './command';
+import { command } from '$shared/command';
 
-const cmd: Command = {
-  name: 'pixelsort',
-  desc: 'Sorts the pixels in an image',
-  async exec(message, _, client) {
+export default command(
+  {
+    name: 'pixelsort',
+    desc: 'Sorts the pixels in an image',
+    args: [] as const
+  },
+  async (message, _, client) => {
     const text = 'Sorting image...';
     console.log(text);
     const msg = await message.channel.send(text);
@@ -47,5 +50,4 @@ const cmd: Command = {
       files: [new MessageAttachment(canvas.toBuffer())]
     });
   }
-};
-export default cmd;
+);

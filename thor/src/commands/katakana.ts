@@ -1,4 +1,4 @@
-import type Command from './command';
+import { command } from '$shared/command';
 
 const kana = [
   'ア',
@@ -74,19 +74,26 @@ const kana = [
   'ポ'
 ];
 
-const cmd: Command = {
-  name: 'katakana',
-  desc: 'Sends a bunch of random katakana characters to practice reading',
-  usage: '<length?=100>',
-  aliases: ['カタカナ'],
-  async exec({ channel }, [lengthStr = '100']) {
-    const length = parseInt(lengthStr);
-    if (isNaN(length) || length < 1) channel.send('Invalid length');
+export default command(
+  {
+    name: 'katakana',
+    aliases: ['カタカナ'],
+    desc: 'Sends a bunch of random katakana characters to practice reading',
+    args: [
+      {
+        name: 'length',
+        type: 'int',
+        desc: 'The number of kana to send',
+        default: 100
+      }
+    ] as const
+  },
+  async ({ channel }, [length]) => {
+    if (length < 1) channel.send('Invalid length');
     const text = new Array(100)
       .fill(0)
       .map(() => kana[Math.floor(Math.random() * kana.length)])
       .join('');
     return channel.send(text);
   }
-};
-export default cmd;
+);

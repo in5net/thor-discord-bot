@@ -3,18 +3,26 @@ import { createCanvas } from 'canvas';
 import { MessageAttachment } from 'discord.js';
 
 import { strTo16x16 } from '../hash';
-import type Command from './command';
+import { command } from '$shared/command';
 
 const size = 16;
 const zoom = 4;
 const width = size * zoom;
 const iterations = 100;
 
-const cmd: Command = {
-  name: 'lifehash',
-  desc: "Converts the binary of a SHA-256 hash of a message to a 16x16 image and then runs Conway's Game of Life on it",
-  usage: '<message>',
-  async exec({ channel }, words) {
+export default command(
+  {
+    name: 'lifehash',
+    desc: "Converts the binary of a SHA-256 hash of a message to a 16x16 image and then runs Conway's Game of Life on it",
+    args: [
+      {
+        name: 'message',
+        type: 'string[]',
+        desc: 'The message to hash and convert to a lifehash'
+      }
+    ] as const
+  },
+  async ({ channel }, [words]) => {
     const canvas = createCanvas(width, width);
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#fff';
@@ -56,8 +64,7 @@ const cmd: Command = {
 
     return channel.send({ files: [new MessageAttachment(canvas.toBuffer())] });
   }
-};
-export default cmd;
+);
 
 function getNeighbors(grid: boolean[][], x: number, y: number): boolean[] {
   return [

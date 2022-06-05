@@ -20,29 +20,43 @@ import {
 } from '@limitlesspc/limitless';
 
 import { pngs2mp4 } from '../utils';
-import type Command from './command';
+import { command } from '$shared/command';
 
 const size = 512;
 
-const cmd: Command = {
-  name: 'sort',
-  desc: 'Sorts a random array of numbers',
-  usage: '<algorithm=quick> <size=50>',
-  async exec({ channel }, args, client) {
+export default command(
+  {
+    name: 'sort',
+    desc: 'Sorts a random array of numbers',
+    args: [
+      {
+        name: 'algorithm',
+        type: 'string',
+        desc: 'The algorithm to use',
+        default: 'quick'
+      },
+      {
+        name: 'length',
+        type: 'int',
+        desc: 'The length of the array to sort',
+        default: 50
+      }
+    ] as const
+  },
+  async ({ channel }, [algorithm, len], client) => {
     const text = 'Sorting...';
     client.user?.setActivity(text);
     const msg = await channel.send(text);
 
-    const length = clamp(parseInt(args[1]?.toString() || '') || 50, 0, 250);
+    const length = clamp(len, 0, 250);
     const randomNumberArr = shuffle(
       new Array(length).fill(0).map((_, i) => i + 1)
     );
     const m = max(randomNumberArr);
     let iter: Generator<number[]>;
 
-    let name = args[0] || '';
     const compare = (a: number, b: number) => a - b;
-    switch (name) {
+    switch (algorithm) {
       case 'bubble':
         iter = bubble(randomNumberArr, compare);
         break;
@@ -75,7 +89,7 @@ const cmd: Command = {
         break;
       default:
         iter = quick(randomNumberArr, compare);
-        name = 'quick';
+        algorithm = 'quick';
     }
 
     const canvas = createCanvas(size, size);
@@ -118,5 +132,4 @@ const cmd: Command = {
     );
     return msg.edit({ content: null, files: [attachment] });
   }
-};
-export default cmd;
+);

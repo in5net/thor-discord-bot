@@ -1,13 +1,16 @@
 // eslint-disable-next-line import/no-cycle
 import { getPlayer } from '../players';
 import woof from '$services/woof';
-import type Command from './command';
+import { command } from '$shared/command';
 
-const cmd: Command = {
-  name: 'soundboard',
-  desc: 'Gives you a bunch of buttons to play random sounds!',
-  aliases: ['sb'],
-  async exec(message) {
+export default command(
+  {
+    name: 'soundboard',
+    aliases: ['sb'],
+    desc: 'Gives you a bunch of buttons to play random sounds!',
+    args: [] as const
+  },
+  async message => {
     const { guildId } = message;
     if (!guildId) return;
     const player = getPlayer(guildId);
@@ -18,5 +21,4 @@ const cmd: Command = {
 
     return player.soundboard(message);
   }
-};
-export default cmd;
+);

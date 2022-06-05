@@ -1,14 +1,22 @@
 // eslint-disable-next-line import/no-cycle
 import { getPlayer } from '../players';
 import woof from '$services/woof';
-import type Command from './command';
+import { command } from '$shared/command';
 
-const cmd: Command = {
-  name: 'playshuffle',
-  desc: 'Adds and shuffles the queue',
-  usage: '<url or YouTube search>',
-  aliases: ['ps'],
-  async exec(message, args) {
+export default command(
+  {
+    name: 'playshuffle',
+    aliases: ['ps'],
+    desc: 'Adds and shuffles the queue',
+    args: [
+      {
+        name: 'urls or YouTube searches',
+        type: 'string[]',
+        desc: 'The URLs or YouTube searches to play'
+      }
+    ] as const
+  },
+  async (message, args) => {
     const { guildId } = message;
     if (!guildId) return;
     const player = getPlayer(guildId);
@@ -19,5 +27,4 @@ const cmd: Command = {
 
     return player.add(message, args.join(' '), true);
   }
-};
-export default cmd;
+);

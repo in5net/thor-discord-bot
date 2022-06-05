@@ -1,10 +1,12 @@
-import type { Client, Message } from 'discord.js';
+import type { Client, Message, User } from 'discord.js';
 
 interface ArgTypeMap {
   int: number;
   float: number;
+  bool: boolean;
   string: string;
   'string[]': string[];
+  mention: User;
 }
 type ArgType = keyof ArgTypeMap;
 
@@ -17,12 +19,14 @@ interface Arg<T extends ArgType = ArgType> {
 }
 
 type Args = readonly Arg[];
+type SubArgs = readonly Args[];
 
-type ArgValue<T extends Arg> = T['default'] extends ArgTypeMap[ArgType]
-  ? ArgTypeMap[T['type']]
-  : T['optional'] extends true
-  ? ArgTypeMap[T['type']] | undefined
-  : ArgTypeMap[T['type']];
+export type ArgValue<T extends Arg = Arg> =
+  T['default'] extends ArgTypeMap[ArgType]
+    ? ArgTypeMap[T['type']]
+    : T['optional'] extends true
+    ? ArgTypeMap[T['type']] | undefined
+    : ArgTypeMap[T['type']];
 
 type Exec<T extends Args> = (
   message: Message,
@@ -41,14 +45,15 @@ interface CommandParams<T extends Args> {
 
 type Command<
   T extends Args = Args,
-  S extends Args[] = Args[]
+  S extends SubArgs = SubArgs
 > = CommandParams<T> & {
   exec: Exec<T>;
   subcommands?: { [I in keyof S]: Command<S[I]> };
 };
+export default Command;
 
-export const createCommand = <T extends Args, S extends Args[]>(
+export const command = <T extends Args, S extends SubArgs>(
   cmd: CommandParams<T>,
   exec: Exec<T>,
   subcommands?: { [I in keyof S]: Command<S[I]> }
-): Command<T> => ({ ...cmd, exec, subcommands });
+): Command<T, S> => ({ ...cmd, exec, subcommands });

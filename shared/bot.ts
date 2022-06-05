@@ -2,6 +2,7 @@ import { Client, MessageEmbed } from 'discord.js';
 import type { IntentsString, Message } from 'discord.js';
 
 import type Command from './command';
+import type { ArgValue } from './command';
 
 export default class DiscordBot {
   client: Client;
@@ -61,7 +62,7 @@ export default class DiscordBot {
 
       const trueArgs = [...args];
       let command: Command | undefined;
-      let { commands } = this;
+      let commands = this.commands as readonly Command[];
       const commandNames: string[] = [];
       for (const arg of args) {
         commandNames.push(arg);
@@ -83,7 +84,23 @@ export default class DiscordBot {
               ? 'No.'
               : `IDK what \`${commandNames.join(' ')}\` is`
           );
-        else await command.exec(message, trueArgs, client);
+        else {
+          const parsedArgs: ArgValue = [];
+          for (let i = 0; i < command.args.length; i++) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const arg = command.args[i]!;
+
+            let value: ArgValue;
+            switch (arg.type) {
+              case 'int': {
+                const argStr = trueArgs.shift();
+                value = argStr ? parseInt(argStr) : arg.default;
+              }
+            }
+
+            await command.exec(message, trueArgs, client);
+          }
+        }
       } catch (err) {
         try {
           await channel.send({

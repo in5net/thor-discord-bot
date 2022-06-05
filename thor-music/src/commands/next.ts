@@ -1,13 +1,16 @@
 // eslint-disable-next-line import/no-cycle
 import { getPlayer } from '../players';
 import woof from '$services/woof';
-import type Command from './command';
+import { command } from '$shared/command';
 
-const cmd: Command = {
-  name: 'next',
-  desc: 'Skips a song and plays the next one',
-  aliases: ['n', 'skip'],
-  async exec(message) {
+export default command(
+  {
+    name: 'next',
+    aliases: ['n', 'skip'],
+    desc: 'Skips a song and plays the next one',
+    args: [] as const
+  },
+  async message => {
     const { guildId } = message;
     if (!guildId) return;
     const player = getPlayer(guildId);
@@ -18,5 +21,4 @@ const cmd: Command = {
 
     return player.next(message.author.id);
   }
-};
-export default cmd;
+);

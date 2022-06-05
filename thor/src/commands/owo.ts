@@ -2,13 +2,21 @@ import { MessageAttachment } from 'discord.js';
 import owo from 'owofy';
 import axios from 'axios';
 
-import type Command from './command';
+import { command } from '$shared/command';
 
-const cmd: Command = {
-  name: 'owo',
-  desc: 'Owoifies a message',
-  usage: '<message>',
-  async exec(message, args) {
+export default command(
+  {
+    name: 'owo',
+    desc: 'Owoifies a message',
+    args: [
+      {
+        name: 'message',
+        type: 'string[]',
+        desc: 'The message to owoify'
+      }
+    ] as const
+  },
+  async (message, [words]) => {
     await message.delete();
 
     const attachment = message.attachments.first();
@@ -19,7 +27,6 @@ const cmd: Command = {
       const file = new MessageAttachment(Buffer.from(output), 'owo.txt');
       return message.channel.send({ files: [file] });
     }
-    return message.channel.send(owo(args.join(' ')));
+    return message.channel.send(owo(words.join(' ')));
   }
-};
-export default cmd;
+);

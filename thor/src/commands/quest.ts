@@ -5,15 +5,18 @@ import type { Message } from 'discord.js';
 
 import { items, part, questions } from '../epiquest';
 import { getText } from '../yyyyyyy.info';
-import type Command from './command';
+import { command } from '$shared/command';
 import type { Part } from '../epiquest/labyrinth';
 
 const color = 0xfcc203;
 
-const cmd: Command = {
-  name: 'quest',
-  desc: 'Epiquest!',
-  async exec({ channel, author }) {
+export default command(
+  {
+    name: 'quest',
+    desc: 'Epiquest!',
+    args: [] as const
+  },
+  async ({ channel, author }) => {
     const titles = ['Under', 'Re', 'Over', 'De', 'Underdere'];
     const title = random(titles);
     await channel.send(`Welcome to the ${title}titled Epiquest!`);
@@ -236,5 +239,4 @@ const cmd: Command = {
 
     return channel.send(`${author}'s epiquest is over!`);
   }
-};
-export default cmd;
+);

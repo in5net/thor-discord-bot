@@ -7,17 +7,26 @@ import glsl from 'glslify';
 
 import GL from '../gl';
 import Progress from '../progress';
-import type Command from './command';
+import { command } from '$shared/command';
 
 const size = 512;
 const scale = 100;
 const frames = 24;
 
-const cmd: Command = {
-  name: 'noise',
-  desc: 'Generates a image with Perlin noise',
-  aliases: ['perlin', '音'],
-  async exec({ channel }, args, client) {
+export default command(
+  {
+    name: 'noise',
+    aliases: ['perlin', '音'],
+    desc: 'Generates a image with Perlin noise',
+    args: [
+      {
+        name: 'gif',
+        type: 'bool',
+        desc: 'Whether to generate a gif instead of a png'
+      }
+    ] as const
+  },
+  async ({ channel }, [gif], client) => {
     const text = `Generating noise...`;
     console.log(text);
     const msg = await channel.send(text);
@@ -32,7 +41,7 @@ const cmd: Command = {
 
     let offset = Math.random() * 1000;
     let attachment: MessageAttachment;
-    if (args[0] === 'gif') {
+    if (gif) {
       const progress = new Progress('Generating noise', frames);
       attachment = new MessageAttachment(
         await gl.gifBuffer(frames, {
@@ -56,5 +65,4 @@ const cmd: Command = {
       files: [attachment]
     });
   }
-};
-export default cmd;
+);

@@ -2,13 +2,16 @@ import { memoryUsage, uptime } from 'node:process';
 import { cpus, freemem, totalmem } from 'node:os';
 import { MessageEmbed, version } from 'discord.js';
 
-import type Command from './command';
+import { command } from '$shared/command';
 
-const cmd: Command = {
-  name: 'status',
-  desc: 'Shows a bunch of technical information about the bot',
-  exec({ channel }) {
-    return channel.send({
+export default command(
+  {
+    name: 'status',
+    desc: 'Shows a bunch of technical information about the bot',
+    args: [] as const
+  },
+  ({ channel }) =>
+    channel.send({
       embeds: [
         new MessageEmbed()
           .setTitle('Status')
@@ -31,8 +34,5 @@ const cmd: Command = {
           .addField('Discord.js', `v${version}`)
           .addField('Node.js', `${process.version}`)
       ]
-    });
-  }
-};
-
-export default cmd;
+    })
+);

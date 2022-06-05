@@ -1,15 +1,18 @@
 import { MessageAttachment } from 'discord.js';
 import { createCanvas } from 'canvas';
 
-import type Command from './command';
+import { command } from '$shared/command';
 
 const size = 128;
 
-const cmd: Command = {
-  name: 'random',
-  desc: 'Generates a (literally) random image',
-  aliases: ['ran'],
-  async exec({ channel }, _, client) {
+export default command(
+  {
+    name: 'random',
+    aliases: ['ran'],
+    desc: 'Generates a (literally) random image',
+    args: [] as const
+  },
+  async ({ channel }, _, client) => {
     const canvas = createCanvas(size, size);
     const ctx = canvas.getContext('2d');
 
@@ -32,5 +35,4 @@ const cmd: Command = {
       files: [new MessageAttachment(canvas.toBuffer())]
     });
   }
-};
-export default cmd;
+);

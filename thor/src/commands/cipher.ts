@@ -1,6 +1,6 @@
-import { createCommand } from '$shared/command';
+import { command } from '$shared/command';
 
-export default createCommand(
+export default command(
   {
     name: 'cipher',
     desc: 'Encrypts or decrypts a message using a Caesar cipher with an indexed offset',
@@ -8,7 +8,7 @@ export default createCommand(
   },
   ({ channel }) => channel.send('See `thor help cipher`'),
   [
-    createCommand(
+    command(
       {
         name: 'encrypt',
         desc: 'Encrypts a message',
@@ -28,7 +28,7 @@ export default createCommand(
       ({ channel }, [offset, words]) =>
         channel.send(encrypt(words.join(' '), offset))
     ),
-    createCommand(
+    command(
       {
         name: 'iencrypt',
         desc: "Encrypts a message in place (removes the original message so others can't see it)",
@@ -54,7 +54,7 @@ export default createCommand(
         return channel.send(encrypt(text, offset));
       }
     ),
-    createCommand(
+    command(
       {
         name: 'decrypt',
         desc: 'Decrypts a message',
@@ -78,7 +78,7 @@ export default createCommand(
         return channel.send(decrypt(text, offset));
       }
     )
-  ]
+  ] as const
 );
 
 const spaceCode = ' '.charCodeAt(0);

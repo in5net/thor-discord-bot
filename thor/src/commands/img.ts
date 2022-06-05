@@ -8,17 +8,26 @@ import {
 
 import { getImg } from '../yyyyyyy.info';
 import ImageSearch from '../image-search';
-import type Command from './command';
+import { command } from '$shared/command';
 
 let collector: InteractionCollector<MessageComponentInteraction> | undefined;
 
-const cmd: Command = {
-  name: 'img',
-  desc: 'Sends an image from the best website on the internet, yyyyyyy.info, or from Google Search',
-  usage: '<search?>',
-  aliases: ['pic', '絵'],
-  async exec({ channel, author }, args) {
-    if (!args.length) {
+export default command(
+  {
+    name: 'img',
+    aliases: ['pic', '絵'],
+    desc: 'Sends an image from the best website on the internet, yyyyyyy.info, or from Google Search',
+    args: [
+      {
+        name: 'search',
+        type: 'string[]',
+        desc: 'The search terms to use for a Google image search',
+        optional: true
+      }
+    ] as const
+  },
+  async ({ channel, author }, [words]) => {
+    if (!words) {
       const src = await getImg();
       try {
         return await channel.send(src);
@@ -27,7 +36,7 @@ const cmd: Command = {
       }
     }
 
-    const query = args.join(' ');
+    const query = words.join(' ');
     const search = new ImageSearch(query);
 
     const embed = new MessageEmbed().setImage(await search.next());
@@ -68,5 +77,4 @@ const cmd: Command = {
       });
     return undefined;
   }
-};
-export default cmd;
+);

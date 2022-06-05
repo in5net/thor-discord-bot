@@ -7,12 +7,12 @@ import { randomInt } from '@limitlesspc/limitless';
 
 import GL from '../gl';
 import { getImageUrl } from '../utils';
-import { createCommand } from '$shared/command';
+import { command } from '$shared/command';
 
 const pixels = 512;
 const iterations = 32;
 
-export default createCommand(
+export default command(
   {
     name: 'fractal',
     desc: 'Generates a random fractal image',

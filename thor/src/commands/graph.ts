@@ -3,13 +3,13 @@ import { createCanvas } from 'canvas';
 import { map } from '@limitlesspc/limitless';
 
 import runner from '../equation';
-import { createCommand } from '$shared/command';
+import { command } from '$shared/command';
 
 const size = 512;
 const ticks = 20;
 const gridSize = size / ticks;
 
-export default createCommand(
+export default command(
   {
     name: 'graph',
     desc: 'Makes a 2D xy graph',

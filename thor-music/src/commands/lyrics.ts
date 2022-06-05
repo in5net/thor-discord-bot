@@ -1,18 +1,26 @@
 // eslint-disable-next-line import/no-cycle
 import { getPlayer } from '../players';
-import type Command from './command';
+import { command } from '$shared/command';
 
-const cmd: Command = {
-  name: 'lyrics',
-  desc: 'Gives you the lyrics of the current song or song by name',
-  usage: '<song name?>',
-  aliases: ['l'],
-  async exec(message, args) {
+export default command(
+  {
+    name: 'lyrics',
+    aliases: ['l'],
+    desc: 'Gives you the lyrics of the current song or song by name',
+    args: [
+      {
+        name: 'song name',
+        type: 'string[]',
+        desc: 'The name of the song to get the lyrics of',
+        optional: true
+      }
+    ] as const
+  },
+  async (message, [song]) => {
     const { guildId } = message;
     if (!guildId) return;
     const player = getPlayer(guildId);
 
-    return player.lyrics(message, args.join(' '));
+    return player.lyrics(message, song?.join(' '));
   }
-};
-export default cmd;
+);

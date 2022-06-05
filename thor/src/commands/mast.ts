@@ -1,12 +1,15 @@
 import axios from 'axios';
 import { load } from 'cheerio';
 
-import type Command from './command';
+import { command } from '$shared/command';
 
-const cmd: Command = {
-  name: 'mast',
-  desc: 'Tells you if the U.S. flag is at half or full mast today',
-  async exec({ channel }) {
+export default command(
+  {
+    name: 'mast',
+    desc: 'Tells you if the U.S. flag is at half or full mast today',
+    args: [] as const
+  },
+  async ({ channel }) => {
     const response = await axios('https://halfstaff.org');
     const $ = load(response.data);
     const element = $('#text-center > div > strong > br:nth-child(3)');
@@ -17,5 +20,4 @@ const cmd: Command = {
       } mast today`
     );
   }
-};
-export default cmd;
+);

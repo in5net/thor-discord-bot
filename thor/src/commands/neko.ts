@@ -3,16 +3,19 @@ import { Client } from 'nekos-best.js';
 import { MessageEmbed } from 'discord.js';
 
 import { incCount } from '$services/users';
-import type Command from './command';
+import { command } from '$shared/command';
 
 const nekosBest = new Client();
 const clientPromise = nekosBest.init();
 
-const cmd: Command = {
-  name: 'neko',
-  desc: 'Sends a random nekos.best image',
-  aliases: ['猫'],
-  async exec({ channel, author: { id } }) {
+export default command(
+  {
+    name: 'neko',
+    aliases: ['猫'],
+    desc: 'Sends a random nekos.best image',
+    args: [] as const
+  },
+  async ({ channel, author: { id } }) => {
     const client = await clientPromise;
     const response = await client.fetchRandom('neko');
     const result = response.results[0];
@@ -29,5 +32,4 @@ const cmd: Command = {
     }
     return channel.send('No neko found');
   }
-};
-export default cmd;
+);

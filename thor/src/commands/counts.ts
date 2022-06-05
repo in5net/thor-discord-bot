@@ -1,9 +1,9 @@
 import { MessageEmbed } from 'discord.js';
 
 import { getUser } from '$services/users';
-import { createCommand } from '$shared/command';
+import { command } from '$shared/command';
 
-export default createCommand(
+export default command(
   {
     name: 'counts',
     desc: 'Displays the number of times a user has used certain commands',

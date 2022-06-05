@@ -3,7 +3,7 @@ import axios from 'axios';
 import { MessageEmbed } from 'discord.js';
 
 import { incCount } from '$services/users';
-import { createCommand } from '$shared/command';
+import { command } from '$shared/command';
 
 interface Response {
   url: string;
@@ -13,7 +13,7 @@ interface Response {
   error: string;
 }
 
-export default createCommand(
+export default command(
   {
     name: 'catboy',
     desc: 'Sends a random catboys.com image',

@@ -6,12 +6,12 @@ import { mat4 } from 'gl-matrix';
 import GL from '../gl';
 import { getImageUrl } from '../utils';
 import Progress from '../progress';
-import { createCommand } from '$shared/command';
+import { command } from '$shared/command';
 
 const size = 512;
 const frames = 20;
 
-export default createCommand(
+export default command(
   {
     name: 'cube',
     desc: 'Makes your profile or attachment spin on a cube',

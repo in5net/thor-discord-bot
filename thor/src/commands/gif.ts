@@ -1,7 +1,7 @@
 import { getGif } from '../yyyyyyy.info';
-import { createCommand } from '$shared/command';
+import { command } from '$shared/command';
 
-export default createCommand(
+export default command(
   {
     name: 'gif',
     desc: 'Sends a gif from the best website on the internet: yyyyyyy.info',

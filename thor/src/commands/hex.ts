@@ -1,15 +1,23 @@
 import { MessageAttachment } from 'discord.js';
 import { createCanvas } from 'canvas';
 
-import type Command from './command';
+import { command } from '$shared/command';
 
 const size = 16;
 
-const cmd: Command = {
-  name: 'hex',
-  desc: 'Gives you a 16x16 image of a hex code',
-  usage: '<#code>',
-  async exec({ channel }, [hex]) {
+export default command(
+  {
+    name: 'hex',
+    desc: 'Gives you a 16x16 image of a hex code',
+    args: [
+      {
+        name: '#code',
+        type: 'string',
+        desc: 'The hex code to convert to an image'
+      }
+    ] as const
+  },
+  async ({ channel }, [hex]) => {
     if (!hex) return channel.send('You need to provide a hex code');
 
     const canvas = createCanvas(size, size);
@@ -26,5 +34,4 @@ const cmd: Command = {
       files: [new MessageAttachment(canvas.toBuffer())]
     });
   }
-};
-export default cmd;
+);

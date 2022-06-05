@@ -3,14 +3,14 @@ import { createCanvas } from 'canvas';
 import { clamp, randomInt, vec2, Vector2 } from '@limitlesspc/limitless';
 
 import Progress from '../progress';
-import { createCommand } from '$shared/command';
+import { command } from '$shared/command';
 
 const size = 1024;
 const r = size / 2;
 const itersPerFrame = 1000;
 const frames = 1000;
 
-export default createCommand(
+export default command(
   {
     name: 'chaos',
     desc: 'Creates chaos',

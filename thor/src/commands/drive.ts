@@ -1,9 +1,9 @@
-import { createCommand } from '$shared/command';
+import { command } from '$shared/command';
 
 const googleDriveURLRegex =
   /^https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9-_]+)\/view$/;
 
-export default createCommand(
+export default command(
   {
     name: 'drive',
     aliases: ['ドライブ'],

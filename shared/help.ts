@@ -1,20 +1,29 @@
 import { MessageEmbed } from 'discord.js';
 import type { ColorResolvable } from 'discord.js';
 
-import type Command from './command';
+import { command } from '$shared/command';
+import type Command from '$shared/command';
 
 export default function helpCommand(
   title: string,
   prefix: string,
   color: ColorResolvable,
   manual: Command[]
-): Command {
-  return {
-    name: 'help',
-    desc: 'Shows help for a/all command(s)',
-    usage: '<command?>',
-    aliases: ['h'],
-    async exec({ channel }, args) {
+) {
+  return command(
+    {
+      name: 'help',
+      aliases: ['h'],
+      desc: 'Shows help for a/all command(s)',
+      args: [
+        {
+          name: 'command',
+          type: 'string[]',
+          desc: 'The command to show help for'
+        }
+      ] as const
+    },
+    async ({ channel }, [args]) => {
       if (!args.length)
         return channel.send({
           embeds: [
@@ -45,12 +54,19 @@ export default function helpCommand(
         }
         commandManuals = commandManual.subcommands || [];
         usage.push(
-          commandManual.usage
-            ? `${commandManual.name} ${commandManual.usage}`
-            : [commandManual.name, ...(commandManual.aliases || [])].join('/')
+          [commandManual.name, ...(commandManual.aliases || [])].join('/')
         );
       }
-      if (!commandManual)
+      if (commandManual)
+        usage.push(
+          ...commandManual.args.map(
+            ({ name, type, optional, default: def }) =>
+              `<${name}${optional || type === 'bool' ? '?' : ''}:${type}${
+                def !== undefined ? `=${def}` : ''
+              }>`
+          )
+        );
+      else
         return channel.send(
           `No help found for command \`${commands.join(' ')}\``
         );
@@ -67,5 +83,5 @@ export default function helpCommand(
         );
       return channel.send({ embeds: [embed] });
     }
-  };
+  );
 }

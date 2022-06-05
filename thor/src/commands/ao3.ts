@@ -8,9 +8,9 @@ import {
 } from '@limitlesspc/limitless/api/ao3/work';
 import type { Work } from '@limitlesspc/limitless/api/ao3/work';
 
-import { createCommand } from '$shared/command';
+import { command } from '$shared/command';
 
-export default createCommand(
+export default command(
   {
     name: 'ao3',
     desc: 'Gets data of a work on Archive of Our Own',

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { MessageEmbed } from 'discord.js';
 
 import { incCount } from '$services/users';
-import type Command from './command';
+import { command } from '$shared/command';
 
 interface Response {
   images: [
@@ -27,20 +27,28 @@ interface Response {
   ];
 }
 
-const cmd: Command = {
-  name: 'waifu',
-  desc: 'Sends a random waifu.im image',
-  usage: 'gif?|nsfw?',
-  aliases: ['ワイフ', 'わいふ'],
-  async exec({ channel, author: { id } }, args) {
-    const nsfw = args.includes('nsfw');
+export default command(
+  {
+    name: 'waifu',
+    aliases: ['ワイフ', 'わいふ'],
+    desc: 'Sends a random waifu.im image',
+    args: [
+      {
+        name: 'options',
+        type: 'string[]',
+        desc: "Add 'gif' to send a gif and/or 'nsfw' to send an nsfw image"
+      }
+    ] as const
+  },
+  async ({ channel, author: { id } }, [options]) => {
+    const nsfw = options.includes('nsfw');
     if (nsfw && channel.type === 'GUILD_TEXT' && !channel.nsfw)
       return channel.send('This channel is not marked as NSFW you cheeky boi.');
 
     const response = await axios.get<Response>('https://api.waifu.im/random', {
       params: {
         is_nsfw: nsfw,
-        gif: args.includes('gif'),
+        gif: options.includes('gif'),
         many: false
       }
     });
@@ -66,5 +74,4 @@ const cmd: Command = {
     await channel.send({ embeds: [embed] });
     return incCount(id, 'weeb');
   }
-};
-export default cmd;
+);

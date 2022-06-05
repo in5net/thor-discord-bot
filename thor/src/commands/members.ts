@@ -1,14 +1,15 @@
-import type Command from './command';
+import { command } from '$shared/command';
 
-const cmd: Command = {
-  name: 'members',
-  desc: 'Shows the number of members in the server',
-  exec({ channel, guild }) {
-    return channel.send(
+export default command(
+  {
+    name: 'members',
+    desc: 'Shows the number of members in the server',
+    args: [] as const
+  },
+  ({ channel, guild }) =>
+    channel.send(
       `There are ${
         guild?.memberCount || 'an unknown number of'
       } members in this server`
-    );
-  }
-};
-export default cmd;
+    )
+);

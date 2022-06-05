@@ -3,7 +3,7 @@ import { MessageAttachment } from 'discord.js';
 import { createCanvas, registerFont } from 'canvas';
 
 import S3 from '$services/s3';
-import type Command from './command';
+import { command } from '$shared/command';
 
 const fontPath = join(__dirname, './Whitney-400.woff');
 registerFont(fontPath, { family: 'Whitney', weight: '400' });
@@ -13,39 +13,52 @@ const ratios = new S3('ratios');
 const numRatios = 50;
 const size = 256;
 
-const cmd: Command = {
-  name: 'ratio',
-  desc: 'Get ratioed',
-  async exec({ channel }) {
+export default command(
+  {
+    name: 'ratio',
+    desc: 'Get ratioed',
+    args: [] as const
+  },
+  async ({ channel }) => {
     const text = generateStr();
     return channel.send(text);
   },
-  subcommands: [
-    {
-      name: 'img',
-      desc: 'Get ratioed',
-      async exec({ channel }) {
+  [
+    command(
+      {
+        name: 'img',
+        desc: 'Get ratioed',
+        args: [] as const
+      },
+      async ({ channel }) => {
         const canvas = generateCanvas();
         return channel.send({
           content: null,
           files: [new MessageAttachment(canvas.toBuffer())]
         });
       }
-    },
-    {
-      name: 'add',
-      desc: 'Adds a ratio to the list',
-      usage: "<...ratios> ('+' separated)",
-      async exec({ channel }, args) {
-        const argStrs = args.join(' ');
+    ),
+    command(
+      {
+        name: 'add',
+        desc: "Adds some ratios ('+' separated) to the list",
+        args: [
+          {
+            name: 'ratios',
+            type: 'string[]',
+            desc: 'The ratios to add'
+          }
+        ] as const
+      },
+      async ({ channel }, [words]) => {
+        const argStrs = words.join(' ');
         const ratioStrs = argStrs.split('+').map(s => s.trim());
         await ratios.add(...ratioStrs);
         return channel.send('Added to ratios');
       }
-    }
-  ]
-};
-export default cmd;
+    )
+  ] as const
+);
 
 function generateCanvas() {
   const text = generateStr();
