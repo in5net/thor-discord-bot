@@ -9,6 +9,7 @@ interface ArgTypeMap {
   mention: User;
 }
 type ArgType = keyof ArgTypeMap;
+export type ArgV = ArgTypeMap[ArgType];
 
 interface Arg<T extends ArgType = ArgType> {
   name: string;
@@ -21,12 +22,11 @@ interface Arg<T extends ArgType = ArgType> {
 type Args = readonly Arg[];
 type SubArgs = readonly Args[];
 
-export type ArgValue<T extends Arg = Arg> =
-  T['default'] extends ArgTypeMap[ArgType]
-    ? ArgTypeMap[T['type']]
-    : T['optional'] extends true
-    ? ArgTypeMap[T['type']] | undefined
-    : ArgTypeMap[T['type']];
+type ArgValue<T extends Arg = Arg> = T['default'] extends ArgTypeMap[ArgType]
+  ? ArgTypeMap[T['type']]
+  : true extends T['optional']
+  ? ArgTypeMap[T['type']] | undefined
+  : ArgTypeMap[T['type']];
 
 type Exec<T extends Args> = (
   message: Message,

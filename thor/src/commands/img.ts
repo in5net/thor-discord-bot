@@ -15,7 +15,7 @@ let collector: InteractionCollector<MessageComponentInteraction> | undefined;
 export default command(
   {
     name: 'img',
-    aliases: ['pic', '絵'],
+    aliases: ['pic', '絵', '写真 '],
     desc: 'Sends an image from the best website on the internet, yyyyyyy.info, or from Google Search',
     args: [
       {
