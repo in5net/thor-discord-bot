@@ -1,8 +1,7 @@
 import { parseFromString } from '../parser.ts';
 
-const texts = new Set<string>();
-const images = new Set<string>();
-const gifs = new Set<string>();
+const FILES_ORIGIN = 'https://files.yyyyyyy.info';
+
 const nsfw = new Set(['https://files.yyyyyyy.info/images/0071-1.gif']);
 
 function random<T>(arr: T[]): T {
@@ -10,61 +9,44 @@ function random<T>(arr: T[]): T {
 }
 
 export async function getText(): Promise<string> {
-  if (!texts.size) {
-    const response = await fetch('https://www.yyyyyyy.info/');
-    const html = await response.text();
-    const $ = parseFromString(html);
-    const spans = $.getElementsByTagName('span');
-    spans.forEach(span => {
-      const text = span.textContent;
-      if (text) texts.add(text);
-    });
-  }
-  const src = random([...texts.values()]);
-  texts.delete(src);
+  const response = await fetch('https://www.yyyyyyy.info/');
+  const html = await response.text();
+  const $ = parseFromString(html);
+  const spans = $.getElementsByTagName('span');
+  const span = random(spans);
+  const src = span.textContent;
   console.log(`Text: ${src}`);
   return src;
 }
 
 export async function getImg(): Promise<string> {
-  if (!images.size) {
-    const response = await fetch('https://www.yyyyyyy.info/');
-    const html = await response.text();
-    const $ = parseFromString(html);
-    const imgs = $.getElementsByTagName('img');
-    imgs.forEach(img => {
-      const src = img.getAttribute('src') || '';
-      if (
-        src.startsWith('https://files.yyyyyyy.info/') &&
-        !src.endsWith('.gif')
-      )
-        images.add(src);
-    });
-  }
-  const src = random([...images.values()]);
-  images.delete(src);
+  const response = await fetch('https://www.yyyyyyy.info/');
+  const html = await response.text();
+  const $ = parseFromString(html);
+  const imgs = $.getElementsByTagName('img');
+  const images = imgs.filter(img => {
+    const src = img.getAttribute('src') || '';
+    return src.startsWith(FILES_ORIGIN) && !src.endsWith('.gif');
+  });
+  const image = random(images);
+  const src = image.getAttribute('src') || '';
   console.log(`Img: ${src}`);
   return src;
 }
 
 export async function getGIF(): Promise<string> {
-  if (!gifs.size) {
-    const response = await fetch('https://www.yyyyyyy.info/');
-    const html = await response.text();
-    const $ = parseFromString(html);
-    const imgs = $.getElementsByTagName('img');
-    imgs.forEach(img => {
-      const src = img.getAttribute('src') || '';
-      if (
-        src.startsWith('https://files.yyyyyyy.info/') &&
-        src.endsWith('.gif') &&
-        !nsfw.has(src)
-      )
-        images.add(src);
-    });
-  }
-  const src = random([...images.values()]);
-  images.delete(src);
-  console.log(`Img: ${src}`);
+  const response = await fetch('https://www.yyyyyyy.info/');
+  const html = await response.text();
+  const $ = parseFromString(html);
+  const imgs = $.getElementsByTagName('img');
+  const images = imgs.filter(img => {
+    const src = img.getAttribute('src') || '';
+    return (
+      src.startsWith(FILES_ORIGIN) && src.endsWith('.gif') && !nsfw.has(src)
+    );
+  });
+  const image = random(images);
+  const src = image.getAttribute('src') || '';
+  console.log(`GIF: ${src}`);
   return src;
 }
