@@ -9,7 +9,6 @@ export { default as norway } from './norway.ts';
 export { default as owo } from './owo.ts';
 export { default as pfp } from './pfp.ts';
 export { default as ping } from './ping.ts';
-export { default as react } from './react.ts';
 export { default as rng } from './rng.ts';
 export { default as text } from './text.ts';
 export { default as waifu } from './waifu.ts';
