@@ -19,21 +19,25 @@ const commandOptionTypeMap: Record<
 
 console.log('Commands registering...');
 
-const data = Object.entries(
-  commandsData as unknown as Record<string, Command | Commands>
-).map(([name, commandOrCommands]) =>
-  typeof commandOrCommands.desc === 'string'
-    ? build(name, commandOrCommands as Command)
-    : {
-        name,
-        description: name,
-        options: Object.entries(commandOrCommands as Commands).map(
-          ([name, command]) => ({
-            type: ApplicationCommandOptionType.SUB_COMMAND,
-            ...build(name, command)
-          })
-        )
-      }
+const { default: oddNameCommands, ...normalCommands } = commandsData;
+
+const data = Object.entries({
+  ...normalCommands,
+  ...oddNameCommands
+} as unknown as Record<string, Command | Commands>).map(
+  ([name, commandOrCommands]) =>
+    typeof commandOrCommands.desc === 'string'
+      ? build(name, commandOrCommands as Command)
+      : {
+          name,
+          description: name,
+          options: Object.entries(commandOrCommands as Commands).map(
+            ([name, command]) => ({
+              type: ApplicationCommandOptionType.SUB_COMMAND,
+              ...build(name, command)
+            })
+          )
+        }
 );
 console.log('data:', data);
 await commands.bulkEdit(data);
