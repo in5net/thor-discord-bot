@@ -4,9 +4,9 @@ import { ApplicationCommandOptionType, commands, init } from './deps.ts';
 import * as commandsData from './commands/mod.ts';
 import {
   Command,
+  CommandGroups,
   CommandOptionType,
-  Commands,
-  Subcommands
+  Commands
 } from './commands/command.ts';
 
 init({ env: true });
@@ -29,10 +29,10 @@ const { default: oddNameCommands, ...normalCommands } = commandsData;
 const data = Object.entries({
   ...normalCommands,
   ...oddNameCommands
-} as unknown as Commands | Subcommands).map(([name, command]) =>
+} as unknown as Commands | CommandGroups).map(([name, command]) =>
   typeof command.desc === 'string'
     ? build(name, command as Command)
-    : typeof Object.values(command as Commands | Subcommands)[0].desc ===
+    : typeof Object.values(command as Commands | CommandGroups)[0].desc ===
       'string'
     ? {
         name,
@@ -45,7 +45,7 @@ const data = Object.entries({
     : {
         name,
         description: name,
-        options: Object.entries(command as Subcommands).map(
+        options: Object.entries(command as CommandGroups).map(
           ([name, command]) => ({
             type: ApplicationCommandOptionType.SUB_COMMAND_GROUP,
             name,

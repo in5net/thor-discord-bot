@@ -1,23 +1,22 @@
 import { client, handle, init } from './deps.ts';
 
 import * as commands from './commands/mod.ts';
-import { Command, Commands, Subcommands } from './commands/command.ts';
+import { Command, CommandGroups, Commands } from './commands/command.ts';
 
 init({ env: true });
 
-const { default: oddNameCommands, ...normalCommands } = commands;
-
+const { default: oddNameCommands = {}, ...normalCommands } = commands;
 Object.entries({
   ...normalCommands,
   ...oddNameCommands
-} as unknown as Commands | Subcommands).forEach(([name, command]) =>
+} as unknown as Commands | CommandGroups).forEach(([name, command]) =>
   run(name, command)
 );
-function run(name: string, command: Command | Commands | Subcommands) {
+function run(name: string, command: Command | Commands | CommandGroups) {
   if (typeof command.desc === 'string') runCmd(name, command as Command);
   else {
-    const { default: oddNameCommands, ...normalCommands } =
-      commands as unknown as Commands | Subcommands;
+    const { default: oddNameCommands = {}, ...normalCommands } =
+      command as unknown as Commands | CommandGroups;
     Object.entries({ ...oddNameCommands, ...normalCommands }).forEach(
       ([subName, subCommand]) => run(`${name} ${subName}`, subCommand)
     );
