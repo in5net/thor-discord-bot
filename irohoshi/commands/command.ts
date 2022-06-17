@@ -57,6 +57,7 @@ export interface Command<
   };
 }
 export type Commands = Record<string, Command>;
+export type Subcommands = Record<string, Commands>;
 
 const command = <T extends Options, S extends SubOptions>(
   options: CommandOptions<T>,

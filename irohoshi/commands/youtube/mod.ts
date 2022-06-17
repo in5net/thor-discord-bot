@@ -1,1 +1,1 @@
-export { default as video } from './video.ts';
+export * as video from './video/mod.ts';

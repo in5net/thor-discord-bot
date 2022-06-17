@@ -1,6 +1,6 @@
-import { formatDuration, getVideo } from '../../api/youtube/mod.ts';
-import command from '../command.ts';
-import { createEmbed } from './embed.ts';
+import { formatDuration, getVideo } from '../../../api/youtube/mod.ts';
+import command from '../../command.ts';
+import { createEmbed } from '../embed.ts';
 
 export default command(
   {
