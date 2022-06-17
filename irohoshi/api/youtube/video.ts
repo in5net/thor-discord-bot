@@ -70,34 +70,18 @@ export async function getVideo(url: string): Promise<Video> {
   if (!video) throw new Error('Video not found');
 
   const {
-    snippet: {
-      title,
-      description,
-      tags = [],
-      publishedAt,
-      channelId,
-      channelTitle,
-      thumbnails: { default: thumbnail }
-    },
+    snippet,
     contentDetails: { duration },
     statistics: { viewCount, likeCount, favoriteCount, commentCount }
   } = video;
   return {
     id,
-    title,
-    description,
     duration: duration2Sec(duration),
-    thumbnail,
-    channel: {
-      id: channelId,
-      title: channelTitle
-    },
     views: parseInt(viewCount),
     likes: parseInt(likeCount),
     comments: parseInt(commentCount),
     favorites: parseInt(favoriteCount),
-    tags,
-    uploadedAt: new Date(publishedAt)
+    ...convertSnippet(snippet)
   };
 }
 
@@ -114,38 +98,39 @@ interface SearchResponse {
 
 export async function searchVideos(
   query: string,
-  maxResults = 5
+  limit = 5
 ): Promise<SearchVideo[]> {
   const response: SearchResponse = await yt.search_list({
     q: query,
     type: 'video',
     part: 'id,snippet',
-    maxResults
+    maxResults: limit
   });
 
-  return response.items.map(
-    ({
-      id: { videoId: id },
-      snippet: {
-        title,
-        description,
-        tags = [],
-        publishedAt,
-        channelId,
-        channelTitle,
-        thumbnails: { default: thumbnail }
-      }
-    }) => ({
-      id,
-      title,
-      description,
-      thumbnail,
-      channel: {
-        id: channelId,
-        title: channelTitle
-      },
-      tags,
-      uploadedAt: new Date(publishedAt)
-    })
-  );
+  return response.items.map(({ id: { videoId: id }, snippet }) => ({
+    id,
+    ...convertSnippet(snippet)
+  }));
+}
+
+function convertSnippet({
+  title,
+  description,
+  tags = [],
+  publishedAt,
+  channelId,
+  channelTitle,
+  thumbnails: { default: thumbnail }
+}: VideoSnippet) {
+  return {
+    title,
+    description,
+    thumbnail,
+    channel: {
+      id: channelId,
+      title: channelTitle
+    },
+    tags,
+    uploadedAt: new Date(publishedAt)
+  };
 }

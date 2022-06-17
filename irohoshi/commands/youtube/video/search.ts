@@ -9,12 +9,19 @@ export default command(
       query: {
         desc: 'The search query to find videos',
         type: 'string'
+      },
+      limit: {
+        desc: 'The maximum number of videos to return',
+        type: 'int',
+        min: 1,
+        max: 10,
+        optional: true
       }
     }
   },
-  async (i, { query }) => {
+  async (i, { query, limit }) => {
     try {
-      const videos = await searchVideos(query);
+      const videos = await searchVideos(query, limit);
 
       const embed = createEmbed()
         .setTitle(`Search results for "${query}"`)
