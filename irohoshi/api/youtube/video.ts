@@ -2,50 +2,51 @@ import { yt } from './api.ts';
 import { duration2Sec, extractId } from './extractors.ts';
 import Thumbnail from './thumbnail.ts';
 
-interface Video {
+interface SearchVideo {
   id: string;
   title: string;
   description?: string;
-  duration: number;
   thumbnail: Thumbnail;
   channel: {
     id: string;
     title: string;
   };
+  tags: string[];
+  uploadedAt: Date;
+}
+
+interface Video extends SearchVideo {
+  duration: number;
   views: number;
   likes: number;
   comments: number;
   favorites: number;
-  tags: string[];
-  uploadedAt: Date;
 }
-export default Video;
+
+interface Thumbnails {
+  default: Thumbnail;
+  medium: Thumbnail;
+  high: Thumbnail;
+  standard: Thumbnail;
+  maxres: Thumbnail;
+}
+interface VideoSnippet {
+  publishedAt: string;
+  channelId: string;
+  title: string;
+  description?: string;
+  thumbnails: Thumbnails;
+  channelTitle: string;
+  tags?: string[];
+}
 
 interface ListResponse {
   kind: 'youtube#videoListResponse';
-  etag: string;
   items: {
     kind: 'youtube#video';
-    etag: string;
     id: string;
-    snippet: {
-      publishedAt: string;
-      channelId: string;
-      title: string;
-      description?: string;
-      thumbnails: {
-        default: Thumbnail;
-        medium: Thumbnail;
-        high: Thumbnail;
-        standard: Thumbnail;
-        maxres: Thumbnail;
-      };
-      channelTitle: string;
-      tags?: string[];
-    };
-    contentDetails: {
-      duration: `PT${string}`;
-    };
+    snippet: VideoSnippet;
+    contentDetails: { duration: `PT${string}` };
     statistics: {
       viewCount: `${number}`;
       likeCount: `${number}`;
@@ -98,4 +99,53 @@ export async function getVideo(url: string): Promise<Video> {
     tags,
     uploadedAt: new Date(publishedAt)
   };
+}
+
+interface SearchResponse {
+  kind: 'youtube#searchListResponse';
+  nextPageToken: string;
+  pageInfo: { totalResults: number; resultsPerPage: number };
+  items: {
+    kind: 'youtube#searchResult';
+    id: { kind: 'youtube#video'; videoId: string };
+    snippet: VideoSnippet;
+  }[];
+}
+
+export async function searchVideos(
+  query: string,
+  maxResults = 5
+): Promise<SearchVideo[]> {
+  const response: SearchResponse = await yt.search_list({
+    q: query,
+    type: 'video',
+    part: 'id,snippet',
+    maxResults
+  });
+
+  return response.items.map(
+    ({
+      id: { videoId: id },
+      snippet: {
+        title,
+        description,
+        tags = [],
+        publishedAt,
+        channelId,
+        channelTitle,
+        thumbnails: { default: thumbnail }
+      }
+    }) => ({
+      id,
+      title,
+      description,
+      thumbnail,
+      channel: {
+        id: channelId,
+        title: channelTitle
+      },
+      tags,
+      uploadedAt: new Date(publishedAt)
+    })
+  );
 }
