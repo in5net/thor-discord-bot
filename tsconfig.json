@@ -3,7 +3,8 @@
     "shared/*.ts",
     "services/*.ts",
     "thor/**/*.ts",
-    "thor-music/**/*.ts"
+    "thor-music/**/*.ts",
+    "irohoshi/**/*.ts"
   ],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */

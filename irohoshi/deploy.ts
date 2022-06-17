@@ -1,4 +1,4 @@
-import 'https://deno.land/std@0.143.0/dotenv/load.ts';
+import 'https://deno.land/std@0.144.0/dotenv/load.ts';
 import { ApplicationCommandOptionType, commands, init } from './deps.ts';
 
 import * as commandsData from './commands/mod.ts';

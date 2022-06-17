@@ -1,4 +1,5 @@
-import { default as ball } from './8ball.ts';
+import ball from './8ball.ts';
+
 export { default as catboy } from './catboy.ts';
 export { default as drive } from './drive.ts';
 export { default as gif } from './gif.ts';
@@ -17,7 +18,8 @@ export { default as text } from './text.ts';
 export { default as waifu } from './waifu.ts';
 export { default as zen } from './zen.ts';
 
+export default { '8ball': ball };
+
 export * as cipher from './cipher/mod.ts';
 export * as ao3 from './ao3/mod.ts';
-
-export default { '8ball': ball };
+export * as youtube from './youtube/mod.ts';

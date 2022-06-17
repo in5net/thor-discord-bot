@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { parseFromString } from '../parser.ts';
 import ORIGIN from './origin.ts';
 
@@ -105,7 +106,7 @@ export interface Work {
 export async function getWork(id: string): Promise<Work> {
   const response = await fetch(`${query}${id}?view_adult=true`);
   const html = await response.text();
-  const $ = parseFromString(html)!;
+  const $ = parseFromString(html);
 
   const rating = $.querySelector(
     '#main > div.wrapper > dl > dd.rating.tags > ul > li > a'
