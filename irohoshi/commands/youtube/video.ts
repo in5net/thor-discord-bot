@@ -40,23 +40,28 @@ export default command(
         .addFields(
           {
             name: 'Duration',
-            value: formatDuration(duration)
+            value: formatDuration(duration),
+            inline: true
           },
           {
             name: 'Views',
-            value: views.toLocaleString()
+            value: views.toLocaleString(),
+            inline: true
           },
           {
             name: 'Likes',
-            value: likes.toLocaleString()
+            value: likes.toLocaleString(),
+            inline: true
           },
           {
             name: 'Comments',
-            value: comments.toLocaleString()
+            value: comments.toLocaleString(),
+            inline: true
           },
           {
             name: 'Favorites',
-            value: favorites.toLocaleString()
+            value: favorites.toLocaleString(),
+            inline: true
           }
         );
 
