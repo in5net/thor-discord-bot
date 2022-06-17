@@ -5,8 +5,7 @@ import { getVideo } from './video.ts';
 Deno.test({
   name: 'youtube.video.list',
   async fn() {
-    const id = 'Ks-_Mh1QhMc';
-    const url = `https://www.youtube.com/watch?v=${id}`;
+    const url = 'https://youtu.be/ZjOUc7rKtPQ';
     const video = await getVideo(url);
     console.log(video);
   }

@@ -57,20 +57,24 @@ export default command(
           {
             name: 'Favorites',
             value: favorites.toLocaleString()
-          },
-          {
-            name: 'Tags',
-            value: tags.join(', ')
           }
         );
-      if (description) embed.setDescription(description);
+
+      const maxDesc = 1024;
+      if (description)
+        embed.setDescription(
+          description.length < maxDesc
+            ? description
+            : `${description.slice(0, maxDesc - 3)}...`
+        );
+      if (tags.length) embed.addField('Tags', tags.join(', '));
 
       return i.reply({
         embeds: [embed]
       });
     } catch (error) {
       console.error(error);
-      return i.reply('Invalid YouTube video url', { ephemeral: true });
+      return i.reply('Failed to get YouTube video', { ephemeral: true });
     }
   }
 );

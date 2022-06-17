@@ -41,7 +41,7 @@ interface ListResponse {
         maxres: Thumbnail;
       };
       channelTitle: string;
-      tags: string[];
+      tags?: string[];
     };
     contentDetails: {
       duration: `PT${string}`;
@@ -72,7 +72,7 @@ export async function getVideo(url: string): Promise<Video> {
     snippet: {
       title,
       description,
-      tags,
+      tags = [],
       publishedAt,
       channelId,
       channelTitle,
