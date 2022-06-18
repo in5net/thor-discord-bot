@@ -42,8 +42,9 @@ export default command(
     }
   },
   async (i, { option }) => {
+    console.log(i);
     if (option === 'nsfw' && i.channel?.isGuildText() && !i.channel.nsfw)
-      return i.reply('This channel is not marked as NSFW you cheeky boi.', {
+      return i.reply('This channel is not marked as NSFW you cheeky boi', {
         ephemeral: true
       });
 
