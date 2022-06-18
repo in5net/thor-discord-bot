@@ -13,7 +13,10 @@ export default command(
   },
   async (i, { ratios }) => {
     const ratioStrs = ratios.split('+').map(s => s.trim());
-    await ratiosTable().upsert(ratioStrs.map(s => ({ text: s })));
+    const { error } = await ratiosTable().upsert(
+      ratioStrs.map(s => ({ text: s }))
+    );
+    if (error) throw new Error(error.message);
     return i.reply('Added to ratios');
   }
 );

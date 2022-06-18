@@ -1,4 +1,4 @@
-import { client, handle, init } from './deps.ts';
+import { client, Embed, handle, init } from './deps.ts';
 
 import * as commands from './commands/mod.ts';
 import { Command, CommandGroups, Commands } from './commands/command.ts';
@@ -23,17 +23,31 @@ function run(name: string, command: Command | Commands | CommandGroups) {
   }
 }
 function runCmd(name: string, { options, handler }: Command) {
-  handle(name, i =>
-    handler(
-      i,
-      Object.fromEntries(
-        Object.entries(options).map(([name, { default: d }]) => [
-          name,
-          i.option(name) ?? d
-        ])
-      )
-    )
-  );
+  handle(name, async i => {
+    try {
+      await handler(
+        i,
+        Object.fromEntries(
+          Object.entries(options).map(([name, { default: d }]) => [
+            name,
+            i.option(name) ?? d
+          ])
+        )
+      );
+    } catch (error) {
+      console.error(`Error while running '${name}':`, error);
+      if (error instanceof Error)
+        await i.reply({
+          embeds: [
+            new Embed()
+              .setColor('RED')
+              .setTitle('Error')
+              .setDescription(error.message)
+              .setTimestamp(new Date())
+          ]
+        });
+    }
+  });
 }
 
 client.on('interactionError', console.error);
