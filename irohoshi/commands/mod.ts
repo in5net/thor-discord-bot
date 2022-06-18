@@ -4,6 +4,7 @@ export { default as cat } from './cat.ts';
 export { default as catboy } from './catboy.ts';
 export { default as counts } from './counts.ts';
 export { default as drive } from './drive.ts';
+export { default as env } from './env.ts';
 export { default as gif } from './gif.ts';
 export { default as hiragana } from './hiragana.ts';
 export { default as img } from './img.ts';
