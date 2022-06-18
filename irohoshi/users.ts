@@ -1,11 +1,13 @@
 import supabase from './supabase.ts';
 import { definitions } from '../types/supabase.ts';
 
-export const usersTable = () => supabase.from<definitions['users']>('users');
+type Def = definitions['users'];
+interface User extends Def {
+  counts?: Record<string, number>;
+}
+export const usersTable = () => supabase.from<User>('users');
 
-export async function getUser(
-  uid: string
-): Promise<definitions['users'] | null> {
+export async function getUser(uid: string): Promise<User | null> {
   const { data: user } = await usersTable().select().eq('uid', uid).single();
   return user;
 }
@@ -15,7 +17,7 @@ export const incCount = async (uid: string, name: string) => {
     .select('counts')
     .eq('uid', uid)
     .single();
-  const counts = (user?.counts || {}) as Record<string, number>;
+  const counts = user?.counts || {};
   return usersTable().upsert({
     uid,
     counts: {
