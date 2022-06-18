@@ -23,6 +23,7 @@ const commandOptionTypeMap: Record<
 };
 
 console.log('Commands registering...');
+let buildCount = 0;
 
 const { default: oddNameCommands, ...normalCommands } = commandsData;
 
@@ -62,6 +63,7 @@ const data = Object.entries({
 );
 
 function build(name: string, { desc, options }: Command) {
+  buildCount++;
   return {
     name,
     description: desc,
@@ -91,7 +93,5 @@ function build(name: string, { desc, options }: Command) {
   };
 }
 
-console.log('data:', data);
 await commands.bulkEdit(data);
-
-console.log('Commands registered');
+console.log(buildCount, 'commands registered');
