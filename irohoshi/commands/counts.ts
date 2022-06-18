@@ -17,10 +17,12 @@ export default command(
     const data = await getUser(user.id);
     const embed = new Embed().setTitle(`${user.username}'s counts`);
     if (data?.counts)
-      Object.entries(data.counts).map(([name, count]) => ({
-        name,
-        value: count.toString()
-      }));
+      embed.addFields(
+        ...Object.entries(data.counts).map(([name, count]) => ({
+          name,
+          value: count.toString()
+        }))
+      );
     else embed.setDescription('No counts found');
     return i.reply({
       embeds: [embed]
