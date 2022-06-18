@@ -1,4 +1,4 @@
-import { Embed, InteractionResponseFlags } from '../deps.ts';
+import { Embed } from '../deps.ts';
 import { incCount } from '../users.ts';
 
 import command from './command.ts';

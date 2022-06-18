@@ -1,6 +1,7 @@
 import ball from './8ball.ts';
 
 export { default as catboy } from './catboy.ts';
+export { default as counts } from './counts.ts';
 export { default as drive } from './drive.ts';
 export { default as gif } from './gif.ts';
 export { default as hiragana } from './hiragana.ts';
