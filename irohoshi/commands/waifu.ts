@@ -1,4 +1,4 @@
-import { Embed } from '../deps.ts';
+import { Embed, InteractionResponseFlags } from '../deps.ts';
 import { incCount } from '../users.ts';
 
 import command from './command.ts';
@@ -35,7 +35,7 @@ export default command(
         desc: 'Additional query option',
         choices: {
           gif: 'Get a GIF instead of a normal image',
-          nsfw: 'Get a naughty image (only usable in NSFW channels)'
+          nsfw: 'Get a naughty image'
         },
         optional: true
       }
