@@ -10,6 +10,7 @@ export default command(
   },
   async i => {
     const { data } = await ratiosTable.select('text');
+    console.log(data);
     const ratios = data?.map(s => s.text) || [];
     const indices = new Set<number>();
     while (indices.size < Math.min(NUM_RATIOS, ratios.length)) {
