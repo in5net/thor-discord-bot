@@ -12,7 +12,10 @@ export default command(
     }
   },
   async (i, { ratios }) => {
-    const ratioStrs = ratios.split('+').map(s => s.trim());
+    const ratioStrs = ratios
+      .split('+')
+      .map(s => s.trim())
+      .filter(Boolean);
     const { error } = await ratiosTable().upsert(
       ratioStrs.map(s => ({ text: s })),
       { onConflict: 'text' }
