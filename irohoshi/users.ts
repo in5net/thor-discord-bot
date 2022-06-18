@@ -1,5 +1,5 @@
-import supabase from './supabase';
-import type { definitions } from '../types/supabase';
+import supabase from './supabase.ts';
+import { definitions } from '../types/supabase.ts';
 
 export const usersTable = supabase.from<definitions['users']>('users');
 

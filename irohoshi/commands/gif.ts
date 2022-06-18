@@ -7,18 +7,11 @@ export default command(
     options: {}
   },
   async i => {
-    while (true) {
-      try {
-        let src: string;
-        try {
-          src = await getGIF();
-        } catch {
-          return i.reply('So sad, looks like yyyyyyy.info is down ):');
-        }
-        return await i.reply(src);
-      } catch {
-        console.log('Error sending gif, trying again');
-      }
+    try {
+      const src = await getGIF();
+      return i.reply(src);
+    } catch {
+      return i.reply('So sad, looks like yyyyyyy.info is down ):');
     }
   }
 );

@@ -1,4 +1,5 @@
 {
-  "deno.enablePaths": ["./irohoshi"],
-  "deno.lint": true
+  "deno.enablePaths": ["irohoshi", "gpu"],
+  "deno.lint": true,
+  "cSpell.words": ["supabase"]
 }

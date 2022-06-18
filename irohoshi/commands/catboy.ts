@@ -1,4 +1,5 @@
 import { Embed } from '../deps.ts';
+import { incCount } from '../users.ts';
 
 import command from './command.ts';
 
@@ -28,6 +29,7 @@ export default command(
     if (artist_url.startsWith('http'))
       embed.setAuthor({ name: artist, url: artist_url });
 
-    return i.reply({ embeds: [embed], ephemeral: true });
+    await i.reply({ embeds: [embed], ephemeral: true });
+    return incCount(i.user.id, 'weeb');
   }
 );

@@ -1,6 +1,4 @@
-import { FieldValue } from 'firebase-admin/firestore';
-
-import { db } from '$services/firebase';
+import supabase from '$services/supabase';
 import {
   FileMedia,
   MediaJSONType,
@@ -10,28 +8,27 @@ import {
   URLMedia,
   YouTubeMedia
 } from './media';
+import type { definitions } from '../../../types/supabase';
 
-interface Playlist {
-  owner: string; // uid
-  name: string;
+type Def = definitions['playlists'];
+interface Playlist extends Def {
   songs: MediaJSONType[];
 }
 
-const playlistsRef = db.collection(
-  'playlists'
-) as FirebaseFirestore.CollectionReference<Playlist>;
+const playlistsTable = supabase.from<Playlist>('playlists');
 
 async function getPlaylist(
   uid: string,
   name: string
-): Promise<(Playlist & { id: string }) | undefined> {
-  const queryRef = playlistsRef
-    .where('owner', '==', uid)
-    .where('name', '==', name)
-    .limit(1);
-  const snapshot = await queryRef.get();
-  const doc = snapshot.docs[0];
-  return doc && { ...doc.data(), id: doc.id };
+): Promise<Playlist | null> {
+  const { data: playlist } = await playlistsTable
+    .select('id,songs')
+    .match({
+      uid,
+      name
+    })
+    .single();
+  return playlist && { ...playlist, uid, name };
 }
 
 export async function get(
@@ -61,10 +58,10 @@ export async function get(
 }
 
 export async function list(uid: string): Promise<string[]> {
-  const queryRef = playlistsRef.where('owner', '==', uid);
-  const snapshot = await queryRef.get();
-  const names = snapshot.docs.map(doc => doc.data().name);
-  return names;
+  const { data: playlists } = await playlistsTable
+    .select('name')
+    .eq('uid', uid);
+  return playlists?.map(({ name }) => name) || [];
 }
 
 export async function save(
@@ -72,17 +69,12 @@ export async function save(
   name: string,
   medias: MediaType[]
 ): Promise<void> {
-  const playlist = await getPlaylist(uid, name);
   const songs = medias.map(media => media.toJSON());
-  if (playlist) {
-    const playlistRef = playlistsRef.doc(playlist.id);
-    await playlistRef.update('songs', songs);
-  } else
-    await playlistsRef.add({
-      owner: uid,
-      name,
-      songs
-    });
+  await playlistsTable.upsert({
+    uid,
+    name,
+    songs
+  });
 }
 
 export async function add(
@@ -93,17 +85,12 @@ export async function add(
   name: string,
   medias: MediaType[]
 ): Promise<void> {
-  const playlist = await getPlaylist(requester.uid, name);
   const songs = medias.map(media => media.toJSON());
-  if (playlist) {
-    const playlistRef = playlistsRef.doc(playlist.id);
-    await playlistRef.update('songs', FieldValue.arrayUnion(...songs));
-  } else
-    await playlistsRef.add({
-      owner: requester.uid,
-      name,
-      songs
-    });
+  await playlistsTable.upsert({
+    uid: requester.uid,
+    name,
+    songs
+  });
 }
 
 export async function remove(
@@ -117,11 +104,12 @@ export async function remove(
   const playlist = await getPlaylist(requester.uid, name);
   if (!playlist) return;
 
-  const playlistRef = playlistsRef.doc(playlist.id);
-
-  if (n === undefined) await playlistRef.delete();
+  if (n === undefined) await playlistsTable.delete().eq('id', playlist.id);
   else {
     playlist.songs.splice(n - 1, 1);
-    await playlistRef.update('songs', playlist.songs);
+    await playlistsTable.update({
+      id: playlist.id,
+      songs: playlist.songs
+    });
   }
 }

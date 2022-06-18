@@ -22,4 +22,5 @@ export default { '8ball': ball };
 
 export * as cipher from './cipher/mod.ts';
 export * as ao3 from './ao3/mod.ts';
+export * as ratio from './ratio/mod.ts';
 export * as youtube from './youtube/mod.ts';

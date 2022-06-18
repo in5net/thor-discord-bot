@@ -1,4 +1,5 @@
 import { Embed } from '../deps.ts';
+import { incCount } from '../users.ts';
 
 import command from './command.ts';
 
@@ -65,6 +66,8 @@ export default command(
       .setAuthor({ name: artist_name, url: artist_href });
     if (source_url) embed.setURL(source_url);
     if (anime_name) embed.setTitle(anime_name);
-    return i.reply({ embeds: [embed] });
+
+    await i.reply({ embeds: [embed] });
+    return incCount(i.user.id, 'weeb');
   }
 );

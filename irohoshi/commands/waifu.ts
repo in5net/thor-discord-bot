@@ -1,4 +1,5 @@
 import { Embed } from '../deps.ts';
+import { incCount } from '../users.ts';
 
 import command from './command.ts';
 
@@ -65,6 +66,7 @@ export default command(
       .setFooter('Powered by waifu.im', 'https://waifu.im/favicon.ico')
       .setTimestamp(new Date(image.uploaded_at));
 
-    return i.reply({ embeds: [embed], ephemeral: true });
+    await i.reply({ embeds: [embed], ephemeral: true });
+    return incCount(i.user.id, 'weeb');
   }
 );
