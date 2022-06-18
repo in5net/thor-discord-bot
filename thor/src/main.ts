@@ -1,12 +1,12 @@
 import { random } from '@limitlesspc/limitless';
 
+import './env';
 import DiscordBot from '$shared/bot';
 import help from './commands/help';
 import commands from './commands';
 import { handleMessage } from './commands/wordle';
 import responses from './responses';
 import { incCount } from '$services/users';
-import './env';
 
 const bot = new DiscordBot(
   'Thor',
