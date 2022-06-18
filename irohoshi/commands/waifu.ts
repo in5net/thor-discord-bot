@@ -43,7 +43,9 @@ export default command(
   },
   async (i, { option }) => {
     if (option === 'nsfw' && i.channel?.isGuildText() && !i.channel.nsfw)
-      return i.reply('This channel is not marked as NSFW you cheeky boi.');
+      return i.reply('This channel is not marked as NSFW you cheeky boi.', {
+        ephemeral: true
+      });
 
     const url = new URL('https://api.waifu.im/random');
     if (option) url.searchParams.append(option, 'true');

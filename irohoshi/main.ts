@@ -44,7 +44,8 @@ function runCmd(name: string, { options, handler }: Command) {
               .setTitle('Error')
               .setDescription(error.message)
               .setTimestamp(new Date())
-          ]
+          ],
+          ephemeral: true
         });
     }
   });
