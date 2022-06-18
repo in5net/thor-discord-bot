@@ -17,7 +17,7 @@ export interface User {
 export async function getUser(name: string): Promise<User> {
   const response = await fetch(`${query}${name}`);
   const html = await response.text();
-  const $ = parseFromString(html);
+  const $ = await parseFromString(html);
 
   return {
     name,

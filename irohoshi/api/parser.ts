@@ -1,6 +1,10 @@
-import { DOMParser } from 'https://deno.land/x/deno_dom@v0.1.30-alpha/deno-dom-wasm.ts';
+import {
+  DOMParser,
+  initParser
+} from 'https://deno.land/x/deno_dom@v0.1.31-alpha/deno-dom-wasm-noinit.ts';
 
-const parser = new DOMParser();
-export const parseFromString = (source: string) =>
+export async function parseFromString(source: string) {
+  await initParser();
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  parser.parseFromString(source, 'text/html')!;
+  return new DOMParser().parseFromString(source, 'text/html')!;
+}

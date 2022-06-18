@@ -106,7 +106,7 @@ export interface Work {
 export async function getWork(id: string): Promise<Work> {
   const response = await fetch(`${query}${id}?view_adult=true`);
   const html = await response.text();
-  const $ = parseFromString(html);
+  const $ = await parseFromString(html);
 
   const rating = $.querySelector(
     '#main > div.wrapper > dl > dd.rating.tags > ul > li > a'
