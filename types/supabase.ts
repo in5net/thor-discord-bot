@@ -311,7 +311,7 @@ export interface definitions {
      * Format: timestamp with time zone
      * @default now()
      */
-    created_at: string;
+    created_at?: string;
     /** Format: text */
     uid: string;
     /** Format: text */
@@ -324,7 +324,7 @@ export interface definitions {
      * Format: timestamp with time zone
      * @default now()
      */
-    created_at: string;
+    created_at?: string;
     /**
      * Format: text
      * @description Note:
@@ -345,7 +345,7 @@ export interface definitions {
      * Format: timestamp with time zone
      * @default now()
      */
-    created_at: string;
+    created_at?: string;
     /** Format: text */
     text: string;
   };
