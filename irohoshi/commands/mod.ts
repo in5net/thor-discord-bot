@@ -1,5 +1,6 @@
 import ball from './8ball.ts';
 
+export { default as cat } from './cat.ts';
 export { default as catboy } from './catboy.ts';
 export { default as counts } from './counts.ts';
 export { default as drive } from './drive.ts';
