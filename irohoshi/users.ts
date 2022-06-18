@@ -10,8 +10,7 @@ export async function getUser(
   return user;
 }
 
-type CountName = 'weeb';
-export const incCount = async (uid: string, name: CountName) => {
+export const incCount = async (uid: string, name: string) => {
   const { data: user } = await usersTable
     .select('counts')
     .eq('uid', uid)

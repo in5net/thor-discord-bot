@@ -27,7 +27,7 @@ const bot = new DiscordBot(
       if (Math.random() < 0.3)
         msg += ` gave 1 strike to <@${message.author.id}>`;
       await channel.send(msg).catch();
-      await incCount(author.id, 'saladMundus');
+      await incCount(author.id, 'salad_mundus');
       return;
     }
 
