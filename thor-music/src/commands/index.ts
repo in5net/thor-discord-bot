@@ -34,5 +34,5 @@ const commands: Command[] = [
   playlist,
   hz,
   playnext
-];
+] as unknown as Command[];
 export default commands;
