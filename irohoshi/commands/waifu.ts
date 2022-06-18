@@ -42,6 +42,8 @@ export default command(
     }
   },
   async (i, { option }) => {
+    console.log(i);
+    console.log(Object.entries(i));
     console.log(i.channel);
     console.log(Object.entries(i.channel || {}));
     if (option === 'nsfw' && i.channel?.isGuildText() && !i.channel.nsfw)
