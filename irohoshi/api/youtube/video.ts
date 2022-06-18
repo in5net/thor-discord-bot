@@ -20,7 +20,6 @@ interface Video extends SearchVideo {
   views: number;
   likes: number;
   comments: number;
-  favorites: number;
 }
 
 interface Thumbnails {
@@ -50,7 +49,6 @@ interface ListResponse {
     statistics: {
       viewCount: `${number}`;
       likeCount: `${number}`;
-      favoriteCount: `${number}`;
       commentCount: `${number}`;
     };
   }[];
@@ -72,7 +70,7 @@ export async function getVideo(url: string): Promise<Video> {
   const {
     snippet,
     contentDetails: { duration },
-    statistics: { viewCount, likeCount, favoriteCount, commentCount }
+    statistics: { viewCount, likeCount, commentCount }
   } = video;
   return {
     id,
@@ -80,7 +78,6 @@ export async function getVideo(url: string): Promise<Video> {
     views: parseInt(viewCount),
     likes: parseInt(likeCount),
     comments: parseInt(commentCount),
-    favorites: parseInt(favoriteCount),
     ...convertSnippet(snippet)
   };
 }

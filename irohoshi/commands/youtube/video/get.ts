@@ -22,7 +22,6 @@ export default command(
         duration,
         views,
         likes,
-        favorites,
         comments,
         tags,
         uploadedAt
@@ -56,11 +55,6 @@ export default command(
           {
             name: 'Comments',
             value: comments.toLocaleString(),
-            inline: true
-          },
-          {
-            name: 'Favorites',
-            value: favorites.toLocaleString(),
             inline: true
           }
         );
