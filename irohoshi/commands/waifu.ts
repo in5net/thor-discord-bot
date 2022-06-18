@@ -42,22 +42,13 @@ export default command(
     }
   },
   async (i, { option }) => {
-    console.log(i);
-    console.log(Object.entries(i));
-    console.log(i.channel);
-    console.log(Object.entries(i.channel || {}));
-    if (option === 'nsfw' && i.channel?.isGuildText() && !i.channel.nsfw)
-      return i.reply('This channel is not marked as NSFW you cheeky boi', {
-        ephemeral: true
-      });
-
     const url = new URL('https://api.waifu.im/random');
     if (option) url.searchParams.append(option, 'true');
     const response = await fetch(url);
     const data: Response = await response.json();
     const image = data.images[0];
     console.log(data);
-    if (!image) return i.reply('No waifu found');
+    if (!image) throw new Error('No waifu found');
 
     const embed = new Embed()
       .setTitle(image.tags.map(t => t.name).join(', '))
