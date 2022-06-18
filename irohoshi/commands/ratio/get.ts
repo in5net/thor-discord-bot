@@ -18,7 +18,7 @@ export default command(
     const ratioStrs = [...indices].map(i => ratios[i] || '');
     i.reply(
       ratioStrs.join(' + ') ||
-        'Looks like there are no ratios, see `thor help ratio add` to find out how to add some'
+        'Looks like there are no ratios, use `/ratio add` to add some'
     );
   }
 );
