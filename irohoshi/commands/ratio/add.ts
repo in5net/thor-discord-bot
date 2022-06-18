@@ -13,7 +13,7 @@ export default command(
   },
   async (i, { ratios }) => {
     const ratioStrs = ratios.split('+').map(s => s.trim());
-    await ratiosTable.insert(ratioStrs.map(s => ({ text: s })));
+    await ratiosTable().insert(ratioStrs.map(s => ({ text: s })));
     return i.reply('Added to ratios');
   }
 );
