@@ -16,8 +16,8 @@ export default command(
   async (i, { user = i.user }) => {
     const data = await getUser(user.id);
     const embed = new Embed().setTitle(`${user.username}'s counts`);
-    if (data)
-      Object.entries(data.counts || {}).map(([name, count]) => ({
+    if (data?.counts)
+      Object.entries(data.counts).map(([name, count]) => ({
         name,
         value: count.toString()
       }));
