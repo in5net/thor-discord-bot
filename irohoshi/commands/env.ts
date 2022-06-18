@@ -7,20 +7,15 @@ export default command(
     options: {}
   },
   i => {
-    const {
-      version: { deno, v8, typescript },
-      build: { target, arch, os, vendor }
-    } = Deno;
+    const { target, arch, os, vendor, env } = Deno.build;
     const embed = new Embed()
-      .setTitle('Environment')
+      .setTitle('Build Environment')
       .setColor(0x00ae86)
-      .addField('🦕 Deno version', deno)
-      .addField('V8 version', v8)
-      .addField('TypeScript version', typescript)
       .addField('🎯 Build target', target)
       .addField('💻 Architecture', arch)
       .addField('💻 Operating system', os)
       .addField('💻 Vendor', vendor);
+    if (env) embed.addField('💻 Environment', env);
     return i.reply({ embeds: [embed] });
   }
 );
