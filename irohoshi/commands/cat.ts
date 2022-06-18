@@ -1,8 +1,12 @@
 import command from './command.ts';
 
-interface Response {
-  file: string;
-}
+type Response = {
+  breeds: string[];
+  id: string;
+  url: string;
+  width: number;
+  height: number;
+}[];
 
 export default command(
   {
@@ -10,9 +14,10 @@ export default command(
     options: {}
   },
   async i => {
-    const response = await fetch('https://aws.random.cat/meow');
+    const response = await fetch('https://api.thecatapi.com/v1/images/search');
     const data: Response = await response.json();
-    const { file } = data;
-    return i.reply(file);
+    const [cat] = data;
+    if (!cat) throw new Error('No cat found');
+    return i.reply(cat.url);
   }
 );

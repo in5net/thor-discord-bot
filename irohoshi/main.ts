@@ -25,6 +25,7 @@ function run(name: string, command: Command | Commands | CommandGroups) {
 function runCmd(name: string, { options, handler }: Command) {
   handle(name, async i => {
     try {
+      console.log(i);
       await handler(
         i,
         Object.fromEntries(
