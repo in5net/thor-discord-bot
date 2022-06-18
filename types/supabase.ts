@@ -297,6 +297,26 @@ export interface paths {
       };
     };
   };
+  "/rpc/get_random_ratios": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: smallint */
+            n: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
 }
 
 export interface definitions {
