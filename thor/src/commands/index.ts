@@ -15,12 +15,11 @@ import quest from './quest';
 import hex from './hex';
 import wordle from './wordle';
 import hash from './hash';
-import neko from './neko';
 import counts from './counts';
 import lifehash from './lifehash';
 import type Command from '$shared/command';
 
-const commands: Command[] = [
+const commands = [
   img,
   fractal,
   random,
@@ -38,8 +37,7 @@ const commands: Command[] = [
   hex,
   wordle,
   hash,
-  neko,
   counts,
   lifehash
-];
+] as unknown as Command[];
 export default commands;
