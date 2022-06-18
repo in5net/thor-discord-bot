@@ -43,7 +43,8 @@ export default command(
   },
   async (i, { option }) => {
     const url = new URL('https://api.waifu.im/random');
-    if (option) url.searchParams.append(option, 'true');
+    if (option === 'gif') url.searchParams.append('gif', 'true');
+    else if (option === 'nsfw') url.searchParams.append('is_nsfw', 'true');
     const response = await fetch(url);
     const data: Response = await response.json();
     const image = data.images[0];
