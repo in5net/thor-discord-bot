@@ -1,22 +1,22 @@
 import supabase from './supabase.ts';
 import { definitions } from '../types/supabase.ts';
 
-export const usersTable = supabase.from<definitions['users']>('users');
+export const usersTable = () => supabase.from<definitions['users']>('users');
 
 export async function getUser(
   uid: string
 ): Promise<definitions['users'] | null> {
-  const { data: user } = await usersTable.select().eq('uid', uid).single();
+  const { data: user } = await usersTable().select().eq('uid', uid).single();
   return user;
 }
 
 export const incCount = async (uid: string, name: string) => {
-  const { data: user } = await usersTable
+  const { data: user } = await usersTable()
     .select('counts')
     .eq('uid', uid)
     .single();
   const counts = (user?.counts || {}) as Record<string, number>;
-  return usersTable.upsert({
+  return usersTable().upsert({
     uid,
     counts: {
       ...counts,

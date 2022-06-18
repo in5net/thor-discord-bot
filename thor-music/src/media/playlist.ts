@@ -15,13 +15,13 @@ interface Playlist extends Def {
   songs: MediaJSONType[];
 }
 
-const playlistsTable = supabase.from<Playlist>('playlists');
+const playlistsTable = () => supabase.from<Playlist>('playlists');
 
 async function getPlaylist(
   uid: string,
   name: string
 ): Promise<Playlist | null> {
-  const { data: playlist } = await playlistsTable
+  const { data: playlist } = await playlistsTable()
     .select('id,songs')
     .match({
       uid,
@@ -58,7 +58,7 @@ export async function get(
 }
 
 export async function list(uid: string): Promise<string[]> {
-  const { data: playlists } = await playlistsTable
+  const { data: playlists } = await playlistsTable()
     .select('name')
     .eq('uid', uid);
   return playlists?.map(({ name }) => name) || [];
@@ -70,7 +70,7 @@ export async function save(
   medias: MediaType[]
 ): Promise<void> {
   const songs = medias.map(media => media.toJSON());
-  await playlistsTable.upsert({
+  await playlistsTable().upsert({
     uid,
     name,
     songs
@@ -86,7 +86,7 @@ export async function add(
   medias: MediaType[]
 ): Promise<void> {
   const songs = medias.map(media => media.toJSON());
-  await playlistsTable.upsert({
+  await playlistsTable().upsert({
     uid: requester.uid,
     name,
     songs
@@ -104,10 +104,10 @@ export async function remove(
   const playlist = await getPlaylist(requester.uid, name);
   if (!playlist) return;
 
-  if (n === undefined) await playlistsTable.delete().eq('id', playlist.id);
+  if (n === undefined) await playlistsTable().delete().eq('id', playlist.id);
   else {
     playlist.songs.splice(n - 1, 1);
-    await playlistsTable.update({
+    await playlistsTable().update({
       id: playlist.id,
       songs: playlist.songs
     });
