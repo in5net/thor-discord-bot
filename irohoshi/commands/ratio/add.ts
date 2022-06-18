@@ -14,7 +14,8 @@ export default command(
   async (i, { ratios }) => {
     const ratioStrs = ratios.split('+').map(s => s.trim());
     const { error } = await ratiosTable().upsert(
-      ratioStrs.map(s => ({ text: s }))
+      ratioStrs.map(s => ({ text: s })),
+      { onConflict: 'text' }
     );
     if (error) throw new Error(error.message);
     return i.reply('Added to ratios');
