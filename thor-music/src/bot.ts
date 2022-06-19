@@ -9,7 +9,7 @@ const bot = new DiscordBot(
   'Thor Music',
   '-',
   ['GUILDS', 'GUILD_MESSAGES', 'GUILD_VOICE_STATES', 'DIRECT_MESSAGES'],
-  process.env.DISCORD_BOT_TOKEN
+  process.env.TOKEN
 ).addCommands([help, ...commands]);
 bot.client.on('voiceStateUpdate', oldState => {
   if (

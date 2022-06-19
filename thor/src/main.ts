@@ -10,7 +10,7 @@ const bot = new DiscordBot(
   'Thor',
   `${process.env.PREFIX} `,
   ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'DIRECT_MESSAGES'],
-  process.env.DISCORD_BOT_TOKEN
+  process.env.TOKEN
 )
   .addCommands([help, ...commands])
   .onMessage(async message => {
