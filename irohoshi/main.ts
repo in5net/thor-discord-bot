@@ -24,8 +24,6 @@ function run(name: string, command: Command | Commands | CommandGroups) {
 }
 function runCmd(name: string, { options, handler }: Command) {
   handle(name, async i => {
-    console.log(i.options);
-    console.log(i.option('user'));
     try {
       await handler(
         i,
@@ -54,10 +52,4 @@ function runCmd(name: string, { options, handler }: Command) {
   });
 }
 
-client
-  .on('ping', () => console.log('ping'))
-  .on('interaction', i => {
-    console.log(i);
-    if (i.isApplicationCommand()) console.log(i.option('user'));
-  })
-  .on('interactionError', console.error);
+client.on('interactionError', console.error);
