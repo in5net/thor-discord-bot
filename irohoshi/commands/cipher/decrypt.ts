@@ -3,7 +3,7 @@ import { encrypt } from './encrypt.ts';
 
 export default command(
   {
-    desc: 'Decrypts a message',
+    desc: 'Decrypts a message using a scanning Caesar cipher',
     options: {
       offset: {
         type: 'int',

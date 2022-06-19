@@ -2,7 +2,7 @@ import command from '../command.ts';
 
 export default command(
   {
-    desc: 'Encrypts a message',
+    desc: 'Encrypts a message using a scanning Caesar cipher',
     options: {
       offset: {
         type: 'int',
