@@ -1,5 +1,3 @@
-import { random } from '@limitlesspc/limitless';
-
 import './env';
 import DiscordBot from '$shared/bot';
 import help from './commands/help';
@@ -12,7 +10,7 @@ const bot = new DiscordBot(
   'Thor',
   `${process.env.PREFIX} `,
   ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'DIRECT_MESSAGES'],
-  process.env.TOKEN
+  process.env.DISCORD_BOT_TOKEN
 )
   .addCommands([help, ...commands])
   .onMessage(async message => {
@@ -64,27 +62,7 @@ const bot = new DiscordBot(
   });
 bot.run();
 
-const first = [
-  'CG',
-  'CGI ',
-  'Cam ',
-  "Cam o'",
-  "Cam'o'",
-  'CJ ',
-  'Cameraman ',
-  'Cheese touch '
-];
-const last = [
-  'Macintosh',
-  'MacOS',
-  'shanter',
-  'Shantero',
-  'Big Mac',
-  'Macaroon',
-  'Macaronie'
-];
-
-const { SHRINE_ID = '', LIMITLESS_PC_ID = '', CG_MACKIE_ID = '' } = process.env;
+const { SHRINE_ID = '', MY_UID = '' } = process.env;
 
 async function getMember(memberId: string) {
   let guild = bot.client.guilds.cache.get(SHRINE_ID);
@@ -103,19 +81,9 @@ async function getMember(memberId: string) {
   return member;
 }
 
-async function setCGNickname() {
+async function setMyNickname() {
   try {
-    const member = await getMember(CG_MACKIE_ID);
-    const nickname = random(first) + random(last);
-    await member.setNickname(nickname);
-    console.log(`${nickname} set`);
-  } catch (error) {
-    console.error(error);
-  }
-}
-async function setLimitlessNickname() {
-  try {
-    const member = await getMember(LIMITLESS_PC_ID);
+    const member = await getMember(MY_UID);
 
     const now = new Date();
     const hours = now.getHours();
@@ -132,10 +100,8 @@ async function setLimitlessNickname() {
   }
 }
 bot.onReady(async () => {
-  setInterval(setCGNickname, 1000 * 60 * 60);
-  callNextMin(() => setInterval(setLimitlessNickname, 1000 * 60));
-  await setCGNickname();
-  await setLimitlessNickname();
+  callNextMin(() => setInterval(setMyNickname, 1000 * 60));
+  await setMyNickname();
 });
 
 function callNextMin(callback: () => void) {
