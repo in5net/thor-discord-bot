@@ -24,7 +24,8 @@ function run(name: string, command: Command | Commands | CommandGroups) {
 }
 function runCmd(name: string, { options, handler }: Command) {
   handle(name, async i => {
-    console.log(name, i);
+    console.log(i.options);
+    console.log(i.option('user'));
     try {
       await handler(
         i,
