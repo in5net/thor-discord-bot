@@ -62,7 +62,7 @@ const bot = new DiscordBot(
   });
 bot.run();
 
-const { SHRINE_ID = '', MY_UID = '' } = process.env;
+const { SHRINE_ID = '', MY_DISCORD_ID = '' } = process.env;
 
 async function getMember(memberId: string) {
   let guild = bot.client.guilds.cache.get(SHRINE_ID);
@@ -83,7 +83,7 @@ async function getMember(memberId: string) {
 
 async function setMyNickname() {
   try {
-    const member = await getMember(MY_UID);
+    const member = await getMember(MY_DISCORD_ID);
 
     const now = new Date();
     const hours = now.getHours();

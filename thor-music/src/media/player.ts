@@ -244,7 +244,7 @@ export default class Player {
     if (
       uid &&
       this.queue.current?.requester.uid === uid &&
-      uid !== process.env.DISCORD_UID
+      uid !== process.env.MY_DISCORD_ID
     ) {
       await this.channel?.send(
         "The currently playing song ain't requested by you, so no."
@@ -276,7 +276,7 @@ export default class Player {
     if (
       uid &&
       this.queue.current?.requester.uid === uid &&
-      uid !== process.env.DISCORD_UID
+      uid !== process.env.MY_DISCORD_ID
     ) {
       await this.channel?.send(
         "The currently playing song ain't requested by you, so no."
@@ -292,7 +292,7 @@ export default class Player {
     if (
       uid &&
       this.queue.current?.requester.uid === uid &&
-      uid !== process.env.DISCORD_UID
+      uid !== process.env.MY_DISCORD_ID
     ) {
       await this.channel?.send(
         "The currently playing song ain't requested by you, so no."
@@ -344,7 +344,7 @@ export default class Player {
     if (
       uid &&
       queue.anyNotRequestedBy(uid) &&
-      uid !== process.env.DISCORD_UID
+      uid !== process.env.MY_DISCORD_ID
     ) {
       await this.channel?.send(
         "There are songs in the queue that aren't requested by you, so no."
