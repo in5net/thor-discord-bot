@@ -54,4 +54,6 @@ function runCmd(name: string, { options, handler }: Command) {
   });
 }
 
-client.on('interactionError', console.error);
+client
+  .on('ping', () => console.log('ping'))
+  .on('interactionError', console.error);
