@@ -43,7 +43,7 @@ const bot = new DiscordBot(
       if (lowercase.includes('ratio')) await incCount(author.id, 'ratio');
       if (['noway', 'norway'].includes(lowercase.replace(' ', ''))) {
         await channel.send(Math.random() < 0.1 ? 'Norway' : 'no way');
-        await incCount(author.id, 'noWay');
+        await incCount(author.id, 'no_way');
         return;
       }
       if (channel.type !== 'DM' && !channel.name.includes('thor')) {
