@@ -56,4 +56,8 @@ function runCmd(name: string, { options, handler }: Command) {
 
 client
   .on('ping', () => console.log('ping'))
+  .on('interaction', i => {
+    console.log(i);
+    if (i.isApplicationCommand()) console.log(i.option('user'));
+  })
   .on('interactionError', console.error);
