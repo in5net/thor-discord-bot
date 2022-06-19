@@ -14,6 +14,8 @@ export default command(
     }
   },
   (i, { user = i.user }) => {
+    console.log('here');
+    console.log(i.option('user'));
     const avatar = user.avatarURL('dynamic', 1024);
     if (!avatar) return i.reply('No profile picture found');
 
