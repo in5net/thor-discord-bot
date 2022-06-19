@@ -8,11 +8,12 @@ export default command(
     options: {
       user: {
         type: 'user',
-        desc: 'The user to get the profile picture of'
+        desc: 'The user to get the profile picture of',
+        optional: true
       }
     }
   },
-  (i, { user }) => {
+  (i, { user = i.user }) => {
     const avatar = user.avatarURL('dynamic', 1024);
     if (!avatar) return i.reply('No profile picture found');
 

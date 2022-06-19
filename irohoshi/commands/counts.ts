@@ -8,11 +8,12 @@ export default command(
     options: {
       user: {
         type: 'user',
-        desc: 'The user to view the counts for'
+        desc: 'The user to view the counts for',
+        optional: true
       }
     }
   },
-  async (i, { user }) => {
+  async (i, { user = i.user }) => {
     const data = await getUser(user.id);
     const embed = new Embed().setTitle(`${user.username}'s counts`);
     if (data?.counts)
