@@ -2,5 +2,5 @@ name: discord-bots
 root: ./
 attach: false
 windows:
-  - thor: pnpm run thor
+  - thor: xvfb-run -s "-ac -screen 0 1280x1024x24" pnpm run thor
   - thor-music: pnpm run thor-music
