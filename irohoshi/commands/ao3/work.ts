@@ -44,7 +44,7 @@ export default command(
         .setAuthor({ name: author, url: authorURL, icon_url: iconURL })
         .setURL(workUrl)
         .setThumbnail(
-          `https://files.in5.network/ao3/squares/${symbols.rating}_${symbols.orientation}_${symbols.warning}_${symbols.complete}.png`
+          `${FILES_ORIGIN}/ao3/squares/${symbols.rating}_${symbols.orientation}_${symbols.warning}_${symbols.complete}.png`
         );
       if (rating) embed.addField('Rating', ratings[rating]);
       if (warnings?.length)
