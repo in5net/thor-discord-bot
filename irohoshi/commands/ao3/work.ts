@@ -44,7 +44,9 @@ export default command(
         .setAuthor({ name: author, url: authorURL, icon_url: iconURL })
         .setURL(workUrl)
         .setThumbnail(
-          `${FILES_ORIGIN}/ao3/squares/${symbols.rating}_${symbols.orientation}_${symbols.warning}_${symbols.complete}.png`
+          `${Deno.env.get('FILES_ORIGIN')}/ao3/squares/${symbols.rating}_${
+            symbols.orientation
+          }_${symbols.warning}_${symbols.complete}.png`
         );
       if (rating) embed.addField('Rating', ratings[rating]);
       if (warnings?.length)
