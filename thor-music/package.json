@@ -1,5 +1,5 @@
 {
-  "name": "music-bot",
+  "name": "thor-music",
   "private": true,
   "dependencies": {
     "@discord-player/downloader": "^3.0.1",

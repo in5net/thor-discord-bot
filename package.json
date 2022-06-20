@@ -1,10 +1,10 @@
 {
   "private": true,
-  "author": {
-    "name": "Izaak Brown",
-    "email": "izaakbthunderbird@gmail.com"
+  "author": "limitlesspc",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/limitlesspc/discord-bots.git"
   },
-  "repository": "github:limitlesspc/discord-bots",
   "scripts": {
     "setup": "pnpm i && cd thor && pnpm i && cd ../thor-music && pnpm i && cd ..",
     "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u && cd thor && npm-check -u && cd ../thor-music && npm-check -u && cd ..",

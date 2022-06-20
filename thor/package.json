@@ -1,5 +1,5 @@
 {
-  "name": "discord-bot",
+  "name": "thor",
   "private": true,
   "dependencies": {
     "@googleapis/customsearch": "^0.2.0",
