@@ -6,11 +6,7 @@ export default class Progress {
   private timer: NodeJS.Timer;
   private index = 0;
 
-  constructor(
-    readonly label: string,
-    readonly total: number,
-    readonly length = 50
-  ) {
+  constructor(readonly label: string, readonly total: number) {
     this.print();
     this.timer = setInterval(() => {
       this.print();
@@ -23,20 +19,26 @@ export default class Progress {
   }
 
   private print(): void {
-    const { label, value, total, length } = this;
+    const { label, value, total } = this;
     const ratio = this.value / total;
     const percent = Math.floor(ratio * 100);
     this.#percent = percent;
 
     process.stdout.clearLine(0);
     process.stdout.cursorTo(0);
+
+    const start = `${spinner[this.index]} ${label} `;
+    const end = ` ${value
+      .toString()
+      .padStart(total.toString().length, ' ')}/${total} | ${percent}%`;
+
+    const length = process.stdout.columns - start.length - end.length;
     const filled = Math.floor(ratio * length);
+
     process.stdout.write(
-      `${spinner[this.index]} ${label} ${'█'.repeat(
-        filled
-      )}\u001b[2m${'█'.repeat(length - filled)}\u001b[22m ${value
-        .toString()
-        .padStart(total.toString().length, ' ')}/${total} | ${percent}%`
+      `${start}${'█'.repeat(filled)}\u001b[2m${'█'.repeat(
+        length - filled
+      )}\u001b[22m${end}`
     );
   }
 
