@@ -9,16 +9,31 @@ import GL from '../gl';
 import { getImage } from '../utils';
 import { command } from '$shared/command';
 
-const iterations = 32;
+const MAX_IMAGE_SIZE = 512 ** 2;
 
 export default command(
   {
     name: 'fractal',
     desc: 'Generates a random fractal image',
-    args: [] as const
+    args: [
+      {
+        name: 'iterations',
+        desc: 'Number of iterations',
+        type: 'int',
+        default: 32
+      }
+    ] as const
   },
-  async (message, _, client) => {
+  async (message, [iterations], client) => {
+    if (iterations < 1 || iterations > 32)
+      return message.reply('Iterations must be between 1 and 32');
+
+    const { url, width, height } = getImage(message);
+    if (width * height > MAX_IMAGE_SIZE)
+      return message.reply('Image is too large');
+
     const shapeSize = randomInt(2, 6);
+
     const sizeText = `${shapeSize}x${shapeSize}`;
     const text = `Generating a ${sizeText} fractal...`;
     console.log(text);
@@ -34,9 +49,14 @@ export default command(
       }
     }
 
-    const { url, width, height } = getImage(message);
-
-    const buffer = await render(shapeSize, url, width, height, coords);
+    const buffer = await render(
+      shapeSize,
+      url,
+      width,
+      height,
+      coords,
+      iterations
+    );
     console.log('Done');
 
     return msg.edit({
@@ -51,7 +71,8 @@ export async function render(
   url: string,
   width: number,
   height: number,
-  coords: [x: number, y: number][]
+  coords: [x: number, y: number][],
+  iterations = 32
 ): Promise<Buffer> {
   console.log(url, width, height);
   const fragmentSource = await GL.loadFile(
