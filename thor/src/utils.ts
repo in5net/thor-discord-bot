@@ -7,6 +7,30 @@ import { tmpdir } from 'node:os';
 import ffmpegPath from 'ffmpeg-static';
 import type { Message } from 'discord.js';
 
+export function getImage(message: Message): {
+  url: string;
+  width: number;
+  height: number;
+} {
+  const attachment = message.attachments.first();
+  if (attachment)
+    return {
+      url: attachment.url,
+      width: attachment.width || 0,
+      height: attachment.height || 0
+    };
+  const size = 512;
+  return {
+    url:
+      message.mentions.users
+        .first()
+        ?.displayAvatarURL({ format: 'png', size }) ||
+      message.author.displayAvatarURL({ format: 'png', size }),
+    width: size,
+    height: size
+  };
+}
+
 export function getImageUrl(message: Message): [url: string, isGif: boolean] {
   const attachment = message.attachments.first();
   if (attachment)

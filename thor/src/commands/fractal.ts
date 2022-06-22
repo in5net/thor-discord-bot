@@ -6,10 +6,9 @@ import { MessageAttachment } from 'discord.js';
 import { randomInt } from '@limitlesspc/limitless';
 
 import GL from '../gl';
-import { getImageUrl } from '../utils';
+import { getImage } from '../utils';
 import { command } from '$shared/command';
 
-const pixels = 512;
 const iterations = 32;
 
 export default command(
@@ -35,35 +34,45 @@ export default command(
       }
     }
 
-    const fragmentSource = await GL.loadFile(
-      resolve(__dirname, './fractal.frag')
-    );
-    const gl = await GL.screen(
-      pixels,
-      pixels,
-      fragmentSource
-        .replaceAll(
-          '#define COORDS_LENGTH 1',
-          `#define COORDS_LENGTH ${coords.length.toString()}`
-        )
-        .replaceAll(
-          '#define ITERATIONS 1',
-          `#define ITERATIONS ${iterations.toString()}`
-        )
-    );
+    const { url, width, height } = getImage(message);
 
-    gl.uniform('resolution', 'vec2', [pixels, pixels]);
-    gl.uniform('size', 'int', shapeSize);
-    gl.uniform('coords', 'ivec2[]', coords);
-
-    await gl.createTexture(getImageUrl(message)[0], { param: gl.gl.REPEAT });
-
-    gl.render();
+    const buffer = await render(shapeSize, url, width, height, coords);
     console.log('Done');
 
     return msg.edit({
       content: null,
-      files: [new MessageAttachment(gl.pngBuffer(), 'fractal.png')]
+      files: [new MessageAttachment(buffer, 'fractal.png')]
     });
   }
 );
+
+export async function render(
+  shapeSize: number,
+  url: string,
+  width: number,
+  height: number,
+  coords: [x: number, y: number][]
+): Promise<Buffer> {
+  console.log(url, width, height);
+  const fragmentSource = await GL.loadFile(
+    resolve(__dirname, './fractal.frag')
+  );
+  const gl = await GL.screen(
+    width * shapeSize,
+    height * shapeSize,
+    fragmentSource.replaceAll(
+      '#define COORDS_LENGTH 1',
+      `#define COORDS_LENGTH ${coords.length.toString()}`
+    )
+  );
+
+  gl.uniform('iterations', 'int', iterations);
+  gl.uniform('size', 'float', shapeSize);
+  gl.uniform('coords', 'ivec2[]', coords);
+
+  await gl.createTexture(url, { param: gl.gl.REPEAT });
+
+  gl.render();
+
+  return gl.pngBuffer();
+}

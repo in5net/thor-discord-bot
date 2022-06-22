@@ -124,6 +124,10 @@ export default class GL {
       {
         name: 'position',
         type: 'vec2'
+      },
+      {
+        name: 'uv',
+        type: 'vec2'
       }
     ]);
     return gl;
@@ -632,7 +636,7 @@ export default class GL {
 
   static unitCubeTextured = {
     vertexData: [
-      // X, Y, Z -- U, V
+      // x, y, z -- u, v
       // Top
       [
         [-1, 1, -1, 0, 0],
@@ -722,11 +726,12 @@ export default class GL {
 
   static screenData = {
     vertexData: [
+      // x, y -- u, v
       [
-        [-1, 1],
-        [1, 1],
-        [-1, -1],
-        [1, -1]
+        [-1, 1, 0, 1],
+        [1, 1, 1, 1],
+        [-1, -1, 0, 0],
+        [1, -1, 1, 0]
       ]
     ],
     indexData: [
