@@ -9,7 +9,7 @@ import GL from '../gl';
 import { getImage } from '../utils';
 import { command } from '$shared/command';
 
-const MAX_IMAGE_SIZE = 512 ** 2;
+const MAX_IMAGE_SIZE = 1024 ** 2;
 
 export default command(
   {
@@ -32,7 +32,7 @@ export default command(
     if (width * height > MAX_IMAGE_SIZE)
       return message.reply('Image is too large');
 
-    const shapeSize = randomInt(2, 6);
+    const shapeSize = randomInt(2, 5);
 
     const sizeText = `${shapeSize}x${shapeSize}`;
     const text = `Generating a ${sizeText} fractal...`;
