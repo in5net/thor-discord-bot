@@ -1,6 +1,0 @@
-name: discord-bots
-root: ./
-attach: false
-windows:
-  - thor: ./thor-restarter.sh
-  - thor-music: pnpm run thor-music

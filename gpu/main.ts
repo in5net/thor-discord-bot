@@ -1,68 +1,142 @@
 import { png } from './deps.ts';
 
-import { copyToBuffer, createCapture, createPng, Dimensions } from './utils.ts';
-
-const dimensions: Dimensions = {
-  width: 200,
-  height: 200
-};
+import {
+  copyToBuffer,
+  createBufferInit,
+  createCapture,
+  createPng
+} from './utils.ts';
 
 const adapter = await navigator.gpu.requestAdapter();
 const device = await adapter?.requestDevice();
-if (!device) {
-  console.error('no suitable adapter found');
-  Deno.exit(0);
-}
-const encoder = device.createCommandEncoder({ label: 'command encoder' });
+if (!device) throw new Error('No GPU device available');
 
-const vertices = new Float32Array([
+const vertices = [
   // x, y, u, v
-  1, 1, 1, 0, 1, -1, 1, 1, -1, -1, 0, 1, 1, 1, 1, 0, -1, -1, 0, 1, -1, 1, 0, 0
-]);
-const vertexBuffer = device.createBuffer({
+  [-1, 1, 0, 0],
+  [1, 1, 1, 0],
+  [-1, -1, 0, 1],
+  [1, -1, 1, 1]
+];
+
+const verticesArray = new Float32Array(vertices.flat());
+const vertexBuffer = createBufferInit(device, {
   label: 'vertex buffer',
   usage: GPUBufferUsage.VERTEX,
-  size: vertices.byteLength,
-  mappedAtCreation: true
-});
-new Float32Array(vertexBuffer.getMappedRange()).set(vertices);
-vertexBuffer.unmap();
-
-const shaderModule = device.createShaderModule({
-  label: 'shader module',
-  code: (await Deno.readTextFile(new URL('./shader.wgsl', import.meta.url)))
-    .replaceAll('ITERATIONS', '100')
-    .replaceAll('SIZE', '2.0')
+  contents: verticesArray.buffer
 });
 
-const renderPipeline = device.createRenderPipeline({
+const ITERATIONS = 100;
+const SIZE = 2;
+const uniforms = new Float32Array([ITERATIONS, SIZE]);
+const uniformBuffer = createBufferInit(device, {
+  label: 'uniform buffer',
+  usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+  contents: uniforms.buffer
+});
+
+const { width, height, image, lineSize } = await png.decode(
+  await Deno.readFile(new URL('./texture.png', import.meta.url))
+);
+const size = {
+  width,
+  height
+};
+const texture = device.createTexture({
+  size,
+  format: 'rgba8unorm-srgb',
+  usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST
+});
+const textureView = texture.createView({
+  label: 'texture view',
+  format: 'rgba8unorm-srgb'
+});
+device.queue.writeTexture({ texture }, image, { bytesPerRow: lineSize }, size);
+
+const sampler = device.createSampler({
+  label: 'sampler',
+  minFilter: 'linear',
+  magFilter: 'linear',
+  addressModeU: 'repeat',
+  addressModeV: 'repeat'
+});
+
+const bindGroupLayoutEntries: Omit<GPUBindGroupLayoutEntry, 'binding'>[] = [
+  {
+    visibility: GPUShaderStage.FRAGMENT,
+    buffer: {
+      minBindingSize: uniforms.byteLength
+    }
+  },
+  {
+    visibility: GPUShaderStage.FRAGMENT,
+    texture: {
+      sampleType: 'float'
+    }
+  },
+  {
+    visibility: GPUShaderStage.FRAGMENT,
+    sampler: {
+      type: 'filtering'
+    }
+  }
+];
+const bindGroupLayout = device.createBindGroupLayout({
+  entries: bindGroupLayoutEntries.map((entry, index) => ({
+    binding: index,
+    ...entry
+  }))
+});
+
+const bindGroupEntryResources: GPUBindGroupEntry['resource'][] = [
+  { buffer: uniformBuffer },
+  textureView,
+  sampler
+];
+const bindGroup = device.createBindGroup({
+  layout: bindGroupLayout,
+  entries: bindGroupEntryResources.map((resource, index) => ({
+    binding: index,
+    resource
+  }))
+});
+
+const shader = device.createShaderModule({
+  label: 'shader',
+  code: await Deno.readTextFile(new URL('./shader.wgsl', import.meta.url))
+});
+
+const pipeline = device.createRenderPipeline({
   label: 'render pipeline',
+  layout: device.createPipelineLayout({
+    bindGroupLayouts: [bindGroupLayout]
+  }),
   primitive: {
-    topology: 'triangle-list'
+    topology: 'triangle-strip'
   },
   vertex: {
-    module: shaderModule,
+    module: shader,
     entryPoint: 'vs_main',
     buffers: [
       {
         arrayStride: 4 * Float32Array.BYTES_PER_ELEMENT,
         attributes: [
           {
-            shaderLocation: 0,
+            format: 'float32x2',
             offset: 0,
-            format: 'float32x2'
+            shaderLocation: 0
           },
           {
-            shaderLocation: 1,
+            format: 'float32x2',
             offset: 2 * Float32Array.BYTES_PER_ELEMENT,
-            format: 'float32x2'
+            shaderLocation: 1
           }
         ]
       }
     ]
   },
   fragment: {
-    module: shaderModule,
+    module: shader,
     entryPoint: 'fs_main',
     targets: [
       {
@@ -72,100 +146,27 @@ const renderPipeline = device.createRenderPipeline({
   }
 });
 
-const sampler = device.createSampler({
-  label: 'sampler',
-  minFilter: 'linear',
-  magFilter: 'linear',
-  addressModeU: 'repeat',
-  addressModeV: 'repeat'
-});
-const texture = await imageToTexture(
-  device,
-  new URL('./input.png', import.meta.url)
-);
-
-const bindGroupLayout = device.createBindGroupLayout({
-  label: 'bind group layout',
-  entries: [
-    {
-      binding: 0,
-      visibility: GPUShaderStage.FRAGMENT,
-      sampler: {
-        type: 'filtering'
+function render(encoder: GPUCommandEncoder, view: GPUTextureView) {
+  const renderPass = encoder.beginRenderPass({
+    colorAttachments: [
+      {
+        view: view,
+        storeOp: 'store',
+        loadValue: [0, 0, 0, 0]
       }
-    },
-    {
-      binding: 1,
-      visibility: GPUShaderStage.FRAGMENT,
-      texture: {
-        sampleType: 'float'
-      }
-    }
-  ]
-});
-const bindGroup = device.createBindGroup({
-  label: 'bind group',
-  layout: bindGroupLayout,
-  entries: [
-    {
-      binding: 0,
-      resource: sampler
-    },
-    {
-      binding: 1,
-      resource: texture.createView({
-        label: 'texture view',
-        format: 'rgba8unorm-srgb'
-      })
-    }
-  ]
-});
-
-const { texture: captureTexture, outputBuffer } = createCapture(
-  device,
-  dimensions
-);
-
-const renderPass = encoder.beginRenderPass({
-  label: 'render pass',
-  colorAttachments: [
-    {
-      view: captureTexture.createView(),
-      storeOp: 'store',
-      loadValue: [0, 0, 0, 0]
-    }
-  ]
-});
-renderPass.setPipeline(renderPipeline);
-renderPass.setBindGroup(0, bindGroup);
-renderPass.setVertexBuffer(0, vertexBuffer);
-renderPass.draw(6);
-renderPass.endPass();
-
-copyToBuffer(encoder, captureTexture, outputBuffer, dimensions);
-
-device.queue.submit([encoder.finish()]);
-
-await createPng(outputBuffer, dimensions);
-
-async function imageToTexture(
-  device: GPUDevice,
-  imagePath: string | URL
-): Promise<GPUTexture> {
-  const file = await Deno.readFile(imagePath);
-  const { width, height, image } = await png.decode(file);
-
-  const texture = device.createTexture({
-    label: 'texture',
-    size: [width, height],
-    format: 'rgba8unorm-srgb',
-    usage: GPUTextureUsage.COPY_DST
+    ]
   });
 
-  device.queue.writeTexture({ texture }, image, { bytesPerRow: width * 4 }, [
-    width,
-    height
-  ]);
-
-  return texture;
+  renderPass.setPipeline(pipeline);
+  renderPass.setBindGroup(0, bindGroup);
+  renderPass.setVertexBuffer(0, vertexBuffer);
+  renderPass.draw(vertices.length);
+  renderPass.endPass();
 }
+
+const { texture: captureTexture, outputBuffer } = createCapture(device, size);
+const encoder = device.createCommandEncoder();
+render(encoder, captureTexture.createView());
+copyToBuffer(encoder, captureTexture, outputBuffer, size);
+device.queue.submit([encoder.finish()]);
+await createPng(outputBuffer, size);

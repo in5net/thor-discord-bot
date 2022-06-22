@@ -10,7 +10,7 @@ interface Padding {
   padded: number;
 }
 
-export function getRowPadding(width: number): Padding {
+function getRowPadding(width: number): Padding {
   // It is a webgpu requirement that BufferCopyView.layout.bytes_per_row % COPY_BYTES_PER_ROW_ALIGNMENT(256) == 0
   // So we calculate padded_bytes_per_row by rounding unpadded_bytes_per_row
   // up to the next multiple of COPY_BYTES_PER_ROW_ALIGNMENT.

@@ -40,12 +40,6 @@ Run Thor Music:
 pnpm run thor-music
 ```
 
-Running Thor and Thor Music in parallel will require [tmuxinator](https://github.com/tmuxinator/tmuxinator):
-
-```
-pnpm start
-```
-
 Since Irohoshi is built to be a serverless bot hosted on [Deno Deploy](https://deno.com/deploy), it doesn't have a dev script. However, to deploy Irohoshi, you will first need [Deno](https://deno.land/), Then run:
 
 ```

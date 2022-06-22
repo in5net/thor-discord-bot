@@ -3,7 +3,7 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt autoremove -y
 
-sudo apt install git curl xvfb libgl1-mesa-dev tmux tmuxinator python-is-python3 -y
+sudo apt install git curl xvfb libgl1-mesa-dev tmux python-is-python3 -y
 
 curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 sudo apt-get install -y nodejs
@@ -19,4 +19,3 @@ gsutil -m cp -r \
 
 cd discord-bots
 pnpm run setup
-pnpm start

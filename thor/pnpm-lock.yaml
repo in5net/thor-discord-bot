@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@googleapis/customsearch': ^0.2.0
+  '@googleapis/customsearch': 0.3.2
   '@limitlesspc/limitless': 0.3.1
   '@types/ffmpeg-static': ^3.0.1
   '@types/gifencoder': ^2.0.1
@@ -23,7 +23,7 @@ specifiers:
   pngjs: ^6.0.0
 
 dependencies:
-  '@googleapis/customsearch': 0.2.0
+  '@googleapis/customsearch': 0.3.2
   '@limitlesspc/limitless': 0.3.1
   axios: 0.27.2
   canvas: 2.9.1
@@ -86,8 +86,8 @@ packages:
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
     dev: false
 
-  /@googleapis/customsearch/0.2.0:
-    resolution: {integrity: sha512-5N4FUJDht/pOpoXem5q8zezPZb6kvdNR0UPcrcVUebytprJ4Ot5g+5EC4yzTW3QJBXlNSuj02QPxClX0OCXJaA==}
+  /@googleapis/customsearch/0.3.2:
+    resolution: {integrity: sha512-U/OabntQcPlDEEngz8i04EgH4dLWbnZoGZqbNeIDBm+LPzlpIemURzCibXJzINKyvy84h5921+1zMcYm68MtGw==}
     engines: {node: '>=10.0.0'}
     dependencies:
       googleapis-common: 5.1.0
@@ -2170,7 +2170,7 @@ packages:
     dev: false
 
   /url-template/2.0.8:
-    resolution: {integrity: sha1-/FZaPMy/93MMd19WQflVV5FDnyE=}
+    resolution: {integrity: sha512-XdVKMF4SJ0nP/O7XIPB0JwAEuT9lDIYnNsK8yGVe43y0AWoKeJNdv3ZNWh7ksJ6KqQFjOO6ox/VEitLnaVNufw==}
     dev: false
 
   /util-deprecate/1.0.2:

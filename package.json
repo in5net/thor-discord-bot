@@ -8,7 +8,6 @@
   "scripts": {
     "setup": "pnpm i && cd thor && pnpm i && cd ../thor-music && pnpm i && cd ..",
     "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u && cd thor && npm-check -u && cd ../thor-music && npm-check -u && cd ..",
-    "start": "tmuxinator start",
     "thor": "node -r @swc-node/register thor/src/main.ts",
     "thor-music": "node -r @swc-node/register thor-music/src/main.ts",
     "lint": "eslint ."
@@ -20,8 +19,8 @@
   "devDependencies": {
     "@swc-node/register": "^1.5.1",
     "@types/node": "18.0.0",
-    "@typescript-eslint/eslint-plugin": "5.28.0",
-    "@typescript-eslint/parser": "5.28.0",
+    "@typescript-eslint/eslint-plugin": "5.29.0",
+    "@typescript-eslint/parser": "5.29.0",
     "eslint": "8.18.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "17.0.0",
