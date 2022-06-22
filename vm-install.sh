@@ -3,7 +3,8 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt autoremove -y
 
-sudo apt install git curl xvfb libgl1-mesa-dev tmux python-is-python3 -y
+sudo apt install git curl tmux -y
+# xvfb libgl1-mesa-dev python-is-python3
 
 curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 sudo apt-get install -y nodejs
