@@ -18,7 +18,7 @@ export default command(
     args: [] as const
   },
   async (message, _, client) => {
-    const shapeSize = Math.random() < 0.01 ? 10 : randomInt(2, 6);
+    const shapeSize = randomInt(2, 6);
     const sizeText = `${shapeSize}x${shapeSize}`;
     const text = `Generating a ${sizeText} fractal...`;
     console.log(text);
