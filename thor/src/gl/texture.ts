@@ -35,6 +35,7 @@ export default class Texture {
 
     const canvas = createCanvas(canvasWidth, canvasHeight);
     const ctx = canvas.getContext('2d');
+    ctx.drawImage(image, 0, 0, canvasWidth, canvasHeight);
     const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
     gl.texImage2D(
       gl.TEXTURE_2D,
