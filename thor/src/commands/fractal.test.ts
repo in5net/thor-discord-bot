@@ -10,9 +10,9 @@ const coords: [x: number, y: number][] = [
   [0, 1]
 ];
 const url =
-  'https://cdn.discordapp.com/avatars/435129882494763069/e0b52447c565af566cd5d7e7f43bd80e.png?size=512';
+  'https://cdn.discordapp.com/attachments/769209668705845308/989251745316229140/Archive_of_Our_Own_logo.png';
 
 (async () => {
-  const buffer = await render(shapeSize, url, 1024, 1024, coords);
+  const buffer = await render(shapeSize, url, 351, 240, coords);
   await writeFile(join(__dirname, 'fractal-gl.png'), buffer);
 })();
