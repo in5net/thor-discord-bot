@@ -467,12 +467,16 @@ export default class GL {
    */
   async createTexture(
     url: string,
-    { param, isGif = false }: { param?: GLenum; isGif?: boolean } = {}
+    {
+      param,
+      isGif = false,
+      mipmap
+    }: { param?: GLenum; isGif?: boolean; mipmap?: boolean } = {}
   ): Promise<Texture | GIF> {
     const { gl, textures } = this;
     const texture = await (isGif
       ? GIF.fromURL(url, gl)
-      : Texture.fromURL(url, gl, param));
+      : Texture.fromURL(url, gl, { param, mipmap }));
     textures.push(texture);
     return texture;
   }

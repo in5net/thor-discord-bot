@@ -91,7 +91,7 @@ export async function render(
   gl.uniform('size', 'float', shapeSize);
   gl.uniform('coords', 'ivec2[]', coords);
 
-  await gl.createTexture(url, { param: gl.gl.REPEAT });
+  await gl.createTexture(url, { param: gl.gl.REPEAT, mipmap: true });
 
   gl.render();
 

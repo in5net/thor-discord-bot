@@ -1,6 +1,13 @@
 import { createCanvas, loadImage } from 'canvas';
 
 const isPowerOf2 = (x: number) => (x & (x - 1)) === 0;
+function nextHighestPowerOfTwo(x: number) {
+  --x;
+  for (let i = 1; i < 32; i <<= 1) {
+    x |= x >> i;
+  }
+  return x + 1;
+}
 
 export default class Texture {
   constructor(public texture: WebGLTexture) {}
@@ -8,7 +15,7 @@ export default class Texture {
   static async fromURL(
     url: string,
     gl: WebGLRenderingContext,
-    param?: GLenum
+    { param, mipmap = false }: { param?: GLenum; mipmap?: boolean } = {}
   ): Promise<Texture> {
     // Create the texture
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -18,11 +25,17 @@ export default class Texture {
 
     const image = await loadImage(url);
     const { width, height } = image;
-    const canvas = createCanvas(width, height);
-    const ctx = canvas.getContext('2d');
 
-    ctx.drawImage(image, 0, 0);
-    const imageData = ctx.getImageData(0, 0, width, height);
+    let canvasWidth = width;
+    let canvasHeight = height;
+    if (mipmap && (!isPowerOf2(width) || !isPowerOf2(height))) {
+      canvasWidth = nextHighestPowerOfTwo(width);
+      canvasHeight = nextHighestPowerOfTwo(height);
+    }
+
+    const canvas = createCanvas(canvasWidth, canvasHeight);
+    const ctx = canvas.getContext('2d');
+    const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
     gl.texImage2D(
       gl.TEXTURE_2D,
       0,
@@ -34,7 +47,6 @@ export default class Texture {
       gl.UNSIGNED_BYTE,
       imageData.data
     );
-
     gl.texParameteri(
       gl.TEXTURE_2D,
       gl.TEXTURE_WRAP_S,
@@ -48,10 +60,7 @@ export default class Texture {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
-    if (isPowerOf2(width) && isPowerOf2(height)) {
-      gl.generateMipmap(gl.TEXTURE_2D);
-      console.log('Generated mipmaps');
-    }
+    gl.generateMipmap(gl.TEXTURE_2D);
 
     return new Texture(texture);
   }
