@@ -8,6 +8,8 @@
   "scripts": {
     "setup": "pnpm i && cd thor && pnpm i && cd ../thor-music && pnpm i && cd ..",
     "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u && cd thor && npm-check -u && cd ../thor-music && npm-check -u && cd ..",
+    "pull": "prisma db pull",
+    "push": "prisma db push",
     "gen": "prisma generate",
     "studio": "prisma studio",
     "deploy": "prisma migrate deploy",
