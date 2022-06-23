@@ -1,4 +1,5 @@
-import supabase from '$services/supabase';
+import type { Prisma } from '@prisma/client';
+import prisma from '$services/prisma';
 import {
   FileMedia,
   MediaJSONType,
@@ -8,27 +9,19 @@ import {
   URLMedia,
   YouTubeMedia
 } from './media';
-import type { definitions } from '../../../types/supabase';
 
-type Def = definitions['playlists'];
-interface Playlist extends Def {
-  songs: MediaJSONType[];
-}
-
-const playlistsTable = () => supabase.from<Playlist>('playlists');
-
-async function getPlaylist(
-  uid: string,
-  name: string
-): Promise<Playlist | null> {
-  const { data: playlist } = await playlistsTable()
-    .select('id,songs')
-    .match({
+async function getPlaylist(uid: string, name: string) {
+  const { id, songs } = await prisma.playlist.findFirst({
+    where: {
       uid,
       name
-    })
-    .single();
-  return playlist && { ...playlist, uid, name };
+    },
+    select: {
+      id: true,
+      songs: true
+    }
+  });
+  return { id, songs: songs as unknown as MediaJSONType[], uid, name };
 }
 
 export async function get(
@@ -58,9 +51,14 @@ export async function get(
 }
 
 export async function list(uid: string): Promise<string[]> {
-  const { data: playlists } = await playlistsTable()
-    .select('name')
-    .eq('uid', uid);
+  const playlists = await prisma.playlist.findMany({
+    where: {
+      uid
+    },
+    select: {
+      name: true
+    }
+  });
   return playlists?.map(({ name }) => name) || [];
 }
 
@@ -69,11 +67,24 @@ export async function save(
   name: string,
   medias: MediaType[]
 ): Promise<void> {
-  const songs = medias.map(media => media.toJSON());
-  await playlistsTable().upsert({
-    uid,
-    name,
-    songs
+  const songs = medias.map(media =>
+    media.toJSON()
+  ) as unknown as Prisma.JsonArray;
+  await prisma.playlist.upsert({
+    create: {
+      uid,
+      name,
+      songs
+    },
+    update: {
+      songs
+    },
+    where: {
+      uid_name: {
+        uid,
+        name
+      }
+    }
   });
 }
 
@@ -85,11 +96,24 @@ export async function add(
   name: string,
   medias: MediaType[]
 ): Promise<void> {
-  const songs = medias.map(media => media.toJSON());
-  await playlistsTable().upsert({
-    uid: requester.uid,
-    name,
-    songs
+  const songs = medias.map(media =>
+    media.toJSON()
+  ) as unknown as Prisma.JsonArray;
+  await prisma.playlist.upsert({
+    create: {
+      uid: requester.uid,
+      name,
+      songs
+    },
+    update: {
+      songs
+    },
+    where: {
+      uid_name: {
+        uid: requester.uid,
+        name
+      }
+    }
   });
 }
 
@@ -102,14 +126,22 @@ export async function remove(
   n?: number
 ): Promise<void> {
   const playlist = await getPlaylist(requester.uid, name);
-  if (!playlist) return;
 
-  if (n === undefined) await playlistsTable().delete().eq('id', playlist.id);
+  if (n === undefined)
+    await prisma.playlist.delete({
+      where: {
+        id: playlist.id
+      }
+    });
   else {
     playlist.songs.splice(n - 1, 1);
-    await playlistsTable().update({
-      id: playlist.id,
-      songs: playlist.songs
+    await prisma.playlist.update({
+      where: {
+        id: playlist.id
+      },
+      data: {
+        songs: playlist.songs as unknown as Prisma.JsonArray
+      }
     });
   }
 }
