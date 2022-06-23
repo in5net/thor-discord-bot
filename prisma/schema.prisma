@@ -22,7 +22,7 @@ model Playlist {
   updated_at DateTime @updatedAt
   uid        String
   name       String
-  songs      Json
+  songs      Json[]
 
   @@unique([uid, name])
   @@map("playlists")
