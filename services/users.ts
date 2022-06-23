@@ -20,16 +20,18 @@ export const incCount = async (uid: string, name: string) => {
     rejectOnNotFound: false
   });
   const counts = (user?.counts || {}) as Record<string, number>;
-  const newCounts = {
-    ...counts,
-    [name]: (counts[name] || 0) + 1
-  };
   return prisma.user.upsert({
     create: {
-      uid
+      uid,
+      counts: {
+        [name]: 1
+      }
     },
     update: {
-      counts: newCounts
+      counts: {
+        ...counts,
+        [name]: (counts[name] || 0) + 1
+      }
     },
     where: {
       uid
