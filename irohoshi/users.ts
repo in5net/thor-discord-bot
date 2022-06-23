@@ -8,18 +8,18 @@ interface User extends Def {
 export const usersTable = () => supabase.from<User>('users');
 
 export async function getUser(uid: string): Promise<User | null> {
-  const { data: user } = await usersTable().select().eq('uid', uid).single();
+  const { data: user } = await usersTable().select().eq('id', uid).single();
   return user;
 }
 
 export const incCount = async (uid: string, name: string) => {
   const { data: user } = await usersTable()
     .select('counts')
-    .eq('uid', uid)
+    .eq('id', uid)
     .single();
   const counts = user?.counts || {};
   return usersTable().upsert({
-    uid,
+    id: uid,
     counts: {
       ...counts,
       [name]: (counts[name] || 0) + 1

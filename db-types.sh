@@ -1,1 +1,0 @@
-openapi-typescript "https://vrzufboyipabjobfxfgp.supabase.co/rest/v1/?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZyenVmYm95aXBhYmpvYmZ4ZmdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTU1MDExNzQsImV4cCI6MTk3MTA3NzE3NH0.hnNxmoHZrmJaeYy6idi6E3XhnD-EpyittPZyTvF0bJs" --output types/supabase.ts

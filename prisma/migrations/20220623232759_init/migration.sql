@@ -1,14 +1,11 @@
--- CreateEnum
-CREATE TYPE "SongType" AS ENUM ('YOUTUBE');
-
 -- CreateTable
 CREATE TABLE "users" (
-    "uid" TEXT NOT NULL,
+    "id" CHAR(18) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "counts" JSONB,
 
-    CONSTRAINT "users_pkey" PRIMARY KEY ("uid")
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -16,9 +13,9 @@ CREATE TABLE "playlists" (
     "id" BIGSERIAL NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "uid" TEXT NOT NULL,
+    "uid" CHAR(18) NOT NULL,
     "name" TEXT NOT NULL,
-    "songs" JSONB NOT NULL,
+    "songs" JSONB[],
 
     CONSTRAINT "playlists_pkey" PRIMARY KEY ("id")
 );
@@ -27,7 +24,6 @@ CREATE TABLE "playlists" (
 CREATE TABLE "ratios" (
     "id" BIGSERIAL NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
     "text" TEXT NOT NULL,
 
     CONSTRAINT "ratios_pkey" PRIMARY KEY ("id")

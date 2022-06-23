@@ -1,18 +1,18 @@
 import prisma from './prisma';
 
-export async function getUser(uid: string) {
+export async function getUser(id: string) {
   const user = await prisma.user.findUnique({
     where: {
-      uid
+      id
     }
   });
   return user;
 }
 
-export const incCount = async (uid: string, name: string) => {
+export const incCount = async (id: string, name: string) => {
   const user = await prisma.user.findUnique({
     where: {
-      uid
+      id
     },
     select: {
       counts: true
@@ -22,7 +22,7 @@ export const incCount = async (uid: string, name: string) => {
   const counts = (user?.counts || {}) as Record<string, number>;
   return prisma.user.upsert({
     create: {
-      uid,
+      id,
       counts: {
         [name]: 1
       }
@@ -34,7 +34,7 @@ export const incCount = async (uid: string, name: string) => {
       }
     },
     where: {
-      uid
+      id
     }
   });
 };

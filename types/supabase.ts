@@ -226,7 +226,7 @@ export interface paths {
     get: {
       parameters: {
         query: {
-          uid?: parameters["rowFilter.users.uid"];
+          id?: parameters["rowFilter.users.id"];
           created_at?: parameters["rowFilter.users.created_at"];
           updated_at?: parameters["rowFilter.users.updated_at"];
           counts?: parameters["rowFilter.users.counts"];
@@ -280,7 +280,7 @@ export interface paths {
     delete: {
       parameters: {
         query: {
-          uid?: parameters["rowFilter.users.uid"];
+          id?: parameters["rowFilter.users.id"];
           created_at?: parameters["rowFilter.users.created_at"];
           updated_at?: parameters["rowFilter.users.updated_at"];
           counts?: parameters["rowFilter.users.counts"];
@@ -298,7 +298,7 @@ export interface paths {
     patch: {
       parameters: {
         query: {
-          uid?: parameters["rowFilter.users.uid"];
+          id?: parameters["rowFilter.users.id"];
           created_at?: parameters["rowFilter.users.created_at"];
           updated_at?: parameters["rowFilter.users.updated_at"];
           counts?: parameters["rowFilter.users.counts"];
@@ -324,7 +324,6 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.ratios.id"];
           created_at?: parameters["rowFilter.ratios.created_at"];
-          updated_at?: parameters["rowFilter.ratios.updated_at"];
           text?: parameters["rowFilter.ratios.text"];
           /** Filtering Columns */
           select?: parameters["select"];
@@ -378,7 +377,6 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.ratios.id"];
           created_at?: parameters["rowFilter.ratios.created_at"];
-          updated_at?: parameters["rowFilter.ratios.updated_at"];
           text?: parameters["rowFilter.ratios.text"];
         };
         header: {
@@ -396,7 +394,6 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.ratios.id"];
           created_at?: parameters["rowFilter.ratios.created_at"];
-          updated_at?: parameters["rowFilter.ratios.updated_at"];
           text?: parameters["rowFilter.ratios.text"];
         };
         body: {
@@ -459,20 +456,20 @@ export interface definitions {
     created_at: string;
     /** Format: timestamp without time zone */
     updated_at: string;
-    /** Format: text */
+    /** Format: character */
     uid: string;
     /** Format: text */
     name: string;
-    /** Format: jsonb */
-    songs: unknown;
+    /** Format: ARRAY */
+    songs?: unknown[];
   };
   users: {
     /**
-     * Format: text
+     * Format: character
      * @description Note:
      * This is a Primary Key.<pk/>
      */
-    uid: string;
+    id: string;
     /**
      * Format: timestamp without time zone
      * @default CURRENT_TIMESTAMP
@@ -495,8 +492,6 @@ export interface definitions {
      * @default CURRENT_TIMESTAMP
      */
     created_at: string;
-    /** Format: timestamp without time zone */
-    updated_at: string;
     /** Format: text */
     text: string;
   };
@@ -561,16 +556,16 @@ export interface parameters {
   "rowFilter.playlists.created_at": string;
   /** Format: timestamp without time zone */
   "rowFilter.playlists.updated_at": string;
-  /** Format: text */
+  /** Format: character */
   "rowFilter.playlists.uid": string;
   /** Format: text */
   "rowFilter.playlists.name": string;
-  /** Format: jsonb */
+  /** Format: ARRAY */
   "rowFilter.playlists.songs": string;
   /** @description users */
   "body.users": definitions["users"];
-  /** Format: text */
-  "rowFilter.users.uid": string;
+  /** Format: character */
+  "rowFilter.users.id": string;
   /** Format: timestamp without time zone */
   "rowFilter.users.created_at": string;
   /** Format: timestamp without time zone */
@@ -583,8 +578,6 @@ export interface parameters {
   "rowFilter.ratios.id": string;
   /** Format: timestamp without time zone */
   "rowFilter.ratios.created_at": string;
-  /** Format: timestamp without time zone */
-  "rowFilter.ratios.updated_at": string;
   /** Format: text */
   "rowFilter.ratios.text": string;
 }
