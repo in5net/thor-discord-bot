@@ -16,7 +16,8 @@ export const incCount = async (uid: string, name: string) => {
     },
     select: {
       counts: true
-    }
+    },
+    rejectOnNotFound: false
   });
   const counts = (user?.counts || {}) as Record<string, number>;
   const newCounts = {

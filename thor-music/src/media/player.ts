@@ -546,13 +546,15 @@ export default class Player {
     { author, member, channel }: Message,
     name: string
   ): Promise<void> {
-    const medias = await playlist.get(
-      {
-        uid: author.id,
-        name: member?.nickname || author.username
-      },
-      name
-    );
+    const medias = await playlist
+      .get(
+        {
+          uid: author.id,
+          name: member?.nickname || author.username
+        },
+        name
+      )
+      .catch(() => []);
     const { length } = medias;
 
     const embed = new MessageEmbed()
@@ -661,13 +663,15 @@ export default class Player {
     for (const name of names) {
       let medias = cache.get(name);
       if (!medias) {
-        medias = await playlist.get(
-          {
-            uid: author.id,
-            name: member?.nickname || author.username
-          },
-          name
-        );
+        medias = await playlist
+          .get(
+            {
+              uid: author.id,
+              name: member?.nickname || author.username
+            },
+            name
+          )
+          .catch(() => []);
       }
       allMedias.push(...medias);
     }

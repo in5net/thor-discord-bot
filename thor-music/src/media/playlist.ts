@@ -31,23 +31,25 @@ export async function get(
   },
   name: string
 ): Promise<MediaType[]> {
-  const playlist = await getPlaylist(requester.uid, name);
-  if (!playlist) throw new Error('Playlist not found');
-
-  return playlist.songs.map(mediaJSON => {
-    switch (mediaJSON.type) {
-      case 'youtube':
-        return YouTubeMedia.fromJSON(mediaJSON, requester);
-      case 'spotify':
-        return SpotifyMedia.fromJSON(mediaJSON, requester);
-      case 'soundcloud':
-        return SoundCloudMedia.fromJSON(mediaJSON, requester);
-      case 'file':
-        return FileMedia.fromJSON(mediaJSON, requester);
-      default:
-        return URLMedia.fromJSON(mediaJSON, requester);
-    }
-  });
+  try {
+    const playlist = await getPlaylist(requester.uid, name);
+    return playlist.songs.map(mediaJSON => {
+      switch (mediaJSON.type) {
+        case 'youtube':
+          return YouTubeMedia.fromJSON(mediaJSON, requester);
+        case 'spotify':
+          return SpotifyMedia.fromJSON(mediaJSON, requester);
+        case 'soundcloud':
+          return SoundCloudMedia.fromJSON(mediaJSON, requester);
+        case 'file':
+          return FileMedia.fromJSON(mediaJSON, requester);
+        default:
+          return URLMedia.fromJSON(mediaJSON, requester);
+      }
+    });
+  } catch {
+    throw new Error('Playlist not found');
+  }
 }
 
 export async function list(uid: string): Promise<string[]> {
@@ -59,7 +61,7 @@ export async function list(uid: string): Promise<string[]> {
       name: true
     }
   });
-  return playlists?.map(({ name }) => name) || [];
+  return playlists.map(({ name }) => name) || [];
 }
 
 export async function save(
@@ -125,23 +127,27 @@ export async function remove(
   name: string,
   n?: number
 ): Promise<void> {
-  const playlist = await getPlaylist(requester.uid, name);
+  try {
+    const playlist = await getPlaylist(requester.uid, name);
 
-  if (n === undefined)
-    await prisma.playlist.delete({
-      where: {
-        id: playlist.id
-      }
-    });
-  else {
-    playlist.songs.splice(n - 1, 1);
-    await prisma.playlist.update({
-      where: {
-        id: playlist.id
-      },
-      data: {
-        songs: playlist.songs as unknown as Prisma.JsonArray
-      }
-    });
+    if (n === undefined)
+      await prisma.playlist.delete({
+        where: {
+          id: playlist.id
+        }
+      });
+    else {
+      playlist.songs.splice(n - 1, 1);
+      await prisma.playlist.update({
+        where: {
+          id: playlist.id
+        },
+        data: {
+          songs: playlist.songs as unknown as Prisma.JsonArray
+        }
+      });
+    }
+  } catch {
+    throw new Error('Playlist not found');
   }
 }
