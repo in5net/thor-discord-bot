@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id         String   @id @db.Char(18)
+  id         String   @id @db.Char(18) // Discord uid 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   counts     Json?
