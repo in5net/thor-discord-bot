@@ -10,8 +10,8 @@ export default command(
   async i => {
     const { data } = await supabase
       .rpc<definitions['y7_images']>('get_random_images')
-      .select('file_name')
       .not('file_name', 'like', '%.gif')
+      .limit(1)
       .single();
     const filename = data?.file_name || '';
     const url = `${Deno.env.get('FILES_ORIGIN')}/y7/images/${filename}`;

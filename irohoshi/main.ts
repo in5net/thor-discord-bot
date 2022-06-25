@@ -34,7 +34,6 @@ function runCmd(name: string, { options, handler }: Command) {
           ])
         )
       );
-      console.log('success');
     } catch (error) {
       console.error(`Error while running '${name}':`, error);
       if (error instanceof Error)
