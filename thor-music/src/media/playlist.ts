@@ -69,6 +69,16 @@ export async function save(
   name: string,
   medias: MediaType[]
 ): Promise<void> {
+  const playlist = await prisma.playlist.findFirst({
+    where: {
+      uid,
+      name
+    },
+    select: {
+      songs: true
+    },
+    rejectOnNotFound: false
+  });
   const songs = medias.map(media =>
     media.toJSON()
   ) as unknown as Prisma.JsonArray;
@@ -79,7 +89,7 @@ export async function save(
       songs
     },
     update: {
-      songs
+      songs: [...(playlist?.songs as unknown as Prisma.JsonArray), ...songs]
     },
     where: {
       uid_name: {
