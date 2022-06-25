@@ -1,6 +1,6 @@
 import { parseFromString } from '../parser.ts';
 
-const FILES_ORIGIN = 'https://files.yyyyyyy.info';
+export const FILES_ORIGIN = 'https://files.yyyyyyy.info';
 
 const nsfw = new Set([`${FILES_ORIGIN}/images/0071-1.gif`]);
 

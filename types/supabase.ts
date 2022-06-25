@@ -222,6 +222,96 @@ export interface paths {
       };
     };
   };
+  "/y7_images": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.y7_images.id"];
+          file_name?: parameters["rowFilter.y7_images.file_name"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["y7_images"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** y7_images */
+          y7_images?: definitions["y7_images"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.y7_images.id"];
+          file_name?: parameters["rowFilter.y7_images.file_name"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.y7_images.id"];
+          file_name?: parameters["rowFilter.y7_images.file_name"];
+        };
+        body: {
+          /** y7_images */
+          y7_images?: definitions["y7_images"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/users": {
     get: {
       parameters: {
@@ -411,6 +501,26 @@ export interface paths {
       };
     };
   };
+  "/rpc/get_random_images": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: smallint */
+            n: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/get_random_ratios": {
     post: {
       parameters: {
@@ -482,6 +592,16 @@ export interface definitions {
     name: string;
     /** Format: ARRAY */
     songs?: unknown[];
+  };
+  y7_images: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /** Format: text */
+    file_name: string;
   };
   users: {
     /**
@@ -582,6 +702,12 @@ export interface parameters {
   "rowFilter.playlists.name": string;
   /** Format: ARRAY */
   "rowFilter.playlists.songs": string;
+  /** @description y7_images */
+  "body.y7_images": definitions["y7_images"];
+  /** Format: bigint */
+  "rowFilter.y7_images.id": string;
+  /** Format: text */
+  "rowFilter.y7_images.file_name": string;
   /** @description users */
   "body.users": definitions["users"];
   /** Format: character */

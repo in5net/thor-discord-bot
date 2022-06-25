@@ -11,10 +11,9 @@ export default command(
     options: {}
   },
   async i => {
-    const { data } = await supabase.rpc<definitions['ratios']>(
-      'get_random_ratios',
-      { n: NUM_RATIOS }
-    );
+    const { data } = await supabase
+      .rpc<definitions['ratios']>('get_random_ratios')
+      .limit(NUM_RATIOS);
     const ratios = data?.map(s => s.text) || [];
     await incCount(i.user.id, 'ratio');
     i.reply(

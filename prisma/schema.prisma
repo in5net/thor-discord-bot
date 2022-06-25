@@ -35,3 +35,10 @@ model Ratio {
 
   @@map("ratios")
 }
+
+model Y7Image {
+  id        BigInt @id @default(autoincrement())
+  file_name String @unique
+
+  @@map("y7_images")
+}

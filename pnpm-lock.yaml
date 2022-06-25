@@ -6,7 +6,7 @@ specifiers:
   '@types/node': 18.0.0
   '@typescript-eslint/eslint-plugin': 5.29.0
   '@typescript-eslint/parser': 5.29.0
-  discord.js: 13.8.0
+  discord.js: 13.8.1
   eslint: 8.18.0
   eslint-config-airbnb-base: ^15.0.0
   eslint-config-airbnb-typescript: 17.0.0
@@ -17,7 +17,7 @@ specifiers:
 
 dependencies:
   '@prisma/client': 3.15.2_prisma@3.15.2
-  discord.js: 13.8.0
+  discord.js: 13.8.1
 
 devDependencies:
   '@swc-node/register': 1.5.1_typescript@4.7.4
@@ -669,8 +669,8 @@ packages:
     resolution: {integrity: sha512-dvO5M52v7m7Dy96+XUnzXNsQ/0npsYpU6dL205kAtEDueswoz3aU3bh1UMoK4cQmcGtB1YRyLKqp+DXi05lzFg==}
     dev: false
 
-  /discord.js/13.8.0:
-    resolution: {integrity: sha512-EPAA/2VLycYN5wSzavqa4iJ6qj3UtQFtHw5TH/60Fj29ymfEsCQVn//o1mTpwDxzwb+rPIrWhkxKIGGnjfv0Iw==}
+  /discord.js/13.8.1:
+    resolution: {integrity: sha512-jOsD+4tEZWWx0RHVyH+FBcqoTrsL+d5Mm5p+ULQOdU0qSaxhLNkWYig+yDHNZoND7nlkXX3qi+BW+gO5erWylg==}
     engines: {node: '>=16.6.0', npm: '>=7.0.0'}
     dependencies:
       '@discordjs/builders': 0.14.0

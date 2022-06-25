@@ -1,4 +1,5 @@
-import { getImg } from '../api/y7/mod.ts';
+import { definitions } from '../../types/supabase.ts';
+import supabase from '../supabase.ts';
 import command from './command.ts';
 
 export default command(
@@ -7,11 +8,13 @@ export default command(
     options: {}
   },
   async i => {
-    try {
-      const src = await getImg();
-      return i.reply(src);
-    } catch {
-      return i.reply('So sad, looks like yyyyyyy.info is down ):');
-    }
+    const { data } = await supabase
+      .rpc<definitions['y7_images']>('get_random_images')
+      .select('file_name')
+      .not('file_name', 'like', '%.gif')
+      .single();
+    const filename = data?.file_name || '';
+    const url = `${Deno.env.get('FILES_ORIGIN')}/y7/images/${filename}`;
+    return i.reply(url);
   }
 );
