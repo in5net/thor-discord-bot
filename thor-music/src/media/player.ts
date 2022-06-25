@@ -642,16 +642,9 @@ export default class Player {
     name: string,
     query?: string
   ): Promise<void> {
-    const { author, member, channel } = message;
+    const { author, channel } = message;
     const medias = await this.getMedias(message, query);
-    await playlist.add(
-      {
-        uid: author.id,
-        name: member?.nickname || author.username
-      },
-      name,
-      medias
-    );
+    await playlist.add(author.id, name, medias);
     await channel.send(`Added to playlist ${name}`);
   }
 
@@ -702,18 +695,11 @@ export default class Player {
   }
 
   async playlistRemove(
-    { author, member, channel }: Message,
+    { author, channel }: Message,
     name: string,
     n?: number
   ): Promise<void> {
-    await playlist.remove(
-      {
-        uid: author.id,
-        name: member?.nickname || author.username
-      },
-      name,
-      n
-    );
+    await playlist.remove(author.id, name, n);
     await channel.send(
       n === undefined
         ? `Removed playlist ${name}`

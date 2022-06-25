@@ -69,6 +69,32 @@ export async function save(
   name: string,
   medias: MediaType[]
 ): Promise<void> {
+  const songs = medias.map(media =>
+    media.toJSON()
+  ) as unknown as Prisma.JsonArray;
+  await prisma.playlist.upsert({
+    create: {
+      uid,
+      name,
+      songs
+    },
+    update: {
+      songs
+    },
+    where: {
+      uid_name: {
+        uid,
+        name
+      }
+    }
+  });
+}
+
+export async function add(
+  uid: string,
+  name: string,
+  medias: MediaType[]
+): Promise<void> {
   const playlist = await prisma.playlist.findFirst({
     where: {
       uid,
@@ -77,6 +103,7 @@ export async function save(
     select: {
       songs: true
     },
+
     rejectOnNotFound: false
   });
   const songs = medias.map(media =>
@@ -89,7 +116,7 @@ export async function save(
       songs
     },
     update: {
-      songs: [...(playlist?.songs as unknown as Prisma.JsonArray), ...songs]
+      songs: [...(playlist?.songs || []), ...songs]
     },
     where: {
       uid_name: {
@@ -100,45 +127,13 @@ export async function save(
   });
 }
 
-export async function add(
-  requester: {
-    uid: string;
-    name: string;
-  },
-  name: string,
-  medias: MediaType[]
-): Promise<void> {
-  const songs = medias.map(media =>
-    media.toJSON()
-  ) as unknown as Prisma.JsonArray;
-  await prisma.playlist.upsert({
-    create: {
-      uid: requester.uid,
-      name,
-      songs
-    },
-    update: {
-      songs
-    },
-    where: {
-      uid_name: {
-        uid: requester.uid,
-        name
-      }
-    }
-  });
-}
-
 export async function remove(
-  requester: {
-    uid: string;
-    name: string;
-  },
+  uid: string,
   name: string,
   n?: number
 ): Promise<void> {
   try {
-    const playlist = await getPlaylist(requester.uid, name);
+    const playlist = await getPlaylist(uid, name);
 
     if (n === undefined)
       await prisma.playlist.delete({
