@@ -4,7 +4,7 @@ specifiers:
   '@discord-player/downloader': ^3.0.1
   '@discordjs/voice': 0.10.0
   '@googleapis/youtube': 5.0.0
-  '@limitlesspc/limitless': 0.3.1
+  '@limitlesspc/limitless': 0.0.1
   chalk: '4'
   discord.js: 13.8.1
   dotenv: 16.0.1
@@ -17,7 +17,7 @@ dependencies:
   '@discord-player/downloader': 3.0.1
   '@discordjs/voice': 0.10.0_ffmpeg-static@5.0.0
   '@googleapis/youtube': 5.0.0
-  '@limitlesspc/limitless': 0.3.1
+  '@limitlesspc/limitless': 0.0.1
   chalk: 4.1.2
   discord.js: 13.8.1
   dotenv: 16.0.1
@@ -92,8 +92,8 @@ packages:
       - supports-color
     dev: false
 
-  /@limitlesspc/limitless/0.3.1:
-    resolution: {integrity: sha512-wNxHlBeDNxAUg9q8voHKd7OnAbV8EQHZnsZ9t/7n4ZOHy3tZZjOZCqEX87W/OhLJqRE3x30CQ3H+vj+TMyjqkA==, tarball: download/@limitlesspc/limitless/0.3.1/5fe522303b6a056efb83014ec2bc394637afb0ad304a275a8482e3ae322dc468}
+  /@limitlesspc/limitless/0.0.1:
+    resolution: {integrity: sha512-hu6dlQCB5DF4MpyPulbir6KkxHzRgizFgRVaCUesP8d2ZMOh7pCk22Nu04cgmo727U1cV3K/4JE83WRHT3qKwg==}
     dependencies:
       axios: 0.27.2
       cheerio: 1.0.0-rc.11

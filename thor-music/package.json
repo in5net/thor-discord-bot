@@ -5,7 +5,7 @@
     "@discord-player/downloader": "^3.0.1",
     "@discordjs/voice": "0.10.0",
     "@googleapis/youtube": "5.0.0",
-    "@limitlesspc/limitless": "0.3.1",
+    "@limitlesspc/limitless": "0.0.1",
     "chalk": "4",
     "discord.js": "13.8.1",
     "dotenv": "16.0.1",
