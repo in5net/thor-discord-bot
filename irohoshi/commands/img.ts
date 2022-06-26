@@ -9,8 +9,9 @@ export default command(
   },
   async i => {
     const { data } = await supabase
-      .rpc<definitions['y7_images']>('get_random_images')
-      .not('file_name', 'like', '%.gif')
+      .rpc<definitions['y7_gifs']>('get_random_images')
+      .select('file_name')
+      .gt('frames', 1)
       .limit(1)
       .single();
     const filename = data?.file_name || '';

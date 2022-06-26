@@ -39,6 +39,20 @@ model Ratio {
 model Y7Image {
   id        BigInt @id @default(autoincrement())
   file_name String @unique
+  size      Int
+  width     Int    @db.SmallInt
+  height    Int    @db.SmallInt
 
   @@map("y7_images")
+}
+
+model Y7GIF {
+  id        BigInt @id @default(autoincrement())
+  file_name String @unique
+  size      Int
+  width     Int    @db.SmallInt
+  height    Int    @db.SmallInt
+  frames    Int    @db.SmallInt
+
+  @@map("y7_gifs")
 }
