@@ -1,5 +1,5 @@
 #!/bin/sh
-until npm run thor-music
+until npm start
 do
     echo "Restarting"
     sleep 1
