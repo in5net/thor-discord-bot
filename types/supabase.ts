@@ -616,10 +616,7 @@ export interface paths {
     post: {
       parameters: {
         body: {
-          args: {
-            /** Format: smallint */
-            n: number;
-          };
+          args: { [key: string]: unknown };
         };
         header: {
           /** Preference */
@@ -636,10 +633,24 @@ export interface paths {
     post: {
       parameters: {
         body: {
-          args: {
-            /** Format: smallint */
-            n: number;
-          };
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/get_random_gifs": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
         };
         header: {
           /** Preference */

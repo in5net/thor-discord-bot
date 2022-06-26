@@ -10,7 +10,6 @@ export default command(
   async i => {
     const { data } = await supabase
       .rpc<definitions['y7_gifs']>('get_random_gifs')
-      .select('file_name')
       .gt('frames', 1)
       .limit(1)
       .single();
