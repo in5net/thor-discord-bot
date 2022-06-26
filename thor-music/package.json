@@ -1,15 +1,11 @@
 {
   "name": "thor-music",
   "private": true,
-  "scripts": {
-    "start": "node -r @swc-node/register src/main.ts"
-  },
   "dependencies": {
     "@discord-player/downloader": "^3.0.1",
     "@discordjs/voice": "0.10.0",
     "@googleapis/youtube": "5.0.0",
-    "@limitlesspc/limitless": "0.0.1",
-    "@swc-node/register": "^1.5.1",
+    "@limitlesspc/limitless": "0.0.2",
     "chalk": "4",
     "discord.js": "13.8.1",
     "dotenv": "16.0.1",

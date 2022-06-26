@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@googleapis/customsearch': 0.3.2
-  '@limitlesspc/limitless': 0.0.1
+  '@limitlesspc/limitless': 0.0.2
   '@types/ffmpeg-static': ^3.0.1
   '@types/gifencoder': ^2.0.1
   '@types/gl': ^4.1.0
@@ -24,7 +24,7 @@ specifiers:
 
 dependencies:
   '@googleapis/customsearch': 0.3.2
-  '@limitlesspc/limitless': 0.0.1
+  '@limitlesspc/limitless': 0.0.2
   axios: 0.27.2
   canvas: 2.9.3
   cheerio: 1.0.0-rc.12
@@ -96,8 +96,8 @@ packages:
       - supports-color
     dev: false
 
-  /@limitlesspc/limitless/0.0.1:
-    resolution: {integrity: sha512-hu6dlQCB5DF4MpyPulbir6KkxHzRgizFgRVaCUesP8d2ZMOh7pCk22Nu04cgmo727U1cV3K/4JE83WRHT3qKwg==}
+  /@limitlesspc/limitless/0.0.2:
+    resolution: {integrity: sha512-FtNlJGYxAKAm8O2w3WHRW0gpYSXL9Z4iC3B7cM0gfmcIwdh+lKEPhqdL14CcC0o3gBjqfqkMCo2m91kAn4JYAA==}
     dependencies:
       axios: 0.27.2
       cheerio: 1.0.0-rc.12
