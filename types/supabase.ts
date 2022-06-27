@@ -753,7 +753,7 @@ export interface definitions {
     width: number;
     /**
      * Format: tsvector
-     * @default to_tsvector('english'::regconfig, file_name)
+     * @default to_tsvector('simple'::regconfig, file_name)
      */
     file_name_search?: string;
   };
