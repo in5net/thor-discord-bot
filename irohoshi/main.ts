@@ -1,4 +1,4 @@
-import { client, Embed, handle, init } from './deps.ts';
+import { autocomplete, client, Embed, handle, init } from './deps.ts';
 
 import * as commands from './commands/mod.ts';
 import { Command, CommandGroups, Commands } from './commands/command.ts';
@@ -23,27 +23,26 @@ function run(name: string, command: Command | Commands | CommandGroups) {
   }
 }
 function runCmd(name: string, { options, handler }: Command) {
+  Object.entries(options).forEach(
+    ([optionName, { autocomplete: handleAutocomplete }]) => {
+      if (handleAutocomplete)
+        autocomplete(name, optionName, async i => {
+          const options = await handleAutocomplete(i.focusedOption.value);
+          return options;
+        });
+    }
+  );
   handle(name, async i => {
     try {
-      if (i.isAutocomplete()) {
-        console.log('autocomplete', i.focusedOption);
-        const autocompleteOptions =
-          (await options[i.focusedOption.value].autocomplete?.(
-            i.focusedOption.value
-          )) || [];
-        await i.autocomplete(
-          autocompleteOptions.map(o => ({ name: o, value: o }))
-        );
-      } else
-        await handler(
-          i,
-          Object.fromEntries(
-            Object.entries(options).map(([name, { default: d }]) => [
-              name,
-              i.option(name) ?? d
-            ])
-          )
-        );
+      await handler(
+        i,
+        Object.fromEntries(
+          Object.entries(options).map(([name, { default: d }]) => [
+            name,
+            i.option(name) ?? d
+          ])
+        )
+      );
     } catch (error) {
       console.error(`Error while running command '${name}':`, error);
       if (error instanceof Error)
