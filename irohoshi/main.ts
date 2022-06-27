@@ -25,13 +25,12 @@ function run(name: string, command: Command | Commands | CommandGroups) {
 function runCmd(name: string, { options, handler }: Command) {
   Object.entries(options).forEach(
     ([optionName, { autocomplete: handleAutocomplete }]) => {
-      console.log(
-        `cmd: ${name}, option: ${optionName}, autocomplete: ${!!handleAutocomplete}`
-      );
       if (handleAutocomplete)
         autocomplete(name, optionName, async i => {
-          const options = await handleAutocomplete(i.focusedOption.value);
-          i.autocomplete(options.map(o => ({ name: o, value: o })));
+          const { value } = i.focusedOption;
+          console.log(`autocomplete: ${value}`);
+          const options = await handleAutocomplete(value);
+          return i.autocomplete(options.map(o => ({ name: o, value: o })));
         });
     }
   );
