@@ -30,19 +30,19 @@ function runCmd(name: string, { options, handler }: Command) {
           (await options[i.focusedOption.value].autocomplete?.(
             i.focusedOption.value
           )) || [];
-        return i.autocomplete(
+        await i.autocomplete(
           autocompleteOptions.map(o => ({ name: o, value: o }))
         );
-      }
-      await handler(
-        i,
-        Object.fromEntries(
-          Object.entries(options).map(([name, { default: d }]) => [
-            name,
-            i.option(name) ?? d
-          ])
-        )
-      );
+      } else
+        await handler(
+          i,
+          Object.fromEntries(
+            Object.entries(options).map(([name, { default: d }]) => [
+              name,
+              i.option(name) ?? d
+            ])
+          )
+        );
     } catch (error) {
       console.error(`Error while running command '${name}':`, error);
       if (error instanceof Error)
