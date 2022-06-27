@@ -26,6 +26,7 @@ function runCmd(name: string, { options, handler }: Command) {
   handle(name, async i => {
     try {
       if (i.isAutocomplete()) {
+        console.log('autocomplete', i.focusedOption);
         const autocompleteOptions =
           (await options[i.focusedOption.value].autocomplete?.(
             i.focusedOption.value

@@ -11,7 +11,7 @@ export default command(
         autocomplete: async query => {
           const { data } = await imagesTable()
             .select('file_name')
-            .textSearch('file_name', query)
+            .textSearch('file_name', `'${query}'`)
             .limit(5);
           console.log(data);
           return data?.map(({ file_name }) => file_name) || [];
