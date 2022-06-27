@@ -25,6 +25,15 @@ function run(name: string, command: Command | Commands | CommandGroups) {
 function runCmd(name: string, { options, handler }: Command) {
   handle(name, async i => {
     try {
+      if (i.isAutocomplete()) {
+        const autocompleteOptions =
+          (await options[i.focusedOption.value].autocomplete?.(
+            i.focusedOption.value
+          )) || [];
+        return i.autocomplete(
+          autocompleteOptions.map(o => ({ name: o, value: o }))
+        );
+      }
       await handler(
         i,
         Object.fromEntries(
@@ -35,7 +44,7 @@ function runCmd(name: string, { options, handler }: Command) {
         )
       );
     } catch (error) {
-      console.error(`Error while running '${name}':`, error);
+      console.error(`Error while running command '${name}':`, error);
       if (error instanceof Error)
         await i.reply({
           embeds: [

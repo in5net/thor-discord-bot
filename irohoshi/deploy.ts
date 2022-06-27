@@ -68,7 +68,10 @@ function build(name: string, { desc, options }: Command) {
     name,
     description: desc,
     options: Object.entries(options).map(
-      ([name, { desc, type, min, max, optional, default: d, choices }]) => ({
+      ([
+        name,
+        { desc, type, min, max, optional, default: d, choices, autocomplete }
+      ]) => ({
         name,
         type: commandOptionTypeMap[type],
         description: desc,
@@ -87,7 +90,8 @@ function build(name: string, { desc, options }: Command) {
                   description,
                   value: name
                 }))
-            : undefined
+            : undefined,
+        autocomplete: !!autocomplete
       })
     )
   };

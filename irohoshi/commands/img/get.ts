@@ -1,6 +1,6 @@
-import { definitions } from '../../types/supabase.ts';
-import supabase from '../supabase.ts';
-import command from './command.ts';
+import { definitions } from '../../../types/supabase.ts';
+import supabase from '../../supabase.ts';
+import command from '../command.ts';
 
 export default command(
   {

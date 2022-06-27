@@ -7,7 +7,6 @@ export { default as drive } from './drive.ts';
 export { default as env } from './env.ts';
 export { default as gif } from './gif.ts';
 export { default as hiragana } from './hiragana.ts';
-export { default as img } from './img.ts';
 export { default as katakana } from './katakana.ts';
 export { default as morse } from './morse.ts';
 export { default as neko } from './neko.ts';
@@ -23,7 +22,8 @@ export { default as zen } from './zen.ts';
 
 export default { '8ball': ball };
 
-export * as cipher from './cipher/mod.ts';
 export * as ao3 from './ao3/mod.ts';
+export * as cipher from './cipher/mod.ts';
+export * as img from './img/mod.ts';
 export * as ratio from './ratio/mod.ts';
 export * as youtube from './youtube/mod.ts';

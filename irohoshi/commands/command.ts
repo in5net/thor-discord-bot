@@ -22,6 +22,7 @@ interface Option<T extends Type = Type, C extends Choices = Choices> {
   choices?: C;
   optional?: boolean;
   default?: CommandOptionType[T];
+  autocomplete?: (option: string) => Promise<string[]>;
 }
 type Options = Record<string, Option>;
 type SubOptions = Record<string, Options>;
