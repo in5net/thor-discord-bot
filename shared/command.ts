@@ -24,7 +24,7 @@ type SubArgs = readonly Args[];
 
 type ArgValue<T extends Arg = Arg> = T['default'] extends ArgTypeMap[ArgType]
   ? ArgTypeMap[T['type']]
-  : true extends T['optional']
+  : T['optional'] extends true
   ? ArgTypeMap[T['type']] | undefined
   : ArgTypeMap[T['type']];
 

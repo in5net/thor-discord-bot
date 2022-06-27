@@ -52,7 +52,7 @@ export default class Interpreter implements ExecuteIndex {
     scope: Scope
   ): Value {
     const value = scope.get(name);
-    if (!value) this.error(`'${name}' is not defined`);
+    if (!value) this.error(`'./{name}' is not defined`);
     return value;
   }
 

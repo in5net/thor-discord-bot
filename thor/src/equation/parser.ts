@@ -206,14 +206,14 @@ export default class Parser {
     } else if (token.is('grouping')) {
       const leftGroupingToken = token as Token<'grouping', LeftGrouping>;
       if (!leftGroupingToken)
-        this.expect(Object.keys(groupings).map(char => `'${char}'`));
+        this.expect(Object.keys(groupings).map(char => `'./{char}'`));
       this.advance();
 
       const expr = this.expr();
 
       const rightGrouping = groupings[leftGroupingToken.value];
       if (!this.token.is('grouping', rightGrouping))
-        this.expect(`'${rightGrouping}'`);
+        this.expect(`'./{rightGrouping}'`);
       const rightGroupingToken = this.token as Token<'grouping', RightGrouping>;
       this.advance();
 
@@ -222,7 +222,7 @@ export default class Parser {
       this.expect([
         'number',
         'identifier',
-        ...Object.keys(groupings).map(char => `'${char}'`)
+        ...Object.keys(groupings).map(char => `'./{char}'`)
       ]);
 
     return rtn;

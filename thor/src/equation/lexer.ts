@@ -58,7 +58,7 @@ export default class Lexer {
       else if (Object.entries(groupings).flat().includes(char)) {
         this.advance();
         return new Token('grouping', char);
-      } else this.error(`Illegal character '${char}'`);
+      } else this.error(`Illegal character './{char}'`);
     }
     return Token.EOF;
   }

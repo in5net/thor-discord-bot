@@ -50,7 +50,7 @@ packages:
     resolution: {integrity: sha512-+fqLIqa9wN3R+kvlld8sgG0nt04BAZxdCDP4t2qZ9TJsquLWA+xMtT8Waibb3d4li4AQS+IOfjiHAznv/dhHgQ==}
     engines: {node: '>=16.9.0'}
     dependencies:
-      '@sapphire/shapeshift': 3.3.1
+      '@sapphire/shapeshift': 3.3.2
       '@sindresorhus/is': 4.6.0
       discord-api-types: 0.33.5
       fast-deep-equal: 3.1.3
@@ -96,7 +96,7 @@ packages:
     resolution: {integrity: sha512-FtNlJGYxAKAm8O2w3WHRW0gpYSXL9Z4iC3B7cM0gfmcIwdh+lKEPhqdL14CcC0o3gBjqfqkMCo2m91kAn4JYAA==}
     dependencies:
       axios: 0.27.2
-      cheerio: 1.0.0-rc.11
+      cheerio: 1.0.0-rc.12
       gl-matrix: 3.4.3
       p5: 1.4.1
       tslib: 2.4.0
@@ -109,8 +109,8 @@ packages:
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
     dev: false
 
-  /@sapphire/shapeshift/3.3.1:
-    resolution: {integrity: sha512-PB2e5JHWIMRz9HiN/sIWcNIzXjYvzc3OmeRHYICXreKhetDYf4Zufypr8A48Z/XZLzbMqIka6uoR+2dH58nksg==}
+  /@sapphire/shapeshift/3.3.2:
+    resolution: {integrity: sha512-8+M8sLmT4RTXJCvI1Z69UiB56himVup8WJVm7ubt5j3HJmVK+l1OI4xTLkLVh1efupOhZR9jrl2YBIv4Lsag7A==}
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
     dev: false
 
@@ -285,8 +285,8 @@ packages:
       domutils: 3.0.1
     dev: false
 
-  /cheerio/1.0.0-rc.11:
-    resolution: {integrity: sha512-bQwNaDIBKID5ts/DsdhxrjqFXYfLw4ste+wMKqWA8DyKcS4qwsPP4Bk8ZNaTJjvpiX/qW3BT4sU7d6Bh5i+dag==}
+  /cheerio/1.0.0-rc.12:
+    resolution: {integrity: sha512-VqR8m68vM46BNnuZ5NtnGBKIE/DfN0cRIzg9n40EIq9NOv90ayxLBXA8fXC5gquFRGJSTRqBq25Jt2ECLR431Q==}
     engines: {node: '>= 6'}
     dependencies:
       cheerio-select: 2.1.0
@@ -296,7 +296,6 @@ packages:
       htmlparser2: 8.0.1
       parse5: 7.0.0
       parse5-htmlparser2-tree-adapter: 7.0.0
-      tslib: 2.4.0
     dev: false
 
   /clone-response/1.0.2:
@@ -585,7 +584,7 @@ packages:
   /genius-lyrics/4.3.8:
     resolution: {integrity: sha512-Gy5JrSoWQKAWK54qfmgJFJIgbHDhfq3vXvYRJdh5QpX0DFic+7NxA88HVtkF7NdhCGtCCS2F9YeNGDiXYXMVIw==}
     dependencies:
-      cheerio: 1.0.0-rc.11
+      cheerio: 1.0.0-rc.12
       got: 11.8.5
     dev: false
 
