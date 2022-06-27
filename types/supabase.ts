@@ -333,6 +333,7 @@ export interface paths {
           height?: parameters["rowFilter.y7_images.height"];
           size?: parameters["rowFilter.y7_images.size"];
           width?: parameters["rowFilter.y7_images.width"];
+          file_name_search?: parameters["rowFilter.y7_images.file_name_search"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -388,6 +389,7 @@ export interface paths {
           height?: parameters["rowFilter.y7_images.height"];
           size?: parameters["rowFilter.y7_images.size"];
           width?: parameters["rowFilter.y7_images.width"];
+          file_name_search?: parameters["rowFilter.y7_images.file_name_search"];
         };
         header: {
           /** Preference */
@@ -407,6 +409,7 @@ export interface paths {
           height?: parameters["rowFilter.y7_images.height"];
           size?: parameters["rowFilter.y7_images.size"];
           width?: parameters["rowFilter.y7_images.width"];
+          file_name_search?: parameters["rowFilter.y7_images.file_name_search"];
         };
         body: {
           /** y7_images */
@@ -748,6 +751,11 @@ export interface definitions {
     size: number;
     /** Format: smallint */
     width: number;
+    /**
+     * Format: tsvector
+     * @default to_tsvector('english'::regconfig, file_name)
+     */
+    file_name_search?: string;
   };
   users: {
     /**
@@ -874,6 +882,8 @@ export interface parameters {
   "rowFilter.y7_images.size": string;
   /** Format: smallint */
   "rowFilter.y7_images.width": string;
+  /** Format: tsvector */
+  "rowFilter.y7_images.file_name_search": string;
   /** @description users */
   "body.users": definitions["users"];
   /** Format: character */
