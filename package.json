@@ -6,6 +6,9 @@
     "type": "git",
     "url": "https://github.com/limitlesspc/discord-bots.git"
   },
+  "engines": {
+    "node": ">=16"
+  },
   "scripts": {
     "setup": "pnpm i && cd thor && pnpm i && cd ../thor-music && pnpm i && cd .. && pnpm run gen",
     "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u && cd thor && npm-check -u && cd ../thor-music && npm-check -u && cd ..",
