@@ -28,7 +28,7 @@ function runCmd(name: string, { options, handler }: Command) {
       if (handleAutocomplete)
         autocomplete(name, optionName, async i => {
           const options = await handleAutocomplete(i.focusedOption.value);
-          return options;
+          i.autocomplete(options.map(o => ({ name: o, value: o })));
         });
     }
   );
