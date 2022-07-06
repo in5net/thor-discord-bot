@@ -324,99 +324,6 @@ export interface paths {
       };
     };
   };
-  "/gifs": {
-    get: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.gifs.id"];
-          file_name?: parameters["rowFilter.gifs.file_name"];
-          size?: parameters["rowFilter.gifs.size"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["gifs"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-    post: {
-      parameters: {
-        body: {
-          /** gifs */
-          gifs?: definitions["gifs"];
-        };
-        query: {
-          /** Filtering Columns */
-          select?: parameters["select"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** Created */
-        201: unknown;
-      };
-    };
-    delete: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.gifs.id"];
-          file_name?: parameters["rowFilter.gifs.file_name"];
-          size?: parameters["rowFilter.gifs.size"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-    patch: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.gifs.id"];
-          file_name?: parameters["rowFilter.gifs.file_name"];
-          size?: parameters["rowFilter.gifs.size"];
-        };
-        body: {
-          /** gifs */
-          gifs?: definitions["gifs"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-  };
   "/y7_images": {
     get: {
       parameters: {
@@ -600,6 +507,99 @@ export interface paths {
         body: {
           /** users */
           users?: definitions["users"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/images": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.images.id"];
+          file_name?: parameters["rowFilter.images.file_name"];
+          size?: parameters["rowFilter.images.size"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["images"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** images */
+          images?: definitions["images"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.images.id"];
+          file_name?: parameters["rowFilter.images.file_name"];
+          size?: parameters["rowFilter.images.size"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.images.id"];
+          file_name?: parameters["rowFilter.images.file_name"];
+          size?: parameters["rowFilter.images.size"];
+        };
+        body: {
+          /** images */
+          images?: definitions["images"];
         };
         header: {
           /** Preference */
@@ -826,18 +826,6 @@ export interface definitions {
     /** Format: smallint */
     frames: number;
   };
-  gifs: {
-    /**
-     * Format: integer
-     * @description Note:
-     * This is a Primary Key.<pk/>
-     */
-    id: number;
-    /** Format: text */
-    file_name: string;
-    /** Format: integer */
-    size: number;
-  };
   y7_images: {
     /**
      * Format: integer
@@ -870,6 +858,18 @@ export interface definitions {
     updated_at: string;
     /** Format: jsonb */
     counts?: unknown;
+  };
+  images: {
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /** Format: text */
+    file_name: string;
+    /** Format: integer */
+    size: number;
   };
   ratios: {
     /**
@@ -967,14 +967,6 @@ export interface parameters {
   "rowFilter.y7_gifs.height": string;
   /** Format: smallint */
   "rowFilter.y7_gifs.frames": string;
-  /** @description gifs */
-  "body.gifs": definitions["gifs"];
-  /** Format: integer */
-  "rowFilter.gifs.id": string;
-  /** Format: text */
-  "rowFilter.gifs.file_name": string;
-  /** Format: integer */
-  "rowFilter.gifs.size": string;
   /** @description y7_images */
   "body.y7_images": definitions["y7_images"];
   /** Format: integer */
@@ -997,6 +989,14 @@ export interface parameters {
   "rowFilter.users.updated_at": string;
   /** Format: jsonb */
   "rowFilter.users.counts": string;
+  /** @description images */
+  "body.images": definitions["images"];
+  /** Format: integer */
+  "rowFilter.images.id": string;
+  /** Format: text */
+  "rowFilter.images.file_name": string;
+  /** Format: integer */
+  "rowFilter.images.size": string;
   /** @description ratios */
   "body.ratios": definitions["ratios"];
   /** Format: integer */
