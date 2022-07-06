@@ -7,12 +7,12 @@ export default command(
     options: {
       file_name: {
         type: 'string',
-        desc: 'THe file name to search for',
+        desc: 'The file name to search for',
         autocomplete: async query => {
           const { data } = await imagesTable()
             .select('file_name')
             .textSearch(
-              'file_name',
+              'file_name_search',
               query
                 .split(' ')
                 .filter(Boolean)
