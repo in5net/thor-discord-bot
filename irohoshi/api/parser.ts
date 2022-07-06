@@ -1,7 +1,7 @@
 import {
   DOMParser,
   initParser
-} from 'https://deno.land/x/deno_dom@v0.1.31-alpha/deno-dom-wasm-noinit.ts';
+} from 'https://deno.land/x/deno_dom@v0.1.32-alpha/deno-dom-wasm-noinit.ts';
 
 export async function parseFromString(source: string) {
   await initParser();

@@ -1,4 +1,4 @@
-import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@1.35.3?dts';
+import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@1.35.4?dts';
 
 const supabase = createClient(
   Deno.env.get('SUPABASE_URL') || '',

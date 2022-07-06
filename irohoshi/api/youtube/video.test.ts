@@ -1,4 +1,4 @@
-import 'https://deno.land/std@0.144.0/dotenv/load.ts';
+import 'https://deno.land/std@0.147.0/dotenv/load.ts';
 
 import { getVideo, searchVideos } from './video.ts';
 
