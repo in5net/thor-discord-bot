@@ -529,6 +529,7 @@ export interface paths {
           id?: parameters["rowFilter.images.id"];
           file_name?: parameters["rowFilter.images.file_name"];
           size?: parameters["rowFilter.images.size"];
+          file_name_search?: parameters["rowFilter.images.file_name_search"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -582,6 +583,7 @@ export interface paths {
           id?: parameters["rowFilter.images.id"];
           file_name?: parameters["rowFilter.images.file_name"];
           size?: parameters["rowFilter.images.size"];
+          file_name_search?: parameters["rowFilter.images.file_name_search"];
         };
         header: {
           /** Preference */
@@ -599,6 +601,7 @@ export interface paths {
           id?: parameters["rowFilter.images.id"];
           file_name?: parameters["rowFilter.images.file_name"];
           size?: parameters["rowFilter.images.size"];
+          file_name_search?: parameters["rowFilter.images.file_name_search"];
         };
         body: {
           /** images */
@@ -759,6 +762,23 @@ export interface paths {
       };
     };
   };
+  "/rpc/get_random_y7_images": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
 }
 
 export interface definitions {
@@ -878,6 +898,11 @@ export interface definitions {
     file_name: string;
     /** Format: integer */
     size: number;
+    /**
+     * Format: tsvector
+     * @default to_tsvector('simple'::regconfig, file_name)
+     */
+    file_name_search?: string;
   };
   ratios: {
     /**
@@ -1007,6 +1032,8 @@ export interface parameters {
   "rowFilter.images.file_name": string;
   /** Format: integer */
   "rowFilter.images.size": string;
+  /** Format: tsvector */
+  "rowFilter.images.file_name_search": string;
   /** @description ratios */
   "body.ratios": definitions["ratios"];
   /** Format: integer */

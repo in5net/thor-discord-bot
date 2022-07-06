@@ -9,7 +9,7 @@ export default command(
   },
   async i => {
     const { data } = await supabase
-      .rpc<definitions['y7_images']>('get_random_images')
+      .rpc<definitions['y7_images']>('get_random_y7_images')
       .select('file_name')
       .limit(1)
       .single();
