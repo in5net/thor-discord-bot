@@ -9,7 +9,7 @@
   "scripts": {
     "setup": "pnpm i && cd thor && pnpm i && cd ../thor-music && pnpm i && cd .. && pnpm run gen",
     "setup-thor": "pnpm i && cd thor && pnpm i && cd .. && pnpm run gen",
-    "setup-thor-music": "cd thor-music && pnpm i && cd .. && pnpm run gen",
+    "setup-thor-music": "pnpm i && cd thor-music && pnpm i && cd .. && pnpm run gen",
     "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u && cd thor && npm-check -u && cd ../thor-music && npm-check -u && cd ..",
     "build": "pnpm run gen",
     "gen": "prisma generate",
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@swc-node/register": "^1.5.1",
-    "@types/node": "18.0.2",
+    "@types/node": "18.0.3",
     "@typescript-eslint/eslint-plugin": "5.30.5",
     "@typescript-eslint/parser": "5.30.5",
     "eslint": "8.19.0",
