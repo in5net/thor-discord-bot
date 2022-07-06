@@ -745,7 +745,7 @@ export interface paths {
       };
     };
   };
-  "/rpc/get_random_gifs": {
+  "/rpc/get_random_y7_gifs": {
     post: {
       parameters: {
         body: {

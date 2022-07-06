@@ -37,24 +37,20 @@ model Ratio {
 }
 
 model Image {
-  id               Int                      @id @default(autoincrement())
-  file_name        String                   @unique
-  size             Int
-  file_name_search Unsupported("tsvector")? @default(dbgenerated("to_tsvector('simple'::regconfig, file_name)"))
+  id        Int    @id @default(autoincrement())
+  file_name String @unique
+  size      Int
 
-  @@index([file_name_search], map: "images_file_name_search", type: Gin)
   @@map("images")
 }
 
 model Y7Image {
-  id               Int                      @id @default(autoincrement())
-  file_name        String                   @unique
-  size             Int
-  width            Int                      @db.SmallInt
-  height           Int                      @db.SmallInt
-  file_name_search Unsupported("tsvector")? @default(dbgenerated("to_tsvector('simple'::regconfig, file_name)"))
+  id        Int    @id @default(autoincrement())
+  file_name String @unique
+  size      Int
+  width     Int    @db.SmallInt
+  height    Int    @db.SmallInt
 
-  @@index([file_name_search], map: "y7_images_file_name_search", type: Gin)
   @@map("y7_images")
 }
 

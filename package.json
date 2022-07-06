@@ -14,6 +14,7 @@
     "build": "pnpm run gen",
     "gen": "prisma generate",
     "studio": "prisma studio",
+    "deploy": "prisma migrate deploy",
     "thor": "node -r @swc-node/register thor/src/main.ts",
     "thor-music": "node -r @swc-node/register thor-music/src/main.ts",
     "lint": "eslint ."

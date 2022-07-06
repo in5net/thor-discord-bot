@@ -30,12 +30,12 @@ CREATE TABLE "ratios" (
 );
 
 -- CreateTable
-CREATE TABLE "gifs" (
+CREATE TABLE "images" (
     "id" SERIAL NOT NULL,
     "file_name" TEXT NOT NULL,
     "size" INTEGER NOT NULL,
 
-    CONSTRAINT "gifs_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "images_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -68,7 +68,7 @@ CREATE UNIQUE INDEX "playlists_uid_name_key" ON "playlists"("uid", "name");
 CREATE UNIQUE INDEX "ratios_text_key" ON "ratios"("text");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "gifs_file_name_key" ON "gifs"("file_name");
+CREATE UNIQUE INDEX "images_file_name_key" ON "images"("file_name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "y7_images_file_name_key" ON "y7_images"("file_name");
