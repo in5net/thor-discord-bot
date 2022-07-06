@@ -243,7 +243,7 @@ export default class Player {
   async playnow(uid: string, message: Message, query?: string): Promise<void> {
     if (
       uid &&
-      this.queue.current?.requester.uid === uid &&
+      this.queue.current?.requester.uid !== uid &&
       uid !== process.env.MY_DISCORD_ID
     ) {
       await this.channel?.send(
@@ -275,7 +275,7 @@ export default class Player {
   async next(uid?: string): Promise<void> {
     if (
       uid &&
-      this.queue.current?.requester.uid === uid &&
+      this.queue.current?.requester.uid !== uid &&
       uid !== process.env.MY_DISCORD_ID
     ) {
       await this.channel?.send(
@@ -291,7 +291,7 @@ export default class Player {
   async pause(uid: string): Promise<void> {
     if (
       uid &&
-      this.queue.current?.requester.uid === uid &&
+      this.queue.current?.requester.uid !== uid &&
       uid !== process.env.MY_DISCORD_ID
     ) {
       await this.channel?.send(
