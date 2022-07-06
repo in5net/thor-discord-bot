@@ -4,7 +4,7 @@ import command from '../command.ts';
 
 export default command(
   {
-    desc: 'Get a random image from yyyyyyy.info',
+    desc: 'Get a random image from files.in5net.io',
     options: {}
   },
   async i => {
