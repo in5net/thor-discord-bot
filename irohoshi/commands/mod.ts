@@ -24,6 +24,7 @@ export default { '8ball': ball };
 
 export * as ao3 from './ao3/mod.ts';
 export * as cipher from './cipher/mod.ts';
-export { get as img, search as imgsearch } from './img/mod.ts';
+export * as img from './img/mod.ts';
 export * as ratio from './ratio/mod.ts';
+export * as y7 from './y7/mod.ts';
 export * as youtube from './youtube/mod.ts';

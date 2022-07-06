@@ -3,7 +3,7 @@ import { imagesTable } from './supabase.ts';
 
 export default command(
   {
-    desc: 'Search for an image from files.in5net.io',
+    desc: 'Search for an image from yyyyyyy.info',
     options: {
       file_name: {
         type: 'string',
@@ -26,7 +26,7 @@ export default command(
     }
   },
   (i, { file_name }) => {
-    const url = `${Deno.env.get('FILES_ORIGIN')}/images/${file_name}`;
+    const url = `${Deno.env.get('FILES_ORIGIN')}/y7/images/${file_name}`;
     return i.reply(url);
   }
 );
