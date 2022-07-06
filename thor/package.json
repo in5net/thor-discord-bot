@@ -10,13 +10,13 @@
     "decode-gif": "^1.0.1",
     "discord.js": "13.8.1",
     "dotenv": "16.0.1",
-    "ffmpeg-static": "5.0.0",
+    "ffmpeg-static": "5.0.2",
     "gifencoder": "^2.0.1",
     "gl": "5.0.3",
     "gl-matrix": "^3.4.3",
     "glsl-noise": "^0.0.0",
     "glslify": "^7.1.1",
-    "music-metadata": "7.12.3",
+    "music-metadata": "7.12.4",
     "pngjs": "^6.0.0"
   },
   "devDependencies": {

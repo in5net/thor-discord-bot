@@ -13,13 +13,13 @@ specifiers:
   decode-gif: ^1.0.1
   discord.js: 13.8.1
   dotenv: 16.0.1
-  ffmpeg-static: 5.0.0
+  ffmpeg-static: 5.0.2
   gifencoder: ^2.0.1
   gl: 5.0.3
   gl-matrix: ^3.4.3
   glsl-noise: ^0.0.0
   glslify: ^7.1.1
-  music-metadata: 7.12.3
+  music-metadata: 7.12.4
   pngjs: ^6.0.0
 
 dependencies:
@@ -31,13 +31,13 @@ dependencies:
   decode-gif: 1.0.1
   discord.js: 13.8.1
   dotenv: 16.0.1
-  ffmpeg-static: 5.0.0
+  ffmpeg-static: 5.0.2
   gifencoder: 2.0.1
   gl: 5.0.3
   gl-matrix: 3.4.3
   glsl-noise: 0.0.0
   glslify: 7.1.1
-  music-metadata: 7.12.3
+  music-metadata: 7.12.4
   pngjs: 6.0.0
 
 devDependencies:
@@ -745,8 +745,8 @@ packages:
     resolution: {integrity: sha512-x6lDDm/tBAzX9kmsPcZsNbvDs3Zey3+scsxaZElS8xWLgUMAg/oFLeewfUz0mu1CblHhhsu15jGkraldkFh8KQ==}
     dev: false
 
-  /ffmpeg-static/5.0.0:
-    resolution: {integrity: sha512-z96jGVa8uCVMnyrTvbDZe0d5zbvIVQnfBN+vKDZoVK+ssYpfUJGEmo2DkuY43CA9Ytlsk+5ZVTFTqzvKw1gSaA==}
+  /ffmpeg-static/5.0.2:
+    resolution: {integrity: sha512-rYeA04AGbvxbUxov6Cn/KDKIzw2rmzwPlgHoqn837NZt0xPdOVA9mJMILz9IX27R45hhSlXS6nThk85XxDivLg==}
     engines: {node: '>=16'}
     requiresBuild: true
     dependencies:
@@ -1459,8 +1459,8 @@ packages:
     resolution: {integrity: sha512-TvmkNhkv8yct0SVBSy+o8wYzXjE4Zz3PCesbfs8HiCXXdcTuocApFv11UWlNFWKYsP2okqrhb7JNlSm9InBhIw==}
     dev: false
 
-  /music-metadata/7.12.3:
-    resolution: {integrity: sha512-6pZngaroNxGBf8KZjE8reGZJiS533eJq7dBFsyoiEAZIORQAxmVVx20ABh9W2tsLT+5mKYyDzcNi5GuHf3jitg==}
+  /music-metadata/7.12.4:
+    resolution: {integrity: sha512-hn4DsDYQUeq4WDDh7MD/nSj6CaZMywuD/4Ywq6veeh4Q5KZw4A2yLY8gUzsEWf/ctdtV9Lj066ihkU7Nk7EXIA==}
     engines: {node: '>=10'}
     dependencies:
       '@tokenizer/token': 0.3.0
