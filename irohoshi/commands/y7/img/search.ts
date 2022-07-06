@@ -1,4 +1,4 @@
-import command from '../command.ts';
+import command from '../../command.ts';
 import { imagesTable } from './supabase.ts';
 
 export default command(
