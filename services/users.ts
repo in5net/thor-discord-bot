@@ -1,7 +1,7 @@
 import prisma from './prisma';
 
 export async function getUser(id: string) {
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findUniqueOrThrow({
     where: {
       id
     }
@@ -16,8 +16,7 @@ export const incCount = async (id: string, name: string) => {
     },
     select: {
       counts: true
-    },
-    rejectOnNotFound: false
+    }
   });
   const counts = (user?.counts || {}) as Record<string, number>;
   return prisma.user.upsert({

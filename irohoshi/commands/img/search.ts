@@ -12,7 +12,7 @@ export default command(
           const { data } = await imagesTable()
             .select('file_name')
             .textSearch(
-              'file_name_search',
+              'file_name',
               query
                 .split(' ')
                 .filter(Boolean)

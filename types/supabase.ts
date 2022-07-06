@@ -324,16 +324,108 @@ export interface paths {
       };
     };
   };
+  "/gifs": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.gifs.id"];
+          file_name?: parameters["rowFilter.gifs.file_name"];
+          size?: parameters["rowFilter.gifs.size"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["gifs"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** gifs */
+          gifs?: definitions["gifs"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.gifs.id"];
+          file_name?: parameters["rowFilter.gifs.file_name"];
+          size?: parameters["rowFilter.gifs.size"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.gifs.id"];
+          file_name?: parameters["rowFilter.gifs.file_name"];
+          size?: parameters["rowFilter.gifs.size"];
+        };
+        body: {
+          /** gifs */
+          gifs?: definitions["gifs"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/y7_images": {
     get: {
       parameters: {
         query: {
           id?: parameters["rowFilter.y7_images.id"];
           file_name?: parameters["rowFilter.y7_images.file_name"];
-          height?: parameters["rowFilter.y7_images.height"];
           size?: parameters["rowFilter.y7_images.size"];
           width?: parameters["rowFilter.y7_images.width"];
-          file_name_search?: parameters["rowFilter.y7_images.file_name_search"];
+          height?: parameters["rowFilter.y7_images.height"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -386,10 +478,9 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.y7_images.id"];
           file_name?: parameters["rowFilter.y7_images.file_name"];
-          height?: parameters["rowFilter.y7_images.height"];
           size?: parameters["rowFilter.y7_images.size"];
           width?: parameters["rowFilter.y7_images.width"];
-          file_name_search?: parameters["rowFilter.y7_images.file_name_search"];
+          height?: parameters["rowFilter.y7_images.height"];
         };
         header: {
           /** Preference */
@@ -406,10 +497,9 @@ export interface paths {
         query: {
           id?: parameters["rowFilter.y7_images.id"];
           file_name?: parameters["rowFilter.y7_images.file_name"];
-          height?: parameters["rowFilter.y7_images.height"];
           size?: parameters["rowFilter.y7_images.size"];
           width?: parameters["rowFilter.y7_images.width"];
-          file_name_search?: parameters["rowFilter.y7_images.file_name_search"];
+          height?: parameters["rowFilter.y7_images.height"];
         };
         body: {
           /** y7_images */
@@ -699,7 +789,7 @@ export interface definitions {
   };
   playlists: {
     /**
-     * Format: bigint
+     * Format: integer
      * @description Note:
      * This is a Primary Key.<pk/>
      */
@@ -720,7 +810,7 @@ export interface definitions {
   };
   y7_gifs: {
     /**
-     * Format: bigint
+     * Format: integer
      * @description Note:
      * This is a Primary Key.<pk/>
      */
@@ -736,26 +826,33 @@ export interface definitions {
     /** Format: smallint */
     frames: number;
   };
-  y7_images: {
+  gifs: {
     /**
-     * Format: bigint
+     * Format: integer
      * @description Note:
      * This is a Primary Key.<pk/>
      */
     id: number;
     /** Format: text */
     file_name: string;
-    /** Format: smallint */
-    height: number;
+    /** Format: integer */
+    size: number;
+  };
+  y7_images: {
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /** Format: text */
+    file_name: string;
     /** Format: integer */
     size: number;
     /** Format: smallint */
     width: number;
-    /**
-     * Format: tsvector
-     * @default to_tsvector('simple'::regconfig, file_name)
-     */
-    file_name_search?: string;
+    /** Format: smallint */
+    height: number;
   };
   users: {
     /**
@@ -776,7 +873,7 @@ export interface definitions {
   };
   ratios: {
     /**
-     * Format: bigint
+     * Format: integer
      * @description Note:
      * This is a Primary Key.<pk/>
      */
@@ -844,7 +941,7 @@ export interface parameters {
   "rowFilter._prisma_migrations.applied_steps_count": string;
   /** @description playlists */
   "body.playlists": definitions["playlists"];
-  /** Format: bigint */
+  /** Format: integer */
   "rowFilter.playlists.id": string;
   /** Format: timestamp without time zone */
   "rowFilter.playlists.created_at": string;
@@ -858,7 +955,7 @@ export interface parameters {
   "rowFilter.playlists.songs": string;
   /** @description y7_gifs */
   "body.y7_gifs": definitions["y7_gifs"];
-  /** Format: bigint */
+  /** Format: integer */
   "rowFilter.y7_gifs.id": string;
   /** Format: text */
   "rowFilter.y7_gifs.file_name": string;
@@ -870,20 +967,26 @@ export interface parameters {
   "rowFilter.y7_gifs.height": string;
   /** Format: smallint */
   "rowFilter.y7_gifs.frames": string;
+  /** @description gifs */
+  "body.gifs": definitions["gifs"];
+  /** Format: integer */
+  "rowFilter.gifs.id": string;
+  /** Format: text */
+  "rowFilter.gifs.file_name": string;
+  /** Format: integer */
+  "rowFilter.gifs.size": string;
   /** @description y7_images */
   "body.y7_images": definitions["y7_images"];
-  /** Format: bigint */
+  /** Format: integer */
   "rowFilter.y7_images.id": string;
   /** Format: text */
   "rowFilter.y7_images.file_name": string;
-  /** Format: smallint */
-  "rowFilter.y7_images.height": string;
   /** Format: integer */
   "rowFilter.y7_images.size": string;
   /** Format: smallint */
   "rowFilter.y7_images.width": string;
-  /** Format: tsvector */
-  "rowFilter.y7_images.file_name_search": string;
+  /** Format: smallint */
+  "rowFilter.y7_images.height": string;
   /** @description users */
   "body.users": definitions["users"];
   /** Format: character */
@@ -896,7 +999,7 @@ export interface parameters {
   "rowFilter.users.counts": string;
   /** @description ratios */
   "body.ratios": definitions["ratios"];
-  /** Format: bigint */
+  /** Format: integer */
   "rowFilter.ratios.id": string;
   /** Format: timestamp without time zone */
   "rowFilter.ratios.created_at": string;

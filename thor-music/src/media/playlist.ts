@@ -11,7 +11,7 @@ import {
 } from './media';
 
 async function getPlaylist(uid: string, name: string) {
-  const { id, songs } = await prisma.playlist.findFirst({
+  const { id, songs } = await prisma.playlist.findFirstOrThrow({
     where: {
       uid,
       name
@@ -102,9 +102,7 @@ export async function add(
     },
     select: {
       songs: true
-    },
-
-    rejectOnNotFound: false
+    }
   });
   const songs = medias.map(media =>
     media.toJSON()
