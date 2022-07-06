@@ -16,7 +16,7 @@ export default command(
               query
                 .split(' ')
                 .filter(Boolean)
-                .map(word => `${word}:*`)
+                .map(word => `'${word}:*'`)
                 .join(' & ')
             )
             .limit(5);
