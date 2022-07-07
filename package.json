@@ -7,10 +7,10 @@
     "url": "https://github.com/limitlesspc/discord-bots.git"
   },
   "scripts": {
-    "setup": "bun i && cd thor && bun i && cd ../thor-music && bun i && cd .. && bun run gen",
-    "setup-thor": "bun i && cd thor && bun i && cd .. && bun run gen",
-    "setup-thor-music": "bun i && cd thor-music && bun i && cd .. && bun run gen",
-    "update": "NPM_CHECK_INSTALLER=bun npm-check -u && cd thor && npm-check -u && cd ../thor-music && npm-check -u && cd ..",
+    "setup": "pnpm i && cd thor && pnpm i && cd ../thor-music && pnpm i && cd .. && pnpm run gen",
+    "setup-thor": "pnpm i && cd thor && pnpm i && cd .. && pnpm run gen",
+    "setup-thor-music": "pnpm i && cd thor-music && pnpm i && cd .. && pnpm run gen",
+    "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u && cd thor && npm-check -u && cd ../thor-music && npm-check -u && cd ..",
     "gen": "prisma generate",
     "studio": "prisma studio",
     "deploy": "prisma migrate deploy",
