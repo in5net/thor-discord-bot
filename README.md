@@ -1,13 +1,13 @@
-# discord-bots
+# music-discord-bot
 
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![license](https://img.shields.io/github/license/limitlesspc/discord-bots.svg)](LICENSE)
 
-A collection of Discord bots I created for fun
+A Discord music bot I created for fun
 
 ## Table of Contents
 
-- [discord-bots](#discord-bots)
+- [music-discord-bot](#music-discord-bot)
   - [Table of Contents](#table-of-contents)
   - [Install](#install)
   - [Usage](#usage)
@@ -28,22 +28,10 @@ pnpm run setup
 
 ## Usage
 
-Run Thor:
+Run the bot:
 
 ```
-pnpm run thor
-```
-
-Run Thor Music:
-
-```
-pnpm run thor-music
-```
-
-Since Irohoshi is built to be a serverless bot hosted on [Deno Deploy](https://deno.com/deploy), it doesn't have a dev script. However, to deploy Irohoshi, you will first need [Deno](https://deno.land/), Then run:
-
-```
-deno run --allow-env --allow-read=./ --allow-net=discord.com irohoshi/deploy.ts
+pnpm start
 ```
 
 Linting:

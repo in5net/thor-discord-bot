@@ -1,26 +1,30 @@
 {
-  "name": "discord-bots",
+  "name": "music-discord-bot",
   "private": true,
   "author": "limitlesspc",
   "repository": {
     "type": "git",
-    "url": "https://github.com/limitlesspc/discord-bots.git"
+    "url": "https://github.com/limitlesspc/raya-discord-bot.git"
   },
   "scripts": {
-    "setup": "pnpm i && cd thor && pnpm i && cd ../thor-music && pnpm i && cd .. && pnpm run gen",
-    "setup-thor": "pnpm i && cd thor && pnpm i && cd .. && pnpm run gen",
-    "setup-thor-music": "pnpm i && cd thor-music && pnpm i && cd .. && pnpm run gen",
-    "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u && cd thor && npm-check -u && cd ../thor-music && npm-check -u && cd ..",
-    "gen": "prisma generate",
-    "studio": "prisma studio",
-    "deploy": "prisma migrate deploy",
-    "thor": "node -r @swc-node/register thor/src/main.ts",
-    "thor-music": "node -r @swc-node/register thor-music/src/main.ts",
+    "build": "prisma generate",
+    "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u",
+    "start": "node -r @swc-node/register src/main.ts",
     "lint": "eslint ."
   },
   "dependencies": {
-    "@prisma/client": "4.0.0",
-    "discord.js": "13.8.1"
+    "@discord-player/downloader": "^3.0.1",
+    "@discordjs/voice": "0.10.0",
+    "@googleapis/youtube": "6.0.0",
+    "@limitlesspc/limitless": "0.0.2",
+    "@prisma/client": "^4.0.0",
+    "chalk": "4",
+    "discord.js": "13.8.1",
+    "dotenv": "16.0.1",
+    "ffmpeg-static": "5.0.2",
+    "genius-lyrics": "4.3.8",
+    "libsodium-wrappers": "0.7.10",
+    "play-dl": "1.9.5"
   },
   "devDependencies": {
     "@swc-node/register": "^1.5.1",

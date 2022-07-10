@@ -2,5 +2,3 @@ node_modules/
 .data/
 .env
 .env.local
-supabase-types.sh
-.DS_Store

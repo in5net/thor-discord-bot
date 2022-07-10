@@ -3,64 +3,59 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "cockroachdb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id         String   @id @db.Char(18)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  counts     Json?
+  id        String   @id @db.Char(18)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@map("users")
+  counts Json?
 }
 
 model Playlist {
-  id         Int      @id @default(autoincrement())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  uid        String   @db.Char(18)
-  name       String
-  songs      Json[]
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  uid   String @db.Char(18)
+  name  String
+  songs Json
 
   @@unique([uid, name])
-  @@map("playlists")
 }
 
 model Ratio {
-  id         Int      @id @default(autoincrement())
-  created_at DateTime @default(now())
-  text       String   @unique
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
 
-  @@map("ratios")
+  text String @unique
 }
 
 model Image {
-  id        Int    @id @default(autoincrement())
-  file_name String @unique
-  size      Int
+  id String @id @default(cuid())
 
-  @@map("images")
+  fileName String @unique
+  size     Int
 }
 
 model Y7Image {
-  id        Int    @id @default(autoincrement())
-  file_name String @unique
-  size      Int
-  width     Int    @db.SmallInt
-  height    Int    @db.SmallInt
+  id String @id @default(cuid())
 
-  @@map("y7_images")
+  fileName String @unique
+  size     Int
+  width    Int    @db.Int2
+  height   Int    @db.Int2
 }
 
 model Y7GIF {
-  id        Int    @id @default(autoincrement())
-  file_name String @unique
-  size      Int
-  width     Int    @db.SmallInt
-  height    Int    @db.SmallInt
-  frames    Int    @db.SmallInt
+  id String @id @default(cuid())
 
-  @@map("y7_gifs")
+  fileName String @unique
+  size     Int
+  width    Int    @db.Int2
+  height   Int    @db.Int2
+  frames   Int    @db.Int2
 }

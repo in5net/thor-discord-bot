@@ -1,4 +1,0 @@
-{
-  "deno.enablePaths": ["irohoshi", "gpu"],
-  "deno.lint": true
-}
