@@ -3,7 +3,7 @@ import chalk from 'chalk-template';
 import ytdl from 'discord-ytdl-core';
 import { Awaitable, EmbedBuilder } from 'discord.js';
 import got from 'got';
-import { createRegExp, digit, exactly, oneOrMore } from 'magic-regexp';
+import { createRegExp, digit, oneOrMore } from 'magic-regexp';
 import type { Readable } from 'node:stream';
 import type {
   SoundCloudPlaylist,
@@ -277,9 +277,7 @@ ${title} (${url})
   ): Promise<YouTubeSong> {
     const id = play.extractID(url);
     const song = await this.fromId(id, requester);
-    const timeRegex = createRegExp(
-      exactly('?t=').and(oneOrMore(digit).as('seconds'))
-    );
+    const timeRegex = createRegExp('?t=', oneOrMore(digit).as('seconds'));
     const matches = url.match(timeRegex);
     if (matches?.groups.seconds) song.time = parseInt(matches.groups.seconds);
     return song;

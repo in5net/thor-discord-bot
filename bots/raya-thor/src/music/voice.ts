@@ -29,27 +29,24 @@ import { SoundCloudSong, SpotifySong, URLSong, YouTubeSong } from './song';
 import Stream from './stream';
 
 const YOUTUBE_CHANNEL_REGEX = createRegExp(
-  exactly('http')
-    .and(maybe('s'))
-    .and('://')
-    .and(maybe('www.'))
-    .and('youtu')
-    .and(exactly('be.com').or('.be'))
-    .and('/')
-    .and(exactly('channel').or('c'))
-    .and('/')
-    .and(oneOrMore(anyOf(letter.lowercase, digit, charIn('_-'))))
+  'http',
+  maybe('s'),
+  '://',
+  maybe('www.'),
+  'youtu',
+  exactly('be.com').or('.be'),
+  '/',
+  exactly('channel').or('c'),
+  '/',
+  oneOrMore(anyOf(letter.lowercase, digit, charIn('_-')))
 );
 
 const URL_REGEX = createRegExp(
-  anyOf(letter.lowercase, digit, charIn('-@:%._+~#='))
-    .times.between(1, 256)
-    .and('.')
-    .and(anyOf(letter.lowercase, digit, charIn('()')).times.between(1, 6))
-    .and(wordBoundary)
-    .and(
-      anyOf(letter.lowercase, digit, charIn('-()@:%_+.~#?&//=')).times.any()
-    ),
+  anyOf(letter.lowercase, digit, charIn('-@:%._+~#=')).times.between(1, 256),
+  '.',
+  anyOf(letter.lowercase, digit, charIn('()')).times.between(1, 6),
+  wordBoundary,
+  anyOf(letter.lowercase, digit, charIn('-()@:%_+.~#?&//=')).times.any(),
   [caseInsensitive]
 );
 
