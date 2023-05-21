@@ -22,11 +22,9 @@ const client = new Client({
   intents: [
     'Guilds',
     'GuildMessages',
-    'GuildMembers',
     'DirectMessages',
     'MessageContent',
-    'GuildMessageReactions',
-    'GuildVoiceStates'
+    'GuildMessageReactions'
   ],
   makeCache: Options.cacheWithLimits({
     ApplicationCommandManager: 0,
