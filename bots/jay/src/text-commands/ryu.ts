@@ -16,6 +16,7 @@ export default command(
     }
   },
   async ({ message, args: { prompt } }) => {
+    console.log('test hmr');
     const channelId = BigInt(message.channelId);
     const { channel } = message;
 
