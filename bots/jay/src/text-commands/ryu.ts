@@ -74,6 +74,8 @@ const gpt3DescPath = new URL(
   import.meta.url
 );
 
+const stoppingStrings = ['\nYou:', '\nMe:', '\nRaya:'];
+
 async function answer(
   prompt: string,
   previous: { question: string; answer: string }[]
@@ -107,13 +109,13 @@ Raya: `,
       num_beams: 1,
       penalty_alpha: 0,
       length_penalty: 1,
-      early_stopping: true,
+      early_stopping: false,
       seed: -1,
       add_bos_token: true,
       truncation_length: 2048,
       ban_eos_token: false,
       skip_special_tokens: true,
-      stopping_strings: ['You:', 'Me:', 'Raya:']
+      stopping_strings: stoppingStrings
     })
   });
   const data = (await response.json()) as { results: [{ text: string }] };
