@@ -3,8 +3,8 @@
   "globalDependencies": [".env"],
   "pipeline": {
     "db:generate": {
-      "cache": false,
-      "inputs": ["prisma/*.prisma"]
+      "inputs": ["prisma/*.prisma"],
+      "outputs": ["generated/**"]
     },
     "db:push": {
       "cache": false
