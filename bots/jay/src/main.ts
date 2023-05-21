@@ -117,7 +117,12 @@ client
         const commandName = commandNames.join(' ');
         try {
           if (!command) {
-            const suggestion = closest(commandName, Object.keys(commands));
+            const suggestion = closest(
+              commandName,
+              Object.entries(commands)
+                .filter(([, command]) => !command.optionalPrefix)
+                .map(([name]) => name)
+            );
             await channel.send(
               `${
                 Math.random() < 0.1 ? 'No' : `IDK what \`${commandName}\` is`
