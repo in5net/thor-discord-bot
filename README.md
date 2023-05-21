@@ -1,17 +1,18 @@
-# music-discord-bot
+# raya-discord-bot
+
+This is a multi-purpose Discord bot I created for fun
 
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-[![license](https://img.shields.io/github/license/limitlesspc/discord-bots.svg)](LICENSE)
-
-A Discord music bot I created for fun
+[![license](https://img.shields.io/github/license/in5net/raya-discord-bot.svg)](LICENSE)
 
 ## Table of Contents
 
-- [music-discord-bot](#music-discord-bot)
+- [raya-discord-bot](#raya-discord-bot)
   - [Table of Contents](#table-of-contents)
   - [Install](#install)
   - [Usage](#usage)
   - [Contributing](#contributing)
+    - [Random Responses](#random-responses)
   - [License](#license)
 
 ## Install
@@ -44,6 +45,15 @@ pnpm run lint
 
 Small note: If editing the README, please conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification.
 
+### Random Responses
+
+In [responses.txt](./responses.txt), you'll find the random responses that the bot sends when a message sent in a channel contains certain words.
+
+Each line in the file is in the format `words: responses`
+
+- `words` is a comma (`,`) separated list of words, ex: `this,that`
+- `responses` is a tilde (`~`) separated list of responses, ex: `hi there ~ okay then`
+
 ## License
 
-[MIT © 2022 limitlesspc](./LICENSE)
+[MIT © 2022 in5net](./LICENSE)

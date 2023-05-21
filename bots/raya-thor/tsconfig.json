@@ -1,0 +1,12 @@
+{
+  "display": "Discord Bot",
+  "extends": "tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "$services/*": ["./src/services/*"],
+      "$commands/*": ["./src/services/commands/*"],
+      "$openapi/*": ["./openapi/*"]
+    }
+  }
+}

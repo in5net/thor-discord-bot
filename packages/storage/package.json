@@ -1,0 +1,9 @@
+{
+  "name": "storage",
+  "version": "0.0.0",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "dependencies": {
+    "@google-cloud/storage": "6.10.1"
+  }
+}

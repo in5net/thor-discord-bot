@@ -1,0 +1,27 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../generated/cache"
+  previewFeatures = ["jsonProtocol"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./cache.db"
+}
+
+model Channel {
+  id BigInt @id
+
+  context Context[]
+}
+
+model Context {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  channel   Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  channelId BigInt
+
+  question String
+  answer   String
+}
