@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises';
 
 import command from '$services/commands/text';
 import { cache } from '$services/prisma';
+import { char, createRegExp, exactly } from 'magic-regexp';
 
 export default command(
   {
@@ -74,7 +75,14 @@ const gpt3DescPath = new URL(
   import.meta.url
 );
 
-const stoppingStrings = ['\nYou:', '\nMe:', '\nRaya:'];
+const stoppingStrings = ['\nYou:', '\nMe:', '\nRaya:'] as const;
+const extraPromptsRegex = createRegExp(
+  exactly(stoppingStrings[0])
+    .or(stoppingStrings[1])
+    .or(stoppingStrings[2])
+    .and(char.times.any()),
+  'i'
+);
 
 async function answer(
   prompt: string,
@@ -119,5 +127,5 @@ Raya: `,
     })
   });
   const data = (await response.json()) as { results: [{ text: string }] };
-  return data.results[0].text;
+  return data.results[0].text.replace(extraPromptsRegex, '');
 }
