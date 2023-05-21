@@ -80,7 +80,7 @@ export async function answer(
 ): Promise<string> {
   const desc = await readFile(gpt3DescPath, 'utf8');
 
-  const response = await fetch('http://192.168.1.99:5000/api/v1/generate', {
+  const response = await fetch('http://localhost:5000/api/v1/generate', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
