@@ -5,7 +5,7 @@
   "main": "./src/main.ts",
   "scripts": {
     "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u",
-    "start": "dotenv -e ./.env -e ../../packages/storage/.env vite-node src/text-commands/ryu.ts",
+    "start": "dotenv -e ./.env -e ../../packages/storage/.env vite-node src/main.ts",
     "lint": "eslint",
     "test": "node --test",
     "deploy": "dotenv -e ./.env -e ../../packages/storage/.env vite-node src/deploy.ts"
