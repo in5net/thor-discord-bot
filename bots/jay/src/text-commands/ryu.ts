@@ -2,13 +2,7 @@ import { readFile } from 'node:fs/promises';
 
 import command from '$services/commands/text';
 import { cache } from '$services/prisma';
-import {
-  anyOf,
-  caseInsensitive,
-  char,
-  createRegExp,
-  maybe
-} from 'magic-regexp';
+import { anyOf, caseInsensitive, char, createRegExp } from 'magic-regexp';
 
 export default command(
   {
@@ -83,7 +77,6 @@ const gpt3DescPath = new URL(
 
 const stoppingStrings = ['You:', 'Me:', 'Raya:'] as const;
 const extraPromptsRegex = createRegExp(
-  maybe('\n'),
   anyOf(...stoppingStrings),
   char.times.any(),
   [caseInsensitive]
