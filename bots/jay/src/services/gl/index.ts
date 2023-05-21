@@ -115,7 +115,7 @@ export default class GL {
     gl.createProgramFromSource(
       vertexSource ||
         (await GL.loadFile(
-          new URL('../../../assets/screen.vert', import.meta.url).pathname
+          new URL('../../assets/screen.vert', import.meta.url).pathname
         )),
       fragmentSource
     );

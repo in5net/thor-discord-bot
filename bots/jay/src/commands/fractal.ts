@@ -105,7 +105,7 @@ export async function render(
   iterations: number
 ): Promise<Buffer> {
   const fragmentSource = await GL.loadFile(
-    new URL('../../../assets/fractal/shader.frag', import.meta.url).pathname
+    new URL('../../assets/fractal/shader.frag', import.meta.url).pathname
   );
   const gl = await GL.screen(
     width * shapeSize,
