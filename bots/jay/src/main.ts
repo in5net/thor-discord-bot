@@ -91,6 +91,7 @@ client
         .map(line => line.trim())
         .filter(Boolean);
       for (const line of lines) {
+        const suggest = line.startsWith(prefix);
         const args = line.replace(prefixRegex, '').split(' ');
         if (!args.length) continue;
 
@@ -117,17 +118,14 @@ client
         const commandName = commandNames.join(' ');
         try {
           if (!command) {
-            const suggestion = closest(
-              commandName,
-              Object.entries(commands)
-                .filter(([, command]) => !command.optionalPrefix)
-                .map(([name]) => name)
-            );
-            await channel.send(
-              `${
-                Math.random() < 0.1 ? 'No' : `IDK what \`${commandName}\` is`
-              }. Did you mean ${suggestion}?`
-            );
+            if (suggest) {
+              const suggestion = closest(commandName, Object.keys(commands));
+              await channel.send(
+                `${
+                  Math.random() < 0.1 ? 'No' : `IDK what \`${commandName}\` is`
+                }. Did you mean ${suggestion}?`
+              );
+            }
           } else {
             const parsedArgs: Record<string, ArgValue | undefined> = {};
             for (const [name, arg] of Object.entries(command.args)) {
