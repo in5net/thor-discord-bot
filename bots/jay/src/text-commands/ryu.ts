@@ -113,7 +113,7 @@ Raya: `,
       truncation_length: 2048,
       ban_eos_token: false,
       skip_special_tokens: true,
-      stopping_strings: ['You:']
+      stopping_strings: ['You:', 'Me:', 'Raya:']
     })
   });
   const data = (await response.json()) as { results: [{ text: string }] };
