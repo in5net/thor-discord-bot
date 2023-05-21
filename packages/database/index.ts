@@ -1,1 +1,1 @@
-export * from './generated/main';
+export * from './generated/main/index';
