@@ -21,9 +21,6 @@ export default defineConfig({
       $openapi: resolve(__dirname, './openapi')
     }
   },
-  define: {
-    fetch: 'fetch'
-  },
   build: {
     rollupOptions: {
       external
