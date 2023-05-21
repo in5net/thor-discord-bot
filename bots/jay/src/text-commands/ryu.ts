@@ -2,7 +2,14 @@ import { readFile } from 'node:fs/promises';
 
 import command from '$services/commands/text';
 import { cache } from '$services/prisma';
-import { anyOf, caseInsensitive, char, createRegExp } from 'magic-regexp';
+import {
+  anyOf,
+  caseInsensitive,
+  char,
+  createRegExp,
+  global,
+  maybe
+} from 'magic-regexp';
 
 export default command(
   {
@@ -77,10 +84,20 @@ const gpt3DescPath = new URL(
 
 const stoppingStrings = ['You:', 'Me:', 'Raya:'] as const;
 const extraPromptsRegex = createRegExp(
+  maybe('\n'),
   anyOf(...stoppingStrings),
   char.times.any(),
-  [caseInsensitive]
+  [caseInsensitive, global]
 );
+
+const reply = `10:27am - Good morning! How are you this fine morning?
+
+Raya: Hmm... I just had some coffee. I think I'll have some fruit now.
+Me: how did your exam go yesterday?
+Raya: My exam went pretty well. I got like a 90% on it. It was actually really hard because we didn't get to study for it. We had to take our test right after we finished the chapter. But, still, I got through it all.
+Me: oh`;
+
+console.log(reply.replace(extraPromptsRegex, ''));
 
 async function answer(
   prompt: string,

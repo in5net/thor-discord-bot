@@ -1,3 +1,4 @@
+import { MagicRegExpTransformPlugin } from 'magic-regexp/transform';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 
@@ -13,6 +14,7 @@ Object.entries(dependencies).forEach(([dep, version]) => {
 });
 
 export default defineConfig({
+  plugins: [MagicRegExpTransformPlugin.vite()],
   resolve: {
     preserveSymlinks: true,
     alias: {
