@@ -22,13 +22,6 @@ export default defineConfig({
     }
   },
   build: {
-    lib: {
-      entry: resolve(__dirname, 'src/main.ts'),
-      fileName: 'main',
-      formats: ['es']
-    },
-    outDir: 'build',
-    sourcemap: true,
     rollupOptions: {
       external
     }
