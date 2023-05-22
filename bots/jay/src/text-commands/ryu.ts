@@ -81,12 +81,8 @@ export default command(
 );
 
 const personaPath = new URL('../../assets/persona.txt', import.meta.url);
-const personalityPath = new URL(
-  '../../assets/personality.txt',
-  import.meta.url
-);
 
-const stoppingStrings = ['\n'] as const;
+const stoppingStrings = ['\nYou:'] as const;
 const extraPromptsRegex = createRegExp(
   anyOf(...stoppingStrings),
   char.times.any(),
@@ -98,7 +94,6 @@ async function answer(
   previous: { question: string; answer: string }[]
 ): Promise<string> {
   const persona = await readFile(personaPath, 'utf8');
-  const personality = await readFile(personalityPath, 'utf8');
 
   const response = await fetch('http://127.0.0.1:5000/api/v1/generate', {
     method: 'POST',
@@ -106,33 +101,33 @@ async function answer(
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      prompt: `Raya's Persona: ${persona} ${personality}
-<START>
+      prompt: `${persona}
 ${previous.map(
   ({ question, answer }) => `You: ${question}
 Raya: ${answer}
 `
 )}You: ${prompt}
 Raya: `,
-      max_new_tokens: 400,
+      max_new_tokens: 180,
       do_sample: true,
-      temperature: 0.8,
-      top_p: 1,
+      temperature: 0.7,
+      top_p: 0.5,
       typical_p: 1,
-      repetition_penalty: 1.1,
-      top_k: 3,
+      repetition_penalty: 1.2,
+      encoder_repetition_penalty: 1,
+      top_k: 40,
       min_length: 0,
-      no_repeat_ngram_size: 3,
+      no_repeat_ngram_size: 0,
       num_beams: 1,
       penalty_alpha: 0,
       length_penalty: 1,
-      early_stopping: true,
+      early_stopping: false,
       seed: -1,
       add_bos_token: true,
+      stopping_strings: stoppingStrings,
       truncation_length: 2048,
       ban_eos_token: false,
-      skip_special_tokens: true,
-      stopping_strings: stoppingStrings
+      skip_special_tokens: true
     })
   });
   const data = (await response.json()) as { results: [{ text: string }] };
