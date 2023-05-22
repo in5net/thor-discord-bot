@@ -80,8 +80,11 @@ export default command(
   }
 );
 
-const personaPath = new URL('./persona.txt', import.meta.url);
-const personalityPath = new URL('./personality.txt', import.meta.url);
+const personaPath = new URL('../../assets/persona.txt', import.meta.url);
+const personalityPath = new URL(
+  '../../assets/personality.txt',
+  import.meta.url
+);
 
 const stoppingStrings = ['\n'] as const;
 const extraPromptsRegex = createRegExp(
