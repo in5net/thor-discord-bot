@@ -55,6 +55,7 @@ export default command(
     });
 
     const reply = await answer(prompt, previous);
+    console.log('reply:', reply);
     await channel.send(reply);
 
     return cache.context.create({
@@ -121,7 +122,7 @@ Raya: `,
       num_beams: 1,
       penalty_alpha: 0,
       length_penalty: 1,
-      early_stopping: false,
+      early_stopping: true,
       seed: -1,
       add_bos_token: true,
       truncation_length: 2048,
