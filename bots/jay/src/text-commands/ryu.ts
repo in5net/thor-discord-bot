@@ -7,8 +7,7 @@ import {
   caseInsensitive,
   char,
   createRegExp,
-  global,
-  maybe
+  global
 } from 'magic-regexp';
 
 export default command(
@@ -82,9 +81,8 @@ const gpt3DescPath = new URL(
   import.meta.url
 );
 
-const stoppingStrings = ['You:', 'Me:', 'Raya:'] as const;
+const stoppingStrings = ['\n'] as const;
 const extraPromptsRegex = createRegExp(
-  maybe('\n'),
   anyOf(...stoppingStrings),
   char.times.any(),
   [caseInsensitive, global]
