@@ -106,9 +106,7 @@ async function answer(
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      prompt: `Raya's Persona: ${persona}
-Personality: ${personality}
-<START>
+      prompt: `${persona} ${personality}
 ${previous.map(
   ({ question, answer }) => `You: ${question}
 Raya: ${answer}
@@ -117,10 +115,10 @@ Raya: ${answer}
 Raya: `,
       max_new_tokens: 128,
       do_sample: true,
-      temperature: 0.85,
-      top_p: 0.95,
+      temperature: 0.72,
+      top_p: 0.73,
       typical_p: 1,
-      repetition_penalty: 1.5,
+      repetition_penalty: 1.1,
       top_k: 0,
       min_length: 1,
       no_repeat_ngram_size: 0,
