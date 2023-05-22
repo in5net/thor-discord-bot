@@ -12,7 +12,7 @@ import {
 
 export default command(
   {
-    desc: 'Talk to Pygmalion',
+    desc: 'Talk to an AI',
     optionalPrefix: true,
     args: {
       prompt: {
