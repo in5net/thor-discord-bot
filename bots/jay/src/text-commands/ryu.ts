@@ -51,7 +51,7 @@ export default command(
       orderBy: {
         createdAt: 'desc'
       },
-      take: 5
+      take: 16
     });
 
     const reply = await answer(prompt, previous);
