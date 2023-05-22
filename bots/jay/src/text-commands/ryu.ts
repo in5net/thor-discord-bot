@@ -114,7 +114,7 @@ Raya: ${answer}
 `
 )}You: ${prompt}
 Raya: `,
-      max_new_tokens: 128,
+      max_new_tokens: 400,
       do_sample: true,
       temperature: 0.8,
       top_p: 1,
