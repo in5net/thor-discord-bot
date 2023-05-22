@@ -80,7 +80,7 @@ export default command(
   }
 );
 
-const personaPath = new URL('../../assets/persona.txt', import.meta.url);
+const descPath = new URL('../../assets/desc.txt', import.meta.url);
 
 const stoppingStrings = ['\nYou:'] as const;
 const extraPromptsRegex = createRegExp(
@@ -93,7 +93,7 @@ async function answer(
   prompt: string,
   previous: { question: string; answer: string }[]
 ): Promise<string> {
-  const persona = await readFile(personaPath, 'utf8');
+  const desc = await readFile(descPath, 'utf8');
 
   const response = await fetch('http://127.0.0.1:5000/api/v1/generate', {
     method: 'POST',
@@ -101,7 +101,7 @@ async function answer(
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      prompt: `${persona}
+      prompt: `${desc}
 ${previous.map(
   ({ question, answer }) => `You: ${question}
 Raya: ${answer}
