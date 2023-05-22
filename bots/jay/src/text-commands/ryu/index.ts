@@ -56,31 +56,32 @@ export default command(
 
     const reply = await answer(prompt, previous);
     console.log('reply:', reply);
-    await channel.send(reply);
+    if (reply) {
+      await channel.send(reply);
 
-    return cache.context.create({
-      data: {
-        channel: {
-          connectOrCreate: {
-            create: {
-              id: channelId
-            },
-            where: {
-              id: channelId
+      return cache.context.create({
+        data: {
+          channel: {
+            connectOrCreate: {
+              create: {
+                id: channelId
+              },
+              where: {
+                id: channelId
+              }
             }
-          }
-        },
-        question: prompt,
-        answer: reply
-      }
-    });
+          },
+          question: prompt,
+          answer: reply
+        }
+      });
+    }
+    return;
   }
 );
 
-const gpt3DescPath = new URL(
-  '../../../raya-thor/gpt3-desc.txt',
-  import.meta.url
-);
+const personaPath = new URL('./persona.txt', import.meta.url);
+const personalityPath = new URL('./personality.txt', import.meta.url);
 
 const stoppingStrings = ['\n'] as const;
 const extraPromptsRegex = createRegExp(
@@ -93,7 +94,8 @@ async function answer(
   prompt: string,
   previous: { question: string; answer: string }[]
 ): Promise<string> {
-  const desc = await readFile(gpt3DescPath, 'utf8');
+  const persona = await readFile(personaPath, 'utf8');
+  const personality = await readFile(personalityPath, 'utf8');
 
   const response = await fetch('http://127.0.0.1:5000/api/v1/generate', {
     method: 'POST',
@@ -101,8 +103,8 @@ async function answer(
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      prompt: `Raya's Persona: ${desc}
-Personality: Creative, clever, funny, kind
+      prompt: `Raya's Persona: ${persona}
+Personality: ${personality}
 <START>
 ${previous.map(
   ({ question, answer }) => `You: ${question}
@@ -132,5 +134,5 @@ Raya: `,
     })
   });
   const data = (await response.json()) as { results: [{ text: string }] };
-  return data.results[0].text.replace(extraPromptsRegex, '');
+  return data.results[0].text.replace(extraPromptsRegex, '').trim();
 }
