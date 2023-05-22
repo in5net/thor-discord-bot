@@ -36,7 +36,7 @@ export default command(
     if (prompt.length > 256) return message.reply('Your text is too long');
 
     const minCreatedAt = new Date();
-    minCreatedAt.setMinutes(minCreatedAt.getMinutes() - 5);
+    minCreatedAt.setMinutes(minCreatedAt.getMinutes() - 15);
     const previous = await cache.context.findMany({
       select: {
         question: true,
@@ -106,7 +106,8 @@ async function answer(
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      prompt: `${persona} ${personality}
+      prompt: `Raya's Persona: ${persona} ${personality}
+<START>
 ${previous.map(
   ({ question, answer }) => `You: ${question}
 Raya: ${answer}
