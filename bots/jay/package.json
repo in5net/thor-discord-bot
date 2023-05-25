@@ -13,8 +13,8 @@
   "dependencies": {
     "@discordjs/rest": "1.7.1",
     "@in5net/limitless": "0.1.4",
-    "@napi-rs/canvas": "0.1.40",
-    "chalk-template": "^1.0.0",
+    "@napi-rs/canvas": "0.1.41",
+    "chalk-template": "^1.1.0",
     "decode-gif": "^1.0.1",
     "discord-api-types": "0.37.42",
     "discord.js": "14.11.0",
