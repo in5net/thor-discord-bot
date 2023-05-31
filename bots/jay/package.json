@@ -16,7 +16,7 @@
     "@napi-rs/canvas": "0.1.41",
     "chalk-template": "^1.1.0",
     "decode-gif": "^1.0.1",
-    "discord-api-types": "0.37.42",
+    "discord-api-types": "0.37.43",
     "discord.js": "14.11.0",
     "fastest-levenshtein": "^1.0.16",
     "fluent-ffmpeg": "^2.1.2",
@@ -41,8 +41,8 @@
     "eslint-config-custom": "workspace:*",
     "tsconfig": "workspace:*",
     "typescript": "5.0.4",
-    "vite": "^4.3.8",
+    "vite": "^4.3.9",
     "storage": "workspace:*",
-    "vite-node": "^0.31.1"
+    "vite-node": "^0.31.2"
   }
 }
