@@ -4,10 +4,11 @@ import {
   ActivityType,
   Client,
   Options,
-  WebhookClient
+  WebhookClient,
 } from 'discord.js';
 import { RecurrenceRule, scheduleJob } from 'node-schedule';
 import { getCatboyEmbed } from './commands/catboy';
+import { loadDiscordEvents } from './loaders/events';
 
 const { NAME, DISCORD_TOKEN } = process.env;
 console.log(`⏳ ${NAME} is starting...`);
@@ -15,12 +16,12 @@ console.time(NAME);
 
 const activity: ActivityOptions = {
   name: 'with your feelings',
-  type: ActivityType.Playing
+  type: ActivityType.Playing,
 };
 
 const client = new Client({
   presence: {
-    activities: [activity]
+    activities: [activity],
   },
   intents: [
     'Guilds',
@@ -28,7 +29,7 @@ const client = new Client({
     'DirectMessages',
     'MessageContent',
     'GuildMessageReactions',
-    'GuildVoiceStates'
+    'GuildVoiceStates',
   ],
   makeCache: Options.cacheWithLimits({
     ApplicationCommandManager: 0,
@@ -44,20 +45,16 @@ const client = new Client({
     StageInstanceManager: 0,
     ThreadManager: 0,
     ThreadMemberManager: 0,
-    UserManager: 0
-  })
+    UserManager: 0,
+  }),
 });
 export default client;
 
-const webhook = new WebhookClient({ url: process.env.WEBHOOK_URL || '' });
+await loadDiscordEvents(client);
 
-client
-  .once('ready', async () => {
-    console.timeEnd(NAME);
-    console.log(`✅ ${NAME} is ready!`);
-    await webhook.send(`✅ ${NAME} is online`);
-  })
-  .login(DISCORD_TOKEN);
+client.login(DISCORD_TOKEN);
+
+const webhook = new WebhookClient({ url: process.env.WEBHOOK_URL });
 
 process
   .on('exit', () => console.log(`🚫 ${NAME} is going offline...`))
@@ -66,11 +63,12 @@ process
     process.exit(0);
   });
 
+const tz = 'America/New_York';
 scheduleJob(
   {
     hour: 4 + 12,
     minute: 20,
-    tz: 'America/New_York'
+    tz,
   },
   () => webhook.send('420 BLAZE IT!!! 🔥🔥🔥')
 );
@@ -78,7 +76,7 @@ scheduleJob(
   {
     hour: 12,
     minute: 0,
-    tz: 'America/New_York'
+    tz,
   },
   () => webhook.send("it's high noon ☀️🤠")
 );
@@ -86,14 +84,14 @@ scheduleJob(
   {
     hour: 7 + 12,
     minute: 0,
-    tz: 'America/New_York'
+    tz,
   },
   () => webhook.send('alarm time ●_●')
 );
 scheduleJob(
   {
     minute: 0,
-    tz: 'America/New_York'
+    tz,
   },
   () => {
     client.user?.setActivity('its 7:00 somewhere');

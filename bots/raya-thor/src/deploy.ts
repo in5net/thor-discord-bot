@@ -9,14 +9,14 @@ const { default: oddNameCommands, ...normalCommands } = commandsData;
 
 const commands = {
   ...normalCommands,
-  ...oddNameCommands
+  ...oddNameCommands,
 } as unknown as Commands | CommandGroups;
 
 deploy(
   commands,
   Object.values(messageCommands),
-  process.env.DISCORD_TOKEN || '',
-  process.env.DISCORD_ID || ''
+  process.env.DISCORD_TOKEN,
+  process.env.DISCORD_ID
 )
   .then(buildCount => console.log(buildCount, 'commands registered'))
   .catch(console.error);

@@ -57,12 +57,11 @@ const client = new Client({
     UserManager: 0,
   }),
 });
+export default client;
 
 await loadDiscordEvents(client);
 client.textCommands = await loadTextCommands();
 client.slashCommands = await loadSlashCommands();
-
-export default client;
 
 if (process.env.DEV !== '1') {
   const webhook = new WebhookClient({ url: process.env.WEBHOOK_URL });
