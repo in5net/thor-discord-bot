@@ -2,10 +2,9 @@ import { EmbedBuilder } from 'discord.js';
 
 import command, {
   argType2Name,
-  type TextCommand
+  type TextCommand,
 } from '$services/commands/text';
 import { COLOR } from '$services/env';
-import commands from '.';
 
 export default command(
   {
@@ -15,9 +14,9 @@ export default command(
       command: {
         type: 'words',
         desc: 'The command to show help for',
-        optional: true
-      }
-    }
+        optional: true,
+      },
+    },
   },
   ({ message: { channel }, args: { command: args } }) => {
     if (!args)
@@ -32,8 +31,8 @@ export default command(
                 )
                 .join(', ')
             )
-            .setColor(COLOR)
-        ]
+            .setColor(COLOR),
+        ],
       });
 
     let commandManual: TextCommand | undefined;
@@ -68,14 +67,14 @@ export default command(
       .setColor(COLOR)
       .addFields({
         name: 'Usage',
-        value: `\`${process.env.PREFIX}${usage.join(' ')}\``
+        value: `\`${process.env.PREFIX}${usage.join(' ')}\``,
       });
     if (commandManual.subcommands)
       embed.addFields({
         name: 'Subcommands',
         value: Object.keys(commandManual.subcommands)
           .map(name => `\`${name}\``)
-          .join(', ')
+          .join(', '),
       });
     return channel.send({ embeds: [embed] });
   }

@@ -1,6 +1,7 @@
 {
   "name": "storage",
   "version": "0.0.0",
+  "type": "module",
   "main": "./index.ts",
   "types": "./index.ts",
   "dependencies": {

@@ -1,1 +1,1 @@
-export * from './generated/cache/index';
+export * from './generated/cache';

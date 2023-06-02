@@ -1,11 +1,16 @@
 import {
   ApplicationCommandOptionType,
   Routes,
-  type RESTPostAPIApplicationCommandsJSONBody
+  type RESTPostAPIApplicationCommandsJSONBody,
 } from 'discord-api-types/v10';
 import { REST } from 'discord.js';
 
-import { Command, CommandGroups, CommandOptionType, Commands } from './slash';
+import {
+  CommandGroups,
+  CommandOptionType,
+  Commands,
+  SlashCommand,
+} from './slash';
 
 let buildCount = 0;
 
@@ -21,7 +26,7 @@ export async function deploy(
     commands
   ).map(([name, command]) =>
     typeof command.desc === 'string'
-      ? build(name, command as Command)
+      ? build(name, command as SlashCommand)
       : typeof Object.values(command as Commands | CommandGroups)[0].desc ===
         'string'
       ? {
@@ -30,9 +35,9 @@ export async function deploy(
           options: Object.entries(command as Commands).map(
             ([name, command]) => ({
               type: ApplicationCommandOptionType.Subcommand,
-              ...build(name, command)
+              ...build(name, command),
             })
-          )
+          ),
         }
       : {
           name,
@@ -45,16 +50,16 @@ export async function deploy(
               options: Object.entries(command as Commands).map(
                 ([name, command]) => ({
                   type: ApplicationCommandOptionType.Subcommand,
-                  ...build(name, command)
+                  ...build(name, command),
                 })
-              )
+              ),
             })
-          )
+          ),
         }
   );
 
   await rest.put(Routes.applicationCommands(applicationId), {
-    body: data
+    body: data,
   });
   return buildCount;
 }
@@ -70,10 +75,10 @@ const commandOptionTypeMap: Record<
   choice: ApplicationCommandOptionType.String,
   user: ApplicationCommandOptionType.User,
   channel: ApplicationCommandOptionType.Channel,
-  attachment: ApplicationCommandOptionType.Attachment
+  attachment: ApplicationCommandOptionType.Attachment,
 };
 
-function build(name: string, { desc, options }: Command) {
+function build(name: string, { desc, options }: SlashCommand) {
   buildCount++;
   return {
     name,
@@ -81,7 +86,7 @@ function build(name: string, { desc, options }: Command) {
     options: Object.entries(options).map(
       ([
         name,
-        { desc, type, min, max, optional, default: d, choices, autocomplete }
+        { desc, type, min, max, optional, default: d, choices, autocomplete },
       ]) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const data: any = {
@@ -96,15 +101,15 @@ function build(name: string, { desc, options }: Command) {
               ? Array.isArray(choices)
                 ? choices.map(choice => ({
                     name: `${choice}`,
-                    value: choice
+                    value: choice,
                   }))
                 : Object.entries(choices || {}).map(([name, description]) => ({
                     name,
                     description,
-                    value: name
+                    value: name,
                   }))
               : undefined,
-          autocomplete: !!autocomplete
+          autocomplete: !!autocomplete,
         };
         if (type === 'int' || type === 'float') {
           data.min_value = min;
@@ -115,6 +120,6 @@ function build(name: string, { desc, options }: Command) {
         }
         return data;
       }
-    )
+    ),
   };
 }

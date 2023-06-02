@@ -1,30 +1,44 @@
 import {
-  ActivityOptions,
   ActivityType,
   Client,
+  Collection,
   Options,
-  WebhookClient
+  WebhookClient,
 } from 'discord.js';
+
+import { SlashCommand } from '$services/commands/slash';
+import { TextCommand } from '$services/commands/text';
+import { loadDiscordEvents } from './loaders/events';
+import { loadSlashCommands } from './loaders/slash-commands';
+import { loadTextCommands } from './loaders/text-commands';
 
 const { NAME, DISCORD_TOKEN } = process.env;
 console.log(`⏳ ${NAME} is starting...`);
 console.time(NAME);
 
-const activity: ActivityOptions = {
-  name: 'and gaming',
-  type: ActivityType.Playing
-};
+declare module 'discord.js' {
+  export interface Client {
+    textCommands: Collection<string, TextCommand>;
+    aliases: Collection<string, string>;
+    slashCommands: Collection<string, SlashCommand>;
+  }
+}
 
 const client = new Client({
   presence: {
-    activities: [activity]
+    activities: [
+      {
+        name: 'and gaming',
+        type: ActivityType.Playing,
+      },
+    ],
   },
   intents: [
     'Guilds',
     'GuildMessages',
     'DirectMessages',
     'MessageContent',
-    'GuildMessageReactions'
+    'GuildMessageReactions',
   ],
   makeCache: Options.cacheWithLimits({
     ApplicationCommandManager: 0,
@@ -40,24 +54,25 @@ const client = new Client({
     StageInstanceManager: 0,
     ThreadManager: 0,
     ThreadMemberManager: 0,
-    UserManager: 0
-  })
+    UserManager: 0,
+  }),
 });
+
+await loadDiscordEvents(client);
+client.textCommands = await loadTextCommands();
+client.slashCommands = await loadSlashCommands();
+
 export default client;
 
-const webhook = new WebhookClient({ url: process.env.WEBHOOK_URL || '' });
+if (process.env.DEV !== '1') {
+  const webhook = new WebhookClient({ url: process.env.WEBHOOK_URL });
 
-client
-  .once('ready', async () => {
-    console.timeEnd(NAME);
-    console.log(`✅ ${NAME} is ready!`);
-    await webhook.send(`✅ ${NAME} is online`);
-  })
-  .login(DISCORD_TOKEN);
-
-process
-  .on('exit', () => console.log(`🚫 ${NAME} is going offline...`))
-  .on('SIGINT', async () => {
+  process.on('SIGINT', async () => {
     await webhook.send(`🚫 ${NAME} is offline`);
     process.exit(0);
   });
+}
+
+client.login(DISCORD_TOKEN);
+
+process.on('exit', () => console.log(`🚫 ${NAME} is going offline...`));

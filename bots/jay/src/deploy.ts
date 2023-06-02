@@ -6,8 +6,8 @@ console.log('Commands registering...');
 
 deploy(
   commands as unknown as Commands | CommandGroups,
-  process.env.DISCORD_TOKEN || '',
-  process.env.DISCORD_ID || ''
+  process.env.DISCORD_TOKEN,
+  process.env.DISCORD_ID
 )
   .then(buildCount => console.log(buildCount, 'commands registered'))
   .catch(console.error);

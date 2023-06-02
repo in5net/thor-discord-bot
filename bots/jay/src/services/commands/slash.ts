@@ -5,7 +5,7 @@ import type {
   Awaitable,
   ChatInputCommandInteraction,
   GuildBasedChannel,
-  User
+  User,
 } from 'discord.js';
 
 type Choice = number | string;
@@ -66,15 +66,15 @@ interface CommandOptions<T extends Options> {
   options: T;
   permissions?: Permission[];
 }
-export interface Command<T extends Options = Options>
+export interface SlashCommand<T extends Options = Options>
   extends CommandOptions<T> {
   handler: Handler<T>;
 }
-export type Commands = Record<string, Command>;
+export type Commands = Record<string, SlashCommand>;
 export type CommandGroups = Record<string, Commands>;
 
 const command = <T extends Options>(
   options: CommandOptions<T>,
   handler: Handler<T>
-): Command<T> => ({ ...options, handler });
+): SlashCommand<T> => ({ ...options, handler });
 export default command;

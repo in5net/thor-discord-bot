@@ -1,5 +1,5 @@
 {
-  "display": "Discord Bot",
+  "display": "Raya/Thor Discord Bot",
   "extends": "tsconfig/tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./",
