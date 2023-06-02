@@ -1,4 +1,4 @@
-import { EmbedBuilder } from 'discord.js';
+import { Collection, EmbedBuilder } from 'discord.js';
 
 import command, {
   argType2Name,
@@ -18,15 +18,15 @@ export default command(
       },
     },
   },
-  ({ message: { channel }, args: { command: args } }) => {
+  ({ message: { client, channel }, args: { command: args } }) => {
     if (!args)
       return channel.send({
         embeds: [
           new EmbedBuilder()
             .setTitle(`${process.env.NAME} Commands`)
             .setDescription(
-              Object.entries(commands)
-                .map(([name, { aliases }]) =>
+              client.textCommands
+                .map(({ aliases }, name) =>
                   [name, ...(aliases?.map(alias => alias) || [])].join('|')
                 )
                 .join(', ')
@@ -36,18 +36,20 @@ export default command(
       });
 
     let commandManual: TextCommand | undefined;
-    let commandManuals = commands;
+    let commandManuals = client.textCommands;
     const usage: string[] = [];
     const commandNames = args.map(arg => arg.toLowerCase());
     for (const command of commandNames) {
-      commandManual = Object.entries(commandManuals).find(
-        ([name, { aliases }]) => name === command || aliases?.includes(command)
-      )?.[1];
+      commandManual = commandManuals.find(
+        ({ aliases }, name) => name === command || aliases?.includes(command)
+      );
       if (!commandManual) {
         commandManual = undefined;
         break;
       }
-      commandManuals = commandManual.subcommands || {};
+      commandManuals = new Collection(
+        Object.entries(commandManual.subcommands || {})
+      );
       usage.push([command, ...(commandManual.aliases || [])].join('/'));
     }
     if (commandManual)
