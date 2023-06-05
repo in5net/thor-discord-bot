@@ -1,23 +1,27 @@
-import { CollectionReference, Timestamp } from 'firebase-admin/firestore';
-import trkl from 'trkl';
-
-import { db } from '$services/firebase';
+import {
+	type CollectionReference,
+	type Timestamp,
+} from "firebase-admin/firestore";
+import trkl from "trkl";
+import { firestore } from "$services/firebase";
 
 interface RandomResponse {
-  words: string[];
-  responses: string[];
-  chance?: number;
-  cooldown?: number;
-  sentAt?: Timestamp;
+	words: string[];
+	responses: string[];
+	chance?: number;
+	cooldown?: number;
+	sentAt?: Timestamp;
 }
 
-export const randomResponsesRef = db.collection(
-  'random-responses'
+export const randomResponsesRef = firestore.collection(
+	"random-responses"
 ) as CollectionReference<RandomResponse>;
 
-const randomResponses = trkl<(RandomResponse & { id: string })[]>([]);
+const randomResponses = trkl<Array<RandomResponse & { id: string }>>([]);
 export default randomResponses;
 
-randomResponsesRef.onSnapshot(({ docs }) =>
-  randomResponses(docs.map(doc => ({ ...doc.data(), id: doc.id })))
-);
+randomResponsesRef.onSnapshot(({ docs }) => {
+	randomResponses(
+		docs.map(document => ({ ...document.data(), id: document.id }))
+	);
+});

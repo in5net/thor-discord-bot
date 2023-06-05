@@ -1,17 +1,17 @@
 import type {
-  Awaitable,
-  MessageContextMenuCommandInteraction
-} from 'discord.js';
+	Awaitable,
+	MessageContextMenuCommandInteraction,
+} from "discord.js";
 
 type Handler = (i: MessageContextMenuCommandInteraction) => Awaitable<any>;
 
 export interface MessageCommand {
-  name: string;
-  handler: Handler;
+	name: string;
+	handler: Handler;
 }
 
 const command = (name: string, handler: Handler): MessageCommand => ({
-  name,
-  handler
+	name,
+	handler,
 });
 export default command;

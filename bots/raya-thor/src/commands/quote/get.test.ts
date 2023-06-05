@@ -1,12 +1,11 @@
-import type { SpeechBubble } from '@prisma/client';
-import test from 'node:test';
+import test from "node:test";
+import type { SpeechBubble } from "database";
+import prisma from "$services/prisma";
 
-import prisma from '$services/prisma';
-
-test('quote', async () => {
-  const [quote] = await prisma.$queryRaw<[SpeechBubble]>`SELECT *
+await test("quote", async () => {
+	const [quote] = await prisma.$queryRaw<[SpeechBubble]>`SELECT *
     FROM SpeechBubble
     ORDER BY RAND()
     LIMIT 1;`;
-  console.log(quote);
+	console.log(quote);
 });

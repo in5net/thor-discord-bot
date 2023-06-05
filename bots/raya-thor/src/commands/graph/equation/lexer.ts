@@ -1,121 +1,126 @@
-import Token, { groupings, Operator, operators, TokenMap } from './token';
+import Token, {
+	groupings,
+	type Operator,
+	operators,
+	type TokenMap,
+} from "./token";
 
 const WHITESPACE = /[ \t\r]/;
-const DIGITS = /[0-9]/;
-// letters, underscore, $ & greek letters
+const DIGITS = /\d/;
+// Letters, underscore, $ & greek letters
 const LETTERS = /[a-zA-Z_$\u0391-\u03C9∞]/;
 const SUPERSCRIPT =
-  'ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖʳˢᵗᵘᵛʷˣʸᶻᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᴿˢᵀᵁⱽᵂˣʸᶻ⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾';
+	"ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖʳˢᵗᵘᵛʷˣʸᶻᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᴿˢᵀᵁⱽᵂˣʸᶻ⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾";
 const NORMALSCRIPT =
-  'abcdefghijklmnoprstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ0123456789+-=()';
+	"abcdefghijklmnoprstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ0123456789+-=()";
 
-const EOF = '\0';
+const EOF = "\0";
 
 export default class Lexer {
-  index = 0;
-  char: string;
+	index = 0;
+	char: string;
 
-  constructor(private text: string) {
-    this.char = text[0] || EOF;
-  }
+	constructor(private readonly text: string) {
+		this.char = text[0] || EOF;
+	}
 
-  // eslint-disable-next-line class-methods-use-this
-  error(message: string): never {
-    throw new Error(message);
-  }
+	error(message: string): never {
+		throw new Error(message);
+	}
 
-  lex(): Token[] {
-    const tokens: Token[] = [];
-    let token = this.nextToken();
-    while (!token.is('eof')) {
-      tokens.push(token);
-      token = this.nextToken();
-    }
-    tokens.push(token);
-    return tokens;
-  }
+	lex(): Token[] {
+		const tokens: Token[] = [];
+		let token = this.nextToken();
+		while (!token.is("eof")) {
+			tokens.push(token);
+			token = this.nextToken();
+		}
 
-  eof(): boolean {
-    return this.char === EOF;
-  }
+		tokens.push(token);
+		return tokens;
+	}
 
-  advance(): void {
-    this.char = this.text[++this.index] || EOF;
-  }
+	eof(): boolean {
+		return this.char === EOF;
+	}
 
-  get nextChar(): string {
-    return this.text[this.index + 1] || EOF;
-  }
+	advance(): void {
+		this.char = this.text[++this.index] || EOF;
+	}
 
-  nextToken(): Token {
-    while (!this.eof()) {
-      const { char } = this;
-      if (WHITESPACE.test(char)) this.advance();
-      else if (DIGITS.test(char)) return this.number();
-      else if (SUPERSCRIPT.includes(char)) return this.superscript();
-      else if (LETTERS.test(char)) return this.word();
-      else if (operators.includes(char as Operator)) return this.operator();
-      else if (Object.entries(groupings).flat().includes(char)) {
-        this.advance();
-        return new Token('grouping', char);
-      } else this.error(`Illegal character './{char}'`);
-    }
-    return Token.EOF;
-  }
+	get nextChar(): string {
+		return this.text[this.index + 1] || EOF;
+	}
 
-  superscript(): Token<'superscript'> {
-    let str = '';
+	nextToken(): Token {
+		while (!this.eof()) {
+			const { char } = this;
+			if (WHITESPACE.test(char)) this.advance();
+			else if (DIGITS.test(char)) return this.number();
+			else if (SUPERSCRIPT.includes(char)) return this.superscript();
+			else if (LETTERS.test(char)) return this.word();
+			else if (operators.includes(char as Operator)) return this.operator();
+			else if (Object.entries(groupings).flat().includes(char)) {
+				this.advance();
+				return new Token("grouping", char);
+			} else this.error(`Illegal character './{char}'`);
+		}
 
-    let index = SUPERSCRIPT.indexOf(this.char);
-    while (index >= 0) {
-      const normalChar = NORMALSCRIPT[index];
-      str += normalChar;
-      this.advance();
-      index = SUPERSCRIPT.indexOf(this.char);
-    }
+		return Token.EOF;
+	}
 
-    const lexer = new Lexer(str);
-    const tokens = lexer.lex() as Token<
-      Exclude<keyof TokenMap, 'superscript'>
-    >[];
-    tokens.pop();
+	superscript(): Token<"superscript"> {
+		let string = "";
 
-    return new Token('superscript', tokens);
-  }
+		let index = SUPERSCRIPT.indexOf(this.char);
+		while (index >= 0) {
+			const normalChar = NORMALSCRIPT[index] || "";
+			string += normalChar;
+			this.advance();
+			index = SUPERSCRIPT.indexOf(this.char);
+		}
 
-  number(): Token<'number'> {
-    let str = this.char;
-    let decimals = 0;
-    this.advance();
+		const lexer = new Lexer(string);
+		const tokens = lexer.lex() as Array<
+			Token<Exclude<keyof TokenMap, "superscript">>
+		>;
+		tokens.pop();
 
-    while (DIGITS.test(this.char) || ['.', '_'].includes(this.char)) {
-      // eslint-disable-next-line no-continue
-      if (this.char === '_') continue;
-      if (this.char === '.' && ++decimals > 1) break;
+		return new Token("superscript", tokens);
+	}
 
-      str += this.char;
-      this.advance();
-    }
+	number(): Token<"number"> {
+		let string_ = this.char;
+		let decimals = 0;
+		this.advance();
 
-    return new Token('number', parseFloat(str));
-  }
+		while (DIGITS.test(this.char) || [".", "_"].includes(this.char)) {
+			if (this.char === "_") continue;
+			if (this.char === "." && ++decimals > 1) break;
 
-  word(): Token<'identifier'> {
-    let str = this.char;
-    this.advance();
+			string_ += this.char;
+			this.advance();
+		}
 
-    while ([LETTERS, DIGITS].some(regex => regex.test(this.char))) {
-      str += this.char;
-      this.advance();
-    }
+		return new Token("number", Number.parseFloat(string_));
+	}
 
-    return new Token('identifier', str);
-  }
+	word(): Token<"identifier"> {
+		let string_ = this.char;
+		this.advance();
 
-  operator(): Token<'operator'> {
-    const str = this.char;
-    this.advance();
+		while ([LETTERS, DIGITS].some(regex => regex.test(this.char))) {
+			string_ += this.char;
+			this.advance();
+		}
 
-    return new Token('operator', str as Operator);
-  }
+		return new Token("identifier", string_);
+	}
+
+	operator(): Token<"operator"> {
+		const string_ = this.char;
+		this.advance();
+
+		return new Token("operator", string_ as Operator);
+	}
 }

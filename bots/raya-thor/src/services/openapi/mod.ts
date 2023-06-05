@@ -1,31 +1,15 @@
-import { Fetcher } from './fetcher';
-import { arrayRequestBody } from './utils';
-
-import type {
-  ApiResponse,
-  FetchArgType,
-  FetchErrorType,
-  FetchReturnType,
-  Middleware,
-  OpArgType,
-  OpDefaultReturnType,
-  OpErrorType,
-  OpReturnType,
-  TypedFetch
-} from './types';
-
-import { ApiError } from './types';
-
-export type {
-  OpArgType,
-  OpErrorType,
-  OpDefaultReturnType,
-  OpReturnType,
-  FetchArgType,
-  FetchReturnType,
-  FetchErrorType,
-  ApiResponse,
-  Middleware,
-  TypedFetch
-};
-export { Fetcher, ApiError, arrayRequestBody };
+export { Fetcher } from "./fetcher";
+export {
+	type ApiResponse,
+	type FetchArgType,
+	type FetchReturnType,
+	type FetchErrorType,
+	type OpArgumentType as OpArgType,
+	type Middleware,
+	type OpErrorType,
+	ApiError,
+	type OpDefaultReturnType,
+	type OpReturnType,
+	type TypedFetch,
+} from "./types";
+export { arrayRequestBody } from "./utils";

@@ -1,1 +1,1 @@
-export { Fetcher } from './openapi/fetcher';
+export { Fetcher } from "./openapi/fetcher";

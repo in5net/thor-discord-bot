@@ -1,1 +1,1 @@
-export * as video from './video/mod';
+export * as video from "./video/mod";

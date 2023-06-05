@@ -1,105 +1,108 @@
-import type { AudioResource } from '@discordjs/voice';
 import {
-  AudioPlayerStatus,
-  createAudioPlayer,
-  joinVoiceChannel,
-  VoiceConnection,
-  VoiceConnectionStatus
-} from '@discordjs/voice';
-import { VoiceChannel } from 'discord.js';
-import { TypedEmitter } from 'tiny-typed-emitter';
-
-import { SongType, YouTubeSong } from './song';
+	AudioPlayerStatus,
+	createAudioPlayer,
+	joinVoiceChannel,
+	VoiceConnectionStatus,
+} from "@discordjs/voice";
+import type { AudioResource, VoiceConnection } from "@discordjs/voice";
+import type { VoiceChannel } from "discord.js";
+import { TypedEmitter } from "tiny-typed-emitter";
+import { type SongType, YouTubeSong } from "./song";
 
 export default class Stream extends TypedEmitter<{
-  idle: () => void;
-  stop: () => void;
-  error: (error: Error) => void;
+	idle: () => void;
+	stop: () => void;
+	error: (error: Error) => void;
 }> {
-  player = createAudioPlayer()
-    .on(AudioPlayerStatus.Idle, () => this.emit('idle'))
-    .on('error', error => this.emit('error', error));
+	player = createAudioPlayer()
+		.on(AudioPlayerStatus.Idle, () => this.emit("idle"))
+		.on("error", error => this.emit("error", error));
 
-  channel?: VoiceChannel;
-  connection?: VoiceConnection;
-  resource?: AudioResource<SongType>;
-  filters: string[] = [];
+	channel?: VoiceChannel;
+	connection?: VoiceConnection;
+	resource?: AudioResource<SongType>;
+	filters: string[] = [];
 
-  stop() {
-    const { player, connection } = this;
-    if (
-      connection &&
-      connection.state.status !== VoiceConnectionStatus.Destroyed
-    )
-      connection.destroy();
-    player.stop();
-    this.connection = undefined;
-    this.emit('stop');
-  }
+	stop() {
+		const { player, connection } = this;
+		if (
+			connection &&
+			connection.state.status !== VoiceConnectionStatus.Destroyed
+		)
+			connection.destroy();
+		player.stop();
+		this.connection = undefined;
+		this.emit("stop");
+	}
 
-  join() {
-    const { player, channel, connection } = this;
-    if (!channel) return;
+	join() {
+		const { player, channel, connection } = this;
+		if (!channel) return;
 
-    console.log(
-      `From: voice connection status ${connection?.state.status || 'gone'}`
-    );
+		console.log(
+			`From: voice connection status ${connection?.state.status || "gone"}`
+		);
 
-    switch (connection?.state.status) {
-      case VoiceConnectionStatus.Ready:
-      case VoiceConnectionStatus.Signalling:
-      case VoiceConnectionStatus.Connecting:
-        break;
-      default:
-        connection?.destroy();
-        this.connection = joinVoiceChannel({
-          channelId: channel.id,
-          guildId: channel.guildId,
-          adapterCreator: channel.guild.voiceAdapterCreator
-        });
-        this.connection
-          .on(VoiceConnectionStatus.Disconnected, () => this.join())
-          .subscribe(player);
-    }
+		switch (connection?.state.status) {
+			case VoiceConnectionStatus.Ready:
+			case VoiceConnectionStatus.Signalling:
+			case VoiceConnectionStatus.Connecting: {
+				break;
+			}
 
-    console.log(
-      `To: voice connection status ${this.connection?.state.status || 'gone'}`
-    );
-  }
+			default: {
+				connection?.destroy();
+				this.connection = joinVoiceChannel({
+					channelId: channel.id,
+					guildId: channel.guildId,
+					adapterCreator: channel.guild.voiceAdapterCreator,
+				});
+				this.connection
+					.on(VoiceConnectionStatus.Disconnected, () => {
+						this.join(",");
+					})
+					.subscribe(player);
+			}
+		}
 
-  play(resource = this.resource) {
-    if (!resource) return;
-    this.resource = resource;
+		console.log(
+			`To: voice connection status ${this.connection?.state.status || "gone"}`
+		);
+	}
 
-    this.join();
-    this.player.play(resource);
-  }
+	play(resource = this.resource) {
+		if (!resource) return;
+		this.resource = resource;
 
-  async setFilters(filters?: string[]) {
-    const { resource } = this;
-    if (!resource) return;
-    let { start } = resource.metadata;
-    if (resource.metadata instanceof YouTubeSong)
-      start += resource.metadata.time || 0;
+		this.join();
+		this.player.play(resource);
+	}
 
-    let scale = 1;
-    for (const values of this.filters) {
-      const atempo = /atempo=(\d+\.?\d+)/.exec(values)?.[1];
-      if (atempo) scale *= parseFloat(atempo);
-      const asetrate = /asetrate=(\d+\.?\d+)/.exec(values)?.[1];
-      if (asetrate) scale *= parseFloat(asetrate);
-    }
+	async setFilters(filters?: string[]) {
+		const { resource } = this;
+		if (!resource) return;
+		let { start } = resource.metadata;
+		if (resource.metadata instanceof YouTubeSong)
+			start += resource.metadata.time || 0;
 
-    this.filters = filters || [];
+		let scale = 1;
+		for (const values of this.filters) {
+			const atempo = /atempo=(\d+\.?\d+)/.exec(values)?.[1];
+			if (atempo) scale *= Number.parseFloat(atempo);
+			const asetrate = /asetrate=(\d+\.?\d+)/.exec(values)?.[1];
+			if (asetrate) scale *= Number.parseFloat(asetrate);
+		}
 
-    const seek =
-      (start || 0) + ((this.resource?.playbackDuration || 0) * scale) / 1000;
-    console.log('start:', start, 'scale:', scale, 'seek:', seek);
-    this.resource = await resource.metadata.getResource({
-      seek,
-      filters
-    });
-    this.resource.metadata.start = seek;
-    await this.play();
-  }
+		this.filters = filters || [];
+
+		const seek =
+			(start || 0) + ((this.resource?.playbackDuration || 0) * scale) / 1000;
+		console.log("start:", start, "scale:", scale, "seek:", seek);
+		this.resource = await resource.metadata.getResource({
+			seek,
+			filters,
+		});
+		this.resource.metadata.start = seek;
+		this.play();
+	}
 }

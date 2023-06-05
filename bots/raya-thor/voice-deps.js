@@ -1,3 +1,3 @@
-import { generateDependencyReport } from '@discordjs/voice';
+import { generateDependencyReport } from "@discordjs/voice";
 
 console.log(generateDependencyReport());

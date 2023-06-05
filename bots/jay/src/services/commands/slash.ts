@@ -1,80 +1,80 @@
 import type {
-  APIInteractionDataResolvedChannel,
-  Attachment,
-  AutocompleteInteraction,
-  Awaitable,
-  ChatInputCommandInteraction,
-  GuildBasedChannel,
-  User,
-} from 'discord.js';
+	APIInteractionDataResolvedChannel,
+	Attachment,
+	AutocompleteInteraction,
+	Awaitable,
+	ChatInputCommandInteraction,
+	GuildBasedChannel,
+	User,
+} from "discord.js";
 
 type Choice = number | string;
 
 export interface CommandOptionType {
-  string: string;
-  int: number;
-  float: number;
-  bool: boolean;
-  choice: Choice;
-  user: User;
-  channel: APIInteractionDataResolvedChannel | GuildBasedChannel;
-  attachment: Attachment;
+	string: string;
+	int: number;
+	float: number;
+	bool: boolean;
+	choice: Choice;
+	user: User;
+	channel: APIInteractionDataResolvedChannel | GuildBasedChannel;
+	attachment: Attachment;
 }
 type Type = keyof CommandOptionType;
 
 type Choices = readonly Choice[] | Record<string, Choice>;
 type ValueFromChoices<T extends Choices> = T extends readonly Choice[]
-  ? T[number]
-  : T[keyof T];
+	? T[number]
+	: T[keyof T];
 
 export type AutocompleteHandler = (
-  option: string,
-  i: AutocompleteInteraction
+	option: string,
+	i: AutocompleteInteraction
 ) => Promise<Choices>;
 interface Option<T extends Type = Type, C extends Choices = Choices> {
-  type: T;
-  desc: string;
-  min?: number;
-  max?: number;
-  choices?: C;
-  optional?: boolean;
-  default?: CommandOptionType[T];
-  autocomplete?: AutocompleteHandler;
+	type: T;
+	desc: string;
+	min?: number;
+	max?: number;
+	choices?: C;
+	optional?: boolean;
+	default?: CommandOptionType[T];
+	autocomplete?: AutocompleteHandler;
 }
 type Options = Record<string, Option>;
 
-type ValueFromOption<T extends Option> = T['choices'] extends Choices
-  ? ValueFromChoices<T['choices']>
-  : CommandOptionType[T['type']];
+type ValueFromOption<T extends Option> = T["choices"] extends Choices
+	? ValueFromChoices<T["choices"]>
+	: CommandOptionType[T["type"]];
 export type OptionValue<T extends Option = Option> =
-  T['default'] extends CommandOptionType[Type]
-    ? ValueFromOption<T>
-    : T['optional'] extends true
-    ? ValueFromOption<T> | undefined
-    : ValueFromOption<T>;
+	T["default"] extends CommandOptionType[Type]
+		? ValueFromOption<T>
+		: T["optional"] extends true
+		? ValueFromOption<T> | undefined
+		: ValueFromOption<T>;
 
 type Handler<T extends Options = Options> = (
-  i: ChatInputCommandInteraction,
-  options: {
-    [K in keyof T]: OptionValue<T[K]>;
-  }
+	i: ChatInputCommandInteraction,
+	options: {
+		[K in keyof T]: OptionValue<T[K]>;
+	}
 ) => Awaitable<any>;
 
-type Permission = 'vc';
+type Permission = "vc";
 interface CommandOptions<T extends Options> {
-  desc: string;
-  options: T;
-  permissions?: Permission[];
+	desc: string;
+	options: T;
+	permissions?: Permission[];
 }
 export interface SlashCommand<T extends Options = Options>
-  extends CommandOptions<T> {
-  handler: Handler<T>;
+	extends CommandOptions<T> {
+	handler: Handler<T>;
 }
 export type Commands = Record<string, SlashCommand>;
 export type CommandGroups = Record<string, Commands>;
 
 const command = <T extends Options>(
-  options: CommandOptions<T>,
-  handler: Handler<T>
+	options: CommandOptions<T>,
+	handler: Handler<T>
 ): SlashCommand<T> => ({ ...options, handler });
 export default command;

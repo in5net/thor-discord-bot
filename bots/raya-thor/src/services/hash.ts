@@ -1,27 +1,27 @@
-import { createHash } from 'node:crypto';
+import { createHash } from "node:crypto";
 
 const size = 16;
 
 export function strTo16x16(input: string): boolean[][] {
-  const hash = createHash('sha256');
-  hash.update(input);
-  const digest = hash.digest('hex');
+	const hash = createHash("sha256");
+	hash.update(input);
+	const digest = hash.digest("hex");
 
-  const grid: boolean[][] = new Array(size)
-    .fill(false)
-    .map(() => new Array(size).fill(false));
+	const grid = Array.from<boolean[]>({ length: size }).map(() =>
+		Array.from<boolean>({ length: size }).fill(false)
+	);
 
-  digest.split('').forEach((char, i) => {
-    const byte = parseInt(char, 16);
-    for (let j = 0; j < 4; j++) {
-      const index = i * 4 + j;
-      const x = index % size;
-      const y = Math.floor(index / size);
-      const bit = (byte >> j) & 1;
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      grid[x]![y] = !!bit;
-    }
-  });
+	digest.split("").forEach((char, i) => {
+		const byte = Number.parseInt(char, 16);
+		for (let index_ = 0; index_ < 4; index_++) {
+			const index = i * 4 + index_;
+			const x = index % size;
+			const y = Math.floor(index / size);
+			const bit = (byte >> index_) & 1;
 
-  return grid;
+			grid[x]![y] = Boolean(bit);
+		}
+	});
+
+	return grid;
 }

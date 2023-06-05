@@ -1,249 +1,256 @@
-import Node, {
-  BinaryOpNode,
-  FuncCallNode,
-  GroupingNode,
-  IdentifierNode,
-  NumberNode,
-  UnaryOpNode
-} from './node';
+import type Node from "./node";
+import {
+	BinaryOpNode,
+	FuncCallNode,
+	GroupingNode,
+	IdentifierNode,
+	NumberNode,
+	UnaryOpNode,
+} from "./node";
 import Token, {
-  BinaryOp,
-  LeftGrouping,
-  PostfixUnaryOp,
-  PrefixUnaryOp,
-  RightGrouping,
-  UnaryOp,
-  binaryOps,
-  groupings,
-  postfixUnaryOps,
-  prefixUnaryOps
-} from './token';
+	type BinaryOp,
+	type LeftGrouping,
+	type PostfixUnaryOp,
+	type PrefixUnaryOp,
+	type RightGrouping,
+	type UnaryOp,
+	binaryOps,
+	groupings,
+	postfixUnaryOps,
+	prefixUnaryOps,
+} from "./token";
 
 export default class Parser {
-  index = -1;
-  token!: Token;
+	index = -1;
+	token!: Token;
 
-  constructor(private tokens: Token[]) {
-    this.advance();
-  }
+	constructor(private readonly tokens: Token[]) {
+		this.advance();
+	}
 
-  // eslint-disable-next-line class-methods-use-this
-  error(message: string): never {
-    throw new Error(message);
-  }
+	error(message: string): never {
+		throw new Error(message);
+	}
 
-  expect(strs: string | string[]): never {
-    let message: string;
-    if (typeof strs === 'string') message = strs;
-    else
-      switch (strs.length) {
-        case 1:
-          // eslint-disable-next-line prefer-destructuring
-          message = strs[0] || '';
-          break;
-        case 2:
-          message = `${strs[0]} or ${strs[1]}`;
-          break;
-        default: {
-          const begin = strs.slice(0, -2);
-          this.error(
-            `Expected ${begin.join(', ')}, or ${strs[strs.length - 1]}`
-          );
-        }
-      }
-    this.error(`Expected ${message}`);
-  }
+	expect(strs: string | string[]): never {
+		let message: string;
+		if (typeof strs === "string") message = strs;
+		else
+			switch (strs.length) {
+				case 1: {
+					message = strs[0] || "";
+					break;
+				}
 
-  advance(): void {
-    this.token = this.tokens[++this.index] || Token.EOF;
-  }
+				case 2: {
+					message = `${strs[0]} or ${strs[1]}`;
+					break;
+				}
 
-  back(amount = 1): void {
-    this.index -= amount + 1;
-    this.advance();
-  }
+				default: {
+					const begin = strs.slice(0, -2);
+					this.error(
+						`Expected ${begin.join(", ")}, or ${strs[strs.length - 1]}`
+					);
+				}
+			}
 
-  get nextToken(): Token {
-    return this.tokens[this.index + 1] || Token.EOF;
-  }
+		this.error(`Expected ${message}`);
+	}
 
-  eof(): boolean {
-    return this.token.type === 'eof';
-  }
+	advance(): void {
+		this.token = this.tokens[++this.index] || Token.EOF;
+	}
 
-  parse(): Node {
-    if (this.eof()) return [];
-    return this.expr();
-  }
+	back(amount = 1): void {
+		this.index -= amount + 1;
+		this.advance();
+	}
 
-  expr(): Node {
-    // term (('+' | '-') term)*
-    return this.binaryOp(this.term, ['+', '-']);
-  }
+	get nextToken(): Token {
+		return this.tokens[this.index + 1] || Token.EOF;
+	}
 
-  term(): Node {
-    // factor (('*' | '∙' | '×' | '/' | '%') factor)* | NUMBER (!BINARY_OP)? term
-    if (
-      this.token.is('number') &&
-      !['number', 'superscript', 'newline', 'eof'].includes(
-        this.nextToken.type
-      ) &&
-      !(
-        this.nextToken.is('operator') &&
-        binaryOps.includes(this.nextToken.value as BinaryOp)
-      ) &&
-      !(
-        this.nextToken.is('grouping') &&
-        Object.values(groupings).includes(this.nextToken.value as RightGrouping)
-      )
-    ) {
-      const number = this.token;
-      this.advance();
+	eof(): boolean {
+		return this.token.type === "eof";
+	}
 
-      const term = this.term();
+	parse(): Node {
+		if (this.eof()) return [];
+		return this.expr();
+	}
 
-      return new BinaryOpNode(new NumberNode(number), '*', term);
-    }
-    return this.binaryOp(this.factor, ['*', '∙', '×', '/', '%']);
-  }
+	expr(): Node {
+		// Term (('+' | '-') term)*
+		return this.binaryOp(this.term, ["+", "-"]);
+	}
 
-  factor(): Node {
-    // ('+' | '-') factor | power
-    const { token } = this;
+	term(): Node {
+		// Factor (('*' | '∙' | '×' | '/' | '%') factor)* | NUMBER (!BINARY_OP)? term
+		if (
+			this.token.is("number") &&
+			!["number", "superscript", "newline", "eof"].includes(
+				this.nextToken.type
+			) &&
+			!(
+				this.nextToken.is("operator") &&
+				binaryOps.includes(this.nextToken.value as BinaryOp)
+			) &&
+			!(
+				this.nextToken.is("grouping") &&
+				Object.values(groupings).includes(this.nextToken.value as RightGrouping)
+			)
+		) {
+			const number = this.token;
+			this.advance();
 
-    if (
-      token.type === 'operator' &&
-      prefixUnaryOps.includes((token as Token<'operator', PrefixUnaryOp>).value)
-    ) {
-      this.advance();
-      return new UnaryOpNode(
-        this.factor(),
-        token as Token<'operator', UnaryOp>
-      );
-    }
+			const term = this.term();
 
-    return this.power();
-  }
+			return new BinaryOpNode(new NumberNode(number), "*", term);
+		}
 
-  power(): Node {
-    // postfix ('^' factor)*
-    return this.binaryOp(this.postfix, ['^'], this.factor);
-  }
+		return this.binaryOp(this.factor, ["*", "∙", "×", "/", "%"]);
+	}
 
-  postfix(): Node {
-    // call POSTFIX_UNARY_OP?
-    const call = this.call();
-    if (
-      this.token.is('operator') &&
-      postfixUnaryOps.includes(this.token.value as PostfixUnaryOp)
-    ) {
-      const operator = this.token as Token<'operator', PostfixUnaryOp>;
-      this.advance();
-      return new UnaryOpNode(call, operator, true);
-    }
-    if (this.token.is('superscript')) {
-      const tokens = (this.token as Token<'superscript'>).value;
-      this.advance();
+	factor(): Node {
+		// ('+' | '-') factor | power
+		const { token } = this;
 
-      const parser = new Parser(tokens);
-      const node = parser.expr();
+		if (
+			token.type === "operator" &&
+			prefixUnaryOps.includes((token as Token<"operator", PrefixUnaryOp>).value)
+		) {
+			this.advance();
+			return new UnaryOpNode(
+				this.factor(),
+				token as Token<"operator", UnaryOp>
+			);
+		}
 
-      return new BinaryOpNode(call, '^', node);
-    }
-    return call;
-  }
+		return this.power();
+	}
 
-  call(): Node {
-    // prop ('(' (expr (',' expr)*)? ')')?
-    const atom = this.atom();
+	power(): Node {
+		// Postfix ('^' factor)*
+		return this.binaryOp(this.postfix, ["^"], this.factor);
+	}
 
-    if (this.token.is('grouping', '(')) {
-      if (!(atom instanceof IdentifierNode)) this.expect('identifier');
+	postfix(): Node {
+		// Call POSTFIX_UNARY_OP?
+		const call = this.call();
+		if (
+			this.token.is("operator") &&
+			postfixUnaryOps.includes(this.token.value as PostfixUnaryOp)
+		) {
+			const operator = this.token as Token<"operator", PostfixUnaryOp>;
+			this.advance();
+			return new UnaryOpNode(call, operator, true);
+		}
 
-      this.advance();
-      const args: Node[] = [];
+		if (this.token.is("superscript")) {
+			const tokens = this.token.value;
+			this.advance();
 
-      if (this.token.is('grouping', ')')) this.advance();
-      else {
-        args.push(this.expr());
+			const parser = new Parser(tokens);
+			const node = parser.expr();
 
-        while ((this.token as Token).is('operator', ',')) {
-          this.advance();
-          args.push(this.expr());
-        }
+			return new BinaryOpNode(call, "^", node);
+		}
 
-        if (!(this.token as Token).is('grouping', ')'))
-          this.expect(["','", "')'"]);
-        this.advance();
-      }
+		return call;
+	}
 
-      return new FuncCallNode(atom, args);
-    }
+	call(): Node {
+		// Prop ('(' (expr (',' expr)*)? ')')?
+		const atom = this.atom();
 
-    return atom;
-  }
+		if (this.token.is("grouping", "(")) {
+			if (!(atom instanceof IdentifierNode)) this.expect("identifier");
 
-  atom(): Node {
-    // (NUMBER | BOOLEAN | STRING | IDENTIFIER) | '(' expr ')' | '|' expr '|' | list_expr | if_expr | func_def
-    const { token } = this;
-    let rtn: Node;
+			this.advance();
+			const args: Node[] = [];
 
-    if (token.is('number')) {
-      this.advance();
-      rtn = new NumberNode(token);
-    } else if (token.is('identifier')) {
-      this.advance();
-      rtn = new IdentifierNode(token);
-    } else if (token.is('grouping', '(')) {
-      this.advance();
+			if (this.token.is("grouping", ")")) this.advance();
+			else {
+				args.push(this.expr());
 
-      const expr = this.expr();
+				while ((this.token as Token).is("operator", ",")) {
+					this.advance();
+					args.push(this.expr());
+				}
 
-      if (!this.token.is('grouping', ')')) this.expect("')'");
-      this.advance();
+				if (!(this.token as Token).is("grouping", ")"))
+					this.expect(["','", "')'"]);
+				this.advance();
+			}
 
-      rtn = expr;
-    } else if (token.is('grouping')) {
-      const leftGroupingToken = token as Token<'grouping', LeftGrouping>;
-      if (!leftGroupingToken)
-        this.expect(Object.keys(groupings).map(char => `'./${char}'`));
-      this.advance();
+			return new FuncCallNode(atom, args);
+		}
 
-      const expr = this.expr();
+		return atom;
+	}
 
-      const rightGrouping = groupings[leftGroupingToken.value];
-      if (!this.token.is('grouping', rightGrouping))
-        this.expect(`'./{rightGrouping}'`);
-      const rightGroupingToken = this.token as Token<'grouping', RightGrouping>;
-      this.advance();
+	atom(): Node {
+		// (NUMBER | BOOLEAN | STRING | IDENTIFIER) | '(' expr ')' | '|' expr '|' | list_expr | if_expr | func_def
+		const { token } = this;
+		let rtn: Node;
 
-      rtn = new GroupingNode(expr, [leftGroupingToken, rightGroupingToken]);
-    } else
-      this.expect([
-        'number',
-        'identifier',
-        ...Object.keys(groupings).map(char => `'./${char}'`)
-      ]);
+		if (token.is("number")) {
+			this.advance();
+			rtn = new NumberNode(token);
+		} else if (token.is("identifier")) {
+			this.advance();
+			rtn = new IdentifierNode(token);
+		} else if (token.is("grouping", "(")) {
+			this.advance();
 
-    return rtn;
-  }
+			const expr = this.expr();
 
-  binaryOp(left: () => Node, operators: BinaryOp[], right = left): Node {
-    let result = left.call(this);
+			if (!this.token.is("grouping", ")")) this.expect("')'");
+			this.advance();
 
-    while (
-      operators.includes((this.token as Token<'operator', BinaryOp>).value)
-    ) {
-      const { token } = this;
-      if (token.is('operator', ':') && !this.nextToken.is('number')) break;
-      this.advance();
-      result = new BinaryOpNode(
-        result,
-        (token as Token<'operator', BinaryOp>).value,
-        right.call(this)
-      );
-    }
+			rtn = expr;
+		} else if (token.is("grouping")) {
+			const leftGroupingToken = token as Token<"grouping", LeftGrouping>;
+			if (!leftGroupingToken)
+				this.expect(Object.keys(groupings).map(char => `'./${char}'`));
+			this.advance();
 
-    return result;
-  }
+			const expr = this.expr();
+
+			const rightGrouping = groupings[leftGroupingToken.value];
+			if (!this.token.is("grouping", rightGrouping))
+				this.expect(`'./{rightGrouping}'`);
+			const rightGroupingToken = this.token as Token<"grouping", RightGrouping>;
+			this.advance();
+
+			rtn = new GroupingNode(expr, [leftGroupingToken, rightGroupingToken]);
+		} else
+			this.expect([
+				"number",
+				"identifier",
+				...Object.keys(groupings).map(char => `'./${char}'`),
+			]);
+
+		return rtn;
+	}
+
+	binaryOp(left: () => Node, operators: BinaryOp[], right = left): Node {
+		let result = left.call(this);
+
+		while (
+			operators.includes((this.token as Token<"operator", BinaryOp>).value)
+		) {
+			const { token } = this;
+			if (token.is("operator", ":") && !this.nextToken.is("number")) break;
+			this.advance();
+			result = new BinaryOpNode(
+				result,
+				(token as Token<"operator", BinaryOp>).value,
+				right.call(this)
+			);
+		}
+
+		return result;
+	}
 }

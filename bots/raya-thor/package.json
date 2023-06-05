@@ -58,7 +58,6 @@
     "@types/node-schedule": "^2.1.0",
     "@types/pngjs": "^6.0.1",
     "dotenv-cli": "^7.2.1",
-    "eslint-config-custom": "workspace:*",
     "tsconfig": "workspace:*",
     "tsx": "^3.12.7",
     "typescript": "5.1.3"
