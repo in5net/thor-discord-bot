@@ -2,6 +2,7 @@
   "name": "raya-discord-bot",
   "private": true,
   "scripts": {
+    "update": "export NPM_CHECK_INSTALLER=pnpm; cd bots/jay && npm-check -u && cd ../raya-thor && npm-check -u && cd ../../packages/database && npm-check -u && cd ../eslint-config-custom && npm-check -u && cd ../storage && npm-check -u",
     "start:raya": "turbo run start --filter raya-thor",
     "start:jay": "turbo run start --filter jay",
     "deploy": "turbo run deploy"
