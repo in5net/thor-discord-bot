@@ -30,7 +30,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "genius-lyrics": "4.4.3",
     "gif-encoder": "^0.7.2",
-    "glob": "10.2.6",
+    "glob": "10.2.7",
     "google-auth-library": "^8.8.0",
     "got": "13.0.0",
     "libsodium-wrappers": "^0.7.11",

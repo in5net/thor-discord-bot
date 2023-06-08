@@ -69,8 +69,8 @@ importers:
         specifier: ^3.4.3
         version: 3.4.3
       glob:
-        specifier: 10.2.6
-        version: 10.2.6
+        specifier: 10.2.7
+        version: 10.2.7
       glsl-noise:
         specifier: ^0.0.0
         version: 0.0.0
@@ -187,8 +187,8 @@ importers:
         specifier: ^0.7.2
         version: 0.7.2
       glob:
-        specifier: 10.2.6
-        version: 10.2.6
+        specifier: 10.2.7
+        version: 10.2.7
       google-auth-library:
         specifier: ^8.8.0
         version: 8.8.0
@@ -4043,8 +4043,8 @@ packages:
     resolution: {integrity: sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==}
     dev: true
 
-  /glob@10.2.6:
-    resolution: {integrity: sha512-U/rnDpXJGF414QQQZv5uVsabTVxMSwzS5CH0p3DRCIV6ownl4f7PzGnkGmvlum2wB+9RlJWJZ6ACU1INnBqiPA==}
+  /glob@10.2.7:
+    resolution: {integrity: sha512-jTKehsravOJo8IJxUGfZILnkvVJM/MOfHRs8QcXolVef2zNI9Tqyy5+SeuOAZd3upViEZQLyFpQhYiHLrMUNmA==}
     engines: {node: '>=16 || 14 >=14.17'}
     hasBin: true
     dependencies:
