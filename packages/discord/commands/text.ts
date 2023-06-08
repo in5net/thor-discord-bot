@@ -53,10 +53,20 @@ export interface TextCommandParams<T extends Arguments> {
 export interface TextCommand<T extends Arguments = Arguments>
 	extends TextCommandParams<T> {
 	exec: Exec<T>;
+	category?: string;
+	symbol: symbol;
 }
+
+export const textCommandSymbol = Symbol("text command");
 
 const command = <T extends Arguments>(
 	cmd: TextCommandParams<T>,
 	exec: Exec<T>
-): TextCommand<T> => ({ ...cmd, exec });
+): TextCommand<T> => ({ ...cmd, exec, symbol: textCommandSymbol });
 export default command;
+
+export const isTextCommand = (x: unknown): x is TextCommand =>
+	typeof x === "object" &&
+	!!x &&
+	"symbol" in x &&
+	x.symbol === textCommandSymbol;

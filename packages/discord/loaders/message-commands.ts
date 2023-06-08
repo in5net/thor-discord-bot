@@ -1,25 +1,24 @@
 import { join, parse } from "node:path";
 import { Collection } from "discord.js";
 import { glob } from "glob";
-import { isTextCommand, type TextCommand } from "../commands/text";
+import { type MessageCommand, isMessageCommand } from "../commands/message";
 
-export async function loadTextCommands(dirPath: string) {
+export async function loadMessageCommands(dirPath: string) {
 	const globPattern = join(dirPath, "**/*.ts");
 	const filePaths = await glob(globPattern);
 
-	const commands = new Collection<string, TextCommand>();
+	const commands = new Collection<string, MessageCommand>();
 
 	for (const filePath of filePaths) {
 		const subPath = filePath.replace(dirPath, "");
-		const { dir: category, name } = parse(subPath);
+		const { name } = parse(subPath);
 
 		const module = (await import(filePath)) as Record<string, unknown>;
 		if (!("default" in module)) continue;
 		const command = module.default;
-		if (!isTextCommand(command)) continue;
+		if (!isMessageCommand(command)) continue;
 
 		commands.set(name, command);
-		if (category) command.category = category;
 	}
 
 	console.log(`Loaded ${commands.size} text commands`);

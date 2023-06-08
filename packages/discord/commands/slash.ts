@@ -69,12 +69,19 @@ interface CommandOptions<T extends Options> {
 export interface SlashCommand<T extends Options = Options>
 	extends CommandOptions<T> {
 	handler: Handler<T>;
+	symbol: symbol;
 }
-export type Commands = Record<string, SlashCommand>;
-export type CommandGroups = Record<string, Commands>;
+
+export const slashCommandSymbol = Symbol("slash command");
 
 const command = <T extends Options>(
 	options: CommandOptions<T>,
 	handler: Handler<T>
-): SlashCommand<T> => ({ ...options, handler });
+): SlashCommand<T> => ({ ...options, handler, symbol: slashCommandSymbol });
 export default command;
+
+export const isSlashCommand = (x: unknown): x is SlashCommand =>
+	typeof x === "object" &&
+	!!x &&
+	"symbol" in x &&
+	x.symbol === slashCommandSymbol;
