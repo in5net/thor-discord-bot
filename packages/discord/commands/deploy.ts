@@ -1,16 +1,11 @@
 import { ApplicationCommandOptionType, Routes } from "discord-api-types/v10";
-import { REST } from "discord.js";
-import {
-	type CommandGroups,
-	type CommandOptionType,
-	type Commands,
-	type SlashCommand,
-} from "./slash";
+import { type Collection, REST } from "discord.js";
+import { type CommandOptionType, type SlashCommand } from "./slash";
 
 let buildCount = 0;
 
 export async function deploy(
-	commands: Commands | CommandGroups,
+	commands: Collection<string, SlashCommand>,
 	token: string,
 	applicationId: string
 ) {
@@ -20,8 +15,7 @@ export async function deploy(
 	const data = Object.entries(commands).map(([name, command]) =>
 		typeof command.desc === "string"
 			? build(name, command as SlashCommand)
-			: typeof Object.values(command as Commands | CommandGroups)[0].desc ===
-			  "string"
+			: typeof Object.values(command)[0].desc === "string"
 			? {
 					name,
 					description: name,

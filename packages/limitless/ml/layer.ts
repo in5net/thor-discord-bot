@@ -1,6 +1,5 @@
 import Matrix from "../math/matrix";
-import activations from "./activations";
-import type { Activation } from "./activations";
+import activations, { type Activation } from "./activations";
 
 export default class Layer {
 	weights: Matrix;

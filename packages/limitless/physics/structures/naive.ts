@@ -1,5 +1,5 @@
-import type Body from "../body";
 import { AABB } from "../body";
+import type Body from "../body";
 
 export default class Naive extends AABB {
 	bodies: Body[] = [];

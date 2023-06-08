@@ -1,9 +1,8 @@
 import { minmax, overlap } from "../../math/funcs";
 import Vector2 from "../../math/vector/vec2";
 import { average, min } from "../../util/array";
-import Body from "./body";
+import Body, { type Collision } from "./body";
 import AABB from "./aabb";
-import type { Collision } from "./body";
 import type Circle from "./circle";
 
 export default class ConvexPolygon extends Body {
