@@ -1,5 +1,5 @@
 import process from "node:process";
-import { Collection, EmbedBuilder } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import { closest } from "fastest-levenshtein";
 import { caseInsensitive, createRegExp, exactly } from "magic-regexp";
 import { type ArgumentValue, type TextCommand } from "$services/commands/text";
@@ -36,7 +36,7 @@ export default event(
 				if (!arguments_.length) continue;
 
 				const trueArguments = [...arguments_];
-				let commands = client.textCommands;
+				const commands = client.textCommands;
 				let command: TextCommand | undefined;
 				const commandNames: string[] = [];
 				for (const argument of arguments_) {
@@ -49,9 +49,6 @@ export default event(
 					if (!subcommand) break;
 					trueArguments.shift();
 					command = subcommand;
-					commands = new Collection(
-						Object.entries(subcommand.subcommands || {})
-					);
 				}
 
 				const commandName = commandNames.join(" ");

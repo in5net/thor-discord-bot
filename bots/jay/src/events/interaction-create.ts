@@ -32,7 +32,8 @@ export default event(
 					i,
 					Object.fromEntries(
 						Object.entries(options).map(([name, { type, default: d }]) => {
-							let value: OptionValue | undefined;
+							// eslint-disable-next-line @typescript-eslint/ban-types
+							let value: OptionValue | null = null;
 							switch (type) {
 								case "string": {
 									value = i.options.getString(name);
@@ -115,7 +116,8 @@ export default event(
 			const options = await handleAutocomplete(option.value, i);
 			return i
 				.respond(
-					Array.isArray(options)
+					// eslint-disable-next-line unicorn/no-instanceof-array
+					options instanceof Array
 						? options.map(o => ({
 								name: o.toString(),
 								value: o,

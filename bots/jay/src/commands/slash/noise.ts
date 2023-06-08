@@ -1,6 +1,4 @@
 import { AttachmentBuilder } from "discord.js";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import glsl from "glslify";
 import command from "$commands/slash";
 import GL from "$services/gl";

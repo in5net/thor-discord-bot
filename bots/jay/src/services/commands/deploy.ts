@@ -1,14 +1,10 @@
-import {
-	ApplicationCommandOptionType,
-	Routes,
-	type RESTPostAPIApplicationCommandsJSONBody,
-} from "discord-api-types/v10";
+import { ApplicationCommandOptionType, Routes } from "discord-api-types/v10";
 import { REST } from "discord.js";
-import {
-	type CommandGroups,
-	type CommandOptionType,
-	type Commands,
-	type SlashCommand,
+import type {
+	CommandGroups,
+	CommandOptionType,
+	Commands,
+	SlashCommand,
 } from "./slash";
 
 let buildCount = 0;
@@ -18,12 +14,10 @@ export async function deploy(
 	token: string,
 	applicationId: string
 ) {
-	const rest = new REST({ version: "10" }).setToken(token);
+	const rest = new REST().setToken(token);
 
 	buildCount = 0;
-	const data: RESTPostAPIApplicationCommandsJSONBody[] = Object.entries(
-		commands
-	).map(([name, command]) =>
+	const data = Object.entries(commands).map(([name, command]) =>
 		typeof command.desc === "string"
 			? build(name, command as SlashCommand)
 			: typeof Object.values(command as Commands | CommandGroups)[0].desc ===
@@ -85,7 +79,21 @@ function build(name: string, { desc, options }: SlashCommand) {
 				name,
 				{ desc, type, min, max, optional, default: d, choices, autocomplete },
 			]) => {
-				const data: any = {
+				const data: {
+					name: string;
+					type: ApplicationCommandOptionType;
+					description: string;
+					min_value?: number;
+					max_value?: number;
+					min_length?: number;
+					max_length?: number;
+					required: boolean;
+					choices?: Array<{
+						name: string;
+						value: number | string;
+					}>;
+					autocomplete: boolean;
+				} = {
 					name,
 					type: commandOptionTypeMap[type],
 					description: desc,
@@ -94,7 +102,8 @@ function build(name: string, { desc, options }: SlashCommand) {
 					required: !optional && d === undefined,
 					choices:
 						type === "choice"
-							? Array.isArray(choices)
+							? // eslint-disable-next-line unicorn/no-instanceof-array
+							  choices instanceof Array
 								? choices.map(choice => ({
 										name: `${choice}`,
 										value: choice,
@@ -105,7 +114,7 @@ function build(name: string, { desc, options }: SlashCommand) {
 										value: name,
 								  }))
 							: undefined,
-					autocomplete: Boolean(autocomplete),
+					autocomplete: !!autocomplete,
 				};
 				if (type === "int" || type === "float") {
 					data.min_value = min;

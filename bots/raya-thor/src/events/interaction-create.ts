@@ -9,7 +9,7 @@ import * as rawCommands from "../commands/mod";
 import textCommands from "../text-commands/mod";
 import "./env";
 import {
-	type Command,
+	type SlashCommand,
 	type CommandGroups,
 	type Commands,
 	type OptionValue,
@@ -29,9 +29,9 @@ const commands = Object.fromEntries(
 	])
 );
 function normalize(
-	command: Command | Commands | CommandGroups
-): Command | Commands | CommandGroups {
-	if (typeof command.desc === "string") return command as Command;
+	command: SlashCommand | Commands | CommandGroups
+): SlashCommand | Commands | CommandGroups {
+	if (typeof command.desc === "string") return command as SlashCommand;
 
 	const { default: oddNameCommands = {}, ...normalCommands } =
 		command as unknown as Commands | CommandGroups;
@@ -39,7 +39,7 @@ function normalize(
 		Object.entries({ ...oddNameCommands, ...normalCommands }).map(
 			([subName, subCommand]) => [
 				subName,
-				normalize(subCommand as Command | Commands) as Command,
+				normalize(subCommand as SlashCommand | Commands) as SlashCommand,
 			]
 		)
 	);
@@ -47,7 +47,7 @@ function normalize(
 
 function getCommand(
 	i: ChatInputCommandInteraction | AutocompleteInteraction
-): Command | void {
+): SlashCommand | void {
 	const command = commands[i.commandName];
 	if (!command) return;
 
@@ -67,7 +67,7 @@ function getCommand(
 		return subCommand;
 	}
 
-	return command as Command;
+	return command as SlashCommand;
 }
 
 const optionalPrefixCommands = Object.entries(textCommands)

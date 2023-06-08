@@ -25,7 +25,6 @@ interface Argument<T extends ArgumentType = ArgumentType> {
 }
 
 export type Arguments = Record<string, Argument>;
-type SubArguments = Record<string, Arguments>;
 
 export type ArgumentValue<T extends Argument = Argument> =
 	T["default"] extends ArgumentTypeMap[ArgumentType]
@@ -51,17 +50,13 @@ export interface TextCommandParams<T extends Arguments> {
 	permissions?: Permission[];
 }
 
-export interface TextCommand<
-	T extends Arguments = Arguments,
-	S extends SubArguments = SubArguments
-> extends TextCommandParams<T> {
+export interface TextCommand<T extends Arguments = Arguments>
+	extends TextCommandParams<T> {
 	exec: Exec<T>;
-	subcommands?: { [I in keyof S]: TextCommand<S[I]> };
 }
 
-const command = <T extends Arguments, S extends SubArguments>(
+const command = <T extends Arguments>(
 	cmd: TextCommandParams<T>,
-	exec: Exec<T>,
-	subcommands?: { [I in keyof S]: TextCommand<S[I]> }
-): TextCommand<T, S> => ({ ...cmd, exec, subcommands });
+	exec: Exec<T>
+): TextCommand<T> => ({ ...cmd, exec });
 export default command;

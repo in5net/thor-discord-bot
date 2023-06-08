@@ -19,7 +19,7 @@ export function strTo16x16(input: string): boolean[][] {
 			const y = Math.floor(index / size);
 			const bit = (byte >> index_) & 1;
 
-			grid[x]![y] = Boolean(bit);
+			grid[x]![y] = !!bit;
 		}
 	});
 
