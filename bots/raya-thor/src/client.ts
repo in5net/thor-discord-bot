@@ -6,14 +6,30 @@ import {
 	Client,
 	Options,
 	WebhookClient,
+	type Collection,
 } from "discord.js";
 import { RecurrenceRule, scheduleJob } from "node-schedule";
 import { loadDiscordEvents } from "discord/loaders/events";
-import { getCatboyEmbed } from "./commands/catboy";
+import { type TextCommand } from "discord/commands/text";
+import { type SlashCommand } from "discord/commands/slash";
+import { type MessageCommand } from "discord/commands/message";
+import { loadSlashCommands } from "discord/loaders/slash-commands";
+import { loadTextCommands } from "discord/loaders/text-commands";
+import { loadMessageCommands } from "discord/loaders/message-commands";
+import { getCatboyEmbed } from "./commands/slash/catboy";
 
 const { NAME, DISCORD_TOKEN } = process.env;
 console.log(`⏳ ${NAME} is starting...`);
 console.time(NAME);
+
+declare module "discord.js" {
+	export interface Client {
+		textCommands: Collection<string, TextCommand>;
+		aliases: Collection<string, string>;
+		slashCommands: Collection<string, SlashCommand>;
+		messageCommands: Collection<string, MessageCommand>;
+	}
+}
 
 const activity: ActivityOptions = {
 	name: "with your feelings",
@@ -53,6 +69,13 @@ export default client;
 
 const eventsPath = new URL("events", import.meta.url).pathname;
 await loadDiscordEvents(eventsPath, client);
+const textCommandsPath = new URL("commands/text", import.meta.url).pathname;
+client.textCommands = await loadTextCommands(textCommandsPath);
+const slashCommandsPath = new URL("commands/slash", import.meta.url).pathname;
+client.slashCommands = await loadSlashCommands(slashCommandsPath);
+const messageCommandsPath = new URL("commands/message", import.meta.url)
+	.pathname;
+client.messageCommands = await loadMessageCommands(messageCommandsPath);
 
 await client.login(DISCORD_TOKEN);
 
