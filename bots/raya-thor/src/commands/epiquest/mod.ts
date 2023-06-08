@@ -1,3 +1,4 @@
+import { env } from "node:process";
 import { random } from "@in5net/limitless";
 import { getText } from "@in5net/limitless/api/y7";
 import {
@@ -6,11 +7,10 @@ import {
 	EmbedBuilder,
 	StringSelectMenuBuilder,
 } from "discord.js";
+import command from "discord/commands/slash";
 import items from "./items";
 import { part, type Part } from "./labyrinth";
 import questions from "./questions";
-import { COLOR } from "$services/env";
-import command from "$commands/slash";
 
 export default command(
 	{
@@ -39,7 +39,7 @@ export default command(
 					stringReplace(typeof text === "string" ? text : text(inventory))
 				)
 				.setDescription(`${i.user.username}'s epiquest`)
-				.setColor(COLOR);
+				.setColor(env.COLOR);
 			if (inventory.length)
 				embed.addFields({ name: "Inventory", value: inventory.join("\n") });
 

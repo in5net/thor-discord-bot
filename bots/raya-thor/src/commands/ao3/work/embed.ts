@@ -1,3 +1,4 @@
+import { env } from "node:process";
 import {
 	categories,
 	contentWarnings,
@@ -6,7 +7,6 @@ import {
 	type User,
 	type Work,
 } from "@in5net/limitless/api/ao3/mod";
-import { FILES_DOMAIN } from "storage";
 import { createEmbedBuilder } from "../embed";
 
 export function createWorkEmbedBuilder(
@@ -32,7 +32,7 @@ export function createWorkEmbedBuilder(
 		.setAuthor({ name: author, url: authorURL, iconURL })
 		.setURL(`${query}${id}`)
 		.setThumbnail(
-			`https://${FILES_DOMAIN}/ao3/squares/${symbols.rating}_${symbols.category}_${symbols.warning}_${symbols.complete}.png`
+			`https://${env.FILES_DOMAIN}/ao3/squares/${symbols.rating}_${symbols.category}_${symbols.warning}_${symbols.complete}.png`
 		);
 	if (rating) embed.addFields({ name: "Rating", value: ratings[rating] });
 	if (warnings.length)

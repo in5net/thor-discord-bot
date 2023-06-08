@@ -1,8 +1,7 @@
-import process from "node:process";
-import * as messageCommands from "./commands/messages";
+import { env } from "node:process";
+import { deploy } from "discord/commands/deploy";
+import { type CommandGroups, type Commands } from "discord/commands/slash";
 import * as commandsData from "./commands/mod";
-import { deploy } from "$services/commands/deploy";
-import { type CommandGroups, type Commands } from "$services/commands/slash";
 
 console.log("Commands registering...");
 
@@ -13,11 +12,6 @@ const commands = {
 	...oddNameCommands,
 } as unknown as Commands | CommandGroups;
 
-const buildCount = await deploy(
-	commands,
-	Object.values(messageCommands),
-	process.env.DISCORD_TOKEN,
-	process.env.DISCORD_ID
-);
+const buildCount = await deploy(commands, env.DISCORD_TOKEN, env.DISCORD_ID);
 
 console.log(buildCount, "commands registered");

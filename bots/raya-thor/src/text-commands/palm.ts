@@ -1,4 +1,4 @@
-import command from "$services/commands/text";
+import command from "discord/commands/text";
 import { answer } from "$services/palm";
 import { cache } from "$services/prisma";
 

@@ -1,6 +1,6 @@
 import { ChannelType, type ColorResolvable, EmbedBuilder } from "discord.js";
-import command from "$commands/slash";
-import type { paths } from "$openapi/waifu";
+import command from "discord/commands/slash";
+import { type paths } from "$openapi/waifu";
 import { Fetcher } from "$services/openapi";
 import { incCount } from "$services/users";
 

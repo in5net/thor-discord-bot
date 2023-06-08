@@ -1,6 +1,6 @@
-import type {
-	Awaitable,
-	MessageContextMenuCommandInteraction,
+import {
+	type Awaitable,
+	type MessageContextMenuCommandInteraction,
 } from "discord.js";
 
 type Handler = (i: MessageContextMenuCommandInteraction) => Awaitable<any>;

@@ -1,6 +1,6 @@
 import CatboyClient from "catboys";
 import { EmbedBuilder } from "discord.js";
-import command from "$commands/slash";
+import command from "discord/commands/slash";
 import { incCount } from "$services/users";
 
 const client = new CatboyClient();

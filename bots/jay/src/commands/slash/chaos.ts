@@ -1,7 +1,7 @@
 import { randomInt, vec2, Vector2 } from "@in5net/limitless";
 import { createCanvas } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
-import command from "$commands/slash";
+import command from "discord/commands/slash";
 
 const size = 1024;
 const r = size / 2;

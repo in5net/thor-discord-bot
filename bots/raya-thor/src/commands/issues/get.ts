@@ -1,5 +1,5 @@
 import { time } from "discord.js";
-import command from "$commands/slash";
+import command from "discord/commands/slash";
 import { createEmbed } from "$services/embed";
 import prisma from "$services/prisma";
 

@@ -1,11 +1,10 @@
-import process from "node:process";
+import { env } from "node:process";
 import { EmbedBuilder } from "discord.js";
-import commands from "./mod";
 import command, {
 	argumentType2Name,
 	type TextCommand,
-} from "$services/commands/text";
-import { COLOR } from "$services/env";
+} from "discord/commands/text";
+import commands from "./mod";
 
 export default command(
 	{
@@ -24,7 +23,7 @@ export default command(
 			return channel.send({
 				embeds: [
 					new EmbedBuilder()
-						.setTitle(`${process.env.NAME} Commands`)
+						.setTitle(`${env.NAME} Commands`)
 						.setDescription(
 							Object.entries(commands)
 								.map(([name, { aliases }]) =>
@@ -32,7 +31,7 @@ export default command(
 								)
 								.join(", ")
 						)
-						.setColor(COLOR),
+						.setColor(env.COLOR),
 				],
 			});
 
@@ -68,12 +67,12 @@ export default command(
 			);
 
 		const embed = new EmbedBuilder()
-			.setTitle(`${process.env.NAME} Help: ${arguments_.join(" ")}`)
+			.setTitle(`${env.NAME} Help: ${arguments_.join(" ")}`)
 			.setDescription(commandManual.desc)
-			.setColor(COLOR)
+			.setColor(env.COLOR)
 			.addFields({
 				name: "Usage",
-				value: `\`${process.env.PREFIX}${usage.join(" ")}\``,
+				value: `\`${env.PREFIX}${usage.join(" ")}\``,
 			});
 		if (commandManual.subcommands)
 			embed.addFields({

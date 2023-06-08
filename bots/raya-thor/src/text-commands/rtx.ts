@@ -1,5 +1,5 @@
 import { pluralize } from "@in5net/limitless";
-import command from "$services/commands/text";
+import command from "discord/commands/text";
 
 const RTX_4090_PRICE = 1600;
 

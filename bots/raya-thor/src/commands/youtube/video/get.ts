@@ -1,5 +1,5 @@
+import command from "discord/commands/slash";
 import { createEmbedBuilder } from "../embed";
-import command from "$commands/slash";
 import { sec2Str } from "$services/time";
 import youtube from "$services/youtube";
 

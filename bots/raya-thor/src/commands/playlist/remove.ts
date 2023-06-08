@@ -1,5 +1,5 @@
+import command from "discord/commands/slash";
 import * as playlist from "../../music/playlist";
-import command from "$services/commands/slash";
 import prisma from "$services/prisma";
 
 export default command(

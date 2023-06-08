@@ -1,7 +1,7 @@
 import { radians, replace } from "@in5net/limitless";
 import { createCanvas } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
-import command from "$commands/slash";
+import command from "discord/commands/slash";
 
 const size = 512;
 

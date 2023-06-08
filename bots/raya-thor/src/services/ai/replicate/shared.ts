@@ -1,4 +1,4 @@
-import process from "node:process";
+import { env } from "node:process";
 
 export const API_URL = "https://api.replicate.com/v1/predictions";
 
@@ -24,7 +24,7 @@ export class Model {
 		const response = await fetch(API_URL, {
 			method: "POST",
 			headers: {
-				Authorization: `Token ${process.env.REPLICATE_TOKEN}`,
+				Authorization: `Token ${env.REPLICATE_TOKEN}`,
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
@@ -75,7 +75,7 @@ export class Model {
 export async function getPrediction(id: string): Promise<Prediction> {
 	const response = await fetch(`${API_URL}/${id}`, {
 		headers: {
-			Authorization: `Token ${process.env.REPLICATE_TOKEN}`,
+			Authorization: `Token ${env.REPLICATE_TOKEN}`,
 		},
 	});
 	const prediction = (await response.json()) as Prediction;

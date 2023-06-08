@@ -8,8 +8,8 @@ import {
 	WebhookClient,
 } from "discord.js";
 import { RecurrenceRule, scheduleJob } from "node-schedule";
+import { loadDiscordEvents } from "discord/loaders/events";
 import { getCatboyEmbed } from "./commands/catboy";
-import { loadDiscordEvents } from "./loaders/events";
 
 const { NAME, DISCORD_TOKEN } = process.env;
 console.log(`⏳ ${NAME} is starting...`);
@@ -51,7 +51,8 @@ const client = new Client({
 });
 export default client;
 
-await loadDiscordEvents(client);
+const eventsPath = new URL("events", import.meta.url).pathname;
+await loadDiscordEvents(eventsPath, client);
 
 await client.login(DISCORD_TOKEN);
 

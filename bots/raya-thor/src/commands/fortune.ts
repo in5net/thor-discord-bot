@@ -1,4 +1,4 @@
-import command from "$services/commands/slash";
+import command from "discord/commands/slash";
 
 interface Response {
 	fortune: string;

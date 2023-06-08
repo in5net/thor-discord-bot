@@ -15,7 +15,7 @@ export class Position {
 		const lines = p1.text.split("\n");
 		let text = "";
 		for (let row = p1.row; row <= p2.row; row++) {
-			const line = lines[row];
+			const line = lines[row] || "";
 			text += `${row + 1} `;
 			if (row === p1.row) text += line.slice(p1.col);
 			else if (row === p2.row) text += line.slice(0, p2.col);

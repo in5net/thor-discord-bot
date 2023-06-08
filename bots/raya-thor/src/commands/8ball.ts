@@ -1,5 +1,5 @@
 import { random } from "@in5net/limitless";
-import command from "$commands/slash";
+import command from "discord/commands/slash";
 
 const answers = [
 	"As I see it, yes.",

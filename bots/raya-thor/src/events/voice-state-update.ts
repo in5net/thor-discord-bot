@@ -1,6 +1,6 @@
-import process from "node:process";
+import { env } from "node:process";
+import event from "discord/event";
 import voices from "../music/voice-manager";
-import event from "$services/event";
 
 const timeouts = new Map<string, NodeJS.Timeout>();
 const FIVE_MINUTES = 1000 * 60 * 5;
@@ -9,7 +9,7 @@ export default event(
 	{ name: "voiceStateUpdate" },
 	async ({ args: [oldState] }) => {
 		const members = oldState.channel?.members;
-		if (!members?.has(process.env.DISCORD_ID)) return;
+		if (!members?.has(env.DISCORD_ID)) return;
 
 		const guildId = oldState.guild.id;
 		if (members.size === 1) {

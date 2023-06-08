@@ -1,9 +1,9 @@
 import { readFile } from "node:fs/promises";
-import process from "node:process";
+import { env } from "node:process";
 import { TextServiceClient } from "@google-ai/generativelanguage";
 import { GoogleAuth } from "google-auth-library";
 
-const { NAME, MAKERSUITE_API_KEY = "" } = process.env;
+const { NAME, MAKERSUITE_API_KEY } = env;
 
 const client = new TextServiceClient({
 	authClient: new GoogleAuth().fromAPIKey(MAKERSUITE_API_KEY),

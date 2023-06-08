@@ -1,5 +1,5 @@
+import command from "discord/commands/slash";
 import { getVoice } from "../../music/voice-manager";
-import command from "$services/commands/slash";
 
 export default command(
 	{

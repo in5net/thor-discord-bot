@@ -2,9 +2,9 @@ import { readdirSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { capitalize, random, randomInt } from "@in5net/limitless";
+import command from "discord/commands/slash";
 import { randomPerson } from "./person";
 import { parse } from "$services/rcpt";
-import command from "$commands/slash";
 
 const themesPath = new URL("../../../assets/poem/themes", import.meta.url)
 	.pathname;

@@ -1,11 +1,11 @@
-import type {
-	APIInteractionDataResolvedChannel,
-	Attachment,
-	AutocompleteInteraction,
-	Awaitable,
-	ChatInputCommandInteraction,
-	GuildBasedChannel,
-	User,
+import {
+	type APIInteractionDataResolvedChannel,
+	type Attachment,
+	type AutocompleteInteraction,
+	type Awaitable,
+	type ChatInputCommandInteraction,
+	type GuildBasedChannel,
+	type User,
 } from "discord.js";
 
 type Choice = number | string;

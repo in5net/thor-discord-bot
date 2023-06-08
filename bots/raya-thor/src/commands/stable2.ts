@@ -1,4 +1,4 @@
-import command from "$commands/slash";
+import command from "discord/commands/slash";
 import { generate } from "$services/ai/replicate/stable2";
 import { getBits, subtractBits } from "$services/ai/shared";
 import { ADMIN_IDS } from "$services/env";

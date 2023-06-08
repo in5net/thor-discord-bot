@@ -1,4 +1,4 @@
-import process from "node:process";
+import { env } from "node:process";
 import { createCanvas, loadImage } from "@napi-rs/canvas";
 
 const url = "https://labs.openai.com/api/labs/tasks";
@@ -53,7 +53,7 @@ export async function generate(prompt: string) {
 	const response = await fetch(url, {
 		method: "POST",
 		headers: {
-			Authorization: `Bearer ${process.env.DALLE2_TOKEN}`,
+			Authorization: `Bearer ${env.DALLE2_TOKEN}`,
 			"Content-Type": "application/json",
 		},
 		body: JSON.stringify({
@@ -80,7 +80,7 @@ export async function variations(url: string) {
 	const response = await fetch(url, {
 		method: "POST",
 		headers: {
-			Authorization: `Bearer ${process.env.DALLE2_TOKEN}`,
+			Authorization: `Bearer ${env.DALLE2_TOKEN}`,
 			"Content-Type": "application/json",
 		},
 		body: JSON.stringify({
@@ -119,7 +119,7 @@ export async function startTask(task: Task) {
 async function getTask(id: string): Promise<Task> {
 	const response = await fetch(`${url}/${id}`, {
 		headers: {
-			Authorization: `Bearer ${process.env.DALLE2_TOKEN}`,
+			Authorization: `Bearer ${env.DALLE2_TOKEN}`,
 		},
 	});
 	const task = (await response.json()) as Task;

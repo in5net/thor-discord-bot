@@ -1,11 +1,11 @@
 import { readFile } from "node:fs/promises";
-import process from "node:process";
-import type { Buffer } from "node:buffer";
+import { env } from "node:process";
+import { type Buffer } from "node:buffer";
 import { createRegExp, exactly } from "magic-regexp";
 import { Configuration, OpenAIApi } from "openai";
 import { TypedEmitter } from "tiny-typed-emitter";
 
-const { NAME, OPENAI_API_KEY = "" } = process.env;
+const { NAME, OPENAI_API_KEY } = env;
 
 export const openai = new OpenAIApi(
 	new Configuration({

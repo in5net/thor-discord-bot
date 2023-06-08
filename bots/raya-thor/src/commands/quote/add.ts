@@ -1,6 +1,7 @@
 import { Writable } from "node:stream";
-import { FILES_DOMAIN, filesBucket } from "storage";
-import command from "$commands/slash";
+import { env } from "node:process";
+import { filesBucket } from "storage";
+import command from "discord/commands/slash";
 import { ADMIN_IDS } from "$services/env";
 
 export default command(
@@ -24,7 +25,7 @@ export default command(
 			})
 		);
 		await body?.pipeTo(stream);
-		const fileURL = `https://${FILES_DOMAIN}/${path}`;
+		const fileURL = `https://${env.FILES_DOMAIN}/${path}`;
 		console.log(`Uploaded ${fileURL}`);
 
 		return i.reply(`Quote added

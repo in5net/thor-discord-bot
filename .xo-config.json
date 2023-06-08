@@ -35,6 +35,7 @@
           "ref": false,
           "dir": false,
           "func": false,
+          "arg": false,
           "args": false,
           "ext": false
         }

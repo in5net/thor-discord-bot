@@ -1,7 +1,7 @@
+import { env } from "node:process";
 import { EmbedBuilder } from "discord.js";
+import command from "discord/commands/slash";
 import * as playlist from "../../music/playlist";
-import command from "$services/commands/slash";
-import { COLOR } from "$services/env";
 
 export default command(
 	{
@@ -14,7 +14,7 @@ export default command(
 		const desc = playlists.join("\n");
 		const embed = new EmbedBuilder()
 			.setTitle("Playlists")
-			.setColor(COLOR)
+			.setColor(env.COLOR)
 			.setAuthor({
 				name: user.username,
 				iconURL: user.avatarURL() || undefined,

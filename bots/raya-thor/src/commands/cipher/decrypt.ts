@@ -1,5 +1,5 @@
+import command from "discord/commands/slash";
 import { encrypt } from "./encrypt";
-import command from "$commands/slash";
 
 export default command(
 	{

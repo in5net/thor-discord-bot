@@ -22,8 +22,14 @@ import play from "play-dl";
 import { TypedEmitter } from "tiny-typed-emitter";
 import * as playlist from "./playlist";
 import Queue from "./queue";
-import type { Album, SongType } from "./song";
-import { SoundCloudSong, SpotifySong, URLSong, YouTubeSong } from "./song";
+import {
+	type Album,
+	type SongType,
+	SoundCloudSong,
+	SpotifySong,
+	URLSong,
+	YouTubeSong,
+} from "./song";
 import Stream from "./stream";
 import { getLyrics } from "$services/genius";
 

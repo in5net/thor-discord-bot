@@ -7,7 +7,7 @@ import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";
 import { nanoid } from "nanoid";
-import command from "$services/commands/slash";
+import command from "discord/commands/slash";
 
 const startGrid: number[][] = [
 	[1, 2, 3],

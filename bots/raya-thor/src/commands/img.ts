@@ -1,12 +1,12 @@
+import { env } from "node:process";
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
 	ButtonStyle,
 	EmbedBuilder,
 } from "discord.js";
-import command from "$commands/slash";
+import command from "discord/commands/slash";
 import ImageSearch from "$services/customsearch";
-import { COLOR } from "$services/env";
 
 export default command(
 	{
@@ -24,7 +24,7 @@ export default command(
 
 		const embed = new EmbedBuilder()
 			.setDescription(query)
-			.setColor(COLOR)
+			.setColor(env.COLOR)
 			.setImage(await search.next());
 		const previousButton = new ButtonBuilder()
 			.setCustomId("prev")

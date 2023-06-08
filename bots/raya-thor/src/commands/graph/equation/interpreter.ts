@@ -2,16 +2,16 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable no-new-wrappers */
 import type Node from "./node";
-import type {
-	BinaryOpNode,
-	FuncCallNode,
-	GroupingNode,
-	IdentifierNode,
-	NumberNode,
-	UnaryOpNode,
+import {
+	type BinaryOpNode,
+	type FuncCallNode,
+	type GroupingNode,
+	type IdentifierNode,
+	type NumberNode,
+	type UnaryOpNode,
 } from "./node";
 import type Scope from "./scope";
-import type { GroupingOp } from "./token";
+import { type GroupingOp } from "./token";
 import Value, { Function, Number } from "./values/mod";
 
 type NodeName =

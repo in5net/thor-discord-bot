@@ -1,5 +1,5 @@
-import { FILES_DOMAIN } from "storage";
-import command from "$commands/slash";
+import { env } from "node:process";
+import command from "discord/commands/slash";
 import prisma from "$services/prisma";
 
 export default command(
@@ -14,7 +14,7 @@ export default command(
       LIMIT 1`;
 		if (!gif) return i.reply("No food found");
 
-		const url = `https://${FILES_DOMAIN}/rotatingfood5/${encodeURIComponent(
+		const url = `https://${env.FILES_DOMAIN}/rotatingfood5/${encodeURIComponent(
 			gif.name
 		)}`;
 		return i.reply(url);

@@ -1,6 +1,6 @@
-import type { KraccBacc } from "database";
-import { FILES_DOMAIN } from "storage";
-import command from "$commands/slash";
+import { env } from "node:process";
+import { type KraccBacc } from "database";
+import command from "discord/commands/slash";
 import prisma from "$services/prisma";
 
 export default command(
@@ -28,7 +28,7 @@ export default command(
 			},
 		});
 
-		const url = `https://${FILES_DOMAIN}/kraccbacc/${encodeURIComponent(
+		const url = `https://${env.FILES_DOMAIN}/kraccbacc/${encodeURIComponent(
 			video.name
 		)}`;
 		return i.editReply(url);

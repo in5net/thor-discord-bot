@@ -1,7 +1,7 @@
-import type { Chicken } from "database";
+import { env } from "node:process";
+import { type Chicken } from "database";
 import { AttachmentBuilder } from "discord.js";
-import { FILES_DOMAIN } from "storage";
-import command from "$commands/slash";
+import command from "discord/commands/slash";
 import prisma from "$services/prisma";
 
 const stickenFileName = "stick.png";
@@ -41,7 +41,7 @@ export default command(
 			name = chicken.name;
 		}
 
-		const url = `https://${FILES_DOMAIN}/chicken/${name}`;
+		const url = `https://${env.FILES_DOMAIN}/chicken/${name}`;
 		if (name.endsWith(".mp3"))
 			return i.editReply({
 				content: null,

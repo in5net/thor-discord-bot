@@ -1,6 +1,6 @@
 import { shuffle } from "@in5net/limitless";
-import type { Ratio } from "database";
-import command from "$commands/slash";
+import { type Ratio } from "database";
+import command from "discord/commands/slash";
 import prisma from "$services/prisma";
 import { incCount } from "$services/users";
 

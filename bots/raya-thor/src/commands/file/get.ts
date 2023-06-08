@@ -1,6 +1,6 @@
-import { FILES_DOMAIN } from "storage";
+import { env } from "node:process";
+import command from "discord/commands/slash";
 import { getRandomFile, sendFile, types } from "./shared";
-import command from "$commands/slash";
 
 export default command(
 	{
@@ -23,7 +23,7 @@ export default command(
 		if (googas)
 			return i.reply(
 				["googas.mp4", "gradi.png"]
-					.map(name => `https://${FILES_DOMAIN}/discord/${name}`)
+					.map(name => `https://${env.FILES_DOMAIN}/discord/${name}`)
 					.join(" ")
 			);
 

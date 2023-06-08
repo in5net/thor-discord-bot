@@ -1,12 +1,12 @@
-import process from "node:process";
+import { env } from "node:process";
 import { EmbedBuilder } from "discord.js";
 import { closest } from "fastest-levenshtein";
 import { caseInsensitive, createRegExp, exactly } from "magic-regexp";
-import { type ArgumentValue, type TextCommand } from "$services/commands/text";
-import event from "$services/event";
+import event from "discord/event";
+import { type ArgumentValue, type TextCommand } from "discord/commands/text";
 import prisma from "$services/prisma";
 
-const prefix = process.env.PREFIX;
+const prefix = env.PREFIX;
 const prefixRegex = createRegExp(exactly(prefix).at.lineStart(), [
 	caseInsensitive,
 ]);

@@ -1,4 +1,4 @@
-import command from "$commands/slash";
+import command from "discord/commands/slash";
 
 const url = "https://api.github.com/zen";
 

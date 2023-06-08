@@ -1,8 +1,7 @@
-import process from "node:process";
+import { env } from "node:process";
 import { EmbedBuilder, hyperlink } from "discord.js";
-import command from "$services/commands/text";
+import command from "discord/commands/text";
 import { api } from "$services/customsearch";
-import { COLOR } from "$services/env";
 
 export default command(
 	{
@@ -18,14 +17,14 @@ export default command(
 	async ({ message, args: { query } }) => {
 		const result = await api.cse.list({
 			q: query,
-			cx: process.env.CUSTOM_SEARCH_ID,
+			cx: env.CUSTOM_SEARCH_ID,
 			num: 5,
 		});
 		const { items = [] } = result.data;
 		const embed = new EmbedBuilder()
 			.setTitle(`Search results`)
 			.setDescription(query)
-			.setColor(COLOR)
+			.setColor(env.COLOR)
 			.addFields(
 				items.map(({ title, link }, i) => ({
 					name: `${i + 1}.`,

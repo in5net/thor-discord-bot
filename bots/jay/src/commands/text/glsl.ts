@@ -1,6 +1,6 @@
-import type { Buffer } from "node:buffer";
+import { type Buffer } from "node:buffer";
 import { AttachmentBuilder } from "discord.js";
-import command from "$commands/text";
+import command from "discord/commands/text";
 import GL from "$services/gl";
 
 const MAX_IMAGE_SIZE = 2048;

@@ -1,10 +1,10 @@
 import { ApplicationCommandOptionType, Routes } from "discord-api-types/v10";
 import { REST } from "discord.js";
-import type {
-	CommandGroups,
-	CommandOptionType,
-	Commands,
-	SlashCommand,
+import {
+	type CommandGroups,
+	type CommandOptionType,
+	type Commands,
+	type SlashCommand,
 } from "./slash";
 
 let buildCount = 0;

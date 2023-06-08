@@ -1,6 +1,6 @@
-import process from "node:process";
+import { env } from "node:process";
+import command from "discord/commands/message";
 import { getVoice } from "../music/voice-manager";
-import command from "$services/commands/message";
 
 export default command("Play", async i => {
 	const message = i.targetMessage;
@@ -8,10 +8,7 @@ export default command("Play", async i => {
 	if (!guildId) return;
 	const voice = getVoice(guildId);
 
-	const queries = content.replace(
-		new RegExp(`${process.env.PREFIX}[a-zA-Z]+`),
-		""
-	);
+	const queries = content.replace(new RegExp(`${env.PREFIX}[a-zA-Z]+`), "");
 	await voice.add(message, queries);
 	await i.reply("Added to queue");
 });

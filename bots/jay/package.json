@@ -10,6 +10,7 @@
     "deploy": "dotenv -e ./.env -e ../../packages/storage/.env tsx src/deploy.ts"
   },
   "dependencies": {
+    "discord": "workspace:*",
     "@discordjs/rest": "1.7.1",
     "@in5net/limitless": "0.1.4",
     "@napi-rs/canvas": "0.1.41",

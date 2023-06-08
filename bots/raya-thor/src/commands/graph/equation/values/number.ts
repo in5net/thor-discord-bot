@@ -1,7 +1,7 @@
 /* eslint-disable no-new-wrappers */
 /* eslint-disable @typescript-eslint/ban-types */
 
-import type { BinaryOp } from "../token";
+import { type BinaryOp } from "../token";
 import Function from "./function";
 import Value from "./value";
 

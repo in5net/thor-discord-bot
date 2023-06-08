@@ -1,5 +1,5 @@
+import command from "discord/commands/text";
 import musicCommand from "./command";
-import command from "$services/commands/text";
 
 export default command(
 	{

@@ -1,7 +1,4 @@
-import process from "node:process";
 import prisma from "./prisma";
-
-export const COLOR = process.env.COLOR as `#${string}`;
 
 const admins = await prisma.user.findMany({
 	select: {

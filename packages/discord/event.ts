@@ -1,13 +1,15 @@
-import type { Client, ClientEvents } from "discord.js";
+import { type Client, type ClientEvents } from "discord.js";
 
 type MaybePromise<T> = PromiseLike<T> | T;
 
+export type EventListener<T extends keyof ClientEvents> = (data: {
+	client: Client;
+	args: ClientEvents[T];
+}) => MaybePromise<any>;
+
 const event = <T extends keyof ClientEvents>(
 	options: { name: T; once?: boolean },
-	listener: (data: {
-		client: Client;
-		args: ClientEvents[T];
-	}) => MaybePromise<any>
+	listener: EventListener<T>
 ) => ({
 	...options,
 	listener,

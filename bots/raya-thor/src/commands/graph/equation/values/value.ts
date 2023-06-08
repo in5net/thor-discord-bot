@@ -1,5 +1,5 @@
 import type Scope from "../scope";
-import type { BinaryOp, GroupingOp, UnaryOp } from "../token";
+import { type BinaryOp, type GroupingOp, type UnaryOp } from "../token";
 
 type UnaryOpIndex = {
 	[index in UnaryOp | GroupingOp]: () => Value | void;

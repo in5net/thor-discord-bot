@@ -1,3 +1,4 @@
+import { type TextCommand } from "discord/commands/text";
 import filter from "./filter";
 import join from "./join";
 import loop from "./loop";
@@ -15,7 +16,6 @@ import remove from "./remove";
 import seek from "./seek";
 import shuffle from "./shuffle";
 import stop from "./stop";
-import type { TextCommand } from "$services/commands/text";
 
 const commands = {
 	filter,

@@ -3,13 +3,14 @@ import { mkdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { Writable } from "node:stream";
+import { env } from "node:process";
 import { nanoid } from "nanoid";
-import { FILES_DOMAIN, filesBucket } from "storage";
+import { filesBucket } from "storage";
+import command from "discord/commands/slash";
 import { BITS_PRICE } from "./shared";
 import { getBits, subtractBits } from "$services/ai/shared";
 import { ADMIN_IDS } from "$services/env";
 import { openai } from "$services/openai";
-import command from "$commands/slash";
 
 export default command(
 	{
@@ -74,7 +75,7 @@ export default command(
 				})
 			);
 			await body?.pipeTo(stream);
-			const fileURL = `https://${FILES_DOMAIN}/${path}`;
+			const fileURL = `https://${env.FILES_DOMAIN}/${path}`;
 			console.log(`Uploaded ${fileURL}`);
 			urls.push(fileURL);
 		}

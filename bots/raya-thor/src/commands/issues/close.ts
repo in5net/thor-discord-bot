@@ -1,7 +1,7 @@
-import process from "node:process";
+import { env } from "node:process";
 import { objectKeys } from "@in5net/limitless";
 import { IssueReason } from "database";
-import command from "$commands/slash";
+import command from "discord/commands/slash";
 import { createEmbed } from "$services/embed";
 import prisma from "$services/prisma";
 
@@ -40,7 +40,7 @@ export default command(
 		},
 	},
 	async (i, { issue, reason }) => {
-		if (i.user.id !== process.env.OWNER_ID)
+		if (i.user.id !== env.OWNER_ID)
 			return i.reply("Only my owner can update issues");
 
 		const { name } = await prisma.issue.update({

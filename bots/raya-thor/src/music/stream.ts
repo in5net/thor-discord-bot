@@ -3,9 +3,10 @@ import {
 	createAudioPlayer,
 	joinVoiceChannel,
 	VoiceConnectionStatus,
+	type AudioResource,
+	type VoiceConnection,
 } from "@discordjs/voice";
-import type { AudioResource, VoiceConnection } from "@discordjs/voice";
-import type { VoiceChannel } from "discord.js";
+import { type VoiceChannel } from "discord.js";
 import { TypedEmitter } from "tiny-typed-emitter";
 import { type SongType, YouTubeSong } from "./song";
 

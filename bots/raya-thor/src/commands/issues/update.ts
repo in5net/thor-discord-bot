@@ -1,7 +1,7 @@
-import process from "node:process";
+import { env } from "node:process";
 import { objectKeys } from "@in5net/limitless";
 import { IssueType } from "database";
-import command from "$commands/slash";
+import command from "discord/commands/slash";
 import { createEmbed } from "$services/embed";
 import prisma from "$services/prisma";
 
@@ -22,8 +22,7 @@ export default command(
 							name: {
 								contains: search,
 							},
-							userId:
-								i.user.id === process.env.OWNER_ID ? undefined : i.user.id,
+							userId: i.user.id === env.OWNER_ID ? undefined : i.user.id,
 						},
 						orderBy: {
 							name: "asc",
@@ -57,7 +56,7 @@ export default command(
 			},
 			where: {
 				id: issue,
-				userId: i.user.id === process.env.OWNER_ID ? undefined : i.user.id,
+				userId: i.user.id === env.OWNER_ID ? undefined : i.user.id,
 			},
 		});
 		return i.reply({

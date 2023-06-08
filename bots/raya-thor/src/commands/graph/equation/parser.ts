@@ -1,4 +1,3 @@
-import type Node from "./node";
 import {
 	BinaryOpNode,
 	FuncCallNode,
@@ -7,6 +6,7 @@ import {
 	NumberNode,
 	UnaryOpNode,
 } from "./node";
+import type Node from "./node";
 import Token, {
 	type BinaryOp,
 	type LeftGrouping,

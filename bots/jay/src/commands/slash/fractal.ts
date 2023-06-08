@@ -1,8 +1,9 @@
-import type { Buffer } from "node:buffer";
+import { type Buffer } from "node:buffer";
+import { env } from "node:process";
 import { randomInt } from "@in5net/limitless";
 import { nanoid } from "nanoid";
-import { FILES_DOMAIN, filesBucket } from "storage";
-import command from "$commands/slash";
+import { filesBucket } from "storage";
+import command from "discord/commands/slash";
 import GL from "$services/gl";
 
 const MAX_IMAGE_SIZE = 2048;
@@ -64,14 +65,14 @@ export default command(
 			}
 		}
 
-		const buffer = await render(
+		const buffer = await render({
 			shapeSize,
 			url,
 			width,
 			height,
 			coords,
-			iterations
-		);
+			iterations,
+		});
 		await i.editReply("Uploading fractal...");
 
 		const path = `fractals/${nanoid()}.png`;
@@ -88,7 +89,7 @@ export default command(
 		const fileURL = await new Promise<string>((resolve, reject) =>
 			stream
 				.on("finish", () => {
-					resolve(`https://${FILES_DOMAIN}/${path}`);
+					resolve(`https://${env.FILES_DOMAIN}/${path}`);
 				})
 				.on("error", reject)
 		);
@@ -97,14 +98,21 @@ export default command(
 	}
 );
 
-export async function render(
-	shapeSize: number,
-	url: string,
-	width: number,
-	height: number,
-	coords: Array<[x: number, y: number]>,
-	iterations: number
-): Promise<Buffer> {
+export async function render({
+	shapeSize,
+	url,
+	width,
+	height,
+	coords,
+	iterations,
+}: {
+	shapeSize: number;
+	url: string;
+	width: number;
+	height: number;
+	coords: Array<[x: number, y: number]>;
+	iterations: number;
+}): Promise<Buffer> {
 	const fragmentSource = await GL.loadFile(
 		new URL("../../assets/fractal/shader.frag", import.meta.url).pathname
 	);

@@ -1,11 +1,11 @@
 import { type Awaitable } from "discord.js";
-import { getVoice } from "../../music/voice-manager";
 import command, {
 	type Arguments,
 	type Exec,
 	type TextCommand,
 	type TextCommandParams,
-} from "$services/commands/text";
+} from "discord/commands/text";
+import { getVoice } from "../../music/voice-manager";
 
 export default function musicCommand<T extends Arguments>(
 	params: TextCommandParams<T>,

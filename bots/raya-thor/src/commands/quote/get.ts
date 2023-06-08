@@ -1,6 +1,6 @@
-import type { SpeechBubble } from "database";
-import { FILES_DOMAIN } from "storage";
-import command from "$commands/slash";
+import { env } from "node:process";
+import { type SpeechBubble } from "database";
+import command from "discord/commands/slash";
 import prisma from "$services/prisma";
 
 export default command(
@@ -15,6 +15,6 @@ export default command(
       FROM SpeechBubble
       ORDER BY RAND()
       LIMIT 1;`;
-		await i.channel?.send(`https://${FILES_DOMAIN}/speech-bubbles/${name}`);
+		await i.channel?.send(`https://${env.FILES_DOMAIN}/speech-bubbles/${name}`);
 	}
 );

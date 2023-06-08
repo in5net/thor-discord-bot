@@ -1,9 +1,9 @@
-import process from "node:process";
+import { env } from "node:process";
 import { customsearch } from "@googleapis/customsearch";
 
 export const api = customsearch({
 	version: "v1",
-	auth: process.env.GOOGLE_APIS_KEY,
+	auth: env.GOOGLE_APIS_KEY,
 });
 
 export default class ImageSearch {
@@ -33,7 +33,7 @@ export default class ImageSearch {
 
 		const result = await api.cse.list({
 			q: query,
-			cx: process.env.CUSTOM_SEARCH_ID,
+			cx: env.CUSTOM_SEARCH_ID,
 			searchType: "image",
 			imgSize: "medium",
 			num: 1,

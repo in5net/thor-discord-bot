@@ -1,5 +1,5 @@
-import type { HopOn } from "database";
-import command from "$commands/slash";
+import { type HopOn } from "database";
+import command from "discord/commands/slash";
 import prisma from "$services/prisma";
 
 export default command(

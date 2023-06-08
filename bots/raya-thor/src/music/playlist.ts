@@ -1,4 +1,4 @@
-import type { Prisma } from "database";
+import { type Prisma } from "database";
 import {
 	type Album,
 	type SongJSONType,

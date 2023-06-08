@@ -1,4 +1,4 @@
+import { env } from "node:process";
 import { EmbedBuilder } from "discord.js";
-import { COLOR } from "./env";
 
-export const createEmbed = () => new EmbedBuilder().setColor(COLOR);
+export const createEmbed = () => new EmbedBuilder().setColor(env.COLOR);

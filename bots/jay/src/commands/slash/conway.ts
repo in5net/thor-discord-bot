@@ -6,7 +6,7 @@ import { createCanvas } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";
 import { nanoid } from "nanoid";
-import command from "$commands/slash";
+import command from "discord/commands/slash";
 
 const size = 512;
 

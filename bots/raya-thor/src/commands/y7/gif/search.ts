@@ -1,6 +1,6 @@
-import { FILES_DOMAIN } from "storage";
+import { env } from "node:process";
+import command from "discord/commands/slash";
 import { NSFW_FILE_NAME } from "./shared";
-import command from "$commands/slash";
 import prisma from "$services/prisma";
 
 export default command(
@@ -33,7 +33,7 @@ export default command(
 		},
 	},
 	async (i, { file_name }) => {
-		const url = `https://${FILES_DOMAIN}/y7/images/${file_name}`;
+		const url = `https://${env.FILES_DOMAIN}/y7/images/${file_name}`;
 		return i.reply(url);
 	}
 );

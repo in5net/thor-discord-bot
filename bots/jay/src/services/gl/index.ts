@@ -7,7 +7,11 @@ import { createCanvas } from "@napi-rs/canvas";
 import ffmpeg from "fluent-ffmpeg";
 import GIFEncoder from "gif-encoder";
 import createContext from "gl";
-import type { ReadonlyMat2, ReadonlyMat3, ReadonlyMat4 } from "gl-matrix";
+import {
+	type ReadonlyMat2,
+	type ReadonlyMat3,
+	type ReadonlyMat4,
+} from "gl-matrix";
 import { nanoid } from "nanoid";
 import { PNG } from "pngjs";
 import GIF from "./gif";

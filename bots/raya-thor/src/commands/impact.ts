@@ -1,6 +1,6 @@
 import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
-import command from "$services/commands/slash";
+import command from "discord/commands/slash";
 
 const font = "Impact";
 let registered = false;

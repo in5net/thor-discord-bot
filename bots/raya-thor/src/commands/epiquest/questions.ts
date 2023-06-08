@@ -1,7 +1,6 @@
 import { random } from "@in5net/limitless";
-import type { Item } from "./items";
-import items from "./items";
-import type { Response } from "./types";
+import items, { type Item } from "./items";
+import { type Response } from "./types";
 
 interface Answer {
 	text: string | (() => string);

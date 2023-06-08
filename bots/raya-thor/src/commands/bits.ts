@@ -1,4 +1,4 @@
-import command from "$commands/slash";
+import command from "discord/commands/slash";
 import { getBits, MAX_BITS } from "$services/ai/shared";
 import { ADMIN_IDS } from "$services/env";
 

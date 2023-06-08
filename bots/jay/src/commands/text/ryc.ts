@@ -1,4 +1,4 @@
-import command from "$services/commands/text";
+import command from "discord/commands/text";
 import { cache } from "$services/prisma";
 
 export default command(

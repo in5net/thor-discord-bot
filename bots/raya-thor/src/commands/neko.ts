@@ -1,6 +1,6 @@
 import { EmbedBuilder } from "discord.js";
 import { Client, type NB_CATEGORIES } from "nekos-best.js";
-import command from "$commands/slash";
+import command from "discord/commands/slash";
 import { incCount } from "$services/users";
 
 const client = new Client();

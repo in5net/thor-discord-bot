@@ -1,5 +1,5 @@
 import { type Message } from "discord.js";
-import command from "$services/commands/text";
+import command from "discord/commands/text";
 import { chat, filter } from "$services/openai";
 import { cache } from "$services/prisma";
 

@@ -1,4 +1,4 @@
-import type { Awaitable, Client, Message } from "discord.js";
+import { type Awaitable, type Client, type Message } from "discord.js";
 
 interface ArgumentTypeMap {
 	int: number;

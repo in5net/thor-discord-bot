@@ -1,5 +1,5 @@
+import command from "discord/commands/slash";
 import { sendFile } from "./shared";
-import command from "$commands/slash";
 import prisma from "$services/prisma";
 
 export default command(

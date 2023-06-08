@@ -1,5 +1,5 @@
 import { parse } from "node:path";
-import process from "node:process";
+import { env } from "node:process";
 import { random, shuffle } from "@in5net/limitless";
 import { ChannelType, EmbedBuilder, userMention } from "discord.js";
 import { closest } from "fastest-levenshtein";
@@ -11,14 +11,14 @@ import {
 	global,
 	whitespace,
 } from "magic-regexp";
+import event from "discord/event";
+import { type ArgumentValue, type TextCommand } from "discord/commands/text";
 import randomResponses, {
 	randomResponsesRef as randomResponsesReference,
 } from "../responses";
 import help from "../text-commands/help";
 import textCommands from "../text-commands/mod";
 import { handleWordleMessage } from "../text-commands/wordle";
-import { type ArgumentValue, type TextCommand } from "$services/commands/text";
-import event from "$services/event";
 import prisma from "$services/prisma";
 import { incCount } from "$services/users";
 import woof from "$services/woof";
@@ -28,7 +28,7 @@ const optionalPrefixCommands = Object.entries(textCommands)
 	.map(([name]) => name);
 console.log("Optional prefix commands:", optionalPrefixCommands);
 
-const prefix = process.env.PREFIX;
+const prefix = env.PREFIX;
 const prefixRegex = createRegExp(exactly(prefix).at.lineStart(), [
 	caseInsensitive,
 ]);

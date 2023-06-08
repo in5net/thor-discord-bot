@@ -1,18 +1,17 @@
-import type { Readable } from "node:stream";
+import { type Readable } from "node:stream";
 import { createAudioResource, StreamType } from "@discordjs/voice";
 import chalk from "chalk-template";
 import ytdl from "discord-ytdl-core";
 import { type Awaitable, EmbedBuilder } from "discord.js";
 import got from "got";
 import { createRegExp, digit, oneOrMore } from "magic-regexp";
-import type {
-	SoundCloudPlaylist,
-	SoundCloudTrack,
-	SpotifyAlbum,
-	SpotifyPlaylist,
-	SpotifyTrack,
+import play, {
+	type SoundCloudPlaylist,
+	type SoundCloudTrack,
+	type SpotifyAlbum,
+	type SpotifyPlaylist,
+	type SpotifyTrack,
 } from "play-dl";
-import play from "play-dl";
 import { z } from "zod";
 import youtube from "$services/youtube";
 

@@ -11,6 +11,7 @@
     "deploy": "turbo run deploy"
   },
   "devDependencies": {
+    "tsconfig": "workspace:*",
     "@commitlint/cli": "^17.6.5",
     "@commitlint/config-conventional": "^17.6.5",
     "@commitlint/prompt-cli": "^17.6.5",

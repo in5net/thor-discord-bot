@@ -1,5 +1,5 @@
 import test from "node:test";
-import type { SpeechBubble } from "database";
+import { type SpeechBubble } from "database";
 import prisma from "$services/prisma";
 
 await test("quote", async () => {

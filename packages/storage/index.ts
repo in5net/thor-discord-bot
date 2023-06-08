@@ -1,12 +1,24 @@
-import { Storage } from '@google-cloud/storage';
-
-import serviceAccount from './service_account.json';
+import { env } from "node:process";
+import { Storage } from "@google-cloud/storage";
+import { z } from "zod";
+import serviceAccount from "./service_account.json";
 
 export const credentials = serviceAccount;
 
 const storage = new Storage({ credentials });
 export default storage;
 
-export const { FILES_DOMAIN = '' } = process.env;
+declare global {
+	// eslint-disable-next-line @typescript-eslint/no-namespace
+	namespace NodeJS {
+		interface ProcessEnv extends z.infer<typeof EnvironmentVariables> {}
+	}
+}
 
-export const filesBucket = storage.bucket(FILES_DOMAIN);
+const EnvironmentVariables = z.object({
+	FILES_DOMAIN: z.string(),
+});
+
+EnvironmentVariables.parse(env);
+
+export const filesBucket = storage.bucket(env.FILES_DOMAIN);

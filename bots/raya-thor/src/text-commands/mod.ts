@@ -1,3 +1,4 @@
+import { type TextCommand } from "discord/commands/text";
 import boss from "./boss";
 import chat from "./chat";
 import google from "./google";
@@ -7,7 +8,6 @@ import rtx from "./rtx";
 import ry from "./ry";
 import video from "./video";
 import wordle from "./wordle";
-import type { TextCommand } from "$services/commands/text";
 
 const commands = {
 	...musicCommands,

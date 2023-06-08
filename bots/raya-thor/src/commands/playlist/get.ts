@@ -1,3 +1,4 @@
+import { env } from "node:process";
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
@@ -5,9 +6,8 @@ import {
 	ComponentType,
 	EmbedBuilder,
 } from "discord.js";
+import command from "discord/commands/slash";
 import * as playlist from "../../music/playlist";
-import command from "$services/commands/slash";
-import { COLOR } from "$services/env";
 import prisma from "$services/prisma";
 import { sec2Str } from "$services/time";
 
@@ -54,7 +54,7 @@ export default command(
 
 		const embed = new EmbedBuilder()
 			.setTitle("Tracks")
-			.setColor(COLOR)
+			.setColor(env.COLOR)
 			.setAuthor({
 				name: user.username,
 				iconURL: user.avatarURL() || undefined,

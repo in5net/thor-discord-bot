@@ -1,8 +1,9 @@
+import { env } from "node:process";
 import { AttachmentBuilder } from "discord.js";
 import { mat4 } from "gl-matrix";
 import { nanoid } from "nanoid";
-import { FILES_DOMAIN, filesBucket } from "storage";
-import command from "$commands/slash";
+import { filesBucket } from "storage";
+import command from "discord/commands/slash";
 import GL from "$services/gl";
 
 const size = 512;
@@ -114,7 +115,7 @@ export default command(
 		});
 		stream.pipe(uploadStream);
 		uploadStream.once("close", async () => {
-			const fileURL = `https://${FILES_DOMAIN}/${path}`;
+			const fileURL = `https://${env.FILES_DOMAIN}/${path}`;
 			console.log(`Uploaded ${fileURL}`);
 
 			return i.editReply({

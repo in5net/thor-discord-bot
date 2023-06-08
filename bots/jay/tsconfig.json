@@ -5,7 +5,6 @@
     "baseUrl": "./",
     "paths": {
       "$services/*": ["./src/services/*"],
-      "$commands/*": ["./src/services/commands/*"],
       "$openapi/*": ["./openapi/*"]
     }
   }

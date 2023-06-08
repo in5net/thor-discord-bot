@@ -1,10 +1,12 @@
-import process from "node:process";
+import { env } from "node:process";
 import { z } from "zod";
 
 declare global {
 	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace NodeJS {
-		interface ProcessEnv extends z.infer<typeof EnvironmentVariables> {}
+		interface ProcessEnv extends z.infer<typeof EnvironmentVariables> {
+			COLOR: `#${string}`;
+		}
 	}
 }
 
@@ -12,7 +14,7 @@ const EnvironmentVariables = z.object({
 	DEV: z.string().optional(),
 	NAME: z.string(),
 	PREFIX: z.string(),
-	COLOR: z.string(),
+	COLOR: z.string().startsWith("#"),
 
 	DISCORD_ID: z.string(),
 	DISCORD_TOKEN: z.string(),
@@ -33,6 +35,6 @@ const EnvironmentVariables = z.object({
 	OPENAI_API_KEY: z.string(),
 });
 
-const result = EnvironmentVariables.safeParse(process.env);
+const result = EnvironmentVariables.safeParse(env);
 if (result.success) console.log("✅ Environment variables verified");
 else throw new Error(`❌ Environment variables not verified: ${result.error}`);

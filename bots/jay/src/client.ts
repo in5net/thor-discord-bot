@@ -6,11 +6,11 @@ import {
 	Options,
 	WebhookClient,
 } from "discord.js";
-import { loadDiscordEvents } from "./loaders/events";
-import { loadSlashCommands } from "./loaders/slash-commands";
-import { loadTextCommands } from "./loaders/text-commands";
-import { type TextCommand } from "$services/commands/text";
-import { type SlashCommand } from "$services/commands/slash";
+import { type TextCommand } from "discord/commands/text";
+import { loadDiscordEvents } from "discord/loaders/events";
+import { loadSlashCommands } from "discord/loaders/slash-commands";
+import { loadTextCommands } from "discord/loaders/text-commands";
+import { type SlashCommand } from "discord/commands/slash";
 
 const { NAME, DISCORD_TOKEN, DEV } = process.env;
 console.log(`⏳ ${NAME} is starting...`);
@@ -59,9 +59,12 @@ const client = new Client({
 });
 export default client;
 
-await loadDiscordEvents(client);
-client.textCommands = await loadTextCommands();
-client.slashCommands = await loadSlashCommands();
+const eventsPath = new URL("events", import.meta.url).pathname;
+await loadDiscordEvents(eventsPath, client);
+const textCommandsPath = new URL("commands/text", import.meta.url).pathname;
+client.textCommands = await loadTextCommands(textCommandsPath);
+const slashCommandsPath = new URL("commands/slash", import.meta.url).pathname;
+client.slashCommands = await loadSlashCommands(slashCommandsPath);
 
 if (DEV !== "1") {
 	const webhook = new WebhookClient({ url: process.env.WEBHOOK_URL });

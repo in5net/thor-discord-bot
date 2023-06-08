@@ -1,6 +1,6 @@
 import { EmbedBuilder } from "discord.js";
-import { type OptionValue } from "$services/commands/slash";
-import event from "$services/event";
+import event from "discord/event";
+import { type OptionValue } from "discord/commands/slash";
 import prisma from "$services/prisma";
 
 export default event(

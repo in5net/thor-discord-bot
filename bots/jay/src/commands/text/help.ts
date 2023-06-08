@@ -1,10 +1,10 @@
-import process from "node:process";
-import { Collection, EmbedBuilder } from "discord.js";
+import { env } from "node:process";
+import { type Collection, EmbedBuilder } from "discord.js";
 import command, {
 	argumentType2Name,
 	type TextCommand,
-} from "$services/commands/text";
-import { COLOR } from "$services/env";
+} from "discord/commands/text";
+import { createRegExp, exactly, word } from "magic-regexp";
 
 export default command(
 	{
@@ -23,7 +23,7 @@ export default command(
 			return channel.send({
 				embeds: [
 					new EmbedBuilder()
-						.setTitle(`${process.env.NAME} Commands`)
+						.setTitle(`${env.NAME} Commands`)
 						.setDescription(
 							client.textCommands
 								.map(({ aliases }, name) =>
@@ -31,7 +31,7 @@ export default command(
 								)
 								.join(", ")
 						)
-						.setColor(COLOR),
+						.setColor(env.COLOR),
 				],
 			});
 
@@ -48,9 +48,7 @@ export default command(
 				break;
 			}
 
-			commandManuals = new Collection(
-				Object.entries(commandManual.subcommands || {})
-			);
+			commandManuals = getSubcommands(command, commandManuals);
 			usage.push([command, ...(commandManual.aliases || [])].join("/"));
 		}
 
@@ -69,20 +67,30 @@ export default command(
 			);
 
 		const embed = new EmbedBuilder()
-			.setTitle(`${process.env.NAME} Help: ${arguments_.join(" ")}`)
+			.setTitle(`${env.NAME} Help: ${arguments_.join(" ")}`)
 			.setDescription(commandManual.desc)
-			.setColor(COLOR)
+			.setColor(env.COLOR)
 			.addFields({
 				name: "Usage",
-				value: `\`${process.env.PREFIX}${usage.join(" ")}\``,
+				value: `\`${env.PREFIX}${usage.join(" ")}\``,
 			});
-		if (commandManual.subcommands)
+
+		if (commandManuals.size)
 			embed.addFields({
 				name: "Subcommands",
-				value: Object.keys(commandManual.subcommands)
+				value: Object.keys(commandManuals)
 					.map(name => `\`${name}\``)
 					.join(", "),
 			});
 		return channel.send({ embeds: [embed] });
 	}
 );
+
+function getSubcommands(
+	name: string,
+	commands: Collection<string, TextCommand>
+) {
+	return commands.filter((_, key) =>
+		createRegExp(exactly(name).at.lineStart(), " ", word.at.lineEnd()).test(key)
+	);
+}

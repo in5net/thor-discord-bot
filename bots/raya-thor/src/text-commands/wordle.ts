@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { random } from "@in5net/limitless";
-import type { Message, Snowflake } from "discord.js";
-import command from "$commands/text";
+import { type Message, type Snowflake } from "discord.js";
+import command from "discord/commands/text";
 
 const words = readFileSync(
 	new URL("../../assets/wordle.txt", import.meta.url),
