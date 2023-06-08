@@ -1,4 +1,4 @@
-import { symbolsOrigin, type Work } from "@in5net/limitless/api/ao3/mod";
+import { symbolsOrigin, type Work } from "@in5net/limitless/api/ao3";
 import { createCanvas, loadImage, type Image } from "@napi-rs/canvas";
 
 const imageCache = new Map<string, Image>();

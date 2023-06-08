@@ -1,7 +1,7 @@
 import { env } from "node:process";
 import { deploy } from "discord/commands/deploy";
 import { type CommandGroups, type Commands } from "discord/commands/slash";
-import * as commandsData from "./commands/mod";
+import * as commandsData from "./commands";
 
 console.log("Commands registering...");
 

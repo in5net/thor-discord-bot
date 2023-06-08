@@ -17,7 +17,7 @@ import randomResponses, {
 	randomResponsesRef as randomResponsesReference,
 } from "../responses";
 import help from "../text-commands/help";
-import textCommands from "../text-commands/mod";
+import textCommands from "../text-commands";
 import { handleWordleMessage } from "../text-commands/wordle";
 import prisma from "$services/prisma";
 import { incCount } from "$services/users";

@@ -2,7 +2,7 @@ import { map } from "@in5net/limitless";
 import { createCanvas } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
-import runner from "./equation/mod";
+import runner from "./equation";
 
 const size = 512;
 const ticks = 20;

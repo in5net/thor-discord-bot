@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-confusing-void-expression */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable no-new-wrappers */
 import type Node from "./node";
@@ -12,7 +11,7 @@ import {
 } from "./node";
 import type Scope from "./scope";
 import { type GroupingOp } from "./token";
-import Value, { Function, Number } from "./values/mod";
+import Value, { Function, Number } from "./values";
 
 type NodeName =
 	| "BinaryOpNode"

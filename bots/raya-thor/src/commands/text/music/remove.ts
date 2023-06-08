@@ -40,9 +40,10 @@ export default musicCommand(
 		}
 
 		const { length } = queue;
-		indices.forEach(i => {
+		for (const i of indices) {
 			queue.remove(i);
-		});
+		}
+
 		return voice.send(
 			`✂️ Removed ${indices.join(", ")}, total of ${
 				length - queue.length

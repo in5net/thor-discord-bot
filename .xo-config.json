@@ -20,13 +20,13 @@
     "n/file-extension-in-import": "off",
     "unicorn/no-array-callback-reference": "off",
     "unicorn/require-array-join-separator": "off",
-    "unicorn/no-array-for-each": "off",
     "unicorn/prevent-abbreviations": [
       "error",
       {
         "replacements": {
           "params": false,
           "ctx": false,
+          "e": false,
           "i": false,
           "j": false,
           "env": false,
@@ -37,10 +37,12 @@
           "func": false,
           "arg": false,
           "args": false,
-          "ext": false
+          "ext": false,
+          "dev": false
         }
       }
     ],
-    "unicorn/explicit-length-check": "off"
+    "unicorn/explicit-length-check": "off",
+    "unicorn/no-array-reduce": "off"
   }
 }

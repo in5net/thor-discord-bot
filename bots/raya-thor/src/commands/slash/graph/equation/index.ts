@@ -17,7 +17,7 @@ import Interpreter from "./interpreter";
 import Lexer from "./lexer";
 import Parser from "./parser";
 import Scope from "./scope";
-import { Function, Number } from "./values/mod";
+import { Function, Number } from "./values";
 
 export default function runner(source: string): (x: number) => number {
 	const lexer = new Lexer(source);

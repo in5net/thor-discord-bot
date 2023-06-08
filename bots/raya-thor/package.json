@@ -16,7 +16,7 @@
     "@discordjs/voice": "0.16.0",
     "@google-ai/generativelanguage": "^0.2.0",
     "@googleapis/customsearch": "1.0.0",
-    "@in5net/limitless": "0.1.4",
+    "@in5net/limitless": "workspace:*",
     "@napi-rs/canvas": "0.1.41",
     "catboys": "^1.0.6",
     "chalk-template": "^1.1.0",

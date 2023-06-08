@@ -94,7 +94,7 @@ export default class Voice extends TypedEmitter<{
 	async send(message: string | MessageCreateOptions) {
 		[this.message] = await Promise.all([
 			this.channel?.send(message),
-			this.message?.delete().catch(() => {}),
+			this.message?.delete().catch(() => null),
 		]);
 	}
 
@@ -259,12 +259,14 @@ export default class Voice extends TypedEmitter<{
 			}
 		}
 
-		for (const song of songs)
-			"songs" in song
-				? song.songs.forEach(song => {
-						song.log();
-				  })
-				: song.log();
+		for (const song of songs) {
+			if ("songs" in song) {
+				for (const song of song.songs) {
+					song.log();
+				}
+			} else song.log();
+		}
+
 		return songs;
 	}
 

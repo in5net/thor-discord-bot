@@ -148,7 +148,7 @@ export default command(
 			ctx.fillRect(0, 0, size, size);
 
 			const w = canvas.width / randomNumberArray.length;
-			randomNumberArray.forEach((n, i) => {
+			for (const [i, n] of randomNumberArray.entries()) {
 				ctx.strokeStyle = ctx.fillStyle = active.includes(i) ? "#f00" : "#fff";
 
 				const x = i * w;
@@ -156,7 +156,7 @@ export default command(
 				const h = map(n, 0, m, 0, canvas.height);
 				ctx.strokeRect(x, y, w, h);
 				ctx.fillRect(x, y, w, h);
-			});
+			}
 
 			const path = join(
 				temporaryDir,

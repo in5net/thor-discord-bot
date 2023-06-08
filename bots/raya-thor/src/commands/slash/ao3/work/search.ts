@@ -4,7 +4,7 @@ import {
 	searchFandoms,
 	searchRelationships,
 	searchTags,
-} from "@in5net/limitless/api/ao3/mod";
+} from "@in5net/limitless/api/ao3";
 import {
 	Category,
 	OrderBy,

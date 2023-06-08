@@ -4,7 +4,7 @@ import {
 	type CreateFetch,
 	type FetchConfig,
 	type Method,
-	OpArgumentType,
+	type OpArgumentType,
 	type OpErrorType,
 	type OpenapiPaths,
 	type Request,
@@ -26,9 +26,12 @@ function queryString(parameters: Record<string, unknown>): string {
 
 	for (const key of Object.keys(parameters)) {
 		const value = parameters[key];
+		// eslint-disable-next-line no-eq-null, eqeqeq
 		if (value != null) {
 			if (Array.isArray(value)) {
-				value.forEach(value => qs.push(encode(key, value)));
+				for (const v of value) {
+					qs.push(encode(key, v));
+				}
 			} else {
 				qs.push(encode(key, value));
 			}

@@ -169,7 +169,7 @@ export default command(
 			);
 		}
 
-		const row = new ActionRowBuilder().addComponents(
+		const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
 			new StringSelectMenuBuilder().setCustomId("action").addOptions(
 				{
 					emoji: "💥",

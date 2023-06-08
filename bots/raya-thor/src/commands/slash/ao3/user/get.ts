@@ -1,4 +1,4 @@
-import { getNameFromURL, getUser } from "@in5net/limitless/api/ao3/mod";
+import { getNameFromURL, getUser } from "@in5net/limitless/api/ao3";
 import command from "discord/commands/slash";
 import { createEmbedBuilder } from "../embed";
 

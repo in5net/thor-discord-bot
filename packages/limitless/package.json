@@ -1,0 +1,14 @@
+{
+  "name": "@in5net/limitless",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "dependencies": {
+    "cheerio": "1.0.0-rc.12",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@types/node": "18.16.3"
+  }
+}

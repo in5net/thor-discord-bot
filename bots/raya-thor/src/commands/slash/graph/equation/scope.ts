@@ -1,4 +1,4 @@
-import type Value from "./values/mod";
+import type Value from "./values";
 
 export default class Scope {
 	symbols = new Map<string, Value>();

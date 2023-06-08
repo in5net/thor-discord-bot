@@ -321,11 +321,11 @@ export default class GL {
 				accumulator + inputSizes[type] * Float32Array.BYTES_PER_ELEMENT,
 			0
 		);
-		inputs.forEach(({ name, type }) => {
+		for (const { name, type } of inputs) {
 			const size = inputSizes[type];
 			this.createAttribute(name, [size, gl.FLOAT, false, stride, offset]);
 			offset += size * Float32Array.BYTES_PER_ELEMENT;
-		});
+		}
 	}
 
 	uniform<T extends keyof Readonly<UniformData>>(
@@ -342,9 +342,10 @@ export default class GL {
 			}
 
 			case "int[]": {
-				(data as UniformData["int[]"]).forEach((value, i) => {
+				for (const [i, value] of (data as UniformData["int[]"]).entries()) {
 					this.uniform(`${name}[${i}]`, "int", value);
-				});
+				}
+
 				break;
 			}
 
@@ -354,9 +355,10 @@ export default class GL {
 			}
 
 			case "float[]": {
-				(data as UniformData["float[]"]).forEach((value, i) => {
+				for (const [i, value] of (data as UniformData["float[]"]).entries()) {
 					this.uniform(`${name}[${i}]`, "float", value);
-				});
+				}
+
 				break;
 			}
 
@@ -366,9 +368,10 @@ export default class GL {
 			}
 
 			case "ivec2[]": {
-				(data as UniformData["ivec2[]"]).forEach((value, i) => {
+				for (const [i, value] of (data as UniformData["ivec2[]"]).entries()) {
 					this.uniform(`${name}[${i}]`, "ivec2", value);
-				});
+				}
+
 				break;
 			}
 
@@ -378,9 +381,10 @@ export default class GL {
 			}
 
 			case "vec2[]": {
-				(data as UniformData["vec2[]"]).forEach((value, i) => {
+				for (const [i, value] of (data as UniformData["vec2[]"]).entries()) {
 					this.uniform(`${name}[${i}]`, "vec2", value);
-				});
+				}
+
 				break;
 			}
 
@@ -390,9 +394,10 @@ export default class GL {
 			}
 
 			case "ivec3[]": {
-				(data as UniformData["ivec3[]"]).forEach((value, i) => {
+				for (const [i, value] of (data as UniformData["ivec3[]"]).entries()) {
 					this.uniform(`${name}[${i}]`, "ivec3", value);
-				});
+				}
+
 				break;
 			}
 
@@ -402,9 +407,10 @@ export default class GL {
 			}
 
 			case "vec3[]": {
-				(data as UniformData["vec3[]"]).forEach((value, i) => {
+				for (const [i, value] of (data as UniformData["vec3[]"]).entries()) {
 					this.uniform(`${name}[${i}]`, "vec3", value);
-				});
+				}
+
 				break;
 			}
 
@@ -414,9 +420,10 @@ export default class GL {
 			}
 
 			case "ivec4[]": {
-				(data as UniformData["ivec4[]"]).forEach((value, i) => {
+				for (const [i, value] of (data as UniformData["ivec4[]"]).entries()) {
 					this.uniform(`${name}[${i}]`, "ivec4", value);
-				});
+				}
+
 				break;
 			}
 
@@ -426,9 +433,10 @@ export default class GL {
 			}
 
 			case "vec4[]": {
-				(data as UniformData["vec4[]"]).forEach((value, i) => {
+				for (const [i, value] of (data as UniformData["vec4[]"]).entries()) {
 					this.uniform(`${name}[${i}]`, "vec4", value);
-				});
+				}
+
 				break;
 			}
 
@@ -540,10 +548,10 @@ export default class GL {
 
 	bindTextures(gifIndex: number): void {
 		const { gl, textures } = this;
-		textures.forEach((texture, i) => {
+		for (const [i, texture] of textures.entries()) {
 			if (texture instanceof Texture) texture.activate(gl, i);
 			else texture.setFrame(gl, gifIndex, i);
-		});
+		}
 	}
 
 	/**

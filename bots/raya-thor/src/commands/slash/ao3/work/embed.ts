@@ -6,7 +6,7 @@ import {
 	ratings,
 	type User,
 	type Work,
-} from "@in5net/limitless/api/ao3/mod";
+} from "@in5net/limitless/api/ao3";
 import { createEmbedBuilder } from "../embed";
 
 export function createWorkEmbedBuilder(

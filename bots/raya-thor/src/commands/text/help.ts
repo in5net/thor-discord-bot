@@ -4,7 +4,6 @@ import command, {
 	argumentType2Name,
 	type TextCommand,
 } from "discord/commands/text";
-import commands from "./mod";
 
 export default command(
 	{
