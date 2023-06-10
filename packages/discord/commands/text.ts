@@ -1,4 +1,9 @@
-import { type Awaitable, type Client, type Message } from "discord.js";
+import {
+	type Attachment,
+	type Awaitable,
+	type Client,
+	type Message,
+} from "discord.js";
 
 interface ArgumentTypeMap {
 	int: number;
@@ -6,8 +11,18 @@ interface ArgumentTypeMap {
 	word: string;
 	words: string[];
 	text: string;
+	image: Attachment;
 }
 type ArgumentType = keyof ArgumentTypeMap;
+
+interface DefaultTypeMap {
+	int: number;
+	float: number;
+	word: string;
+	words: string[];
+	text: string;
+	image: "user";
+}
 
 export const argumentType2Name: Record<ArgumentType, string> = {
 	int: "integer",
@@ -15,19 +30,20 @@ export const argumentType2Name: Record<ArgumentType, string> = {
 	word: "word",
 	words: "words",
 	text: "text",
+	image: "image",
 };
 
 interface Argument<T extends ArgumentType = ArgumentType> {
 	type: T;
 	desc: string;
 	optional?: boolean;
-	default?: ArgumentTypeMap[T];
+	default?: DefaultTypeMap[T];
 }
 
 export type Arguments = Record<string, Argument>;
 
 export type ArgumentValue<T extends Argument = Argument> =
-	T["default"] extends ArgumentTypeMap[ArgumentType]
+	T["default"] extends DefaultTypeMap[ArgumentType]
 		? ArgumentTypeMap[T["type"]]
 		: T["optional"] extends true
 		? ArgumentTypeMap[T["type"]] | undefined

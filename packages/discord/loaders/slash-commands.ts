@@ -17,11 +17,13 @@ export async function loadSlashCommands(dirPath: string) {
 
 		const subPath = filePath.replace(dirPath, "");
 		const name = subPath
+			.slice(1)
 			.replaceAll("/", " ")
 			.replace(".ts", "")
 			.replace(" index", "");
 
 		commands.set(name, command);
+		console.log(`Loaded slash command ${name}`);
 	}
 
 	console.log(`Loaded ${commands.size} slash commands`);

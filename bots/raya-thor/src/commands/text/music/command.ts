@@ -5,7 +5,7 @@ import command, {
 	type TextCommand,
 	type TextCommandParams,
 } from "discord/commands/text";
-import { getVoice } from "../../../music/voice-manager";
+import { getVoice } from "$src/music/voice-manager";
 
 export default function musicCommand<T extends Arguments>(
 	params: TextCommandParams<T>,

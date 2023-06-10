@@ -63,9 +63,9 @@ export default class Voice extends TypedEmitter<{
 			try {
 				const queue = await this.getQueue();
 				if (queue?.size) {
-					await this.stream.join();
+					this.stream.join();
 					await this.play();
-				} else await this.stream.stop();
+				} else this.stream.stop();
 			} catch (error) {
 				console.error("⚠️ Player error:", error);
 				await this.send("⚠️ Error");
@@ -127,7 +127,7 @@ export default class Voice extends TypedEmitter<{
 		for (const { url } of attachments.values()) {
 			let song = urlSongsCache.get(url);
 			if (!song) {
-				song = await URLSong.fromURL(url, requester);
+				song = URLSong.fromURL(url, requester);
 				urlSongsCache.set(url, song);
 			}
 
@@ -303,7 +303,7 @@ export default class Voice extends TypedEmitter<{
 			seek: seconds,
 			filters,
 		});
-		await this.stream.play();
+		this.stream.play();
 	}
 
 	async next() {

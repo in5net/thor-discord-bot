@@ -1,5 +1,5 @@
 import command from "discord/commands/slash";
-import { getVoice } from "../../music/voice-manager";
+import { getVoice } from "$src/music/voice-manager";
 import prisma from "$services/prisma";
 
 export default command(

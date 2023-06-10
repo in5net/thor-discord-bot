@@ -1,9 +1,11 @@
+import { join } from "node:path";
 import { type Client, type ClientEvents } from "discord.js";
 import { glob } from "glob";
 import { type Event, type EventListener } from "../event";
 
 export async function loadDiscordEvents(dirPath: string, client: Client) {
-	const filePaths = await glob(dirPath);
+	const globPattern = join(dirPath, "**/*.ts");
+	const filePaths = await glob(globPattern);
 	if (!filePaths.length) return;
 
 	for (const filePath of filePaths) {

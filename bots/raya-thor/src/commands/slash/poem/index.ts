@@ -6,7 +6,7 @@ import command from "discord/commands/slash";
 import { randomPerson } from "./person";
 import { parse } from "$services/rcpt";
 
-const themesPath = new URL("../../../assets/poem/themes", import.meta.url)
+const themesPath = new URL("../../../../assets/poem/themes", import.meta.url)
 	.pathname;
 const files = readdirSync(themesPath);
 const themes = files.map(file => file.replace(".rcpt", ""));
@@ -26,7 +26,10 @@ export default command(
 	async (i, { theme = random(themes) }) => {
 		const author = randomPerson(Math.random() < 0.9);
 
-		const poemPath = new URL("../../../assets/poem/poem.rcpt", import.meta.url);
+		const poemPath = new URL(
+			"../../../../assets/poem/poem.rcpt",
+			import.meta.url
+		);
 		const poemSource = await readFile(poemPath, "utf8");
 		const poemSections = parse(poemSource);
 

@@ -1,7 +1,7 @@
 import { Buffer } from "node:buffer";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/text";
-import { getVoice } from "../../music/voice-manager";
+import { getVoice } from "$src/music/voice-manager";
 
 export default command(
 	{

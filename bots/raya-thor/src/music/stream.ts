@@ -60,7 +60,7 @@ export default class Stream extends TypedEmitter<{
 				});
 				this.connection
 					.on(VoiceConnectionStatus.Disconnected, () => {
-						this.join(",");
+						this.join();
 					})
 					.subscribe(player);
 			}

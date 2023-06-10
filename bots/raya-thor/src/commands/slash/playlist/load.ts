@@ -1,8 +1,8 @@
 import { shuffle } from "@in5net/limitless";
 import { ChannelType, GuildMember } from "discord.js";
 import command from "discord/commands/slash";
-import * as playlist from "../../../music/playlist";
-import { getVoice } from "../../../music/voice-manager";
+import * as playlist from "$src/music/playlist";
+import { getVoice } from "$src/music/voice-manager";
 import prisma from "$services/prisma";
 
 export default command(

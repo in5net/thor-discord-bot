@@ -1,6 +1,6 @@
 import { env } from "node:process";
 import event from "discord/event";
-import voices from "../music/voice-manager";
+import voices from "$src/music/voice-manager";
 
 const timeouts = new Map<string, NodeJS.Timeout>();
 const FIVE_MINUTES = 1000 * 60 * 5;

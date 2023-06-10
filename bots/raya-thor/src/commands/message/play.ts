@@ -1,7 +1,7 @@
 import { env } from "node:process";
 import command from "discord/commands/message";
 import { createRegExp, letter, oneOrMore } from "magic-regexp";
-import { getVoice } from "../../music/voice-manager";
+import { getVoice } from "$src/music/voice-manager";
 
 export default command("Play", async i => {
 	const message = i.targetMessage;

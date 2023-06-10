@@ -79,7 +79,7 @@ export default command(
 	}
 );
 
-const descPath = new URL("../../assets/desc.txt", import.meta.url);
+const descPath = new URL("../../../assets/desc.txt", import.meta.url);
 
 const stoppingStrings = ["\nYou:"] as const;
 const extraPromptsRegex = createRegExp(

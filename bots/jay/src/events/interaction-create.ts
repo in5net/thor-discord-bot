@@ -8,9 +8,9 @@ export default event(
 	async ({ client, args: [i] }) => {
 		if (!i.isChatInputCommand() && !i.isAutocomplete()) return;
 		const commandName = [
+			i.commandName,
 			i.options.getSubcommandGroup(false),
 			i.options.getSubcommand(false),
-			i.commandName,
 		]
 			.filter(Boolean)
 			.join(" ");

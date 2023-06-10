@@ -9,7 +9,7 @@ const client = new TextServiceClient({
 	authClient: new GoogleAuth().fromAPIKey(MAKERSUITE_API_KEY),
 });
 
-const palmDescPath = new URL("../../palm-desc.txt", import.meta.url);
+const palmDescPath = new URL("../../../palm-desc.txt", import.meta.url);
 
 export async function answer(
 	question: string,

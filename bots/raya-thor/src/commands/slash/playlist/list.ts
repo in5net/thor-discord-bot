@@ -1,7 +1,7 @@
 import { env } from "node:process";
 import { EmbedBuilder } from "discord.js";
 import command from "discord/commands/slash";
-import * as playlist from "../../music/playlist";
+import { list } from "$src/music/playlist";
 
 export default command(
 	{
@@ -10,7 +10,7 @@ export default command(
 	},
 	async i => {
 		const { user } = i;
-		const playlists = await playlist.list(user.id);
+		const playlists = await list(user.id);
 		const desc = playlists.join("\n");
 		const embed = new EmbedBuilder()
 			.setTitle("Playlists")

@@ -22,7 +22,7 @@ export async function filter(input: string): Promise<boolean> {
 	return !result?.flagged;
 }
 
-const gpt3DescPath = new URL("../../gpt3-desc.txt", import.meta.url);
+const gpt3DescPath = new URL("../../../gpt3-desc.txt", import.meta.url);
 
 export async function answer(
 	question: string,
@@ -51,8 +51,11 @@ ${NAME}:`,
 	return response.data.choices?.[0]?.text || "";
 }
 
-const chatGPTSystemPath = new URL("../../chatgpt-system.txt", import.meta.url);
-const chatGPTDescPath = new URL("../../chatgpt-desc.txt", import.meta.url);
+const chatGPTSystemPath = new URL(
+	"../../../chatgpt-system.txt",
+	import.meta.url
+);
+const chatGPTDescPath = new URL("../../../chatgpt-desc.txt", import.meta.url);
 
 export async function chat(
 	question: string,

@@ -25,7 +25,7 @@ export default command(
 			size,
 			glsl(
 				await GL.loadFile(
-					new URL("../../assets/noise/shader.frag", import.meta.url).pathname
+					new URL("../../../assets/noise/shader.frag", import.meta.url).pathname
 				)
 			)
 		);
