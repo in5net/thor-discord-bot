@@ -23,7 +23,6 @@ export async function loadSlashCommands(dirPath: string) {
 			.replace(" index", "");
 
 		commands.set(name, command);
-		console.log(`Loaded slash command ${name}`);
 	}
 
 	console.log(`Loaded ${commands.size} slash commands`);
