@@ -6,7 +6,9 @@ export async function fetchNekoBot<TBody>(endpoint: string) {
 			"Content-Type": "application/json",
 		},
 	});
-	const data = (await response.json()) as TBody;
+	const text = await response.text();
+	console.log(text);
+	const data = JSON.parse(text) as TBody;
 	return data;
 }
 
