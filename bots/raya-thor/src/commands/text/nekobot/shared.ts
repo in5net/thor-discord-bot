@@ -18,6 +18,6 @@ export async function imagegen(
 		type,
 		...searchParams,
 	});
-	const data = await fetchNekoBot<{ message: string }>(`endpoint?${params}`);
+	const data = await fetchNekoBot<{ message: string }>(`imagegen?${params}`);
 	return data.message;
 }

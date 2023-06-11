@@ -188,13 +188,14 @@ async function runCommand(
 		if (command.permissions?.includes("vc") && !message.member?.voice.channel)
 			await message.reply(`${woof()}, you are not in a voice channel`);
 		else {
-			const parsedArguments = parseArgs(command, trueArguments);
+			const parsedArguments = parseArgs(command, trueArguments, message);
 
-			await command.exec({
+			const result = await command.exec({
 				message,
 				args: parsedArguments as Record<string, ArgumentValue>,
 				client,
 			});
+			if (typeof result === "string") await message.channel.send(result);
 			await prisma.commandExecution.create({
 				data: {
 					name,
@@ -211,7 +212,12 @@ async function runCommand(
 	}
 }
 
-function parseArgs(command: TextCommand, trueArguments: string[]) {
+// eslint-disable-next-line complexity
+function parseArgs(
+	command: TextCommand,
+	trueArguments: string[],
+	message: Message
+) {
 	const parsedArguments: Record<string, ArgumentValue | undefined> = {};
 	for (const [name, argument] of Object.entries(command.args)) {
 		let value: ArgumentValue | undefined;
@@ -259,6 +265,25 @@ function parseArgs(command: TextCommand, trueArguments: string[]) {
 			case "text": {
 				const argumentStrs = [...trueArguments];
 				if (argumentStrs.length) value = argumentStrs.join(" ");
+				break;
+			}
+
+			case "image": {
+				const file = message.attachments.first();
+				if (file) {
+					if (typeof file.width === "number" && typeof file.height === "number")
+						value = file;
+					else throw new Error(`Argument \`${name}\` must be an image file`);
+				} else if (argument.default === "user") {
+					const size = 512;
+					const url = message.author.displayAvatarURL({ size });
+					value = {
+						url,
+						proxyURL: url,
+						width: size,
+						height: size,
+					};
+				}
 			}
 		}
 

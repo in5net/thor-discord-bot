@@ -1,4 +1,4 @@
-import process from "node:process";
+import process, { env } from "node:process";
 import { randomInt } from "@in5net/limitless";
 import {
 	type ActivityOptions,
@@ -86,7 +86,7 @@ process
 		console.log(`🚫 ${NAME} is going offline...`);
 	})
 	.on("SIGINT", async () => {
-		await webhook.send(`🚫 ${NAME} is offline`);
+		if (env.DEV) await webhook.send(`🚫 ${NAME} is offline`);
 		// eslint-disable-next-line unicorn/no-process-exit
 		process.exit(0);
 	});

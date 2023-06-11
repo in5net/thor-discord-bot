@@ -1,9 +1,4 @@
-import {
-	type Attachment,
-	type Awaitable,
-	type Client,
-	type Message,
-} from "discord.js";
+import { type Awaitable, type Client, type Message } from "discord.js";
 
 interface ArgumentTypeMap {
 	int: number;
@@ -11,7 +6,12 @@ interface ArgumentTypeMap {
 	word: string;
 	words: string[];
 	text: string;
-	image: Attachment;
+	image: {
+		url: string;
+		proxyURL: string;
+		width: number;
+		height: number;
+	};
 }
 type ArgumentType = keyof ArgumentTypeMap;
 
@@ -55,7 +55,7 @@ export type Exec<T extends Arguments> = (params: {
 		[I in keyof T]: ArgumentValue<T[I]>;
 	};
 	client: Client;
-}) => Awaitable<any>;
+}) => Awaitable<unknown>;
 
 type Permission = "vc";
 export interface TextCommandParams<T extends Arguments> {
