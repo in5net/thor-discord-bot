@@ -17,6 +17,12 @@ importers:
       '@commitlint/prompt-cli':
         specifier: ^17.6.5
         version: 17.6.5
+      '@in5net/prettier-config':
+        specifier: ^1.0.0
+        version: 1.0.0
+      '@in5net/xo-config':
+        specifier: ^1.0.0
+        version: 1.0.0
       husky:
         specifier: ^8.0.3
         version: 8.0.3
@@ -1166,6 +1172,14 @@ packages:
 
   /@humanwhocodes/object-schema@1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
+    dev: true
+
+  /@in5net/prettier-config@1.0.0:
+    resolution: {integrity: sha512-Zge6630M62Tbk23xJwkk5Q95qi0sV+K7KjsXcrbBIs4CZehZh/BTBqUW7DuQMz3v2N/+uAmqSP9qUwyc2cNwvw==}
+    dev: true
+
+  /@in5net/xo-config@1.0.0:
+    resolution: {integrity: sha512-eLdUxt1gYzwfSNpqoDxLUmCc5CfKRO0F7NSQFncx1HGgcNc7c8vsx7FbtKR5C7zlLwIjkfaYShm/11GOq5N9oQ==}
     dev: true
 
   /@isaacs/cliui@8.0.2:

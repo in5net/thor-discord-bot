@@ -16,6 +16,8 @@
     "@commitlint/cli": "^17.6.5",
     "@commitlint/config-conventional": "^17.6.5",
     "@commitlint/prompt-cli": "^17.6.5",
+    "@in5net/prettier-config": "^1.0.0",
+    "@in5net/xo-config": "^1.0.0",
     "husky": "^8.0.3",
     "tsconfig": "workspace:*",
     "turbo": "^1.10.3",
