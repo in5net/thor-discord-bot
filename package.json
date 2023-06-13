@@ -1,6 +1,9 @@
 {
   "name": "raya-discord-bot",
   "private": true,
+  "engines": {
+    "node": "18"
+  },
   "scripts": {
     "postinstall": "husky install",
     "commit": "commit",

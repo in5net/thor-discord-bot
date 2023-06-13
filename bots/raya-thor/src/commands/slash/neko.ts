@@ -1,9 +1,7 @@
 import { EmbedBuilder } from "discord.js";
-import { Client, type NB_CATEGORIES } from "nekos-best.js";
+import { fetchRandom, type NB_CATEGORIES } from "nekos-best.js";
 import command from "discord/commands/slash";
 import { incCount } from "$services/users";
-
-const client = new Client();
 
 const CATEGORIES: NB_CATEGORIES[] = [
 	"baka",
@@ -49,7 +47,7 @@ export default command(
 		await i.deferReply();
 		const {
 			results: [result],
-		} = await client.fetchRandom(category);
+		} = await fetchRandom(category);
 		if (!result) return i.editReply("No results found");
 
 		const {
