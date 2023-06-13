@@ -1,7 +1,8 @@
 import { EmbedBuilder } from "discord.js";
 import command from "discord/commands/slash";
+import got from "got";
 
-type Response = Array<{
+type Data = Array<{
 	breeds: string[];
 	id: string;
 	url: string;
@@ -16,9 +17,9 @@ export default command(
 	},
 	async i => {
 		await i.deferReply();
-		const response = await fetch("https://api.thecatapi.com/v1/images/search");
-		const data = (await response.json()) as Response;
-		const [cat] = data;
+		const [cat] = await got(
+			"https://api.thecatapi.com/v1/images/search"
+		).json<Data>();
 		if (!cat) throw new Error("No cat found");
 
 		const embed = new EmbedBuilder()

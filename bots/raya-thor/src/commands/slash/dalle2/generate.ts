@@ -1,8 +1,9 @@
-import { Writable } from "node:stream";
 import { env } from "node:process";
+import { pipeline } from "node:stream/promises";
 import { nanoid } from "nanoid";
 import { filesBucket } from "storage";
 import command from "discord/commands/slash";
+import got from "got";
 import { BITS_PRICE } from "./shared";
 import { getBits, subtractBits } from "$services/ai/shared";
 import { ADMIN_IDS } from "$services/env";
@@ -47,17 +48,15 @@ export default command(
 
 		const urls: string[] = [];
 		for (const { url = "" } of data) {
-			const { body } = await fetch(url);
+			const request = got.stream(url);
 			const path = `ai/${nanoid()}.png`;
-			const stream = Writable.toWeb(
-				filesBucket.file(path).createWriteStream({
-					gzip: true,
-					metadata: {
-						model: "dalle2",
-					},
-				})
-			);
-			await body?.pipeTo(stream);
+			const stream = filesBucket.file(path).createWriteStream({
+				gzip: true,
+				metadata: {
+					model: "dalle2",
+				},
+			});
+			await pipeline(request, stream);
 			const fileURL = `https://${env.FILES_DOMAIN}/${path}`;
 			console.log(`Uploaded ${fileURL}`);
 			urls.push(fileURL);

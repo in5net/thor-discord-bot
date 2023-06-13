@@ -1,7 +1,6 @@
 import { env } from "node:process";
 import { createCanvas, loadImage } from "@napi-rs/canvas";
-
-const url = "https://labs.openai.com/api/labs/tasks";
+import got from "got";
 
 type TaskType = "text2im" | "variations";
 interface Task<T extends TaskType = TaskType> {
@@ -49,22 +48,25 @@ interface Task<T extends TaskType = TaskType> {
 	};
 }
 
+const api = got.extend({
+	prefixUrl: "https://labs.openai.com/api/labs/tasks",
+	headers: {
+		Authorization: `Bearer ${env.DALLE2_TOKEN}`,
+	},
+});
+
 export async function generate(prompt: string) {
-	const response = await fetch(url, {
-		method: "POST",
-		headers: {
-			Authorization: `Bearer ${env.DALLE2_TOKEN}`,
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			task_type: "text2im",
-			prompt: {
-				caption: prompt,
-				batch_size: 4,
+	const task = await api
+		.post({
+			json: {
+				task_type: "text2im",
+				prompt: {
+					caption: prompt,
+					batch_size: 4,
+				},
 			},
-		}),
-	});
-	const task = (await response.json()) as Task;
+		})
+		.json<Task>();
 	return startTask(task);
 }
 
@@ -77,21 +79,17 @@ export async function variations(url: string) {
 	const parts = dataURL.split(",");
 	const base64 = parts.pop();
 
-	const response = await fetch(url, {
-		method: "POST",
-		headers: {
-			Authorization: `Bearer ${env.DALLE2_TOKEN}`,
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			task_type: "variations",
-			prompt: {
-				image: base64,
-				batch_size: 3,
+	const task = await api
+		.post({
+			json: {
+				task_type: "variations",
+				prompt: {
+					image: base64,
+					batch_size: 3,
+				},
 			},
-		}),
-	});
-	const task = (await response.json()) as Task;
+		})
+		.json<Task>();
 	return startTask(task);
 }
 
@@ -117,11 +115,6 @@ export async function startTask(task: Task) {
 }
 
 async function getTask(id: string): Promise<Task> {
-	const response = await fetch(`${url}/${id}`, {
-		headers: {
-			Authorization: `Bearer ${env.DALLE2_TOKEN}`,
-		},
-	});
-	const task = (await response.json()) as Task;
+	const task = await api(id).json<Task>();
 	return task;
 }

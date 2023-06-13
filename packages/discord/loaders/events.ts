@@ -4,6 +4,7 @@ import { glob } from "glob";
 import { type Event, type EventListener } from "../event";
 
 export async function loadDiscordEvents(dirPath: string, client: Client) {
+	dirPath = dirPath.replaceAll("\\", "/");
 	const globPattern = join(dirPath, "**/*.ts");
 	const filePaths = await glob(globPattern);
 	if (!filePaths.length) return;

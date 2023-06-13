@@ -7,6 +7,7 @@ import {
 	global,
 } from "magic-regexp";
 import command from "discord/commands/text";
+import got from "got";
 import { cache } from "$services/prisma";
 
 export default command(
@@ -94,41 +95,38 @@ async function answer(
 ): Promise<string> {
 	const desc = await readFile(descPath, "utf8");
 
-	const response = await fetch("http://127.0.0.1:5000/api/v1/generate", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			prompt: `${desc}
+	const data = await got
+		.post("http://127.0.0.1:5000/api/v1/generate", {
+			json: {
+				prompt: `${desc}
 ${previous.map(
 	({ question, answer }) => `You: ${question}
 Raya: ${answer}
 `
 )}You: ${prompt}
 Raya: `,
-			max_new_tokens: 180,
-			do_sample: true,
-			temperature: 0.7,
-			top_p: 0.5,
-			typical_p: 1,
-			repetition_penalty: 1.2,
-			encoder_repetition_penalty: 1,
-			top_k: 40,
-			min_length: 0,
-			no_repeat_ngram_size: 0,
-			num_beams: 1,
-			penalty_alpha: 0,
-			length_penalty: 1,
-			early_stopping: false,
-			seed: -1,
-			add_bos_token: true,
-			stopping_strings: stoppingStrings,
-			truncation_length: 2048,
-			ban_eos_token: false,
-			skip_special_tokens: true,
-		}),
-	});
-	const data = (await response.json()) as { results: [{ text: string }] };
+				max_new_tokens: 180,
+				do_sample: true,
+				temperature: 0.7,
+				top_p: 0.5,
+				typical_p: 1,
+				repetition_penalty: 1.2,
+				encoder_repetition_penalty: 1,
+				top_k: 40,
+				min_length: 0,
+				no_repeat_ngram_size: 0,
+				num_beams: 1,
+				penalty_alpha: 0,
+				length_penalty: 1,
+				early_stopping: false,
+				seed: -1,
+				add_bos_token: true,
+				stopping_strings: stoppingStrings,
+				truncation_length: 2048,
+				ban_eos_token: false,
+				skip_special_tokens: true,
+			},
+		})
+		.json<{ results: [{ text: string }] }>();
 	return data.results[0].text.replace(extraPromptsRegex, "").trim();
 }

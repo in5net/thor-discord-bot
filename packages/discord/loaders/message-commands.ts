@@ -4,6 +4,7 @@ import { glob } from "glob";
 import { type MessageCommand, isMessageCommand } from "../commands/message";
 
 export async function loadMessageCommands(dirPath: string) {
+	dirPath = dirPath.replaceAll("\\", "/");
 	const globPattern = join(dirPath, "**/*.ts");
 	const filePaths = await glob(globPattern);
 

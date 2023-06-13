@@ -1,12 +1,12 @@
 import decodeGif from "decode-gif";
+import got from "got";
 
 export default class GIF {
 	textures: WebGLTexture[] = [];
 
 	static async fromURL(url: string, gl: WebGLRenderingContext): Promise<GIF> {
-		const response = await fetch(url);
-		const buffer = await response.arrayBuffer();
-		const { width, height, frames } = decodeGif(new Uint8Array(buffer));
+		const buffer = await got(url).buffer();
+		const { width, height, frames } = decodeGif(buffer);
 		const gif = new GIF();
 		gif.textures = frames.map(frame =>
 			createTexture(gl, frame.data, width, height)

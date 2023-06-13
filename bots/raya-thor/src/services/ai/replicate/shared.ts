@@ -1,6 +1,6 @@
 import { env } from "node:process";
-
-export const API_URL = "https://api.replicate.com/v1/predictions";
+import { sleep } from "@in5net/limitless";
+import got from "got";
 
 export interface Prediction {
 	id: string;
@@ -9,8 +9,12 @@ export interface Prediction {
 	error: string | undefined;
 }
 
-export const wait = async (ms: number) =>
-	new Promise(resolve => setTimeout(resolve, ms));
+const api = got.extend({
+	prefixUrl: "https://api.replicate.com/v1/predictions",
+	headers: {
+		Authorization: `Token ${env.REPLICATE_TOKEN}`,
+	},
+});
 
 export class Model {
 	constructor(
@@ -21,23 +25,19 @@ export class Model {
 	async *generate(
 		input: Record<string, number | string | boolean | undefined>
 	) {
-		const response = await fetch(API_URL, {
-			method: "POST",
-			headers: {
-				Authorization: `Token ${env.REPLICATE_TOKEN}`,
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				version: this.version,
-				input: {
-					...this.input,
-					...input,
+		let prediction = await api
+			.post({
+				json: {
+					version: this.version,
+					input: {
+						...this.input,
+						...input,
+					},
 				},
-			}),
-		});
-		let prediction = (await response.json()) as Prediction;
+			})
+			.json<Prediction>();
 		console.log("prediction:", prediction);
-		await wait(1000);
+		await sleep(1000);
 
 		let i = 0;
 		while (["starting", "processing"].includes(prediction.status)) {
@@ -60,7 +60,7 @@ export class Model {
 				};
 			}
 
-			await wait(1000);
+			await sleep(1000);
 		}
 
 		yield {
@@ -72,12 +72,7 @@ export class Model {
 	}
 }
 
-export async function getPrediction(id: string): Promise<Prediction> {
-	const response = await fetch(`${API_URL}/${id}`, {
-		headers: {
-			Authorization: `Token ${env.REPLICATE_TOKEN}`,
-		},
-	});
-	const prediction = (await response.json()) as Prediction;
+export async function getPrediction(id: string) {
+	const prediction = await api(id).json<Prediction>();
 	return prediction;
 }

@@ -2,11 +2,12 @@ import { createReadStream, createWriteStream } from "node:fs";
 import { mkdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { Writable } from "node:stream";
 import { env } from "node:process";
+import { pipeline } from "node:stream/promises";
 import { nanoid } from "nanoid";
 import { filesBucket } from "storage";
 import command from "discord/commands/slash";
+import got from "got";
 import { BITS_PRICE } from "./shared";
 import { getBits, subtractBits } from "$services/ai/shared";
 import { ADMIN_IDS } from "$services/env";
@@ -44,13 +45,12 @@ export default command(
 		if (image.width !== image.height) return i.reply("Image must be square");
 		await i.deferReply();
 
-		const { body } = await fetch(image.proxyURL);
-		if (!body) return i.editReply("Failed to fetch image");
+		const request = got.stream(image.proxyURL);
 
 		const temporaryDir = join(tmpdir(), nanoid());
 		await mkdir(temporaryDir);
 		const filePath = join(temporaryDir, "input.png");
-		await body.pipeTo(Writable.toWeb(createWriteStream(filePath)));
+		await pipeline(request, createWriteStream(filePath));
 
 		const {
 			data: { data },
@@ -64,17 +64,15 @@ export default command(
 
 		const urls: string[] = [];
 		for (const { url = "" } of data) {
-			const { body } = await fetch(url);
+			const request = got.stream(url);
 			const path = `ai/${nanoid()}.png`;
-			const stream = Writable.toWeb(
-				filesBucket.file(path).createWriteStream({
-					gzip: true,
-					metadata: {
-						model: "dalle2",
-					},
-				})
-			);
-			await body?.pipeTo(stream);
+			const stream = filesBucket.file(path).createWriteStream({
+				gzip: true,
+				metadata: {
+					model: "dalle2",
+				},
+			});
+			await pipeline(request, stream);
 			const fileURL = `https://${env.FILES_DOMAIN}/${path}`;
 			console.log(`Uploaded ${fileURL}`);
 			urls.push(fileURL);

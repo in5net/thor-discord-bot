@@ -4,6 +4,7 @@ import { glob } from "glob";
 import { isSlashCommand, type SlashCommand } from "../commands/slash";
 
 export async function loadSlashCommands(dirPath: string) {
+	dirPath = dirPath.replaceAll("\\", "/");
 	const globPattern = join(dirPath, "**/*.ts");
 	const filePaths = await glob(globPattern);
 

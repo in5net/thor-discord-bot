@@ -1,4 +1,5 @@
 import command from "discord/commands/slash";
+import got from "got";
 
 const url = "https://api.github.com/zen";
 
@@ -9,8 +10,7 @@ export default command(
 	},
 	async i => {
 		await i.deferReply();
-		const response = await fetch(url);
-		const text = await response.text();
+		const text = await got(url).text();
 		return i.editReply(text);
 	}
 );

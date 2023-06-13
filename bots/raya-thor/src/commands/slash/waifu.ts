@@ -1,15 +1,55 @@
 import { ChannelType, type ColorResolvable, EmbedBuilder } from "discord.js";
 import command from "discord/commands/slash";
-import { type paths } from "$openapi/waifu";
-import { Fetcher } from "$services/openapi";
+import got from "got";
 import { incCount } from "$services/users";
 
-const fetcher = Fetcher.for<paths>();
-fetcher.configure({
-	baseUrl: "https://api.waifu.im",
-});
+interface TagModel {
+	/** Tag Id */
+	tag_id: number;
+	/** Name */
+	name: string;
+	/** Description */
+	description: string;
+	/**
+	 * Is Nsfw
+	 * @default false
+	 */
+	is_nsfw?: boolean;
+}
 
-const getRandom = fetcher.path("/random/").method("get").create();
+interface Data {
+	images: Array<{
+		/** Signature */
+		signature: string;
+		/** Extension */
+		extension: string;
+		/** Image Id */
+		image_id: number;
+		/** Favourites */
+		favourites: number;
+		/** Dominant Color */
+		dominant_color: string;
+		/** Source */
+		source?: string;
+		/** Uploaded At */
+		uploaded_at: string;
+		/**
+		 * Is Nsfw
+		 * @default false
+		 */
+		is_nsfw?: boolean;
+		/** Width */
+		width: number;
+		/** Height */
+		height: number;
+		/** Url */
+		url: string;
+		/** Preview Url */
+		preview_url: string;
+		/** Tags */
+		tags: TagModel[];
+	}>;
+}
 
 export default command(
 	{
@@ -40,12 +80,13 @@ export default command(
 			});
 		await i.deferReply();
 
-		const { data } = await getRandom({
-			gif: option === "gif",
-			is_nsfw: option === "nsfw" ? "true" : "false",
-		});
+		const data = await got("https://api.waifu.im/random", {
+			searchParams: {
+				gif: option === "gif",
+				is_nsfw: option === "nsfw" ? "true" : "false",
+			},
+		}).json<Data>();
 		const image = data.images[0];
-		console.log(data);
 		if (!image) throw new Error("No waifu found");
 
 		const embed = new EmbedBuilder()

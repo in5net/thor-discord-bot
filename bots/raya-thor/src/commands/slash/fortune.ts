@@ -1,6 +1,7 @@
 import command from "discord/commands/slash";
+import got from "got";
 
-interface Response {
+interface Data {
 	fortune: string;
 }
 
@@ -10,8 +11,7 @@ export default command(
 		options: {},
 	},
 	async i => {
-		const response = await fetch("http://yerkee.com/api/fortune");
-		const data = (await response.json()) as Response;
+		const data = await got("http://yerkee.com/api/fortune").json<Data>();
 		return i.reply(data.fortune);
 	}
 );

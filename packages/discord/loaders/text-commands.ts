@@ -4,6 +4,7 @@ import { glob } from "glob";
 import { isTextCommand, type TextCommand } from "../commands/text";
 
 export async function loadTextCommands(dirPath: string) {
+	dirPath = dirPath.replaceAll("\\", "/");
 	const globPattern = join(dirPath, "**/*.ts");
 	const filePaths = await glob(globPattern);
 
