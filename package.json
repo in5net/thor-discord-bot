@@ -1,10 +1,6 @@
 {
-  "name": "raya-discord-bot",
+  "name": "discord-bots",
   "private": true,
-  "engines": {
-    "node": "18"
-  },
-  "packageManager": "pnpm@8.6.2",
   "scripts": {
     "postinstall": "husky install",
     "commit": "commit",

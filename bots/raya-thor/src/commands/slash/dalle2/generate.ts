@@ -1,9 +1,4 @@
-import { env } from "node:process";
-import { pipeline } from "node:stream/promises";
-import { nanoid } from "nanoid";
-import { filesBucket } from "storage";
 import command from "discord/commands/slash";
-import got from "got";
 import { BITS_PRICE } from "./shared";
 import { getBits, subtractBits } from "$services/ai/shared";
 import { ADMIN_IDS } from "$services/env";
@@ -46,25 +41,9 @@ export default command(
 			user: i.user.id,
 		});
 
-		const urls: string[] = [];
-		for (const { url = "" } of data) {
-			const request = got.stream(url);
-			const path = `ai/${nanoid()}.png`;
-			const stream = filesBucket.file(path).createWriteStream({
-				gzip: true,
-				metadata: {
-					model: "dalle2",
-				},
-			});
-			await pipeline(request, stream);
-			const fileURL = `https://${env.FILES_DOMAIN}/${path}`;
-			console.log(`Uploaded ${fileURL}`);
-			urls.push(fileURL);
-		}
-
 		await i.editReply({
-			content: `${prompt}
-${urls.join(" ")}`,
+			content: prompt,
+			files: data.map(({ url = "" }) => url),
 		});
 		return subtractBits(i.user.id, cost);
 	}

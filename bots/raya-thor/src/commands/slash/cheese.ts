@@ -10,7 +10,7 @@ export default command(
 	async i => {
 		await i.deferReply();
 		await i.deleteReply();
-		await i.channel?.send(`https://${env.FILES_DOMAIN}/cheese/cheesecat.png`);
+		await i.channel?.send(`https://${env.FILES_DOMAIN}/discord/cheesecat.png`);
 		await incCount(i.user.id, "cheese");
 	}
 );

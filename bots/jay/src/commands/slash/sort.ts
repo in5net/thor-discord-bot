@@ -14,11 +14,11 @@ import {
 	max,
 	merge,
 	objectKeys,
-	pause,
 	quick,
 	randomInt,
 	selection,
 	shell,
+	sleep,
 	swap,
 } from "@in5net/limitless";
 import { createCanvas } from "@napi-rs/canvas";
@@ -114,7 +114,7 @@ export default command(
 			if (show_shuffle) {
 				active = [i, j];
 				await render();
-				await pause(0);
+				await sleep(0);
 			}
 		}
 
@@ -122,7 +122,7 @@ export default command(
 		if (show_shuffle) {
 			for (let i = 0; i < 30; i++) {
 				await render();
-				await pause(0);
+				await sleep(0);
 			}
 		}
 
@@ -137,7 +137,7 @@ export default command(
 			for (let i = 0; i < iterations_per_frame; i++) {
 				next = iter.next();
 				active = next.value || [];
-				await pause(0);
+				await sleep(0);
 			}
 
 			await render();

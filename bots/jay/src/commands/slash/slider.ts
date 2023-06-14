@@ -2,7 +2,7 @@ import { createReadStream } from "node:fs";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { Vector2, pause, vec2 } from "@in5net/limitless";
+import { Vector2, sleep, vec2 } from "@in5net/limitless";
 import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";
@@ -60,8 +60,7 @@ export default command(
 				`frame${(index++).toString().padStart(4, "0")}.png`
 			);
 			await writeFile(path, await canvas.encode("png"));
-			console.log("j:", index);
-			await pause(0);
+			await sleep(0);
 		}
 
 		const grid = structuredClone(startGrid);
