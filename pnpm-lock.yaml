@@ -307,12 +307,18 @@ importers:
 
   packages/discord:
     dependencies:
+      database:
+        specifier: workspace:*
+        version: link:../database
       discord-api-types:
         specifier: 0.37.43
         version: 0.37.43
       discord.js:
         specifier: 14.11.0
         version: 14.11.0
+      fastest-levenshtein:
+        specifier: ^1.0.16
+        version: 1.0.16
       glob:
         specifier: 10.2.7
         version: 10.2.7

@@ -4,10 +4,8 @@ import { random, shuffle } from "@in5net/limitless";
 import {
 	ChannelType,
 	type Client,
-	EmbedBuilder,
 	userMention,
 	type Message,
-	type TextBasedChannel,
 } from "discord.js";
 import { closest } from "fastest-levenshtein";
 import { Timestamp } from "firebase-admin/firestore";
@@ -19,7 +17,8 @@ import {
 	whitespace,
 } from "magic-regexp";
 import event from "discord/event";
-import { type ArgumentValue, type TextCommand } from "discord/commands/text";
+import { type TextCommand } from "discord/commands/text";
+import { runCommand } from "discord/events/message-create";
 import randomResponses, {
 	randomResponsesRef as randomResponsesReference,
 } from "../responses";
@@ -115,8 +114,12 @@ async function handleTextCommand(client: Client, message: Message) {
 		}
 
 		const name = commandNames.join(" ");
-		if (command) await runCommand(name, command, trueArguments, message);
-		else {
+		if (command) {
+			await (command.permissions?.includes("vc") &&
+			!message.member?.voice.channel
+				? message.reply(`${woof()}, you are not in a voice channel`)
+				: runCommand(name, command, trueArguments, message));
+		} else {
 			const suggestion = closest(name, [...client.textCommands.keys()]);
 			await channel.send(
 				`${
@@ -174,142 +177,5 @@ async function handleRandomResponse(message: Message) {
 				.replaceAll("{name}", member?.displayName || author.username);
 			await channel.send(message_);
 		}
-	}
-}
-
-async function runCommand(
-	name: string,
-	command: TextCommand,
-	trueArguments: string[],
-	message: Message
-) {
-	const { channelId, author, client } = message;
-	try {
-		if (command.permissions?.includes("vc") && !message.member?.voice.channel)
-			await message.reply(`${woof()}, you are not in a voice channel`);
-		else {
-			const parsedArguments = parseArgs(command, trueArguments, message);
-
-			const result = await command.exec({
-				message,
-				args: parsedArguments as Record<string, ArgumentValue>,
-				client,
-			});
-			if (typeof result === "string") await message.channel.send(result);
-			await prisma.commandExecution.create({
-				data: {
-					name,
-					type: "Text",
-					userId: BigInt(author.id),
-					messageId: BigInt(message.id),
-					channelId: BigInt(channelId),
-					guildId: message.guildId ? BigInt(message.guildId) : undefined,
-				},
-			});
-		}
-	} catch (error) {
-		await sendError(message.channel, error);
-	}
-}
-
-// eslint-disable-next-line complexity
-function parseArgs(
-	command: TextCommand,
-	trueArguments: string[],
-	message: Message
-) {
-	const parsedArguments: Record<string, ArgumentValue | undefined> = {};
-	for (const [name, argument] of Object.entries(command.args)) {
-		let value: ArgumentValue | undefined;
-		switch (argument.type) {
-			case "int": {
-				const argumentString = trueArguments.shift();
-				if (argumentString) {
-					const number_ = Number.parseInt(argumentString);
-					if (Number.isNaN(number_))
-						throw new Error(
-							`Argument \`${name}\` must be an integer, got \`${argumentString}\``
-						);
-					value = number_;
-				}
-
-				break;
-			}
-
-			case "float": {
-				const argumentString = trueArguments.shift();
-				if (argumentString) {
-					const number_ = Number.parseFloat(argumentString);
-					if (Number.isNaN(number_))
-						throw new Error(
-							`Argument \`${name}\` must be an float, got \`${argumentString}\``
-						);
-					value = number_;
-				}
-
-				break;
-			}
-
-			case "word": {
-				const argumentString = trueArguments.shift();
-				if (argumentString) value = argumentString;
-				break;
-			}
-
-			case "words": {
-				const argumentStrs = [...trueArguments];
-				if (argumentStrs.length) value = argumentStrs.filter(Boolean);
-				break;
-			}
-
-			case "text": {
-				const argumentStrs = [...trueArguments];
-				if (argumentStrs.length) value = argumentStrs.join(" ");
-				break;
-			}
-
-			case "image": {
-				const file = message.attachments.first();
-				if (file) {
-					if (typeof file.width === "number" && typeof file.height === "number")
-						value = file;
-					else throw new Error(`Argument \`${name}\` must be an image file`);
-				} else if (argument.default === "user") {
-					const size = 512;
-					const url = message.author.displayAvatarURL({ size });
-					value = {
-						url,
-						proxyURL: url,
-						width: size,
-						height: size,
-					};
-				}
-			}
-		}
-
-		if (value === undefined && argument.default !== undefined)
-			value = argument.default;
-		if (!argument.optional && value === undefined)
-			throw new Error(`Argument \`${name}\` is required`);
-		parsedArguments[name] = value;
-	}
-
-	return parsedArguments;
-}
-
-async function sendError(channel: TextBasedChannel, error: unknown) {
-	console.error(error);
-	try {
-		await channel.send({
-			embeds: [
-				new EmbedBuilder()
-					.setColor("Red")
-					.setTitle("Error")
-					.setDescription(error instanceof Error ? error.message : `${error}`)
-					.setTimestamp(),
-			],
-		});
-	} catch (error) {
-		console.error("Failed to send error:", error);
 	}
 }
