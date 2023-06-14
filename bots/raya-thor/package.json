@@ -40,7 +40,7 @@
     "nanoid": "4.0.2",
     "nekos-best.js": "^6.2.1",
     "node-schedule": "^2.1.1",
-    "openai": "3.2.1",
+    "openai": "3.3.0",
     "owofire": "^1.0.4",
     "play-dl": "1.9.6",
     "pngjs": "^7.0.0",
