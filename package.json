@@ -4,7 +4,7 @@
   "scripts": {
     "postinstall": "husky install",
     "commit": "commit",
-    "update": "export NPM_CHECK_INSTALLER=pnpm; npm-check -u && cd bots/jay && npm-check -u && cd ../raya-thor && npm-check -u && cd ../../packages/database && npm-check -u && cd ../limitless && npm-check -u && cd ../storage && npm-check -u",
+    "update": "export NPM_CHECK_INSTALLER=pnpm; cd bots/jay && npm-check -u && cd ../raya-thor && npm-check -u && cd ../../packages/database && npm-check -u && cd ../limitless && npm-check -u && cd ../storage && npm-check -u",
     "lint": "xo",
     "dev:raya": "turbo run dev --filter raya-thor",
     "start:raya": "turbo run start --filter raya-thor",
