@@ -12,7 +12,7 @@ import { loadSlashCommands } from "discord/loaders/slash-commands";
 import { loadTextCommands } from "discord/loaders/text-commands";
 import { type SlashCommand } from "discord/commands/slash";
 
-const { NAME, DISCORD_TOKEN, DEV } = process.env;
+const { NAME, DISCORD_TOKEN, NODE_ENV } = process.env;
 console.log(`⏳ ${NAME} is starting...`);
 console.time(NAME);
 
@@ -66,7 +66,7 @@ client.textCommands = await loadTextCommands(textCommandsPath);
 const slashCommandsPath = new URL("commands/slash", import.meta.url).pathname;
 client.slashCommands = await loadSlashCommands(slashCommandsPath);
 
-if (DEV !== "1") {
+if (NODE_ENV === "production") {
 	const webhook = new WebhookClient({ url: process.env.WEBHOOK_URL });
 
 	process.on("SIGINT", async () => {

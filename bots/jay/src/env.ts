@@ -11,7 +11,7 @@ declare global {
 }
 
 const EnvironmentVariables = z.object({
-	DEV: z.string().optional(),
+	NODE_ENV: z.enum(["development", "production"]),
 	NAME: z.string(),
 	PREFIX: z.string(),
 	COLOR: z.string().startsWith("#"),

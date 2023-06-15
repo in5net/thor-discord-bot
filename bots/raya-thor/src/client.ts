@@ -81,13 +81,9 @@ await client.login(DISCORD_TOKEN);
 
 const webhook = new WebhookClient({ url: process.env.WEBHOOK_URL });
 
-process
-	.on("exit", () => {
-		console.log(`🚫 ${NAME} is going offline...`);
-	})
-	.on("SIGINT", async () => {
-		if (env.DEV) await webhook.send(`🚫 ${NAME} is offline`);
-		// eslint-disable-next-line unicorn/no-process-exit
+if (env.NODE_ENV === "production")
+	process.on("SIGINT", async () => {
+		await webhook.send(`🚫 ${NAME} is offline`);
 		process.exit(0);
 	});
 
