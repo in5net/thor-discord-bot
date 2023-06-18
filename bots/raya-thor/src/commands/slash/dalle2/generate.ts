@@ -1,4 +1,5 @@
 import command from "discord/commands/slash";
+import { type ResponseTypes } from "@nick.heiner/openai-edge";
 import { BITS_PRICE } from "./shared";
 import { getBits, subtractBits } from "$services/ai/shared";
 import { ADMIN_IDS } from "$services/env";
@@ -32,14 +33,13 @@ export default command(
 
 		await i.deferReply();
 
-		const {
-			data: { data },
-		} = await openai.createImage({
+		const response = await openai.createImage({
 			prompt,
 			n,
 			size: "1024x1024",
 			user: i.user.id,
 		});
+		const { data } = (await response.json()) as ResponseTypes["createImage"];
 
 		await i.editReply({
 			content: prompt,

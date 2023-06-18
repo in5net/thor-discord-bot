@@ -1,9 +1,12 @@
 import { readFile } from "node:fs/promises";
 import { env } from "node:process";
-import { type Buffer } from "node:buffer";
-import { createRegExp, exactly } from "magic-regexp";
-import { Configuration, OpenAIApi } from "openai";
+import {
+	Configuration,
+	OpenAIApi,
+	type ResponseTypes,
+} from "@nick.heiner/openai-edge";
 import { TypedEmitter } from "tiny-typed-emitter";
+import { OpenAIStream as openAIStream } from "ai";
 
 const { NAME, OPENAI_API_KEY } = env;
 
@@ -14,12 +17,9 @@ export const openai = new OpenAIApi(
 );
 
 export async function filter(input: string): Promise<boolean> {
-	const {
-		data: {
-			results: [result],
-		},
-	} = await openai.createModeration({ input });
-	return !result?.flagged;
+	const response = await openai.createModeration({ input });
+	const data = (await response.json()) as ResponseTypes["createModeration"];
+	return !data.results[0]?.flagged;
 }
 
 const gpt3DescPath = new URL("../../gpt3-desc.txt", import.meta.url);
@@ -48,7 +48,8 @@ ${NAME}:`,
 		stop: ["You:"],
 		user,
 	});
-	return response.data.choices?.[0]?.text || "";
+	const data = (await response.json()) as ResponseTypes["createCompletion"];
+	return data.choices?.[0]?.text || "";
 }
 
 const chatGPTSystemPath = new URL("../../chatgpt-system.txt", import.meta.url);
@@ -61,33 +62,30 @@ export async function chat(
 ) {
 	const system = await readFile(chatGPTSystemPath, "utf8");
 	const desc = await readFile(chatGPTDescPath, "utf8");
-	const response = await openai.createChatCompletion(
-		{
-			model: "gpt-3.5-turbo",
-			messages: [
-				{
-					role: "system",
-					content: `${system} Current date: ${new Date().toDateString()}`,
-				},
-				{
-					role: "assistant",
-					content: desc,
-				},
-				...previous.flatMap(
-					({ question: q, answer: a }) =>
-						[
-							{ role: "user", content: q },
-							{ role: "assistant", content: a },
-						] as const
-				),
-				{ role: "user", content: question },
-			],
-			max_tokens: 512,
-			stream: true,
-			user,
-		},
-		{ responseType: "stream" }
-	);
+	const response = await openai.createChatCompletion({
+		model: "gpt-3.5-turbo",
+		stream: true,
+		max_tokens: 512,
+		user,
+		messages: [
+			{
+				role: "system",
+				content: `${system} Current date: ${new Date().toDateString()}`,
+			},
+			{
+				role: "assistant",
+				content: desc,
+			},
+			...previous.flatMap(
+				({ question: q, answer: a }) =>
+					[
+						{ role: "user", content: q },
+						{ role: "assistant", content: a },
+					] as const
+			),
+			{ role: "user", content: question },
+		],
+	});
 
 	const emitter = new TypedEmitter<{
 		data: (response: string) => void;
@@ -95,23 +93,15 @@ export async function chat(
 	}>();
 
 	let reply = "";
-	response.data.on("data", (data: Buffer) => {
-		const lines = data
-			.toString()
-			.split("\n")
-			.filter(line => line.trim());
-		for (const line of lines) {
-			const message = line.replace(
-				createRegExp(exactly("data: ").at.lineStart()),
-				""
-			);
-			if (message === "[DONE]") return emitter.emit("done");
-
-			const parsed = JSON.parse(message);
-			const next = (parsed.choices[0].delta.content as string) || "";
-			reply += next;
+	openAIStream(response, {
+		async onToken(token) {
+			reply += token;
 			emitter.emit("data", reply);
-		}
+		},
+		async onCompletion() {
+			emitter.emit("done");
+		},
 	});
+
 	return emitter;
 }

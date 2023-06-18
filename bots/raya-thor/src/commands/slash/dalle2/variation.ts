@@ -6,6 +6,7 @@ import { pipeline } from "node:stream/promises";
 import { nanoid } from "nanoid";
 import command from "discord/commands/slash";
 import got from "got";
+import { type ResponseTypes } from "@nick.heiner/openai-edge";
 import { BITS_PRICE } from "./shared";
 import { getBits, subtractBits } from "$services/ai/shared";
 import { ADMIN_IDS } from "$services/env";
@@ -50,15 +51,15 @@ export default command(
 		const filePath = join(temporaryDir, "input.png");
 		await pipeline(request, createWriteStream(filePath));
 
-		const {
-			data: { data },
-		} = await openai.createImageVariation(
+		const response = await openai.createImageVariation(
 			createReadStream(filePath) as unknown as File,
 			1,
 			"1024x1024",
 			"url",
 			i.user.id
 		);
+		const { data } =
+			(await response.json()) as ResponseTypes["createImageVariation"];
 
 		await i.editReply({
 			files: data.map(({ url = "" }) => url),
