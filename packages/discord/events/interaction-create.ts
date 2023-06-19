@@ -178,7 +178,6 @@ function getCommand(i: ChatInputCommandInteraction | AutocompleteInteraction) {
 	console.log(name);
 
 	const command = i.client.slashCommands.get(name);
-	console.log(command);
 	if (!command) return;
 	return { ...command, name };
 }
