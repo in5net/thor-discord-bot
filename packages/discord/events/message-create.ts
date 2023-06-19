@@ -41,15 +41,25 @@ export async function handleTextCommand(message: Message) {
 				? message.reply(`You are not in a voice channel`)
 				: runCommand(name, command, trueArguments, message));
 		else {
-			const fuse = new Fuse([...client.textCommands.keys()], {
-				threshold: 0.3,
+			const list = [...client.textCommands.entries()]
+				.map(([name, command]) => ({ name, ...command }))
+				.sort((a, b) => a.name.localeCompare(b.name));
+			const fuse = new Fuse(list, {
+				keys: ["name", "aliases"],
+				threshold: 0.2,
 			});
 			const [suggestion] = fuse.search(name, { limit: 1 });
 			if (suggestion)
 				await channel.send(
 					`${
 						Math.random() < 0.1 ? "No" : `IDK what \`${name}\` is`
-					}. Did you mean ${suggestion.item}?`
+					}. Did you mean \`${suggestion.item.name}\`${
+						suggestion.item.aliases
+							? `(${suggestion.item.aliases
+									.map(alias => `\`${alias}\``)
+									.join(", ")})`
+							: ""
+					}?`
 				);
 		}
 	}
