@@ -1,12 +1,11 @@
 import { env } from "node:process";
 import { EmbedBuilder, type Message, type TextBasedChannel } from "discord.js";
-import { closest } from "fastest-levenshtein";
 import { caseInsensitive, createRegExp, exactly } from "magic-regexp";
+import Fuse from "fuse.js";
 import prisma from "../prisma";
 import { type ArgumentValue, type TextCommand } from "../commands/text";
 
-const prefix = env.PREFIX;
-const prefixRegex = createRegExp(exactly(prefix).at.lineStart(), [
+const prefixRegex = createRegExp(exactly(env.PREFIX).at.lineStart(), [
 	caseInsensitive,
 ]);
 
@@ -36,14 +35,22 @@ export async function handleTextCommand(message: Message) {
 		}
 
 		const name = commandNames.join(" ");
-		if (command) await runCommand(name, command, trueArguments, message);
+		if (command)
+			await (command.permissions?.includes("vc") &&
+			!message.member?.voice.channel
+				? message.reply(`You are not in a voice channel`)
+				: runCommand(name, command, trueArguments, message));
 		else {
-			const suggestion = closest(name, [...client.textCommands.keys()]);
-			await channel.send(
-				`${
-					Math.random() < 0.1 ? "No" : `IDK what \`${name}\` is`
-				}. Did you mean ${suggestion}?`
-			);
+			const fuse = new Fuse([...client.textCommands.keys()], {
+				threshold: 0.3,
+			});
+			const [suggestion] = fuse.search(name, { limit: 1 });
+			if (suggestion)
+				await channel.send(
+					`${
+						Math.random() < 0.1 ? "No" : `IDK what \`${name}\` is`
+					}. Did you mean ${suggestion.item}?`
+				);
 		}
 	}
 }
@@ -92,12 +99,12 @@ function parseArgs(
 			case "int": {
 				const argumentString = trueArguments.shift();
 				if (argumentString) {
-					const number_ = Number.parseInt(argumentString);
-					if (Number.isNaN(number_))
+					const n = Number.parseInt(argumentString);
+					if (Number.isNaN(n))
 						throw new Error(
 							`Argument \`${name}\` must be an integer, got \`${argumentString}\``
 						);
-					value = number_;
+					value = n;
 				}
 
 				break;
@@ -106,12 +113,12 @@ function parseArgs(
 			case "float": {
 				const argumentString = trueArguments.shift();
 				if (argumentString) {
-					const number_ = Number.parseFloat(argumentString);
-					if (Number.isNaN(number_))
+					const n = Number.parseFloat(argumentString);
+					if (Number.isNaN(n))
 						throw new Error(
 							`Argument \`${name}\` must be an float, got \`${argumentString}\``
 						);
-					value = number_;
+					value = n;
 				}
 
 				break;
@@ -139,6 +146,7 @@ function parseArgs(
 				const file = message.attachments.first();
 				if (file) {
 					if (typeof file.width === "number" && typeof file.height === "number")
+						// @ts-expect-error should be fine, but TypeScript is being dumb
 						value = file;
 					else throw new Error(`Argument \`${name}\` must be an image file`);
 				} else if (argument.default === "user") {

@@ -68,9 +68,6 @@ importers:
       discord.js:
         specifier: 14.11.0
         version: 14.11.0
-      fastest-levenshtein:
-        specifier: ^1.0.16
-        version: 1.0.16
       fluent-ffmpeg:
         specifier: ^2.1.2
         version: 2.1.2
@@ -198,9 +195,6 @@ importers:
       discord.js:
         specifier: 14.11.0
         version: 14.11.0
-      fastest-levenshtein:
-        specifier: ^1.0.16
-        version: 1.0.16
       firebase-admin:
         specifier: ^11.9.0
         version: 11.9.0
@@ -319,9 +313,9 @@ importers:
       discord.js:
         specifier: 14.11.0
         version: 14.11.0
-      fastest-levenshtein:
-        specifier: ^1.0.16
-        version: 1.0.16
+      fuse.js:
+        specifier: ^6.6.2
+        version: 6.6.2
       glob:
         specifier: 10.2.7
         version: 10.2.7
@@ -3793,11 +3787,6 @@ packages:
     resolution: {integrity: sha512-VhXlQgj9ioXCqGstD37E/HBeqEGV/qOD/kmbVG8h5xKBYvM1L3lR1Zn4555cQ8GkYbJa8aJSipLPndE1k6zK2w==}
     dev: false
 
-  /fastest-levenshtein@1.0.16:
-    resolution: {integrity: sha512-eRnCtTTtGZFpQCwhJiUOuxPQWRXVKYDn0b2PeHfXL6/Zi53SLAzAHfVhVWK2AryC/WH05kGfxhFIPvTF0SXQzg==}
-    engines: {node: '>= 4.9.1'}
-    dev: false
-
   /fastq@1.15.0:
     resolution: {integrity: sha512-wBrocU2LCXXa+lWBt8RoIRD89Fi8OdABODa/kEnyeyjS5aZO5/GNvI5sEINADqP/h8M29UHTHUb53sUu5Ihqdw==}
     dependencies:
@@ -4019,6 +4008,11 @@ packages:
   /functions-have-names@1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
     dev: true
+
+  /fuse.js@6.6.2:
+    resolution: {integrity: sha512-cJaJkxCCxC8qIIcPBF9yGxY0W/tVZS3uEISDxhYIdtk8OL93pe+6Zj7LjCqVV4dzbqcriOZ+kQ/NE4RXZHsIGA==}
+    engines: {node: '>=10'}
+    dev: false
 
   /gauge@3.0.2:
     resolution: {integrity: sha512-+5J6MS/5XksCuXq++uFRsnUd7Ovu1XenbeuIuNRJxYWjgQbPuFhT14lAvsWfqfAmnwluf1OwMjz39HjfLPci0Q==}

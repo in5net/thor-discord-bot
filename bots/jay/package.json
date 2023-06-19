@@ -20,7 +20,6 @@
     "discord": "workspace:*",
     "discord-api-types": "0.37.45",
     "discord.js": "14.11.0",
-    "fastest-levenshtein": "^1.0.16",
     "fluent-ffmpeg": "^2.1.2",
     "gif-encoder": "^0.7.2",
     "gl": "6.0.2",
