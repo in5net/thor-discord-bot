@@ -1,3 +1,4 @@
 packages:
-  - 'bots/*'
-  - 'packages/*'
+  - "discord-bots"
+  - "bots/*"
+  - "packages/*"

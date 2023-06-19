@@ -21,8 +21,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       '@in5net/xo-config':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.2.0
+        version: 1.2.0
       husky:
         specifier: ^8.0.3
         version: 8.0.3
@@ -1178,8 +1178,8 @@ packages:
     resolution: {integrity: sha512-Zge6630M62Tbk23xJwkk5Q95qi0sV+K7KjsXcrbBIs4CZehZh/BTBqUW7DuQMz3v2N/+uAmqSP9qUwyc2cNwvw==}
     dev: true
 
-  /@in5net/xo-config@1.0.0:
-    resolution: {integrity: sha512-eLdUxt1gYzwfSNpqoDxLUmCc5CfKRO0F7NSQFncx1HGgcNc7c8vsx7FbtKR5C7zlLwIjkfaYShm/11GOq5N9oQ==}
+  /@in5net/xo-config@1.2.0:
+    resolution: {integrity: sha512-3aRiJk0RRkTs8TeANy6rppmUtZP32nhkPOkqr1eiXMyYz0YagajkkacgOzl/lMbyZxzk5t1s9Z/sZ2/mHOn1CA==}
     dev: true
 
   /@isaacs/cliui@8.0.2:
