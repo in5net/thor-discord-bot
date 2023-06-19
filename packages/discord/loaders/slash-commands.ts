@@ -1,12 +1,12 @@
 import { join } from "node:path";
 import { Collection } from "discord.js";
-import { glob } from "glob";
 import { isSlashCommand, type SlashCommand } from "../commands/slash";
+import { noTestGlob } from "./shared";
 
 export async function loadSlashCommands(dirPath: string) {
 	dirPath = dirPath.replaceAll("\\", "/");
 	const globPattern = join(dirPath, "**/*.ts");
-	const filePaths = await glob(globPattern);
+	const filePaths = await noTestGlob(globPattern);
 
 	const commands = new Collection<string, SlashCommand>();
 

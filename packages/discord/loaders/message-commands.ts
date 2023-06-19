@@ -1,12 +1,12 @@
 import { join, parse } from "node:path";
 import { Collection } from "discord.js";
-import { glob } from "glob";
 import { type MessageCommand, isMessageCommand } from "../commands/message";
+import { noTestGlob } from "./shared";
 
 export async function loadMessageCommands(dirPath: string) {
 	dirPath = dirPath.replaceAll("\\", "/");
 	const globPattern = join(dirPath, "**/*.ts");
-	const filePaths = await glob(globPattern);
+	const filePaths = await noTestGlob(globPattern);
 
 	const commands = new Collection<string, MessageCommand>();
 
