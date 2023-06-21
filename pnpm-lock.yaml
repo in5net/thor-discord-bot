@@ -319,6 +319,9 @@ importers:
 
   packages/discord:
     dependencies:
+      '@in5net/limitless':
+        specifier: workspace:*
+        version: link:../limitless
       database:
         specifier: workspace:*
         version: link:../database

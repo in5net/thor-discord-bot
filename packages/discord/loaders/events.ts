@@ -1,5 +1,6 @@
 import { join } from "node:path";
 import { type Client, type ClientEvents } from "discord.js";
+import { pluralize } from "@in5net/limitless";
 import { type Event, type EventListener } from "../event";
 import { noTestGlob } from "./shared";
 
@@ -19,7 +20,9 @@ export async function loadDiscordEvents(dirPath: string, client: Client) {
 		else client.on(name, eventListener);
 	}
 
-	console.log(`Loaded ${filePaths.length} events`);
+	console.log(
+		`Loaded ${filePaths.length} ${pluralize("event", filePaths.length)}`
+	);
 }
 
 function createEventListener<T extends keyof ClientEvents>(

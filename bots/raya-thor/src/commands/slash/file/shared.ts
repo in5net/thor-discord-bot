@@ -4,8 +4,8 @@ import {
 	hyperlink,
 	userMention,
 } from "discord.js";
-import { type File } from "database";
-import db, { sql, inArray } from "database/drizzle";
+import db, { sql, inArray, type InferModel } from "database/drizzle";
+import { type files } from "database/drizzle/schema";
 import { createEmbed } from "$services/embed";
 
 export const types = ["image", "video", "audio"] as const;
@@ -29,7 +29,15 @@ export async function sendFile(
 	replyable: {
 		reply(options: MessagePayload | BaseMessageOptions): Promise<any>;
 	},
-	{ createdAt, ext, authorId, messageId, channelId, guildId, proxyURL }: File
+	{
+		createdAt,
+		ext,
+		authorId,
+		messageId,
+		channelId,
+		guildId,
+		proxyUrl,
+	}: InferModel<typeof files>
 ) {
 	const embed = createEmbed()
 		.setFields(
@@ -49,7 +57,7 @@ export async function sendFile(
 		.setTimestamp(createdAt);
 	const extension = ext.replace(".", "");
 	if (extensions.image.includes(extension)) {
-		embed.setImage(proxyURL);
+		embed.setImage(proxyUrl);
 		return replyable.reply({
 			embeds: [embed],
 		});
@@ -57,6 +65,6 @@ export async function sendFile(
 
 	return replyable.reply({
 		embeds: [embed],
-		files: [proxyURL],
+		files: [proxyUrl],
 	});
 }

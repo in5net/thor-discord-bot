@@ -5,7 +5,9 @@ import "./env";
 import * as schema from "./drizzle/schema";
 
 const conn = connect({
-	url: env.DATABASE_URL.replace("?sslaccept=strict", ""),
+	host: env.DATABASE_HOST,
+	username: env.DATABASE_USERNAME,
+	password: env.DATABASE_PASSWORD,
 });
 const db = drizzle(conn, { schema });
 export default db;

@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
+    "@in5net/limitless": "workspace:*",
     "database": "workspace:*",
     "discord-api-types": "0.37.43",
     "discord.js": "14.11.0",
