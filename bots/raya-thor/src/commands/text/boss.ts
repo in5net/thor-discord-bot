@@ -1,5 +1,5 @@
 import command from "discord/commands/text";
-import prisma from "$services/prisma";
+import db, { sql } from "database/drizzle";
 
 export default command(
 	{
@@ -7,10 +7,12 @@ export default command(
 		args: {},
 	},
 	async ({ message }) => {
-		const [boss] = await prisma.$queryRaw<Array<{ url: string }>>`SELECT url
-      FROM BossFile
-      ORDER BY RAND()
-      LIMIT 1`;
+		const boss = await db.query.bossFiles.findFirst({
+			columns: {
+				url: true,
+			},
+			orderBy: sql`rand()`,
+		});
 		if (!boss) return message.reply("No boss found");
 		return message.reply(boss.url);
 	}

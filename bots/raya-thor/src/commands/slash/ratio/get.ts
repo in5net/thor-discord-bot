@@ -1,7 +1,6 @@
 import { shuffle } from "@in5net/limitless";
-import { type Ratio } from "database";
 import command from "discord/commands/slash";
-import prisma from "$services/prisma";
+import db, { sql } from "database/drizzle";
 import { incCount } from "$services/users";
 
 const NUM_RATIOS = 50;
@@ -14,10 +13,13 @@ export default command(
 	async i => {
 		await i.deferReply();
 		await i.deleteReply();
-		const ratios = await prisma.$queryRaw<Ratio[]>`SELECT content
-      FROM Ratio
-      ORDER BY RAND()
-      LIMIT ${NUM_RATIOS}`;
+		const ratios = await db.query.ratios.findMany({
+			columns: {
+				content: true,
+			},
+			orderBy: sql`rand()`,
+			limit: NUM_RATIOS,
+		});
 		const texts = shuffle(ratios.map(({ content }) => content));
 		await i.channel?.send(
 			texts.join(" + ") ||

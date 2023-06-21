@@ -4,9 +4,9 @@ import {
 	hyperlink,
 	userMention,
 } from "discord.js";
-import { Prisma, type File } from "database";
+import { type File } from "database";
+import db, { sql, inArray } from "database/drizzle";
 import { createEmbed } from "$services/embed";
-import prisma from "$services/prisma";
 
 export const types = ["image", "video", "audio"] as const;
 export type Type = (typeof types)[number];
@@ -17,17 +17,11 @@ export const extensions: Record<Type, string[]> = {
 };
 
 export async function getRandomFile(type?: Type) {
-	const [file] = await prisma.$queryRaw<File[]>`SELECT *
-    FROM File
-    ${
-			type
-				? Prisma.sql`WHERE ext IN (${Prisma.join(
-						extensions[type].map(ext => `.${ext}`)
-				  )})`
-				: Prisma.empty
-		}
-    ORDER BY RAND()
-    LIMIT 1`;
+	const file = await db.query.files.findFirst({
+		where: table =>
+			inArray(table.ext, type ? extensions[type].map(ext => `.${ext}`) : []),
+		orderBy: sql`rand()`,
+	});
 	return file;
 }
 

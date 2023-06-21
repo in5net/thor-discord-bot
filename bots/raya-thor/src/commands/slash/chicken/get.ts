@@ -1,7 +1,7 @@
 import { env } from "node:process";
-import { type Chicken } from "database";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
+import db, { lt, isNotNull, sql } from "database/drizzle";
 import prisma from "$services/prisma";
 
 const stickenFileName = "stick.png";
@@ -24,11 +24,14 @@ export default command(
 		else {
 			const date = new Date();
 			date.setMinutes(date.getMinutes() - 1);
-			const [chicken] = await prisma.$queryRaw<Chicken[]>`SELECT name
-        FROM Chicken
-        WHERE sentAt < ${date} OR sentAt IS NULL
-        ORDER BY RAND()
-        LIMIT 1;`;
+			const chicken = await db.query.chickens.findFirst({
+				columns: {
+					name: true,
+				},
+				where: (table, { or }) =>
+					or(lt(table.sentAt, date), isNotNull(table.sentAt)),
+				orderBy: sql`rand()`,
+			});
 			if (!chicken) return i.editReply("No chicken found!");
 			await prisma.chicken.update({
 				data: {

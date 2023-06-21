@@ -1,6 +1,6 @@
 import { env } from "node:process";
-import { type KraccBacc } from "database";
 import command from "discord/commands/slash";
+import db, { lt, isNotNull, sql } from "database/drizzle";
 import prisma from "$services/prisma";
 
 export default command(
@@ -13,11 +13,14 @@ export default command(
 
 		const date = new Date();
 		date.setMinutes(date.getMinutes() - 1);
-		const [video] = await prisma.$queryRaw<KraccBacc[]>`SELECT name
-      FROM KraccBacc
-      WHERE sentAt < ${date} OR sentAt IS NULL
-      ORDER BY RAND()
-      LIMIT 1;`;
+		const video = await db.query.kraccBacc.findFirst({
+			columns: {
+				name: true,
+			},
+			where: (table, { or }) =>
+				or(lt(table.sentAt, date), isNotNull(table.sentAt)),
+			orderBy: sql`rand()`,
+		});
 		if (!video) return i.editReply("No video found!");
 		await prisma.kraccBacc.update({
 			data: {

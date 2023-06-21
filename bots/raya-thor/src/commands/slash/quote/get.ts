@@ -1,7 +1,6 @@
 import { env } from "node:process";
-import { type SpeechBubble } from "database";
 import command from "discord/commands/slash";
-import prisma from "$services/prisma";
+import db, { sql } from "database/drizzle";
 
 export default command(
 	{
@@ -11,10 +10,14 @@ export default command(
 	async i => {
 		await i.deferReply();
 		await i.deleteReply();
-		const [{ name }] = await prisma.$queryRaw<[SpeechBubble]>`SELECT name
-      FROM SpeechBubble
-      ORDER BY RAND()
-      LIMIT 1;`;
-		await i.channel?.send(`https://${env.FILES_DOMAIN}/speech-bubbles/${name}`);
+		const bubble = await db.query.speechBubbles.findFirst({
+			columns: {
+				name: true,
+			},
+			orderBy: sql`rand()`,
+		});
+		await i.channel?.send(
+			`https://${env.FILES_DOMAIN}/speech-bubbles/${bubble?.name}`
+		);
 	}
 );

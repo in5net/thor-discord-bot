@@ -1,6 +1,5 @@
-import { type HopOn } from "database";
 import command from "discord/commands/slash";
-import prisma from "$services/prisma";
+import db, { sql } from "database/drizzle";
 
 export default command(
 	{
@@ -10,10 +9,12 @@ export default command(
 	async i => {
 		await i.deferReply();
 		await i.deleteReply();
-		const [{ id }]: [HopOn] = await prisma.$queryRaw`SELECT id
-      FROM HopOn
-      ORDER BY RAND()
-      LIMIT 1`;
-		await i.channel?.send(`https://tenor.com/view/${id}`);
+		const hopOn = await db.query.hopOn.findFirst({
+			columns: {
+				id: true,
+			},
+			orderBy: sql`rand()`,
+		});
+		await i.channel?.send(`https://tenor.com/view/${hopOn?.id}`);
 	}
 );
