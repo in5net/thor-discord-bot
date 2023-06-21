@@ -4,11 +4,11 @@
   "type": "module",
   "main": "./src/main.ts",
   "scripts": {
-    "dev": "dotenv -e ./.env -e ../../packages/storage/.env tsx watch src/main.ts",
-    "start": "dotenv -e ./.env -e ../../packages/storage/.env tsx src/main.ts",
+    "dev": "dotenv -e ./.env -e ../../packages/database/.env -e ../../packages/storage/.env tsx watch src/main.ts",
+    "start": "dotenv -e ./.env -e ../../packages/database/.env -e ../../packages/storage/.env tsx src/main.ts",
     "lint": "eslint",
     "test": "node --test",
-    "deploy": "dotenv -e ./.env -e ../../packages/storage/.env tsx src/deploy.ts"
+    "deploy": "dotenv -e ./.env -e ../../packages/database/.env -e ../../packages/storage/.env tsx src/deploy.ts"
   },
   "dependencies": {
     "@discordjs/rest": "1.7.1",
