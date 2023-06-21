@@ -21,8 +21,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       '@in5net/xo-config':
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^1.3.0
+        version: 1.3.0
       husky:
         specifier: ^8.0.3
         version: 8.0.3
@@ -341,19 +341,6 @@ importers:
       '@types/node':
         specifier: 18.16.3
         version: 18.16.3
-
-  packages/drizzle:
-    dependencies:
-      '@planetscale/database':
-        specifier: ^1.7.0
-        version: 1.7.0
-      drizzle-orm:
-        specifier: ^0.27.0
-        version: 0.27.0(@planetscale/database@1.7.0)
-    devDependencies:
-      drizzle-kit:
-        specifier: ^0.19.1
-        version: 0.19.1
 
   packages/limitless:
     dependencies:
@@ -1206,8 +1193,8 @@ packages:
     resolution: {integrity: sha512-Zge6630M62Tbk23xJwkk5Q95qi0sV+K7KjsXcrbBIs4CZehZh/BTBqUW7DuQMz3v2N/+uAmqSP9qUwyc2cNwvw==}
     dev: true
 
-  /@in5net/xo-config@1.2.0:
-    resolution: {integrity: sha512-3aRiJk0RRkTs8TeANy6rppmUtZP32nhkPOkqr1eiXMyYz0YagajkkacgOzl/lMbyZxzk5t1s9Z/sZ2/mHOn1CA==}
+  /@in5net/xo-config@1.3.0:
+    resolution: {integrity: sha512-CfaGfNL6cZYjSzv8kda10MDDibeV6YV8fiwR5+MWvLRzweNMRF97C1ciflssXy6rASIi7z5Fun5PIZHbT1TYzw==}
     dev: true
 
   /@isaacs/cliui@8.0.2:
