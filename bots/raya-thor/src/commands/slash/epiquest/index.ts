@@ -8,6 +8,7 @@ import {
 	StringSelectMenuBuilder,
 } from "discord.js";
 import command from "discord/commands/slash";
+import logger from "logger";
 import items from "./items";
 import { part, type Part } from "./labyrinth";
 import questions from "./questions";
@@ -113,7 +114,7 @@ export default command(
 					}
 
 					await i.followUp(`**> ${res}**`);
-					console.log(`Effect: +${good} -${bad}`);
+					logger.debug(`Effect: +${good} -${bad}`);
 				}
 			}
 		}
@@ -122,7 +123,7 @@ export default command(
 		let currentPart: Part = part;
 		let wrong = 0;
 		const timesMap = new WeakMap<Part, Record<string, number>>();
-		console.log("labby time!");
+		logger.info("labby time!");
 
 		// eslint-disable-next-line no-constant-condition
 		while (true) {
@@ -163,7 +164,7 @@ export default command(
 				choices.find(choice => choice.emoji === int.values[0]) || choices[0];
 			if (choice) {
 				const { text, emoji, response, effect } = choice;
-				console.log(`${int.customId} - ${text}`);
+				logger.debug(`${int.customId} - ${text}`);
 
 				let times = timesMap.get(currentPart);
 				if (!times) {
@@ -226,7 +227,7 @@ export default command(
 					}
 
 					await i.followUp(`**> ${res}**`);
-					console.log(`Effect: +${good} -${bad}`);
+					logger.debug(`Effect: +${good} -${bad}`);
 				}
 
 				const nextPart = choice.next?.(t);

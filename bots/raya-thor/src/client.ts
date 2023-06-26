@@ -9,6 +9,7 @@ import {
 	type Collection,
 } from "discord.js";
 import { RecurrenceRule, scheduleJob } from "node-schedule";
+import ms from "ms";
 import { loadDiscordEvents } from "discord/loaders/events";
 import { type TextCommand } from "discord/commands/text";
 import { type SlashCommand } from "discord/commands/slash";
@@ -49,13 +50,22 @@ const client = new Client({
 		"GuildVoiceStates",
 	],
 	makeCache: Options.cacheWithLimits({
+		...Options.DefaultMakeCacheSettings,
+		AutoModerationRuleManager: 0,
 		ApplicationCommandManager: 0,
 		BaseGuildEmojiManager: 0,
 		GuildEmojiManager: 0,
+		GuildMemberManager: {
+			maxSize: 10,
+			keepOverLimit: ({ id }) => id === client.user.id,
+		},
 		GuildBanManager: 0,
+		GuildForumThreadManager: 0,
 		GuildInviteManager: 0,
 		GuildScheduledEventManager: 0,
 		GuildStickerManager: 0,
+		GuildTextThreadManager: 0,
+		MessageManager: 25,
 		PresenceManager: 0,
 		ReactionManager: 0,
 		ReactionUserManager: 0,
@@ -63,7 +73,15 @@ const client = new Client({
 		ThreadManager: 0,
 		ThreadMemberManager: 0,
 		UserManager: 0,
+		VoiceStateManager: 10,
 	}),
+	sweepers: {
+		...Options.DefaultSweeperSettings,
+		messages: {
+			interval: ms("1 hr") / 1000,
+			lifetime: ms("30 min") / 1000,
+		},
+	},
 });
 export default client;
 

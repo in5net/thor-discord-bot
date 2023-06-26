@@ -1,6 +1,7 @@
 import { join } from "node:path";
 import { Collection } from "discord.js";
 import { pluralize } from "@in5net/limitless";
+import logger from "logger";
 import { isSlashCommand, type SlashCommand } from "../commands/slash";
 import { noTestGlob } from "./shared";
 
@@ -27,7 +28,7 @@ export async function loadSlashCommands(dirPath: string) {
 		commands.set(name, command);
 	}
 
-	console.log(
+	logger.info(
 		`Loaded ${commands.size} slash ${pluralize("command", commands.size)}`
 	);
 

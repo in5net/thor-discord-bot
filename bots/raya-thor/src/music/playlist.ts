@@ -1,4 +1,5 @@
 import { type Prisma } from "database";
+import logger from "logger";
 import {
 	type Album,
 	type SongJSONType,
@@ -62,7 +63,7 @@ export async function get(
 			}
 		});
 	} catch (error) {
-		console.error(error);
+		logger.error(error);
 		throw new Error("Playlist not found");
 	}
 }
@@ -266,7 +267,7 @@ export async function remove(uid: string, name: string, n?: number) {
 			});
 		}
 	} catch (error) {
-		console.error(error);
+		logger.error(error);
 		throw new Error("Playlist not found");
 	}
 }

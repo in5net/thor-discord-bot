@@ -8,6 +8,7 @@ import {
 } from "@discordjs/voice";
 import { type VoiceChannel } from "discord.js";
 import { TypedEmitter } from "tiny-typed-emitter";
+import logger from "logger";
 import { type SongType, YouTubeSong } from "./song";
 
 export default class Stream extends TypedEmitter<{
@@ -40,7 +41,7 @@ export default class Stream extends TypedEmitter<{
 		const { player, channel, connection } = this;
 		if (!channel) return;
 
-		console.log(
+		logger.info(
 			`From: voice connection status ${connection?.state.status || "gone"}`
 		);
 
@@ -66,7 +67,7 @@ export default class Stream extends TypedEmitter<{
 			}
 		}
 
-		console.log(
+		logger.info(
 			`To: voice connection status ${this.connection?.state.status || "gone"}`
 		);
 	}
@@ -98,7 +99,7 @@ export default class Stream extends TypedEmitter<{
 
 		const seek =
 			(start || 0) + ((this.resource?.playbackDuration || 0) * scale) / 1000;
-		console.log("start:", start, "scale:", scale, "seek:", seek);
+		logger.debug("start:", start, "scale:", scale, "seek:", seek);
 		this.resource = await resource.metadata.getResource({
 			seek,
 			filters,

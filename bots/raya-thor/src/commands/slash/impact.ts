@@ -1,6 +1,7 @@
 import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
+import logger from "logger";
 
 const font = "Impact";
 let registered = false;
@@ -11,7 +12,7 @@ function registerFont() {
 		font
 	);
 	registered = true;
-	console.log(`${font} font registered:`, success);
+	logger.debug(`${font} font registered:`, success);
 }
 
 export default command(
@@ -63,7 +64,7 @@ export function generate({
 }) {
 	registerFont();
 	const canvas = createCanvas(width, font_size);
-	console.log("canvas:", canvas.width, "x", canvas.height);
+	logger.debug("canvas:", canvas.width, "x", canvas.height);
 	const ctx = canvas.getContext("2d");
 
 	ctx.strokeStyle = "#000";

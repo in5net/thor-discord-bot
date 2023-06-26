@@ -1,6 +1,7 @@
 import { env } from "node:process";
 import { sleep } from "@in5net/limitless";
 import got from "got";
+import logger from "logger";
 
 export interface Prediction {
 	id: string;
@@ -36,13 +37,13 @@ export class Model {
 				},
 			})
 			.json<Prediction>();
-		console.log("prediction:", prediction);
+		logger.debug("prediction:", prediction);
 		await sleep(1000);
 
 		let i = 0;
 		while (["starting", "processing"].includes(prediction.status)) {
 			prediction = await getPrediction(prediction.id);
-			console.log("prediction:", prediction);
+			logger.debug("prediction:", prediction);
 			if (prediction.error) {
 				yield { status: prediction.status, error: prediction.error };
 				return;

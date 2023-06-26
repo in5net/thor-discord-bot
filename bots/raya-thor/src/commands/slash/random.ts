@@ -22,7 +22,6 @@ export default command(
 		);
 		ctx.putImageData(image, 0, 0);
 
-		console.log("Done");
 		return i.editReply({
 			files: [new AttachmentBuilder(canvas.toBuffer("image/png"))],
 		});

@@ -4,6 +4,7 @@ import {
 	EmbedBuilder,
 	type MessageContextMenuCommandInteraction,
 } from "discord.js";
+import logger from "logger";
 import event from "../event";
 import { type OptionValue } from "../commands/slash";
 import prisma from "../prisma";
@@ -81,7 +82,7 @@ async function handleSlash(i: ChatInputCommandInteraction) {
 			},
 		});
 	} catch (error) {
-		console.error(`Error while running command '${name}':`, error);
+		logger.error(`Error while running command '${name}':`, error);
 		if (error instanceof Error) {
 			const embed = new EmbedBuilder()
 				.setColor("Red")
@@ -91,13 +92,11 @@ async function handleSlash(i: ChatInputCommandInteraction) {
 			if (i.replied)
 				await i
 					.followUp({ embeds: [embed], ephemeral: true })
-					.catch(console.error);
+					.catch(logger.error);
 			else if (i.deferred)
-				await i.editReply({ embeds: [embed] }).catch(console.error);
+				await i.editReply({ embeds: [embed] }).catch(logger.error);
 			else
-				await i
-					.reply({ embeds: [embed], ephemeral: true })
-					.catch(console.error);
+				await i.reply({ embeds: [embed], ephemeral: true }).catch(logger.error);
 		}
 	}
 }
@@ -124,7 +123,7 @@ async function handleAutocomplete(i: AutocompleteInteraction) {
 						value,
 				  }))
 		)
-		.catch(console.error);
+		.catch(logger.error);
 }
 
 async function handleMessageMenu(i: MessageContextMenuCommandInteraction) {
@@ -146,7 +145,7 @@ async function handleMessageMenu(i: MessageContextMenuCommandInteraction) {
 			},
 		});
 	} catch (error) {
-		console.error(`Error while running command '${name}':`, error);
+		logger.error(`Error while running command '${name}':`, error);
 		if (error instanceof Error) {
 			const embed = new EmbedBuilder()
 				.setColor("Red")
@@ -156,13 +155,11 @@ async function handleMessageMenu(i: MessageContextMenuCommandInteraction) {
 			if (i.replied)
 				await i
 					.followUp({ embeds: [embed], ephemeral: true })
-					.catch(console.error);
+					.catch(logger.error);
 			else if (i.deferred)
-				await i.editReply({ embeds: [embed] }).catch(console.error);
+				await i.editReply({ embeds: [embed] }).catch(logger.error);
 			else
-				await i
-					.reply({ embeds: [embed], ephemeral: true })
-					.catch(console.error);
+				await i.reply({ embeds: [embed], ephemeral: true }).catch(logger.error);
 		}
 	}
 }
@@ -175,7 +172,7 @@ function getCommand(i: ChatInputCommandInteraction | AutocompleteInteraction) {
 	]
 		.filter(Boolean)
 		.join(" ");
-	console.log(name);
+	logger.debug(name);
 
 	const command = i.client.slashCommands.get(name);
 	if (!command) return;

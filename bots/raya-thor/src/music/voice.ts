@@ -20,6 +20,7 @@ import {
 } from "magic-regexp";
 import play from "play-dl";
 import { TypedEmitter } from "tiny-typed-emitter";
+import logger from "logger";
 import * as playlist from "./playlist";
 import Queue from "./queue";
 import {
@@ -67,18 +68,18 @@ export default class Voice extends TypedEmitter<{
 					await this.play();
 				} else this.stream.stop();
 			} catch (error) {
-				console.error("⚠️ Player error:", error);
+				logger.error("⚠️ Player error:", error);
 				await this.send("⚠️ Error");
 				await this.next();
 			}
 		})
 		.on("error", async error => {
-			console.error("⚠️ Player error:", error);
+			logger.error("⚠️ Player error:", error);
 			try {
 				await this.send("⚠️ Error");
 				await this.next();
 			} catch (error) {
-				console.error("⚠️ Error:", error);
+				logger.error("⚠️ Error:", error);
 			}
 		});
 
@@ -159,7 +160,7 @@ export default class Voice extends TypedEmitter<{
 			}
 		}
 
-		console.log("Queries:", queries);
+		logger.debug("Queries:", queries);
 
 		const songs: Array<SongType | Album<YouTubeSong>> = [];
 		const songsCache = new Map<string, Array<SongType | Album<YouTubeSong>>>();
@@ -178,7 +179,7 @@ export default class Voice extends TypedEmitter<{
 					songs.push(album);
 					songsCache.set(query, [album]);
 				} catch (error) {
-					console.error(error);
+					logger.error(error);
 					await this.send("🚫 Invalid YouTube playlist url");
 				}
 			} else if (play.yt_validate(query) === "video") {
@@ -187,7 +188,7 @@ export default class Voice extends TypedEmitter<{
 					songs.push(song);
 					songsCache.set(query, [song]);
 				} catch (error) {
-					console.error(error);
+					logger.error(error);
 					await this.send("🚫 Invalid YouTube video url");
 				}
 			} else if (YOUTUBE_CHANNEL_REGEX.test(query)) {
@@ -197,7 +198,7 @@ export default class Voice extends TypedEmitter<{
 					songs.push(...videos);
 					songsCache.set(query, videos);
 				} catch (error) {
-					console.error(error);
+					logger.error(error);
 					await this.send("🚫 Invalid YouTube channel url");
 				}
 			} else if (play.sp_validate(query) === "track") {
@@ -206,7 +207,7 @@ export default class Voice extends TypedEmitter<{
 					songs.push(song);
 					songsCache.set(query, [song]);
 				} catch (error) {
-					console.error(error);
+					logger.error(error);
 					await this.send("🚫 Invalid Spotify song url");
 				}
 			} else if (
@@ -217,7 +218,7 @@ export default class Voice extends TypedEmitter<{
 					songs.push(...songs);
 					songsCache.set(query, songs);
 				} catch (error) {
-					console.error(error);
+					logger.error(error);
 					await this.send("🚫 Invalid Spotify album/playlist url");
 				}
 			} else if ((await play.so_validate(query)) === "track") {
@@ -226,7 +227,7 @@ export default class Voice extends TypedEmitter<{
 					songs.push(song);
 					songsCache.set(query, [song]);
 				} catch (error) {
-					console.error(error);
+					logger.error(error);
 					await this.send("🚫 Invalid SoundCloud song url");
 				}
 			} else if ((await play.so_validate(query)) === "playlist") {
@@ -235,7 +236,7 @@ export default class Voice extends TypedEmitter<{
 					songs.push(...songs);
 					songsCache.set(query, songs);
 				} catch (error) {
-					console.error(error);
+					logger.error(error);
 					await this.send("🚫 Invalid SoundCloud playlist url");
 				}
 			} else if (URL_REGEX.test(query)) {
@@ -244,7 +245,7 @@ export default class Voice extends TypedEmitter<{
 					songs.push(song);
 					songsCache.set(query, [song]);
 				} catch (error) {
-					console.error(error);
+					logger.error(error);
 					await this.send("🚫 Invalid song url");
 				}
 			} else {
@@ -253,7 +254,7 @@ export default class Voice extends TypedEmitter<{
 					songs.push(song);
 					songsCache.set(query, [song]);
 				} catch (error) {
-					console.error(error);
+					logger.error(error);
 					this.send("🚫 Invalid YouTube query");
 				}
 			}
@@ -347,7 +348,7 @@ export default class Voice extends TypedEmitter<{
 				embeds: [embed],
 			});
 		} catch (error) {
-			console.error("Error creating embed:", error);
+			logger.error("Error creating embed:", error);
 		}
 	}
 

@@ -13,6 +13,7 @@ import play, {
 	type SpotifyTrack,
 } from "play-dl";
 import { z } from "zod";
+import logger from "logger";
 import youtube from "$services/youtube";
 
 interface SongJSON {
@@ -181,7 +182,7 @@ export class YouTubeSong extends Song {
 
 	log() {
 		const { title, channel, url } = this;
-		console.log(chalk`📺 {red [You{white Tube}]}
+		logger.debug(chalk`📺 {red [You{white Tube}]}
 ${title} (${url})
 * channel: ${channel?.title}`);
 	}
@@ -265,7 +266,7 @@ ${title} (${url})
 				requester,
 			});
 		} catch (error) {
-			console.error(error);
+			logger.error(error);
 			return new YouTubeSong({ id, title: "", duration: 0, requester });
 		}
 	}
@@ -475,7 +476,7 @@ export class SpotifySong extends Song {
 
 	log() {
 		const { title, artist, album, url, artistURL, albumURL, youtubeURL } = this;
-		console.log(chalk`🟢 {green [Spotify]}
+		logger.debug(chalk`🟢 {green [Spotify]}
 ${title} (${url})
 * {red you{white tube}} url: ${youtubeURL}
 * artist: ${artist?.name} (${artistURL})${
@@ -649,7 +650,7 @@ export class SoundCloudSong extends Song {
 
 	log() {
 		const { title, url, user } = this;
-		console.log(chalk`☁️ {orange [SoundCloud]}
+		logger.debug(chalk`☁️ {orange [SoundCloud]}
 ${title} (${url})
 * user: ${user.name} (${user.url})`);
 	}
@@ -764,7 +765,7 @@ export class URLSong extends Song {
 
 	log() {
 		const { title, url } = this;
-		console.log(chalk`🔗 {blue [URL]}
+		logger.debug(chalk`🔗 {blue [URL]}
 ${title} (${url})`);
 	}
 

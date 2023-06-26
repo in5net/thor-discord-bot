@@ -1,4 +1,5 @@
 import command from "discord/commands/slash";
+import logger from "logger";
 import { createEmbedBuilder } from "../embed";
 import { sec2Str } from "$services/time";
 import youtube from "$services/youtube";
@@ -63,7 +64,7 @@ export default command(
 				embeds: [embed],
 			});
 		} catch (error) {
-			console.error(error);
+			logger.error(error);
 			return i.reply({
 				content: "Failed to get YouTube video",
 				ephemeral: true,

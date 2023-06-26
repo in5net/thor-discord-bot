@@ -1,3 +1,4 @@
+import logger from "logger";
 import musicCommand from "./command";
 import woof from "$services/woof";
 
@@ -32,7 +33,7 @@ export default musicCommand(
 			}
 		}
 
-		console.log("indices:", indices);
+		logger.debug("indices:", indices);
 
 		for (const i of indices) {
 			if (Number.isNaN(i) || i < 0 || i >= queue.length)

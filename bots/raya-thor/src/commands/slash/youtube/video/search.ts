@@ -1,5 +1,6 @@
 import { type APIEmbedField } from "discord.js";
 import command from "discord/commands/slash";
+import logger from "logger";
 import { createEmbedBuilder } from "../embed";
 import youtube from "$services/youtube";
 
@@ -45,7 +46,7 @@ export default command(
 				embeds: [embed],
 			});
 		} catch (error) {
-			console.error(error);
+			logger.error(error);
 			throw new Error("Failed to search for YouTube videos");
 		}
 	}

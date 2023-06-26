@@ -1,6 +1,7 @@
 import { join, parse } from "node:path";
 import { Collection } from "discord.js";
 import { pluralize } from "@in5net/limitless";
+import logger from "logger";
 import { isTextCommand, type TextCommand } from "../commands/text";
 import { noTestGlob } from "./shared";
 
@@ -24,7 +25,7 @@ export async function loadTextCommands(dirPath: string) {
 		if (category) command.category = category;
 	}
 
-	console.log(
+	logger.info(
 		`Loaded ${commands.size} text ${pluralize("command", commands.size)}`
 	);
 

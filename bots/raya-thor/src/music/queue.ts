@@ -11,6 +11,7 @@ import {
 } from "discord.js";
 import { FieldValue, type CollectionReference } from "firebase-admin/firestore";
 import { TypedEmitter } from "tiny-typed-emitter";
+import logger from "logger";
 import {
 	fromJSON,
 	type Requester,
@@ -229,10 +230,10 @@ export default class Queue extends Array<SongType> {
 		const send = async () => {
 			generateEmbed();
 			try {
-				console.log("Updating queue embed");
+				logger.info("Updating queue embed");
 				await message.edit({ embeds: [embed], components: [row] });
 			} catch (error) {
-				console.error(error);
+				logger.error(error);
 				await channel.send("Failed to update queue embed, try `-queue` again");
 				this.collector?.stop();
 				this.collector = undefined;

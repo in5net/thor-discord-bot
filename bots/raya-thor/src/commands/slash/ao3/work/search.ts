@@ -152,7 +152,6 @@ export default command(
 
 		if (works.length === 0)
 			return i.reply({ content: "No results found", ephemeral: true });
-		console.log(works.map(x => x.author));
 
 		const embeds = await Promise.all(
 			works.slice(0, 5).map(async work => {

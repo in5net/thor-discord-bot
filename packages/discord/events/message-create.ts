@@ -2,6 +2,7 @@ import { env } from "node:process";
 import { EmbedBuilder, type Message, type TextBasedChannel } from "discord.js";
 import { caseInsensitive, createRegExp, exactly } from "magic-regexp";
 import Fuse from "fuse.js";
+import logger from "logger";
 import prisma from "../prisma";
 import { type ArgumentValue, type TextCommand } from "../commands/text";
 
@@ -183,7 +184,7 @@ function parseArgs(
 }
 
 async function sendError(channel: TextBasedChannel, error: unknown) {
-	console.error(error);
+	logger.error(error);
 	try {
 		await channel.send({
 			embeds: [
@@ -195,6 +196,6 @@ async function sendError(channel: TextBasedChannel, error: unknown) {
 			],
 		});
 	} catch (error) {
-		console.error("Failed to send error:", error);
+		logger.error("Failed to send error:", error);
 	}
 }

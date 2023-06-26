@@ -3,6 +3,7 @@ import { pipeline } from "node:stream/promises";
 import { filesBucket } from "storage";
 import command from "discord/commands/slash";
 import got from "got";
+import logger from "logger";
 import { ADMIN_IDS } from "$services/env";
 
 export default command(
@@ -25,7 +26,7 @@ export default command(
 		});
 		await pipeline(request, stream);
 		const fileURL = `https://${env.FILES_DOMAIN}/${path}`;
-		console.log(`Uploaded ${fileURL}`);
+		logger.info(`Uploaded ${fileURL}`);
 
 		return i.reply(`Quote added
 ${fileURL}`);

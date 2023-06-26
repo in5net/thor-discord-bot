@@ -1,4 +1,5 @@
 import { env } from "node:process";
+import logger from "logger";
 import { z } from "zod";
 
 declare global {
@@ -36,5 +37,5 @@ const EnvironmentVariables = z.object({
 });
 
 const result = EnvironmentVariables.safeParse(env);
-if (result.success) console.log("✅ Environment variables verified");
+if (result.success) logger.debug("✅ Environment variables verified");
 else throw new Error(`❌ Environment variables not verified: ${result.error}`);

@@ -1,5 +1,6 @@
 import { getNameFromURL, getUser } from "@in5net/limitless/api/ao3";
 import command from "discord/commands/slash";
+import logger from "logger";
 import { createEmbedBuilder } from "../embed";
 
 export default command(
@@ -25,7 +26,7 @@ export default command(
 
 			return await i.reply({ embeds: [embed] });
 		} catch (error) {
-			console.error(error);
+			logger.error(error);
 			return i.reply({ content: "Invalid AO3 url", ephemeral: true });
 		}
 	}

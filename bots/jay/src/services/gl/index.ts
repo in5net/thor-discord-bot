@@ -302,7 +302,8 @@ export default class GL {
 	 * Gets the location of a uniform
 	 * @param name the name of the uniform
 	 */
-	getUniformLocation(name: string): WebGLUniformLocation | undefined {
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	getUniformLocation(name: string): WebGLUniformLocation | null {
 		// Uniform location is already cached
 		if (Object.prototype.hasOwnProperty.call(this.uniformLocations, name))
 			return this.uniformLocations[name]!;

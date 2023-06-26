@@ -12,7 +12,6 @@ export async function getText(): Promise<string> {
 	const spans = $("span");
 	const span = random(spans.get());
 	const source = $(span).text();
-	console.log(`Text: ${source}`);
 	return source;
 }
 
@@ -27,7 +26,6 @@ export async function getImg(): Promise<string> {
 	});
 	const image = random(images.get());
 	const source = $(image).attr("src") || "";
-	console.log(`Img: ${source}`);
 	return source;
 }
 
@@ -46,6 +44,5 @@ export async function getGIF(): Promise<string> {
 	});
 	const image = random(images.get());
 	const source = $(image).attr("src") || "";
-	console.log(`GIF: ${source}`);
 	return source;
 }

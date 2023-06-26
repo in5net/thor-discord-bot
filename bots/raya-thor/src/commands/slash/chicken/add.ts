@@ -2,6 +2,7 @@ import { Writable } from "node:stream";
 import { env } from "node:process";
 import { filesBucket } from "storage";
 import command from "discord/commands/slash";
+import logger from "logger";
 import { ADMIN_IDS } from "$services/env";
 
 export default command(
@@ -26,7 +27,7 @@ export default command(
 		);
 		await body?.pipeTo(stream);
 		const fileURL = `https://${env.ILES_DOMAIN}/${path}`;
-		console.log(`Uploaded ${fileURL}`);
+		logger.info(`Uploaded ${fileURL}`);
 
 		return i.reply(`Chicken added
 ${fileURL}`);
