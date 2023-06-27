@@ -4,11 +4,9 @@
   "type": "module",
   "main": "./src/main.ts",
   "scripts": {
-    "dev": "dotenv -e ./.env -e ../../packages/database/.env -e ../../packages/storage/.env tsx watch src/main.ts",
-    "start": "dotenv -e ./.env -e ../../packages/database/.env -e ../../packages/storage/.env tsx src/main.ts",
-    "lint": "eslint",
-    "test": "node --test",
-    "deploy": "dotenv -e ./.env -e ../../packages/database/.env -e ../../packages/storage/.env tsx src/deploy.ts"
+    "dev": "tsx watch src/main.ts",
+    "start": "tsx src/main.ts",
+    "deploy": "tsx src/deploy.ts"
   },
   "dependencies": {
     "@discordjs/opus": "^0.9.0",
@@ -29,6 +27,7 @@
     "discord-api-types": "0.37.46",
     "discord-ytdl-core": "^5.0.4",
     "discord.js": "14.11.0",
+    "dotenv": "^16.3.1",
     "firebase-admin": "^11.9.0",
     "fluent-ffmpeg": "^2.1.2",
     "genius-lyrics": "4.4.3",
@@ -61,7 +60,6 @@
     "@types/node": "18.16.3",
     "@types/node-schedule": "^2.1.0",
     "@types/pngjs": "^6.0.1",
-    "dotenv-cli": "^7.2.1",
     "tsconfig": "workspace:*",
     "tsx": "^3.12.7",
     "typescript": "5.1.3"

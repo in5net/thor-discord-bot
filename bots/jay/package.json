@@ -4,11 +4,9 @@
   "type": "module",
   "main": "./src/main.ts",
   "scripts": {
-    "dev": "dotenv -e ./.env -e ../../packages/database/.env -e ../../packages/storage/.env tsx watch src/main.ts",
-    "start": "dotenv -e ./.env -e ../../packages/database/.env -e ../../packages/storage/.env tsx src/main.ts",
-    "lint": "eslint",
-    "test": "node --test",
-    "deploy": "dotenv -e ./.env -e ../../packages/database/.env -e ../../packages/storage/.env tsx src/deploy.ts"
+    "dev": "tsx watch src/main.ts",
+    "start": "tsx src/main.ts",
+    "deploy": "tsx src/deploy.ts"
   },
   "dependencies": {
     "@discordjs/rest": "1.7.1",
@@ -20,6 +18,7 @@
     "discord": "workspace:*",
     "discord-api-types": "0.37.46",
     "discord.js": "14.11.0",
+    "dotenv": "^16.3.1",
     "fluent-ffmpeg": "^2.1.2",
     "gif-encoder": "^0.7.2",
     "gl": "6.0.2",
@@ -41,7 +40,6 @@
     "@types/gl": "6.0.2",
     "@types/node": "18.16.3",
     "@types/pngjs": "^6.0.1",
-    "dotenv-cli": "^7.2.1",
     "tsconfig": "workspace:*",
     "tsx": "^3.12.7",
     "typescript": "5.1.3"

@@ -1,7 +1,10 @@
 import { env } from "node:process";
 import { Storage } from "@google-cloud/storage";
 import { z } from "zod";
+import { config } from "dotenv";
 import serviceAccount from "./service_account.json";
+
+config({ path: new URL(".env", import.meta.url) });
 
 export const credentials = serviceAccount;
 
