@@ -18,6 +18,7 @@ import randomResponses, {
 import { handleWordleMessage } from "../commands/text/wordle";
 import prisma from "$services/prisma";
 import { incCount } from "$services/users";
+import { emojiRegex } from "$services/emoji";
 
 const prefix = env.PREFIX;
 const prefixRegex = createRegExp(exactly(prefix).at.lineStart(), [
@@ -45,15 +46,24 @@ export default event(
 				message_ += ` gave 1 strike to ${userMention(message.author.id)}`;
 			await channel.send(message_);
 			await incCount(author.id, "salad_mundus");
-		} else if (
-			prefixRegex.test(content) ||
-			client.textCommands.some(
-				({ optionalPrefix }, name) =>
-					optionalPrefix && lowercase.startsWith(name)
+		} else {
+			const [first = "", second = "", third = ""] = noWhitespace;
+			if (emojiRegex.test(first) && second === "+" && emojiRegex.test(third)) {
+				const { default: emojiMix } = await import("emoji-mixer");
+				const url = emojiMix(first, third);
+				await (url
+					? message.reply(url)
+					: message.reply("no emoji mix found ):"));
+			} else if (
+				prefixRegex.test(content) ||
+				client.textCommands.some(
+					({ optionalPrefix }, name) =>
+						optionalPrefix && lowercase.startsWith(name)
+				)
 			)
-		)
-			await handleTextCommand(message);
-		else await handleRandomResponse(message);
+				await handleTextCommand(message);
+			else await handleRandomResponse(message);
+		}
 
 		if (
 			channel.isTextBased() &&

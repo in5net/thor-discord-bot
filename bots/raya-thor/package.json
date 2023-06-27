@@ -28,6 +28,7 @@
     "discord-ytdl-core": "^5.0.4",
     "discord.js": "14.11.0",
     "dotenv": "^16.3.1",
+    "emoji-mixer": "^1.0.33",
     "firebase-admin": "^11.9.0",
     "fluent-ffmpeg": "^2.1.2",
     "genius-lyrics": "4.4.3",
