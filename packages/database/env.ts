@@ -1,8 +1,5 @@
 import { env } from "node:process";
 import { z } from "zod";
-import { config } from "dotenv";
-
-config({ path: new URL(".env", import.meta.url) });
 
 declare global {
 	// eslint-disable-next-line @typescript-eslint/no-namespace
@@ -18,6 +15,4 @@ const EnvironmentVariables = z.object({
 	DATABASE_PASSWORD: z.string(),
 });
 
-const result = EnvironmentVariables.safeParse(env);
-if (result.success) console.log("✅ Environment variables verified");
-else throw new Error(`❌ Environment variables not verified: ${result.error}`);
+EnvironmentVariables.parse(env);
