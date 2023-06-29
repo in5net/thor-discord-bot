@@ -6,6 +6,7 @@ import {
 	EmbedBuilder,
 } from "discord.js";
 import command from "discord/commands/slash";
+import ms from "ms";
 import ImageSearch from "$services/customsearch";
 
 export default command(
@@ -49,7 +50,7 @@ export default command(
 		i.channel
 			?.createMessageComponentCollector({
 				filter: int => int.user.id === i.user.id,
-				time: 60_000,
+				time: ms("1 min"),
 			})
 			.on("collect", async i => {
 				try {

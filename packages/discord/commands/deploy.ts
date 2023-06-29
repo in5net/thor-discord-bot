@@ -1,52 +1,71 @@
-import { ApplicationCommandOptionType, Routes } from "discord-api-types/v10";
+import {
+	ApplicationCommandOptionType,
+	Routes,
+	type RESTPutAPIApplicationCommandsJSONBody,
+} from "discord-api-types/v10";
 import { type Collection, REST } from "discord.js";
 import { type CommandOptionType, type SlashCommand } from "./slash";
-
-let buildCount = 0;
 
 export async function deploy(
 	commands: Collection<string, SlashCommand>,
 	token: string,
 	applicationId: string
 ) {
+	const data: RESTPutAPIApplicationCommandsJSONBody = [];
+	for (const [name, command] of commands.sort((_a, _b, aName, bName) =>
+		aName.localeCompare(bName)
+	)) {
+		const [commandName = "", groupName, subName] = name.split(" ");
+		if (subName && groupName) {
+			let commandData = data.find(({ name }) => name === commandName);
+			if (!commandData) {
+				commandData = {
+					name: commandName,
+					description: commandName,
+					options: [],
+				};
+				data.push(commandData);
+			}
+
+			let groupData = commandData.options?.find(
+				({ name }) => name === groupName
+			);
+			if (!groupData) {
+				groupData = {
+					type: ApplicationCommandOptionType.SubcommandGroup,
+					name: groupName,
+					description: groupName,
+					options: [],
+				};
+				commandData.options?.push(groupData);
+			}
+
+			groupData.options?.push({
+				type: ApplicationCommandOptionType.Subcommand,
+				...build(subName, command),
+			});
+		} else if (groupName) {
+			let commandData = data.find(({ name }) => name === commandName);
+			if (!commandData) {
+				commandData = {
+					name: commandName,
+					description: commandName,
+					options: [],
+				};
+				data.push(commandData);
+			}
+
+			commandData.options?.push({
+				type: ApplicationCommandOptionType.Subcommand,
+				...build(groupName, command),
+			});
+		} else data.push(build(commandName, command));
+	}
+
 	const rest = new REST().setToken(token);
-
-	buildCount = 0;
-	const data = Object.entries(commands).map(([name, command]) =>
-		typeof command.desc === "string"
-			? build(name, command as SlashCommand)
-			: typeof Object.values(command)[0].desc === "string"
-			? {
-					name,
-					description: name,
-					options: Object.entries(command as Commands).map(
-						([name, command]) => ({
-							type: ApplicationCommandOptionType.Subcommand,
-							...build(name, command),
-						})
-					),
-			  }
-			: {
-					name,
-					description: name,
-					options: Object.entries(command as CommandGroups).map(
-						([name, command]) => ({
-							type: ApplicationCommandOptionType.SubcommandGroup,
-							name,
-							description: name,
-							options: Object.entries(command).map(([name, command]) => ({
-								type: ApplicationCommandOptionType.Subcommand,
-								...build(name, command),
-							})),
-						})
-					),
-			  }
-	);
-
 	await rest.put(Routes.applicationCommands(applicationId), {
 		body: data,
 	});
-	return buildCount;
 }
 
 const commandOptionTypeMap: Record<
@@ -64,7 +83,6 @@ const commandOptionTypeMap: Record<
 };
 
 function build(name: string, { desc, options }: SlashCommand) {
-	buildCount++;
 	return {
 		name,
 		description: desc,

@@ -9,6 +9,7 @@ import {
 } from "discord.js";
 import command from "discord/commands/slash";
 import logger from "logger";
+import ms from "ms";
 import items from "./items";
 import { part, type Part } from "./labyrinth";
 import questions from "./questions";
@@ -61,7 +62,7 @@ export default command(
 				?.awaitMessageComponent({
 					componentType: ComponentType.StringSelect,
 					filter: int => int.user.id === i.user.id,
-					time: 60_000,
+					time: ms("1 min"),
 				})
 				.catch(() => null);
 			if (!int) return i.followUp("Epiquest ran out of time ⏱");
@@ -153,7 +154,7 @@ export default command(
 				?.awaitMessageComponent({
 					componentType: ComponentType.StringSelect,
 					filter: int => int.user.id === i.user.id,
-					time: 60_000,
+					time: ms("1 min"),
 				})
 				.catch(() => null);
 			if (!int) return i.followUp("Epiquest ran out of time ⏱");

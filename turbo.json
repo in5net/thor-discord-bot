@@ -25,7 +25,7 @@
       "dependsOn": ["^db:generate"]
     },
     "deploy": {
-      "inputs": ["src/**"]
+      "inputs": ["src/commands/slash/**"]
     }
   }
 }

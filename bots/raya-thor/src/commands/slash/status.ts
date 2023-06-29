@@ -1,6 +1,6 @@
 import { cpus, freemem, totalmem } from "node:os";
 import { arch, memoryUsage, platform, uptime, versions } from "node:process";
-import { EmbedBuilder, formatEmoji, version } from "discord.js";
+import { EmbedBuilder, version } from "discord.js";
 import command from "discord/commands/slash";
 
 export default command(
@@ -15,18 +15,18 @@ export default command(
 			.setColor("#3AA65B")
 			.addFields(
 				{
-					name: `${formatEmoji("1010539296899477526")} Node.js`,
+					name: `⬢ Node.js`,
 					value: node,
 					inline: true,
 				},
 				{
-					name: `${formatEmoji("1010544592833228841")} V8`,
+					name: `V8`,
 					value: v8,
 					inline: true,
 				},
 				{ name: "\u200B", value: "\u200B" },
 				{
-					name: `${formatEmoji("1010538929063211128")} Discord.js`,
+					name: `Discord.js`,
 					value: `v${version}`,
 					inline: true,
 				},
@@ -55,7 +55,7 @@ export default command(
 					inline: true,
 				},
 				{
-					name: `${formatEmoji("1010543156531568701")} Logical CPU Cores`,
+					name: `🖥️ Logical CPU Cores`,
 					value: `${cpus().length} cores`,
 				}
 			);

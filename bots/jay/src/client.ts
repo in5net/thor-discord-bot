@@ -8,9 +8,8 @@ import {
 } from "discord.js";
 import { type TextCommand } from "discord/commands/text";
 import { loadDiscordEvents } from "discord/loaders/events";
-import { loadSlashCommands } from "discord/loaders/slash-commands";
-import { loadTextCommands } from "discord/loaders/text-commands";
 import { type SlashCommand } from "discord/commands/slash";
+import { slashCommands, textCommands } from "./commands";
 
 const { NAME, DISCORD_TOKEN, NODE_ENV } = process.env;
 console.log(`⏳ ${NAME} is starting...`);
@@ -61,10 +60,8 @@ export default client;
 
 const eventsPath = new URL("events", import.meta.url).pathname;
 await loadDiscordEvents(eventsPath, client);
-const textCommandsPath = new URL("commands/text", import.meta.url).pathname;
-client.textCommands = await loadTextCommands(textCommandsPath);
-const slashCommandsPath = new URL("commands/slash", import.meta.url).pathname;
-client.slashCommands = await loadSlashCommands(slashCommandsPath);
+client.textCommands = textCommands;
+client.slashCommands = slashCommands;
 
 if (NODE_ENV === "production") {
 	const webhook = new WebhookClient({ url: process.env.WEBHOOK_URL });

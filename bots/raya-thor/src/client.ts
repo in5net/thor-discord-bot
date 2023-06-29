@@ -18,6 +18,7 @@ import { loadSlashCommands } from "discord/loaders/slash-commands";
 import { loadTextCommands } from "discord/loaders/text-commands";
 import { loadMessageCommands } from "discord/loaders/message-commands";
 import { getCatboyEmbed } from "./commands/slash/catboy";
+import { messageCommands, slashCommands, textCommands } from "./commands";
 
 const { NAME, DISCORD_TOKEN } = process.env;
 console.log(`⏳ ${NAME} is starting...`);
@@ -87,13 +88,9 @@ export default client;
 
 const eventsPath = new URL("events", import.meta.url).pathname;
 await loadDiscordEvents(eventsPath, client);
-const textCommandsPath = new URL("commands/text", import.meta.url).pathname;
-client.textCommands = await loadTextCommands(textCommandsPath);
-const slashCommandsPath = new URL("commands/slash", import.meta.url).pathname;
-client.slashCommands = await loadSlashCommands(slashCommandsPath);
-const messageCommandsPath = new URL("commands/message", import.meta.url)
-	.pathname;
-client.messageCommands = await loadMessageCommands(messageCommandsPath);
+client.textCommands = textCommands;
+client.slashCommands = slashCommands;
+client.messageCommands = messageCommands;
 
 await client.login(DISCORD_TOKEN);
 
@@ -137,7 +134,7 @@ scheduleJob(
 	},
 	() => {
 		client.user?.setActivity("its 7:00 somewhere");
-		setTimeout(() => client.user?.setActivity(activity), 60_000);
+		setTimeout(() => client.user?.setActivity(activity), ms("1 min"));
 	}
 );
 

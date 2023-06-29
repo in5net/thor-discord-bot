@@ -7,6 +7,7 @@ import {
 	EmbedBuilder,
 } from "discord.js";
 import command from "discord/commands/slash";
+import ms from "ms";
 import * as playlist from "$src/music/playlist";
 import prisma from "$services/prisma";
 import { sec2Str } from "$services/time";
@@ -107,7 +108,7 @@ export default command(
 		message
 			.createMessageComponentCollector({
 				componentType: ComponentType.Button,
-				time: 60_000,
+				time: ms("1 min"),
 			})
 			.on("collect", async i => {
 				const { customId } = i;
