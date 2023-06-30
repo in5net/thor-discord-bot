@@ -1,6 +1,7 @@
 import { env } from "node:process";
 import { deploy } from "discord/commands/deploy";
 import { slashCommands } from "./commands";
+import "./env";
 
 console.log("Commands registering...");
 

@@ -2,8 +2,9 @@ import { env } from "node:process";
 import { deploy } from "discord/commands/deploy";
 import logger from "logger";
 import { slashCommands } from "./commands";
+import "./env";
 
-logger.info("Commands registering...");
+logger.info("Commands registering...", env.DISCORD_ID);
 
 await deploy(slashCommands, env.DISCORD_TOKEN, env.DISCORD_ID);
 
