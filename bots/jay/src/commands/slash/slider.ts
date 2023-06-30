@@ -3,7 +3,6 @@ import { mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { Vector2, sleep, vec2 } from "@in5net/limitless";
-import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";
 import { nanoid } from "nanoid";
@@ -36,6 +35,7 @@ export default command(
 		await i.deferReply();
 		const url =
 			image?.url || i.user.displayAvatarURL({ extension: "png", size: 256 });
+		const { loadImage, createCanvas } = await import("@napi-rs/canvas");
 		const img = await loadImage(url).catch(() => null);
 		if (!img) return i.reply("Could not load image");
 		const { width, height } = img;

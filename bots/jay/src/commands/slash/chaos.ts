@@ -1,5 +1,4 @@
 import { randomInt, vec2, Vector2 } from "@in5net/limitless";
-import { createCanvas } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
 
@@ -30,6 +29,7 @@ export default command(
 	},
 	async (i, { num_points, stride }) => {
 		await i.deferReply();
+		const { createCanvas } = await import("@napi-rs/canvas");
 		const canvas = createCanvas(size, size);
 		const ctx = canvas.getContext("2d");
 

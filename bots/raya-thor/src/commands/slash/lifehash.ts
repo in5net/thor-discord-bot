@@ -1,4 +1,3 @@
-import { createCanvas } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
 import { strTo16x16 } from "$services/hash";
@@ -20,6 +19,7 @@ export default command(
 	},
 	async (i, { message }) => {
 		await i.deferReply();
+		const { createCanvas } = await import("@napi-rs/canvas");
 		const canvas = createCanvas(width, width);
 		const ctx = canvas.getContext("2d");
 		ctx.fillStyle = "#fff";
@@ -30,9 +30,9 @@ export default command(
 
 		// Conway's Game of Life
 		for (let i = 0; i < iterations; i++) {
-			const next = Array.from({ length: size });
+			const next = Array.from<boolean[]>({ length: size });
 			for (let x = 0; x < size; x++) {
-				const row = Array.from({ length: size });
+				const row = Array.from<boolean>({ length: size });
 				for (let y = 0; y < size; y++) {
 					const neighbors = getNeighbors(grid, x, y);
 					const alive = neighbors.reduce(

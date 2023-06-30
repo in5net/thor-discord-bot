@@ -2,7 +2,6 @@ import { createReadStream } from "node:fs";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { createCanvas } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";
 import { nanoid } from "nanoid";
@@ -43,6 +42,7 @@ export default command(
 		const temporaryDir = join(tmpdir(), nanoid());
 		await mkdir(temporaryDir);
 
+		const { createCanvas } = await import("@napi-rs/canvas");
 		const canvas = createCanvas(size, size);
 		const ctx = canvas.getContext("2d");
 

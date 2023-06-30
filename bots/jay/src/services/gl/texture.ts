@@ -1,5 +1,3 @@
-import { createCanvas, loadImage } from "@napi-rs/canvas";
-
 const isPowerOf2 = (x: number) => (x & (x - 1)) === 0;
 function nextHighestPowerOfTwo(x: number) {
 	--x;
@@ -24,6 +22,7 @@ export default class Texture {
 		// Bind and config the texture
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 
+		const { loadImage, createCanvas } = await import("@napi-rs/canvas");
 		const image = await loadImage(url);
 		const { width, height } = image;
 

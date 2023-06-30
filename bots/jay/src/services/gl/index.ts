@@ -3,9 +3,7 @@ import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { Buffer } from "node:buffer";
-import { createCanvas } from "@napi-rs/canvas";
 import ffmpeg from "fluent-ffmpeg";
-import GIFEncoder from "gif-encoder";
 import createContext from "gl";
 import {
 	type ReadonlyMat2,
@@ -605,6 +603,7 @@ export default class GL {
 
 		const writeStream = createWriteStream(path);
 
+		const { default: GIFEncoder } = await import("gif-encoder");
 		const encoder = new GIFEncoder(width, height);
 		encoder.writeHeader();
 		if (!noRepeat) encoder.setRepeat(0);
@@ -642,6 +641,7 @@ export default class GL {
 		} = {}
 	): Promise<ReadStream> {
 		const { width, height } = this;
+		const { createCanvas } = await import("@napi-rs/canvas");
 		const canvas = createCanvas(width, height);
 		const ctx = canvas.getContext("2d");
 		const imageData = ctx.createImageData(width, height);

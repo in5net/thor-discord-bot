@@ -21,7 +21,6 @@ import {
 	sleep,
 	swap,
 } from "@in5net/limitless";
-import { createCanvas } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";
 import { nanoid } from "nanoid";
@@ -95,6 +94,7 @@ export default command(
 		let active: number[] = [];
 		let index = 0;
 
+		const { createCanvas } = await import("@napi-rs/canvas");
 		const canvas = createCanvas(size, size);
 		const ctx = canvas.getContext("2d");
 		ctx.lineWidth = 1;

@@ -18,7 +18,6 @@ import {
 	oneOrMore,
 	wordBoundary,
 } from "magic-regexp";
-import play from "play-dl";
 import { TypedEmitter } from "tiny-typed-emitter";
 import logger from "logger";
 import * as playlist from "./playlist";
@@ -164,6 +163,7 @@ export default class Voice extends TypedEmitter<{
 
 		const songs: Array<SongType | Album<YouTubeSong>> = [];
 		const songsCache = new Map<string, Array<SongType | Album<YouTubeSong>>>();
+		const { default: play } = await import("play-dl");
 		if (play.is_expired()) await play.refreshToken();
 		for (const query of queries) {
 			const mds = songsCache.get(query);

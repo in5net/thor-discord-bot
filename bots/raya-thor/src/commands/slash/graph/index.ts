@@ -1,5 +1,4 @@
 import { map } from "@in5net/limitless";
-import { createCanvas } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
 import runner from "./equation";
@@ -20,6 +19,7 @@ export default command(
 	},
 	async (i, { equation }) => {
 		await i.deferReply();
+		const { createCanvas } = await import("@napi-rs/canvas");
 		const canvas = createCanvas(size, size);
 		const ctx = canvas.getContext("2d");
 

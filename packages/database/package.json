@@ -10,13 +10,13 @@
     "drizzle:introspect": "dotenv drizzle-kit introspect:mysql"
   },
   "dependencies": {
-    "@planetscale/database": "^1.7.0",
-    "@prisma/client": "4.16.1",
+    "@planetscale/database": "^1.8.0",
+    "@prisma/client": "4.16.2",
     "drizzle-orm": "^0.27.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {
     "drizzle-kit": "^0.19.2",
-    "prisma": "4.16.1"
+    "prisma": "4.16.2"
   }
 }

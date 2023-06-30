@@ -47,7 +47,9 @@ export default command(
 		} else {
 			gl.uniform("offset", "float", offset);
 			gl.render();
-			attachment = new AttachmentBuilder(gl.pngBuffer(), { name: "noise.png" });
+			attachment = new AttachmentBuilder(gl.pngBuffer(), {
+				name: "noise.png",
+			});
 		}
 
 		return i.editReply({

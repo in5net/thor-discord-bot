@@ -1,5 +1,4 @@
 import { radians, replace } from "@in5net/limitless";
-import { createCanvas } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
 
@@ -56,6 +55,7 @@ export default command(
 			result = replace(result, replacements);
 		}
 
+		const { createCanvas } = await import("@napi-rs/canvas");
 		const canvas = createCanvas(size, size);
 		const ctx = canvas.getContext("2d");
 		ctx.fillStyle = "#000";

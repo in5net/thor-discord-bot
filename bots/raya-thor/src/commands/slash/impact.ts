@@ -1,12 +1,12 @@
-import { createCanvas, GlobalFonts } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
 import logger from "logger";
 
 const font = "Impact";
 let registered = false;
-function registerFont() {
+async function registerFont() {
 	if (registered) return;
+	const { GlobalFonts } = await import("@napi-rs/canvas");
 	const success = GlobalFonts.registerFromPath(
 		new URL("../../assets/fonts/impact.ttf", import.meta.url).pathname,
 		font
@@ -44,14 +44,14 @@ export default command(
 	},
 	async (i, { text, width, font_size, border_width }) => {
 		await i.deferReply();
-		const canvas = generate({ text, width, font_size, border_width });
+		const canvas = await generate({ text, width, font_size, border_width });
 		return i.editReply({
 			files: [new AttachmentBuilder(canvas.toBuffer("image/png"))],
 		});
 	}
 );
 
-export function generate({
+export async function generate({
 	text,
 	font_size,
 	width,
@@ -62,7 +62,8 @@ export function generate({
 	font_size: number;
 	border_width: number;
 }) {
-	registerFont();
+	await registerFont();
+	const { createCanvas } = await import("@napi-rs/canvas");
 	const canvas = createCanvas(width, font_size);
 	logger.debug("canvas:", canvas.width, "x", canvas.height);
 	const ctx = canvas.getContext("2d");

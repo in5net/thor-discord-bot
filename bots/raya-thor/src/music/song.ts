@@ -1,11 +1,10 @@
 import { type Readable } from "node:stream";
 import { createAudioResource, StreamType } from "@discordjs/voice";
 import chalk from "chalk-template";
-import ytdl from "discord-ytdl-core";
 import { type Awaitable, EmbedBuilder } from "discord.js";
 import got from "got";
 import { createRegExp, digit, oneOrMore } from "magic-regexp";
-import play, {
+import {
 	type SoundCloudPlaylist,
 	type SoundCloudTrack,
 	type SpotifyAlbum,
@@ -89,13 +88,15 @@ abstract class Song implements SongJSON {
 	}
 }
 
-const ytStream = (url: string, { seek, filter }: StreamOptions) =>
-	ytdl(url, {
+async function ytStream(url: string, { seek, filter }: StreamOptions) {
+	const { default: ytdl } = await import("discord-ytdl-core");
+	return ytdl(url, {
 		filter: "audioonly",
 		opusEncoded: true,
 		seek,
 		encoderArgs: filter ? ["-af", filter] : undefined,
 	});
+}
 
 interface Channel {
 	id: string;
@@ -221,7 +222,7 @@ ${title} (${url})
 		});
 	}
 
-	getEmbed() {
+	override getEmbed() {
 		const { description, thumbnail, channel, url, channelURL } = this;
 		const embed = super.getEmbed().setColor("Red").setURL(url);
 		if (thumbnail) embed.setThumbnail(thumbnail);
@@ -275,6 +276,7 @@ ${title} (${url})
 		url: string,
 		requester: Requester
 	): Promise<YouTubeSong> {
+		const { default: play } = await import("play-dl");
 		const id = play.extractID(url);
 		const song = await this.fromId(id, requester);
 		const timeRegex = createRegExp("?t=", oneOrMore(digit).as("seconds"));
@@ -375,8 +377,9 @@ ${title} (${url})
 	async getStream({ seek, filter }: StreamOptions) {
 		if (filter)
 			return {
-				stream: ytStream(this.url, { seek: seek ?? this.time, filter }),
+				stream: await ytStream(this.url, { seek: seek ?? this.time, filter }),
 			};
+		const { default: play } = await import("play-dl");
 		return play.stream(this.url, { seek: seek ?? this.time });
 	}
 }
@@ -521,7 +524,7 @@ ${title} (${url})
 		});
 	}
 
-	getEmbed() {
+	override getEmbed() {
 		const { thumbnail, artist, album, url, artistURL, albumURL } = this;
 		const embed = super.getEmbed().setColor("Green").setURL(url);
 		if (artist)
@@ -539,7 +542,8 @@ ${title} (${url})
 		url: string,
 		requester: Requester
 	): Promise<SpotifySong> {
-		if (play.sp_validate(url) !== "track") throw undefined;
+		const { default: play } = await import("play-dl");
+		if (play.sp_validate(url) !== "track") throw new Error("Invalid URL");
 
 		const {
 			name,
@@ -577,6 +581,7 @@ ${title} (${url})
 		url: string,
 		requester: Requester
 	): Promise<SpotifySong[]> {
+		const { default: play } = await import("play-dl");
 		const type = play.sp_validate(url);
 		if (type !== "album" && type !== "playlist") return [];
 
@@ -587,18 +592,26 @@ ${title} (${url})
 		);
 	}
 
-	getStream(options: StreamOptions) {
-		return { stream: ytStream(this.youtubeURL, options) };
+	async getStream(options: StreamOptions) {
+		return { stream: await ytStream(this.youtubeURL, options) };
 	}
 }
 
-play.getFreeClientID().then(clientID => {
-	play.setToken({
-		soundcloud: {
-			client_id: clientID,
-		},
-	});
-});
+let loadedSoundCloud = false;
+async function playSC() {
+	const { default: play } = await import("play-dl");
+	if (!loadedSoundCloud) {
+		const clientId = await play.getFreeClientID();
+		await play.setToken({
+			soundcloud: {
+				client_id: clientId,
+			},
+		});
+		loadedSoundCloud = true;
+	}
+
+	return play;
+}
 
 interface SoundCloudJSON extends SongJSON {
 	type: "soundcloud";
@@ -678,7 +691,7 @@ ${title} (${url})
 		});
 	}
 
-	getEmbed() {
+	override getEmbed() {
 		const { user, thumbnail, url } = this;
 		const embed = super
 			.getEmbed()
@@ -711,7 +724,9 @@ ${title} (${url})
 		url: string,
 		requester: Requester
 	): Promise<SoundCloudSong> {
-		if ((await play.so_validate(url)) !== "track") throw undefined;
+		const play = await playSC();
+		if ((await play.so_validate(url)) !== "track")
+			throw new Error("Invalid URL");
 
 		const track = (await play.soundcloud(url)) as SoundCloudTrack;
 		return this.fromTrack(track, requester);
@@ -729,7 +744,9 @@ ${title} (${url})
 		url: string,
 		requester: Requester
 	): Promise<SoundCloudSong[]> {
-		if ((await play.so_validate(url)) !== "playlist") throw undefined;
+		const play = await playSC();
+		if ((await play.so_validate(url)) !== "playlist")
+			throw new Error("Invalid URL");
 
 		const playlist = (await play.soundcloud(url)) as SoundCloudPlaylist;
 		const tracks = await playlist.all_tracks();
@@ -739,7 +756,9 @@ ${title} (${url})
 	}
 
 	async getStream({ seek, filter }: StreamOptions) {
+		const play = await playSC();
 		const { stream } = await play.stream(this.url);
+		const { default: ytdl } = await import("discord-ytdl-core");
 		return {
 			stream: ytdl.arbitraryStream(stream, {
 				opusEncoded: true,
@@ -782,7 +801,7 @@ ${title} (${url})`);
 		return new URLSong(url, requester);
 	}
 
-	getEmbed() {
+	override getEmbed() {
 		return super.getEmbed().setColor("Blue").setURL(this.url);
 	}
 
@@ -791,7 +810,8 @@ ${title} (${url})`);
 	}
 
 	async getStream({ seek, filter }: StreamOptions) {
-		const stream = await got.stream(this.url);
+		const stream = got.stream(this.url);
+		const { default: ytdl } = await import("discord-ytdl-core");
 		return {
 			stream: ytdl.arbitraryStream(stream, {
 				opusEncoded: true,

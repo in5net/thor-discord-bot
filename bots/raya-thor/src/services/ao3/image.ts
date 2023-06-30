@@ -1,5 +1,5 @@
 import { symbolsOrigin, type Work } from "@in5net/limitless/api/ao3";
-import { createCanvas, loadImage, type Image } from "@napi-rs/canvas";
+import { type Image } from "@napi-rs/canvas";
 
 const imageCache = new Map<string, Image>();
 
@@ -9,6 +9,7 @@ export async function drawLegendarySquare({
 	warning,
 	complete,
 }: Work["symbols"]) {
+	const { createCanvas, loadImage } = await import("@napi-rs/canvas");
 	const canvas = createCanvas(56, 56);
 	const ctx = canvas.getContext("2d");
 

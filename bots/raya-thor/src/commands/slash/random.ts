@@ -1,4 +1,3 @@
-import { createCanvas } from "@napi-rs/canvas";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
 
@@ -11,6 +10,7 @@ export default command(
 	},
 	async i => {
 		await i.deferReply();
+		const { createCanvas } = await import("@napi-rs/canvas");
 		const canvas = createCanvas(size, size);
 		const ctx = canvas.getContext("2d");
 
