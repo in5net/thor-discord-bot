@@ -13,6 +13,7 @@ import {
 } from "play-dl";
 import { z } from "zod";
 import logger from "logger";
+import { memo } from "@in5net/limitless";
 import youtube from "$services/youtube";
 
 interface SongJSON {
@@ -597,21 +598,16 @@ ${title} (${url})
 	}
 }
 
-let loadedSoundCloud = false;
-async function playSC() {
+const playSC = memo(async () => {
 	const { default: play } = await import("play-dl");
-	if (!loadedSoundCloud) {
-		const clientId = await play.getFreeClientID();
-		await play.setToken({
-			soundcloud: {
-				client_id: clientId,
-			},
-		});
-		loadedSoundCloud = true;
-	}
-
+	const clientId = await play.getFreeClientID();
+	await play.setToken({
+		soundcloud: {
+			client_id: clientId,
+		},
+	});
 	return play;
-}
+});
 
 interface SoundCloudJSON extends SongJSON {
 	type: "soundcloud";

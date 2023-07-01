@@ -103,7 +103,11 @@ export function median(array: number[]): number {
 
 export function mode(array: number[]): number[] {
 	const counts: Record<number, number> = {};
-	for (const n of array) counts[n] ? counts[n]++ : (counts[n] = 1);
+	for (const n of array) {
+		if (counts[n]) counts[n]++;
+		else counts[n] = 1;
+	}
+
 	const sortedCounts = Object.entries(counts).sort((a, b) => a[1] - b[1]);
 	const sortedNumbers = sortedCounts.map(n => n[1]);
 	return sortedNumbers.filter(n => n === sortedCounts[0]![1]);

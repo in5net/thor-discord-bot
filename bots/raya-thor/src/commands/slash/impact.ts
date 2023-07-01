@@ -1,19 +1,17 @@
+import { memo } from "@in5net/limitless";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
 import logger from "logger";
 
 const font = "Impact";
-let registered = false;
-async function registerFont() {
-	if (registered) return;
+const registerFont = memo(async () => {
 	const { GlobalFonts } = await import("@napi-rs/canvas");
 	const success = GlobalFonts.registerFromPath(
 		new URL("../../assets/fonts/impact.ttf", import.meta.url).pathname,
 		font
 	);
-	registered = true;
 	logger.debug(`${font} font registered:`, success);
-}
+});
 
 export default command(
 	{

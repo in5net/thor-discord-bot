@@ -25,7 +25,7 @@ export function debounce<T extends Func>(
 	};
 }
 
-export function memoize<P, R>(func: (arg: P) => R): (arg: P) => R {
+export function memoize<P, R>(func: (arg: P) => R) {
 	const outputs = new Map<P, R>();
 	return (arg: P) => {
 		let output = outputs.get(arg);
@@ -33,5 +33,16 @@ export function memoize<P, R>(func: (arg: P) => R): (arg: P) => R {
 		output = func(arg);
 		outputs.set(arg, output);
 		return output;
+	};
+}
+
+export function memo<T>(fn: () => T) {
+	let cache: T;
+	let called = false;
+	return () => {
+		if (called) return cache;
+		cache = fn();
+		called = true;
+		return cache;
 	};
 }

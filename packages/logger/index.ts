@@ -31,7 +31,6 @@ if (dev)
 	});
 
 const logger = pino({
-	level: dev ? "trace" : "info",
 	transport: { targets },
 });
 export default logger;
