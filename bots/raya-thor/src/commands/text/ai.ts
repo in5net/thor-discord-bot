@@ -31,13 +31,9 @@ export default musicCommand(
 				description: "plays a song",
 				schema: z.object({
 					query: z.string().describe("A song title or a url of a song"),
-					shuffle: z
-						.boolean()
-						.optional()
-						.describe("Whether to shuffle the queue"),
 				}),
-				async func({ query, shuffle }) {
-					await voice.add(message, query, shuffle);
+				async func({ query }) {
+					await voice.add(message, query);
 					return `Now playing: ${query}`;
 				},
 			}),
