@@ -166,8 +166,8 @@ importers:
         specifier: 1.0.1-7
         version: 1.0.1-7
       ai:
-        specifier: ^2.1.13
-        version: 2.1.13(react@18.2.0)(svelte@3.59.2)(vue@3.3.4)
+        specifier: ^2.1.14
+        version: 2.1.14(react@18.2.0)(svelte@3.59.2)(vue@3.3.4)
       catboys:
         specifier: ^1.0.6
         version: 1.0.6
@@ -256,8 +256,8 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1
       youtubei.js:
-        specifier: 5.2.0
-        version: 5.2.0
+        specifier: 5.2.1
+        version: 5.2.1
       ytdl-core:
         specifier: ^4.11.4
         version: 4.11.4
@@ -2383,8 +2383,8 @@ packages:
       indent-string: 4.0.0
     dev: false
 
-  /ai@2.1.13(react@18.2.0)(svelte@3.59.2)(vue@3.3.4):
-    resolution: {integrity: sha512-huPgaFymrTIQcF/S5t02ohTXCtUrMVbPrLcxEB2hc7oKYM8dajfd0y6iOIIuI1S+d+JFbs3CrkeUX30VRot4/Q==}
+  /ai@2.1.14(react@18.2.0)(svelte@3.59.2)(vue@3.3.4):
+    resolution: {integrity: sha512-P9jPlHqZZlXJ9Tva6FSqyJvWi0lVKenEpoxGvenkQH3QfT9qKpPj4sEF71mmrRgXrKQiMjhFcxpI22bvhskT/A==}
     engines: {node: '>=14.6'}
     peerDependencies:
       react: ^18.2.0
@@ -9078,8 +9078,8 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  /youtubei.js@5.2.0:
-    resolution: {integrity: sha512-UXbkHnLp+YUSbA6ye58knH11RRx52BWpO/k6wSKQTm6eC/MSUBQO4KdYrO1INptlbOWWn7DjW5LwLMZ6e4qdMw==}
+  /youtubei.js@5.2.1:
+    resolution: {integrity: sha512-adhbRAZq/W5K3t8tTe/uYp27m7rRHn988UWve4HmXhucFrRcfbkjcxLsGfOUuA/B0bm2YTvSR8oSBrpzOO528Q==}
     dependencies:
       jintr: 1.0.0
       linkedom: 0.14.26
