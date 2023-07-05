@@ -20,27 +20,25 @@ const targets: TransportTargetOptions[] = [
 			destination,
 		},
 	},
+	dev
+		? {
+				level: "debug",
+				target: "pino-pretty",
+				options: {
+					colorize: true,
+				},
+		  }
+		: {
+				level: "trace",
+				target: "cloud-pine",
+				options: {
+					cloudLoggingOptions: {
+						skipInit: true,
+						sync: true,
+					},
+				},
+		  },
 ];
-if (dev)
-	targets.push(
-		dev
-			? {
-					level: "debug",
-					target: "pino-pretty",
-					options: {
-						colorize: true,
-					},
-			  }
-			: {
-					level: "trace",
-					target: "cloud-pine",
-					options: {
-						cloudLoggingOptions: {
-							sync: true,
-						},
-					},
-			  }
-	);
 
 const logger = pino({
 	transport: { targets },
