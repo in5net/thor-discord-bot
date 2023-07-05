@@ -5,6 +5,7 @@
   "main": "./index.ts",
   "types": "./index.ts",
   "dependencies": {
+    "cloud-pine": "^2.0.0",
     "pino": "^8.14.1"
   },
   "devDependencies": {
