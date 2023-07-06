@@ -3,7 +3,7 @@ import { mkdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import pino, { type TransportTargetOptions } from "pino";
 
-const dev = env.NODE_ENV === "development";
+const prod = env.NODE_ENV === "production";
 
 const logsPath = new URL("../../logs", import.meta.url).pathname;
 if (!existsSync(logsPath)) mkdirSync(logsPath);
@@ -20,22 +20,17 @@ const targets: TransportTargetOptions[] = [
 			destination,
 		},
 	},
-	dev
+	prod
 		? {
+				level: "trace",
+				target: "cloud-pine",
+				options: {},
+		  }
+		: {
 				level: "debug",
 				target: "pino-pretty",
 				options: {
 					colorize: true,
-				},
-		  }
-		: {
-				level: "trace",
-				target: "cloud-pine",
-				options: {
-					cloudLoggingOptions: {
-						skipInit: true,
-						sync: true,
-					},
 				},
 		  },
 ];
