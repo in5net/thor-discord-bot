@@ -4,6 +4,7 @@ import { join } from "node:path";
 import pino, { type TransportTargetOptions } from "pino";
 
 const prod = env.NODE_ENV === "production";
+console.log("production:", prod);
 
 const logsPath = new URL("../../logs", import.meta.url).pathname;
 if (!existsSync(logsPath)) mkdirSync(logsPath);
