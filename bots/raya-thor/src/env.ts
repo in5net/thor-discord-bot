@@ -1,7 +1,7 @@
 import { env } from "node:process";
+import "dotenv/config";
 import logger from "logger";
 import { z } from "zod";
-import "dotenv/config";
 
 declare global {
 	// eslint-disable-next-line @typescript-eslint/no-namespace
