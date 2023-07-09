@@ -7,9 +7,9 @@
     "database": "workspace:*",
     "discord-api-types": "0.37.43",
     "discord.js": "14.11.0",
-    "logger": "workspace:*",
+    "fast-glob": "^3.3.0",
     "fuse.js": "^6.6.2",
-    "glob": "10.2.7",
+    "logger": "workspace:*",
     "magic-regexp": "^0.7.0"
   },
   "devDependencies": {

@@ -1,9 +1,6 @@
-import { glob } from "glob";
+import { async } from "fast-glob";
 
-export async function noTestGlob(pattern: string) {
-	return glob(pattern, {
-		ignore: {
-			ignored: p => p.name.endsWith(".test.ts"),
-		},
+export const noTestGlob = async (pattern: string) =>
+	async(pattern, {
+		ignore: ["**/*.test.ts"],
 	});
-}
