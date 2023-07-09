@@ -2,6 +2,7 @@ import { z } from "zod";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { initializeAgentExecutorWithOptions } from "langchain/agents";
 import { DynamicStructuredTool } from "langchain/tools";
+import { Calculator } from "langchain/tools/calculator";
 import musicCommand from "./music/command";
 
 export default musicCommand(
@@ -26,6 +27,7 @@ export default musicCommand(
 			modelKwargs: { user: author.id },
 		});
 		const tools = [
+			new Calculator(),
 			new DynamicStructuredTool({
 				name: "song-player",
 				description: "plays a song",
