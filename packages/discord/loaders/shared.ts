@@ -1,6 +1,6 @@
-import { async } from "fast-glob";
+import fg from "fast-glob";
 
 export const noTestGlob = async (pattern: string) =>
-	async(pattern, {
+	fg.async(pattern, {
 		ignore: ["**/*.test.ts"],
 	});
