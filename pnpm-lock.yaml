@@ -1405,6 +1405,7 @@ packages:
   /@google-cloud/storage@6.11.0:
     resolution: {integrity: sha512-p5VX5K2zLTrMXlKdS1CiQNkKpygyn7CBFm5ZvfhVj6+7QUsjWvYx9YDMkYXdarZ6JDt4cxiu451y9QUIH82ZTw==}
     engines: {node: '>=12'}
+    requiresBuild: true
     dependencies:
       '@google-cloud/paginator': 3.0.7
       '@google-cloud/projectify': 3.0.0

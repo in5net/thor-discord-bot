@@ -5,7 +5,7 @@ import { incCount } from "$services/users";
 
 export default command(
 	{
-		desc: "Sends a random catboy",
+		desc: "Sends a random catgirl",
 		options: {},
 	},
 	async i => {
@@ -22,7 +22,7 @@ export async function getCatgirlEmbed() {
 	}>();
 
 	return new EmbedBuilder()
-		.setTitle("Catboy")
+		.setTitle("Catgirl")
 		.setColor("#BCADD9")
 		.setImage(url)
 		.setFooter({

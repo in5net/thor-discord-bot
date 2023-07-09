@@ -1,6 +1,14 @@
+import { readFile } from "node:fs/promises";
+import { env } from "node:process";
 import command from "discord/commands/text";
-import { answer, filter } from "$services/openai";
+import { ttlCache } from "@in5net/limitless";
+import ms from "ms";
+import { type ResponseTypes } from "@nick.heiner/openai-edge";
+import { filter, openai } from "$services/openai";
 import { cache } from "$services/prisma";
+
+const gpt3DescPath = new URL("../../../gpt3-desc.txt", import.meta.url);
+const desc = ttlCache(async () => readFile(gpt3DescPath, "utf8"), ms("10 min"));
 
 export default command(
 	{
@@ -49,24 +57,26 @@ export default command(
 			take: 5,
 		});
 
-		const reply = await answer(prompt, previous, author.id);
-		await channel.send(reply);
+		const response = await openai.createCompletion({
+			model: "text-curie-001",
+			prompt: `${await desc()} Current date: ${new Date().toDateString()}
 
-		return cache.context.create({
-			data: {
-				channel: {
-					connectOrCreate: {
-						create: {
-							id: channelId,
-						},
-						where: {
-							id: channelId,
-						},
-					},
-				},
-				question: prompt,
-				answer: reply,
-			},
+${previous.map(
+	({ question: q, answer: a }) => `You: ${q}
+${env.NAME}: ${a}
+`
+)}
+You: ${prompt}
+${env.NAME}:`,
+			temperature: 0.9,
+			max_tokens: 512,
+			frequency_penalty: 0.5,
+			presence_penalty: 0.5,
+			stop: ["You:"],
+			user: author.id,
 		});
+		const data = (await response.json()) as ResponseTypes["createCompletion"];
+		const reply = data.choices?.[0]?.text || "";
+		return channel.send(reply);
 	}
 );

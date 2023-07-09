@@ -46,3 +46,16 @@ export function memo<T>(fn: () => T) {
 		return cache;
 	};
 }
+
+export function ttlCache<T>(fn: () => T, ttl: number) {
+	let cache: T;
+	let called = false;
+	let lastCalled = performance.now();
+	return () => {
+		if (called && performance.now() - lastCalled < ttl) return cache;
+		cache = fn();
+		called = true;
+		lastCalled = performance.now();
+		return cache;
+	};
+}

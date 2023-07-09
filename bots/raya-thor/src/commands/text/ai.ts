@@ -7,7 +7,7 @@ import musicCommand from "./music/command";
 
 export default musicCommand(
 	{
-		desc: "Use AI to play songs",
+		desc: "Use AI to do stuff",
 		optionalPrefix: true,
 		args: {
 			prompt: {

@@ -1,4 +1,11 @@
 {
-  "cSpell.words": ["catboy", "firestore", "langchain", "Neko"],
+  "cSpell.words": [
+    "catboy",
+    "catgirl",
+    "firestore",
+    "langchain",
+    "Neko",
+    "openai"
+  ],
   "typescript.tsdk": "node_modules/typescript/lib"
 }
