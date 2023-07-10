@@ -46,6 +46,7 @@
     "storage": "workspace:*",
     "tiny-typed-emitter": "^2.1.0",
     "trkl": "^2.0.1",
+    "tsx": "^3.12.7",
     "youtubei.js": "5.2.1",
     "ytdl-core": "^4.11.4",
     "zod": "^3.21.4"
@@ -59,7 +60,6 @@
     "@types/node-schedule": "^2.1.0",
     "@types/pngjs": "^6.0.1",
     "tsconfig": "workspace:*",
-    "tsx": "^3.12.7",
     "typescript": "5.1.6"
   }
 }

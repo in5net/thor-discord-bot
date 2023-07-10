@@ -1,16 +1,22 @@
 #!/bin/bash
 sudo apt update; sudo apt upgrade -y; sudo apt autoremove -y
 
-sudo apt install git curl tmux python-is-python3 ffmpeg -y
+sudo apt install git curl ffmpeg -y
 
-curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-sudo apt install nodejs
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
-sudo npm i -g pnpm turbo
+cargo binstall zellij
+
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+
+git config --global credential.helper store
+git config --global pull.rebase false
 
 git clone https://github.com/in5net/discord-bots.git
 
 gsutil -m cp -r "gs://in5net-vm-transfer/discord-bots" .
 
 cd discord-bots
+fnm use
 pnpm i

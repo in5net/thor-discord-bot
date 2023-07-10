@@ -13,10 +13,10 @@
     "@planetscale/database": "^1.8.0",
     "@prisma/client": "4.16.2",
     "drizzle-orm": "^0.27.0",
+    "prisma": "4.16.2",
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.19.3",
-    "prisma": "4.16.2"
+    "drizzle-kit": "^0.19.3"
   }
 }
