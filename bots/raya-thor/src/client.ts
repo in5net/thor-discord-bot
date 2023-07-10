@@ -14,9 +14,6 @@ import { loadDiscordEvents } from "discord/loaders/events";
 import { type TextCommand } from "discord/commands/text";
 import { type SlashCommand } from "discord/commands/slash";
 import { type MessageCommand } from "discord/commands/message";
-import { loadSlashCommands } from "discord/loaders/slash-commands";
-import { loadTextCommands } from "discord/loaders/text-commands";
-import { loadMessageCommands } from "discord/loaders/message-commands";
 import { getCatboyEmbed } from "./commands/slash/catboy";
 import { messageCommands, slashCommands, textCommands } from "./commands";
 

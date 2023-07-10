@@ -1,10 +1,11 @@
-import { env } from "node:process";
+import process, { env } from "node:process";
 import { WebhookClient } from "discord.js";
 import event from "discord/event";
 
 const { WEBHOOK_URL, NAME, NODE_ENV } = env;
 
 export default event({ name: "ready", once: true }, async () => {
+	process.send?.("ready");
 	console.timeEnd(NAME);
 	console.log(`✅ ${NAME} is ready!`);
 	if (NODE_ENV === "production") {
