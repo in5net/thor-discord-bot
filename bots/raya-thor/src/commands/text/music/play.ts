@@ -2,7 +2,7 @@ import musicCommand from "./command";
 
 export default musicCommand(
 	{
-		aliases: ["p"],
+		aliases: ["p", "ballsack", "bs"],
 		desc: "Plays a song by name or URL",
 		args: {
 			query: {
@@ -14,5 +14,5 @@ export default musicCommand(
 		},
 		permissions: ["vc"],
 	},
-	async ({ message, args: { query }, voice }) => voice.add(message, query)
+	async ({ message, args: { query }, voice }) => voice.add(message, query),
 );
