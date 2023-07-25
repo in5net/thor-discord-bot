@@ -13,6 +13,6 @@
     "magic-regexp": "^0.7.0"
   },
   "devDependencies": {
-    "@types/node": "18.16.1"
+    "@types/node": "18.17.0"
   }
 }

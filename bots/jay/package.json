@@ -38,7 +38,7 @@
     "@types/fluent-ffmpeg": "^2.1.21",
     "@types/gif-encoder": "^0.7.1",
     "@types/gl": "6.0.2",
-    "@types/node": "18.16.1",
+    "@types/node": "18.17.0",
     "@types/pngjs": "^6.0.1",
     "tsconfig": "workspace:*",
     "typescript": "5.1.6"

@@ -9,6 +9,6 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@types/node": "18.16.1"
+    "@types/node": "18.17.0"
   }
 }
