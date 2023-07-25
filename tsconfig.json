@@ -1,4 +1,4 @@
 {
   "display": "Root",
-  "extends": "tsconfig/tsconfig.json"
+  "extends": "./packages/tsconfig/tsconfig.json"
 }

@@ -21,7 +21,6 @@
     "@in5net/prettier-config": "^1.1.0",
     "@in5net/xo-config": "^1.4.1",
     "husky": "^8.0.3",
-    "tsconfig": "workspace:*",
     "typescript": "5.1.6",
     "xo": "^0.55.0"
   }
