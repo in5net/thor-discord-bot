@@ -30,6 +30,7 @@
     "nanoid": "4.0.2",
     "pngjs": "^7.0.0",
     "storage": "workspace:*",
+    "tsconfig": "workspace:*",
     "tsx": "^3.12.7",
     "zod": "^3.21.4"
   },
@@ -40,7 +41,6 @@
     "@types/gl": "6.0.2",
     "@types/node": "18.17.0",
     "@types/pngjs": "^6.0.1",
-    "tsconfig": "workspace:*",
     "typescript": "5.1.6"
   }
 }

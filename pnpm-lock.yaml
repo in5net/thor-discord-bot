@@ -102,6 +102,9 @@ importers:
       storage:
         specifier: workspace:*
         version: link:../../packages/storage
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
       tsx:
         specifier: ^3.12.7
         version: 3.12.7
@@ -127,9 +130,6 @@ importers:
       '@types/pngjs':
         specifier: ^6.0.1
         version: 6.0.1
-      tsconfig:
-        specifier: workspace:*
-        version: link:../../packages/tsconfig
       typescript:
         specifier: 5.1.6
         version: 5.1.6
@@ -247,6 +247,9 @@ importers:
       trkl:
         specifier: ^2.0.1
         version: 2.0.1
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
       tsx:
         specifier: ^3.12.7
         version: 3.12.7
@@ -281,9 +284,6 @@ importers:
       '@types/pngjs':
         specifier: ^6.0.1
         version: 6.0.1
-      tsconfig:
-        specifier: workspace:*
-        version: link:../../packages/tsconfig
       typescript:
         specifier: 5.1.6
         version: 5.1.6
@@ -4781,6 +4781,7 @@ packages:
 
   /functional-red-black-tree@1.0.1:
     resolution: {integrity: sha512-dsKNQNdj6xA3T+QlADDA7mOSlX0qiMINjn0cgr+eGHGsbSHzTabcIogz2+p/iqP1Xs6EP/sS2SbqH+brGTbq0g==}
+    requiresBuild: true
     dev: false
     optional: true
 
@@ -5496,6 +5497,7 @@ packages:
   /iconv-lite@0.6.3:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
     dependencies:
       safer-buffer: 2.1.2
     dev: false
