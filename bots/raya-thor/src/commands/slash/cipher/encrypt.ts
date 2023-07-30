@@ -18,7 +18,7 @@ export default command(
 		await i.deferReply();
 		await i.deleteReply();
 		await i.channel?.send(encrypt(message, offset));
-	}
+	},
 );
 
 const spaceCode = " ".codePointAt(0) || 0;

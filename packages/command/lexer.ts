@@ -16,7 +16,7 @@ export class LexerError extends Error {
 	constructor(
 		readonly message: string,
 		readonly start: Position,
-		readonly end: Position
+		readonly end: Position,
 	) {
 		super(message);
 	}
@@ -147,7 +147,7 @@ export default class Lexer {
 				if ((this.char as string) !== "}")
 					this.error(
 						"When putting expressions in strings, you must wrap the expression in curly braces '{}'. It seems like you forgot the ending '}",
-						start
+						start,
 					);
 				fragments.push(tokens);
 			} else str += this.char;
@@ -166,7 +166,7 @@ export default class Lexer {
 		if (this.char !== '"')
 			this.error(
 				`Strings must start and end with '"'. It seems like you forgot the ending '"'.`,
-				start
+				start,
 			);
 		this.advance();
 		return { type: "str", value: fragments, start, end: this.position.copy() };

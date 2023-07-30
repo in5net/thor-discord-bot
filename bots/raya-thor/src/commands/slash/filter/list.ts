@@ -13,7 +13,7 @@ export default command(
 			},
 		});
 		return i.reply(
-			`Filters: ${filters.map(({ name }) => `\`${name}\``).join(", ")}`
+			`Filters: ${filters.map(({ name }) => `\`${name}\``).join(", ")}`,
 		);
-	}
+	},
 );

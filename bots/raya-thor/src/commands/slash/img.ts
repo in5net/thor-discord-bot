@@ -38,7 +38,7 @@ export default command(
 			.setStyle(ButtonStyle.Primary);
 		const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
 			previousButton,
-			nextButton
+			nextButton,
 		);
 		await i
 			.editReply({
@@ -55,7 +55,7 @@ export default command(
 			.on("collect", async i => {
 				try {
 					embed.setImage(
-						i.customId === "prev" ? await search.prev() : await search.next()
+						i.customId === "prev" ? await search.prev() : await search.next(),
 					);
 					previousButton?.setDisabled(!search.hasPrev());
 					await i.update({
@@ -69,5 +69,5 @@ export default command(
 			.once("end", async () => {
 				await i.followUp("Ran out of time ⏱");
 			});
-	}
+	},
 );

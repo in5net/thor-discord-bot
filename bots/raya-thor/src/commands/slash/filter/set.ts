@@ -46,5 +46,5 @@ export default command(
 
 		await voice.setFilters([audioFilter.value]);
 		return i.reply(`🎚️ Set filters to \`${filter}\``);
-	}
+	},
 );

@@ -13,7 +13,7 @@ const palmDescPath = new URL("../../../palm-desc.txt", import.meta.url);
 
 export async function answer(
 	question: string,
-	previous: Array<{ question: string; answer: string }>
+	previous: Array<{ question: string; answer: string }>,
 ) {
 	const desc = await readFile(palmDescPath, "utf8");
 	const result = await client.generateText({
@@ -22,7 +22,7 @@ export async function answer(
 			text: `${desc} Current date: ${new Date().toDateString()}
 ${previous.map(
 	({ question: q, answer: a }) => `You: ${q}
-${NAME}: ${a}`
+${NAME}: ${a}`,
 )}
 You: ${question}
 ${NAME}:`,

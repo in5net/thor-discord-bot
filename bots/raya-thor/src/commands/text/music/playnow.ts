@@ -28,9 +28,9 @@ export default musicCommand(
 					.slice(0, 10)
 					.join(", ")}${
 					songs.length > 10 ? ", ..." : ""
-				} to the front of the queue`
+				} to the front of the queue`,
 			);
 
 		return voice.play(true);
-	}
+	},
 );

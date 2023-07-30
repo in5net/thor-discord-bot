@@ -24,9 +24,9 @@ export default command(
 						.setDescription(
 							client.textCommands
 								.map(({ aliases }, name) =>
-									[name, ...(aliases?.map(alias => alias) || [])].join("|")
+									[name, ...(aliases?.map(alias => alias) || [])].join("|"),
 								)
-								.join(", ")
+								.join(", "),
 						)
 						.setColor(env.COLOR),
 				],
@@ -38,7 +38,7 @@ export default command(
 		const commandNames = arguments_.map(argument => argument.toLowerCase());
 		for (const command of commandNames) {
 			commandManual = commandManuals.find(
-				({ aliases }, name) => name === command || aliases?.includes(command)
+				({ aliases }, name) => name === command || aliases?.includes(command),
 			);
 			if (!commandManual) {
 				commandManual = undefined;
@@ -55,12 +55,12 @@ export default command(
 					([name, { type, optional, default: default_ }]) =>
 						`<${name}${optional ? "?" : ""}: ${argumentType2Name[type]}${
 							default_ === undefined ? "" : ` = ${default_}`
-						}>`
-				)
+						}>`,
+				),
 			);
 		else
 			return channel.send(
-				`No help found for command \`${arguments_.join(" ")}\``
+				`No help found for command \`${arguments_.join(" ")}\``,
 			);
 
 		const embed = new EmbedBuilder()
@@ -80,14 +80,16 @@ export default command(
 					.join(", "),
 			});
 		return channel.send({ embeds: [embed] });
-	}
+	},
 );
 
 function getSubcommands(
 	name: string,
-	commands: Collection<string, TextCommand>
+	commands: Collection<string, TextCommand>,
 ) {
 	return commands.filter((_, key) =>
-		createRegExp(exactly(name).at.lineStart(), " ", word.at.lineEnd()).test(key)
+		createRegExp(exactly(name).at.lineStart(), " ", word.at.lineEnd()).test(
+			key,
+		),
 	);
 }

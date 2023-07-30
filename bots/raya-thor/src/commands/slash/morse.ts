@@ -66,9 +66,9 @@ export default command(
 				word
 					.split("")
 					.map(c => codes[c] || "")
-					.join(" ")
+					.join(" "),
 			)
 			.join(" / ");
 		return i.channel?.send(morse);
-	}
+	},
 );

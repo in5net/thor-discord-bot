@@ -97,7 +97,7 @@ export default class Vector4 {
 		x: First,
 		y?: number,
 		z?: number,
-		w?: number
+		w?: number,
 	): Vector4 {
 		return v1.copy().add(x, y, z, w);
 	}
@@ -133,7 +133,7 @@ export default class Vector4 {
 		x: First,
 		y?: number,
 		z?: number,
-		w?: number
+		w?: number,
 	): Vector4 {
 		return v1.copy().sub(x, y, z, w);
 	}
@@ -169,7 +169,7 @@ export default class Vector4 {
 		x: First,
 		y?: number,
 		z?: number,
-		w?: number
+		w?: number,
 	): Vector4 {
 		return v1.copy().mult(x, y, z, w);
 	}
@@ -205,7 +205,7 @@ export default class Vector4 {
 		x: First,
 		y?: number,
 		z?: number,
-		w?: number
+		w?: number,
 	): Vector4 {
 		return v1.copy().div(x, y, z, w);
 	}

@@ -14,6 +14,7 @@ import {
 import { z } from "zod";
 import logger from "logger";
 import { memo } from "@in5net/limitless";
+import Video from "node_modules/youtubei.js/dist/src/parser/classes/Video";
 import youtube from "$services/youtube";
 
 interface SongJSON {
@@ -73,7 +74,7 @@ abstract class Song implements SongJSON {
 	}
 
 	abstract getStream(
-		options: StreamOptions
+		options: StreamOptions,
 	): Awaitable<{ stream: Readable; type?: StreamType }>;
 
 	async getResource({ seek, filters }: { seek?: number; filters?: string[] }) {
@@ -128,9 +129,9 @@ const videosSchema = z.array(
 		thumbnails: z.array(
 			z.object({
 				url: z.string(),
-			})
+			}),
 		),
-	})
+	}),
 );
 
 export class YouTubeSong extends Song {
@@ -209,7 +210,7 @@ ${title} (${url})
 
 	static fromJSON(
 		{ id, title, description, duration, time, thumbnail, channel }: YouTubeJSON,
-		requester: Requester
+		requester: Requester,
 	): YouTubeSong {
 		return new YouTubeSong({
 			id,
@@ -237,7 +238,7 @@ ${title} (${url})
 			embed.setDescription(
 				description.length > 1000
 					? `${description.slice(0, 1000)}...`
-					: description
+					: description,
 			);
 		return embed;
 	}
@@ -275,7 +276,7 @@ ${title} (${url})
 
 	static async fromURL(
 		url: string,
-		requester: Requester
+		requester: Requester,
 	): Promise<YouTubeSong> {
 		const { default: play } = await import("play-dl");
 		const id = play.extractID(url);
@@ -289,17 +290,12 @@ ${title} (${url})
 
 	static async fromSearch(
 		query: string,
-		requester: Requester
+		requester: Requester,
 	): Promise<YouTubeSong> {
 		const { videos } = await youtube.search(query, { type: "video" });
-		const video = videos.first();
-		if (!video) throw new Error("No video found");
-
-		const id = video.key("id").string();
-		const title = video.key("title").object();
-		const description = video.key("description").string();
-		const best_thumbnail = video.key("best_thumbnail").object();
-		const duration = video.key("duration").object();
+		const { id, title, description, duration, best_thumbnail } = videos
+			.first()
+			.as(Video);
 		return new YouTubeSong({
 			id,
 			title: title.toString(),
@@ -312,7 +308,7 @@ ${title} (${url})
 
 	static async fromPlaylistId(
 		id: string,
-		requester: Requester
+		requester: Requester,
 	): Promise<YouTubeAlbum> {
 		const {
 			info: { title = "", description },
@@ -332,7 +328,7 @@ ${title} (${url})
 					duration: seconds,
 					thumbnail: thumbnail?.url,
 					requester,
-				})
+				}),
 			);
 		}
 
@@ -345,7 +341,7 @@ ${title} (${url})
 
 	static async fromChannelId(
 		id: string,
-		requester: Requester
+		requester: Requester,
 	): Promise<YouTubeSong[]> {
 		const channel = await youtube.getChannel(id);
 		const { videos } = await channel.getVideos();
@@ -368,7 +364,7 @@ ${title} (${url})
 						thumbnail: channel.metadata.thumbnail?.[0]?.url || "",
 					},
 					requester,
-				})
+				}),
 			);
 		}
 
@@ -511,7 +507,7 @@ ${title} (${url})
 
 	static fromJSON(
 		{ id, ytId, title, duration, thumbnail, artist, album }: SpotifyJSON,
-		requester: Requester
+		requester: Requester,
 	): SpotifySong {
 		return new SpotifySong({
 			id,
@@ -541,7 +537,7 @@ ${title} (${url})
 
 	static async fromURL(
 		url: string,
-		requester: Requester
+		requester: Requester,
 	): Promise<SpotifySong> {
 		const { default: play } = await import("play-dl");
 		if (play.sp_validate(url) !== "track") throw new Error("Invalid URL");
@@ -558,8 +554,8 @@ ${title} (${url})
 		const { videos } = await youtube.search(`${name} ${artist?.name || ""}`, {
 			type: "video",
 		});
-		const video = videos.first();
-		if (video?.hasKey("id")) ytId = video.id;
+		const { id } = videos.first().as(Video);
+		ytId = id;
 
 		return new SpotifySong({
 			id: SpotifySong.url2Id(url),
@@ -580,7 +576,7 @@ ${title} (${url})
 
 	static async fromListURL(
 		url: string,
-		requester: Requester
+		requester: Requester,
 	): Promise<SpotifySong[]> {
 		const { default: play } = await import("play-dl");
 		const type = play.sp_validate(url);
@@ -589,7 +585,7 @@ ${title} (${url})
 		const spotify = (await play.spotify(url)) as SpotifyAlbum | SpotifyPlaylist;
 		const tracks = await spotify.all_tracks();
 		return Promise.all(
-			tracks.map(async track => SpotifySong.fromId(track.id, requester))
+			tracks.map(async track => SpotifySong.fromId(track.id, requester)),
 		);
 	}
 
@@ -675,7 +671,7 @@ ${title} (${url})
 
 	static fromJSON(
 		{ url, title, duration, thumbnail, user }: SoundCloudJSON,
-		requester: Requester
+		requester: Requester,
 	): SoundCloudSong {
 		return new SoundCloudSong({
 			url,
@@ -703,7 +699,7 @@ ${title} (${url})
 
 	static fromTrack(
 		track: SoundCloudTrack,
-		requester: Requester
+		requester: Requester,
 	): SoundCloudSong {
 		const { url, name, durationInSec: duration, thumbnail, user } = track;
 		return new SoundCloudSong({
@@ -718,7 +714,7 @@ ${title} (${url})
 
 	static async fromURL(
 		url: string,
-		requester: Requester
+		requester: Requester,
 	): Promise<SoundCloudSong> {
 		const play = await playSC();
 		if ((await play.so_validate(url)) !== "track")
@@ -730,7 +726,7 @@ ${title} (${url})
 
 	static async fromId(
 		id: string,
-		requester: Requester
+		requester: Requester,
 	): Promise<SoundCloudSong> {
 		const url = SpotifySong.id2URL(id);
 		return this.fromURL(url, requester);
@@ -738,7 +734,7 @@ ${title} (${url})
 
 	static async fromListURL(
 		url: string,
-		requester: Requester
+		requester: Requester,
 	): Promise<SoundCloudSong[]> {
 		const play = await playSC();
 		if ((await play.so_validate(url)) !== "playlist")
@@ -747,7 +743,7 @@ ${title} (${url})
 		const playlist = (await play.soundcloud(url)) as SoundCloudPlaylist;
 		const tracks = await playlist.all_tracks();
 		return Promise.all(
-			tracks.map(track => SoundCloudSong.fromTrack(track, requester))
+			tracks.map(track => SoundCloudSong.fromTrack(track, requester)),
 		);
 	}
 
@@ -770,7 +766,10 @@ interface URLJSON extends SongJSON {
 	url: string;
 }
 export class URLSong extends Song {
-	constructor(public url: string, requester: Requester) {
+	constructor(
+		public url: string,
+		requester: Requester,
+	) {
 		super({ title: url.split("/").pop() || url, duration: 0, requester });
 	}
 

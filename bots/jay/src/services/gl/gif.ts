@@ -9,7 +9,7 @@ export default class GIF {
 		const { width, height, frames } = decodeGif(buffer);
 		const gif = new GIF();
 		gif.textures = frames.map(frame =>
-			createTexture(gl, frame.data, width, height)
+			createTexture(gl, frame.data, width, height),
 		);
 		return gif;
 	}
@@ -27,7 +27,7 @@ function createTexture(
 	gl: WebGLRenderingContext,
 	data: Uint8ClampedArray,
 	width: number,
-	height: number
+	height: number,
 ): WebGLTexture {
 	// Create the texture
 
@@ -49,7 +49,7 @@ function createTexture(
 		0,
 		gl.RGBA,
 		gl.UNSIGNED_BYTE,
-		data
+		data,
 	);
 
 	return texture;

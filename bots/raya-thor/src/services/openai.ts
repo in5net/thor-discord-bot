@@ -10,7 +10,7 @@ const { OPENAI_API_KEY } = env;
 export const openai = new OpenAIApi(
 	new Configuration({
 		apiKey: OPENAI_API_KEY,
-	})
+	}),
 );
 
 export async function filter(input: string): Promise<boolean> {

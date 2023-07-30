@@ -39,7 +39,7 @@ export async function get(
 		uid: string;
 		name: string;
 	},
-	name: string
+	name: string,
 ): Promise<SongType[]> {
 	try {
 		const playlist = await getPlaylist(requester.uid, name);
@@ -83,7 +83,7 @@ export async function list(uid: string): Promise<string[]> {
 export async function save(
 	uid: string,
 	name: string,
-	data: Array<SongType | Album<YouTubeSong>>
+	data: Array<SongType | Album<YouTubeSong>>,
 ) {
 	const songs = data.filter(song => !("songs" in song)) as SongType[];
 	const albums = data.filter(song => "songs" in song) as Array<
@@ -165,7 +165,7 @@ export async function save(
 export async function add(
 	uid: string,
 	name: string,
-	data: Array<SongType | Album<YouTubeSong>>
+	data: Array<SongType | Album<YouTubeSong>>,
 ) {
 	const songs = data.filter(song => !("songs" in song)) as SongType[];
 	const albums = data.filter(song => "songs" in song) as Array<

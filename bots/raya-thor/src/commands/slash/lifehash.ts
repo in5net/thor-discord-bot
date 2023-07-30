@@ -37,7 +37,7 @@ export default command(
 					const neighbors = getNeighbors(grid, x, y);
 					const alive = neighbors.reduce(
 						(sum, cell) => sum + (cell ? 1 : 0),
-						0
+						0,
 					);
 					row[y] = grid[x]![y] ? alive === 2 || alive === 3 : alive === 3;
 				}
@@ -63,7 +63,7 @@ export default command(
 		return i.editReply({
 			files: [new AttachmentBuilder(canvas.toBuffer("image/png"))],
 		});
-	}
+	},
 );
 
 function getNeighbors(grid: boolean[][], x: number, y: number): boolean[] {

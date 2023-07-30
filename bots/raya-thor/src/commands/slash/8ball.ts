@@ -35,5 +35,5 @@ export default command(
 			},
 		},
 	},
-	async i => i.reply(random(answers))
+	async i => i.reply(random(answers)),
 );

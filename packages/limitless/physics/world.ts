@@ -17,7 +17,7 @@ export default class World {
 			capacity?: number;
 			divisionSize?: number;
 			doCollisions?: boolean;
-		} = {}
+		} = {},
 	) {
 		this.doCollisions = options?.doCollisions ?? true;
 		switch (structure) {
@@ -32,7 +32,7 @@ export default class World {
 					y,
 					width,
 					height,
-					options?.divisionSize
+					options?.divisionSize,
 				);
 				break;
 			}

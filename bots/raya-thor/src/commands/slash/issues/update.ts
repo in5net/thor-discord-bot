@@ -66,5 +66,5 @@ export default command(
 					.setDescription(`#${issue}: ${name}`),
 			],
 		});
-	}
+	},
 );

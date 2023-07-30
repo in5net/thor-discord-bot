@@ -13,7 +13,7 @@ export default class Layer {
 	constructor(
 		readonly nodes: number,
 		readonly inputNodes: number,
-		activation: keyof typeof activations = "sigmoid"
+		activation: keyof typeof activations = "sigmoid",
 	) {
 		this.weights = Matrix.random(nodes, inputNodes);
 		this.biases = Matrix.random(nodes, 1);
@@ -39,7 +39,7 @@ export default class Layer {
 	train(
 		targets: number[],
 		learningRate: number,
-		errorArray?: number[]
+		errorArray?: number[],
 	): number[] {
 		const {
 			weights,
@@ -53,6 +53,7 @@ export default class Layer {
 			? Matrix.fromArray(errorArray)
 			: Matrix.sub(Matrix.fromArray(targets), outputsMat);
 
+		// eslint-disable-next-line unicorn/no-array-method-this-argument
 		const gradients = Matrix.map(outputsMat, df)
 			.mult(errors)
 			.mult(learningRate);

@@ -13,5 +13,5 @@ export default musicCommand(
 		if (paused) voice.stream.player.unpause();
 		else voice.stream.player.pause(true);
 		return voice.channel?.send(paused ? "⏯️ Resumed" : "⏸️ Paused");
-	}
+	},
 );

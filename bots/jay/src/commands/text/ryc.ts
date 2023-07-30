@@ -14,5 +14,5 @@ export default command(
 			},
 		});
 		await message.reply("Context cleared");
-	}
+	},
 );

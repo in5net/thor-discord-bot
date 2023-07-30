@@ -29,8 +29,8 @@ export default command(
 				items.map(({ title, link }, i) => ({
 					name: `${i + 1}.`,
 					value: title && link ? hyperlink(title, link) : "Unknown",
-				}))
+				})),
 			);
 		await message.channel.send({ embeds: [embed] });
-	}
+	},
 );

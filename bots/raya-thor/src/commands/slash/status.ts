@@ -57,8 +57,8 @@ export default command(
 				{
 					name: `🖥️ Logical CPU Cores`,
 					value: `${cpus().length} cores`,
-				}
+				},
 			);
 		return i.reply({ embeds: [embed] });
-	}
+	},
 );

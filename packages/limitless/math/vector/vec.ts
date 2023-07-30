@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unified-signatures */
 export default class Vector {
 	components!: Float64Array;
 
@@ -321,7 +322,7 @@ export default class Vector {
 	dot(v: Vector): number {
 		return this.components.reduce(
 			(sum, x, i) => sum + x * (v.components[i] || 0),
-			0
+			0,
 		);
 	}
 

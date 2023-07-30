@@ -28,5 +28,5 @@ export default command(
 				new AttachmentBuilder(Buffer.from(lyrics), { name: "lyrics.txt" }),
 			],
 		});
-	}
+	},
 );

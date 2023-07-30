@@ -1,16 +1,16 @@
 export const {
-  sin,
-  cos,
-  tan,
-  asin,
-  acos,
-  atan,
-  sinh,
-  cosh,
-  tanh,
-  asinh,
-  acosh,
-  atanh
+	sin,
+	cos,
+	tan,
+	asin,
+	acos,
+	atan,
+	sinh,
+	cosh,
+	tanh,
+	asinh,
+	acosh,
+	atanh,
 } = Math;
 
 export const sec = (x: number): number => 1 / cos(x);

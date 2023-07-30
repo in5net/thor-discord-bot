@@ -70,5 +70,5 @@ export default command(
 
 		await i.editReply({ embeds: [embed] });
 		return incCount(i.user.id, "weeb");
-	}
+	},
 );

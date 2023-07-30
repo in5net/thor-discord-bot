@@ -9,7 +9,7 @@ export type EventListener<T extends keyof ClientEvents> = (data: {
 
 const event = <T extends keyof ClientEvents>(
 	options: { name: T; once?: boolean },
-	listener: EventListener<T>
+	listener: EventListener<T>,
 ) => ({
 	...options,
 	listener,

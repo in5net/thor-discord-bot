@@ -77,7 +77,7 @@ export default command(
 				},
 			});
 		}
-	}
+	},
 );
 
 const descPath = new URL("../../../assets/desc.txt", import.meta.url);
@@ -86,12 +86,12 @@ const stoppingStrings = ["\nYou:"] as const;
 const extraPromptsRegex = createRegExp(
 	anyOf(...stoppingStrings),
 	char.times.any(),
-	[caseInsensitive, global]
+	[caseInsensitive, global],
 );
 
 async function answer(
 	prompt: string,
-	previous: Array<{ question: string; answer: string }>
+	previous: Array<{ question: string; answer: string }>,
 ): Promise<string> {
 	const desc = await readFile(descPath, "utf8");
 
@@ -102,7 +102,7 @@ async function answer(
 ${previous.map(
 	({ question, answer }) => `You: ${question}
 Raya: ${answer}
-`
+`,
 )}You: ${prompt}
 Raya: `,
 				max_new_tokens: 180,

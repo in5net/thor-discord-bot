@@ -50,7 +50,7 @@ export default command(
 					uid: user.id,
 					name: member?.nickname || user.username,
 				},
-				name
+				name,
 			)
 			.catch(() => []);
 
@@ -60,5 +60,5 @@ export default command(
 		if (member.voice.channel?.type === ChannelType.GuildVoice)
 			voice.stream.channel = member.voice.channel;
 		return voice.play();
-	}
+	},
 );

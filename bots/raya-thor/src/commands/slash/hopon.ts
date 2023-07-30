@@ -16,5 +16,5 @@ export default command(
 			orderBy: sql`rand()`,
 		});
 		await i.channel?.send(`https://tenor.com/view/${hopOn?.id}`);
-	}
+	},
 );

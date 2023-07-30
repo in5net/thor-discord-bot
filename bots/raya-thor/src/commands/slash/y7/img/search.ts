@@ -35,5 +35,5 @@ export default command(
 	async (i, { file_name }) => {
 		const url = `https://${env.FILES_DOMAIN}/y7/images/${file_name}`;
 		return i.reply(url);
-	}
+	},
 );

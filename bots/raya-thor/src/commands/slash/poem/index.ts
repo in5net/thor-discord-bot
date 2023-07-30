@@ -28,7 +28,7 @@ export default command(
 
 		const poemPath = new URL(
 			"../../../../assets/poem/poem.rcpt",
-			import.meta.url
+			import.meta.url,
 		);
 		const poemSource = await readFile(poemPath, "utf8");
 		const poemSections = parse(poemSource);
@@ -45,7 +45,7 @@ export default command(
 
 		function visit(section: string[]): string {
 			const line = random(section);
-			return line.replace(/<([a-z- \d]+)>/g, (_, key: string) => {
+			return line.replaceAll(/<([a-z- \d]+)>/g, (_, key: string) => {
 				const remembered = memory.get(key);
 				if (remembered) return remembered;
 
@@ -86,5 +86,5 @@ export default command(
 *by ${author.fullName}*
 
 ${text.split("\n").map(capitalize).join("\n")}`);
-	}
+	},
 );

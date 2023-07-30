@@ -48,7 +48,7 @@ export default musicCommand(
 		return voice.send(
 			`✂️ Removed ${indices.join(", ")}, total of ${
 				length - queue.length
-			} songs`
+			} songs`,
 		);
-	}
+	},
 );

@@ -11,7 +11,7 @@ export default command("Play", async i => {
 
 	const queries = content.replace(
 		createRegExp(env.PREFIX, oneOrMore(letter)),
-		""
+		"",
 	);
 	await voice.add(message, queries);
 	await i.reply("Added to queue");

@@ -51,9 +51,9 @@ export default command(
 								type === "Bug" ? "🐛" : type === "Feature" ? "✨" : "🔧"
 							} ${name}`,
 							value: desc,
-						}))
+						})),
 					),
 			],
 		});
-	}
+	},
 );

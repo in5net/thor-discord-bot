@@ -12,7 +12,6 @@ export default class Scope {
 	}
 
 	set(name: string, value: Value): void {
-		// TODO: search parent first, then set
 		this.symbols.set(name, value);
 	}
 

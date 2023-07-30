@@ -15,7 +15,7 @@ export default command(
 		const embed = await getCatboyEmbed();
 		await i.editReply({ embeds: [embed] });
 		return incCount(i.user.id, "weeb");
-	}
+	},
 );
 
 export async function getCatboyEmbed() {

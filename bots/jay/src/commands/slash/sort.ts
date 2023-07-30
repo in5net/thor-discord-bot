@@ -81,7 +81,7 @@ export default command(
 	},
 	async (
 		i,
-		{ algorithm, length, iterations_per_frame, opacity, show_shuffle }
+		{ algorithm, length, iterations_per_frame, opacity, show_shuffle },
 	) => {
 		if (
 			["bubble", "cocktail", "cycle", "selection"].includes(algorithm) &&
@@ -128,7 +128,7 @@ export default command(
 
 		const iter = algorithms[algorithm](
 			randomNumberArray,
-			(a: number, b: number) => a - b
+			(a: number, b: number) => a - b,
 		);
 
 		let next = iter.next();
@@ -160,7 +160,7 @@ export default command(
 
 			const path = join(
 				temporaryDir,
-				`frame${(index++).toString().padStart(4, "0")}.png`
+				`frame${(index++).toString().padStart(4, "0")}.png`,
 			);
 			await writeFile(path, await canvas.encode("png"));
 		}
@@ -174,7 +174,7 @@ export default command(
 				.outputOptions(["-pix_fmt yuv420p"])
 				.save(name)
 				.once("end", resolve)
-				.once("error", reject)
+				.once("error", reject),
 		);
 
 		const outputPath = join(temporaryDir, name);
@@ -184,7 +184,7 @@ export default command(
 		return i.editReply({
 			files: [new AttachmentBuilder(stream, { name })],
 		});
-	}
+	},
 );
 
 export function* shuffle<T>(array: T[]): Generator<[number, number]> {

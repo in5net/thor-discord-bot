@@ -195,7 +195,7 @@ export default class Matrix {
 
 	static map(
 		m: Matrix,
-		func: (value: number, i: number, j: number) => number
+		func: (value: number, i: number, j: number) => number,
 	): Matrix {
 		return m.copy().map(func);
 	}

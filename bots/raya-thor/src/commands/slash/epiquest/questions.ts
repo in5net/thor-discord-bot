@@ -265,7 +265,7 @@ const questions: Array<{
 				response(inventory) {
 					inventory.push("emotional baggage");
 					return `As soon as you start talking, the {item} tells you to remember {random}. The two of you have an emotional moment reminiscing about {random}. Afterwards, you go your separate ways, ${random(
-						["dreading", "looking foreward to", "ready for"]
+						["dreading", "looking foreward to", "ready for"],
 					)} your next encounter. (You got emotional baggage)`;
 				},
 			},

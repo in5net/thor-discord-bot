@@ -22,5 +22,5 @@ export default command(
 		else if (max === undefined) n = Math.floor(Math.random() * min) + 1;
 		else n = Math.floor(Math.random() * (max - min + 1)) + min;
 		return i.reply(n.toString());
-	}
+	},
 );

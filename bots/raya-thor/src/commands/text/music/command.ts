@@ -10,8 +10,8 @@ import { getVoice } from "$src/music/voice-manager";
 export default function musicCommand<T extends Arguments>(
 	params: TextCommandParams<T>,
 	exec: (
-		params: Parameters<Exec<T>>[0] & { voice: ReturnType<typeof getVoice> }
-	) => Awaitable<any>
+		params: Parameters<Exec<T>>[0] & { voice: ReturnType<typeof getVoice> },
+	) => Awaitable<any>,
 ): TextCommand<T> {
 	return command(params, async ({ message, args, client }) => {
 		const { guildId, channel } = message;

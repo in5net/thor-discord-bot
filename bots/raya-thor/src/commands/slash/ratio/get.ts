@@ -23,8 +23,8 @@ export default command(
 		const texts = shuffle(ratios.map(({ content }) => content));
 		await i.channel?.send(
 			texts.join(" + ") ||
-				"Looks like there are no ratios, use `/ratio add` to add some"
+				"Looks like there are no ratios, use `/ratio add` to add some",
 		);
 		await incCount(i.user.id, "ratio");
-	}
+	},
 );

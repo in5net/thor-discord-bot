@@ -23,5 +23,5 @@ export default command(
 			})
 			.join("");
 		return i.reply(converted);
-	}
+	},
 );

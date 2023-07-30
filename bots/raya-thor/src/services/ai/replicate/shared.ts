@@ -20,11 +20,11 @@ const api = got.extend({
 export class Model {
 	constructor(
 		readonly version: string,
-		readonly input?: Record<string, number | string | boolean>
+		readonly input?: Record<string, number | string | boolean>,
 	) {}
 
 	async *generate(
-		input: Record<string, number | string | boolean | undefined>
+		input: Record<string, number | string | boolean | undefined>,
 	) {
 		let prediction = await api
 			.post({

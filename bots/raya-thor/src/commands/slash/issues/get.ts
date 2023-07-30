@@ -60,11 +60,11 @@ export default command(
 				{
 					name: "Created",
 					value: time(createdAt),
-				}
+				},
 			);
 		if (closedAt) embed.addFields({ name: "Closed", value: time(closedAt) });
 		return i.reply({
 			embeds: [embed],
 		});
-	}
+	},
 );

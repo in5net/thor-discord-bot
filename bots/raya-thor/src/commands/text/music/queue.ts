@@ -43,5 +43,5 @@ export default musicCommand(
 			const queue = await voice.getQueue();
 			return queue.embed(voice.channel, seconds);
 		}
-	}
+	},
 );

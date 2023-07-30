@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import type Scope from "../scope";
 import { type BinaryOp, type GroupingOp, type UnaryOp } from "../token";
 
@@ -15,7 +16,7 @@ export default abstract class Value implements UnaryOpIndex, BinaryOpIndex {
 
 	static illegalBinaryOp(left: Value, operator: BinaryOp, right: Value): never {
 		throw new Error(
-			`Illegal operation: ${left.constructor.name} ${operator} ${right.constructor.name}`
+			`Illegal operation: ${left.constructor.name} ${operator} ${right.constructor.name}`,
 		);
 	}
 

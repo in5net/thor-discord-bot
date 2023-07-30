@@ -10,5 +10,5 @@ export default command(
 		const file = await getRandomFile("video");
 		if (!file) return i.reply("No file found");
 		return sendFile(i, file);
-	}
+	},
 );

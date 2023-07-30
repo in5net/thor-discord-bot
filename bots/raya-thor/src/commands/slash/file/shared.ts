@@ -37,7 +37,7 @@ export async function sendFile(
 		channelId,
 		guildId,
 		proxyUrl,
-	}: InferModel<typeof files>
+	}: InferModel<typeof files>,
 ) {
 	const embed = createEmbed()
 		.setFields(
@@ -49,10 +49,10 @@ export async function sendFile(
 				name: "Where",
 				value: hyperlink(
 					"Original message",
-					`https://discord.com/channels/${guildId}/${channelId}/${messageId}`
+					`https://discord.com/channels/${guildId}/${channelId}/${messageId}`,
 				),
 				inline: true,
-			}
+			},
 		)
 		.setTimestamp(createdAt);
 	const extension = ext.replace(".", "");

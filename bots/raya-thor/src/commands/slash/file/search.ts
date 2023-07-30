@@ -25,7 +25,9 @@ export default command(
 						},
 						take: 5,
 					});
-					return Object.fromEntries(files.map(({ id, base }) => [id, base]));
+					return Object.fromEntries(
+						files.map(({ id, base }) => [id.toString(), base]),
+					);
 				},
 			},
 		},
@@ -38,5 +40,5 @@ export default command(
 		});
 		if (!fileData) return i.reply("No file found");
 		return sendFile(i, fileData);
-	}
+	},
 );

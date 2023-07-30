@@ -29,10 +29,10 @@ export default command(
 			return i.reply(`I chose ${choice2Name[botChoice]} too, so it's a draw!`);
 		if (wins[choice] === botChoice)
 			return i.reply(
-				`You chose ${choice2Name[choice]} and I chose ${choice2Name[botChoice]}, you win!`
+				`You chose ${choice2Name[choice]} and I chose ${choice2Name[botChoice]}, you win!`,
 			);
 		return i.reply(
-			`You chose ${choice2Name[choice]} and I chose ${choice2Name[botChoice]}, I win!`
+			`You chose ${choice2Name[choice]} and I chose ${choice2Name[botChoice]}, I win!`,
 		);
-	}
+	},
 );

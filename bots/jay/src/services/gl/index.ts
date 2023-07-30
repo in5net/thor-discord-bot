@@ -87,7 +87,7 @@ export default class GL {
 		readonly width: number,
 		readonly height = width,
 		depth = false,
-		cull = false
+		cull = false,
 	) {
 		// Set up the WebGL rendering context
 		const gl = createContext(width, height, {
@@ -111,15 +111,15 @@ export default class GL {
 		width: number,
 		height: number,
 		fragmentSource: string,
-		vertexSource?: string
+		vertexSource?: string,
 	): Promise<GL> {
 		const gl = new GL(width, height);
 		gl.createProgramFromSource(
 			vertexSource ||
 				(await GL.loadFile(
-					new URL("../../../assets/screen.vert", import.meta.url).pathname
+					new URL("../../../assets/screen.vert", import.meta.url).pathname,
 				)),
-			fragmentSource
+			fragmentSource,
 		);
 		gl.screen();
 		gl.attributes([
@@ -159,7 +159,7 @@ export default class GL {
 		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
 			console.error(
 				"Error compiling vertex shader:",
-				gl.getShaderInfoLog(shader)
+				gl.getShaderInfoLog(shader),
 			);
 
 		this.vertexShader = { shader, source };
@@ -181,7 +181,7 @@ export default class GL {
 		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
 			console.error(
 				"Error compiling fragment shader:",
-				gl.getShaderInfoLog(shader)
+				gl.getShaderInfoLog(shader),
 			);
 
 		this.fragmentShader = { shader, source };
@@ -195,7 +195,7 @@ export default class GL {
 	 */
 	createProgram(
 		vertexShader: WebGLShader,
-		fragmentShader: WebGLShader
+		fragmentShader: WebGLShader,
 	): WebGLProgram {
 		const { gl } = this;
 		// Create the program and bind the vertex and fragment shaders
@@ -219,21 +219,21 @@ export default class GL {
 
 	createProgramFromSource(
 		vertexSource: string,
-		fragmentSource: string
+		fragmentSource: string,
 	): WebGLProgram {
 		return this.createProgram(
 			this.createVertexShader(vertexSource),
-			this.createFragmentShader(fragmentSource)
+			this.createFragmentShader(fragmentSource),
 		);
 	}
 
 	async createProgramFromPaths(
 		vertexShaderPath: string,
-		fragmentShaderPath: string
+		fragmentShaderPath: string,
 	): Promise<WebGLProgram> {
 		return this.createProgramFromSource(
 			await GL.loadFile(vertexShaderPath),
-			await GL.loadFile(fragmentShaderPath)
+			await GL.loadFile(fragmentShaderPath),
 		);
 	}
 
@@ -273,7 +273,7 @@ export default class GL {
 		gl.bufferData(
 			gl.ELEMENT_ARRAY_BUFFER,
 			new Uint16Array(flatData),
-			gl.STATIC_DRAW
+			gl.STATIC_DRAW,
 		);
 
 		this.indexBuffer = { buffer, data, flatData };
@@ -318,7 +318,7 @@ export default class GL {
 		const stride = inputs.reduce(
 			(accumulator, { type }) =>
 				accumulator + inputSizes[type] * Float32Array.BYTES_PER_ELEMENT,
-			0
+			0,
 		);
 		for (const { name, type } of inputs) {
 			const size = inputSizes[type];
@@ -330,7 +330,7 @@ export default class GL {
 	uniform<T extends keyof Readonly<UniformData>>(
 		name: string,
 		type: T,
-		data: UniformData[T]
+		data: UniformData[T],
 	): void {
 		const { gl } = this;
 		const location = this.getUniformLocation(name);
@@ -443,7 +443,7 @@ export default class GL {
 				gl.uniformMatrix2fv(
 					location,
 					false,
-					new Float32Array(data as UniformData["mat2"])
+					new Float32Array(data as UniformData["mat2"]),
 				);
 				break;
 			}
@@ -452,7 +452,7 @@ export default class GL {
 				gl.uniformMatrix3fv(
 					location,
 					false,
-					new Float32Array(data as UniformData["mat3"])
+					new Float32Array(data as UniformData["mat3"]),
 				);
 				break;
 			}
@@ -461,7 +461,7 @@ export default class GL {
 				gl.uniformMatrix4fv(
 					location,
 					false,
-					new Float32Array(data as UniformData["mat4"])
+					new Float32Array(data as UniformData["mat4"]),
 				);
 				break;
 			}
@@ -490,8 +490,8 @@ export default class GL {
 			type: GLenum,
 			normalized: GLboolean,
 			stride: GLsizei,
-			offset: GLintptr
-		]
+			offset: GLintptr,
+		],
 	): GLint {
 		const { gl } = this;
 		// Find the attribute location
@@ -499,7 +499,7 @@ export default class GL {
 		// Enable the attribute and config
 		gl.vertexAttribPointer(
 			attributeLocation, // Attribute location
-			...config
+			...config,
 			// Number of elements per attribute
 			// Type of elements
 			// Is it normalized?
@@ -521,7 +521,7 @@ export default class GL {
 			param,
 			isGif = false,
 			mipmap,
-		}: { param?: GLenum; isGif?: boolean; mipmap?: boolean } = {}
+		}: { param?: GLenum; isGif?: boolean; mipmap?: boolean } = {},
 	): Promise<Texture | GIF> {
 		const { gl, textures } = this;
 		const texture = await (isGif
@@ -562,7 +562,7 @@ export default class GL {
 			gl.TRIANGLES, // Type of shape
 			this.indexBuffer.flatData.length, // Number of vertices
 			gl.UNSIGNED_SHORT, // Type of the indices
-			0 // Where to start
+			0, // Where to start
 		);
 		return this;
 	}
@@ -593,7 +593,7 @@ export default class GL {
 			noRepeat?: boolean;
 			quality?: number;
 			render?: (t: number) => void;
-		} = {}
+		} = {},
 	): Promise<ReadStream> {
 		const { width, height } = this;
 
@@ -638,7 +638,7 @@ export default class GL {
 		}: {
 			fps?: number;
 			render?: (t: number) => void;
-		} = {}
+		} = {},
 	): Promise<ReadStream> {
 		const { width, height } = this;
 		const { createCanvas } = await import("@napi-rs/canvas");
@@ -659,7 +659,7 @@ export default class GL {
 
 			const path = join(
 				temporaryDir,
-				`frame${i.toString().padStart(4, "0")}.png`
+				`frame${i.toString().padStart(4, "0")}.png`,
 			);
 			await writeFile(path, canvas.toBuffer("image/png"));
 
@@ -674,7 +674,7 @@ export default class GL {
 				.outputOptions(["-pix_fmt yuv420p"])
 				.save("output.mp4")
 				.once("end", resolve)
-				.once("error", reject)
+				.once("error", reject),
 		);
 		console.log(temporaryDir);
 
@@ -688,7 +688,7 @@ export default class GL {
 				])
 				.save("full.mp4")
 				.once("end", resolve)
-				.once("error", reject)
+				.once("error", reject),
 		);
 		const outputPath = join(temporaryDir, "full.mp4");
 		const stream = createReadStream(outputPath);

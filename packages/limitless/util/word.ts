@@ -11,12 +11,12 @@ export function pluralize<S extends string>(word: S, n: number): S | `${S}s`;
 export function pluralize<S extends string, P extends string>(
 	word: S,
 	n: number,
-	plural: P
+	plural: P,
 ): S | P;
 export function pluralize<S extends string, P extends string>(
 	word: S,
 	n: number,
-	plural?: P
+	plural?: P,
 ): (S | `${S}s`) | (S | P) {
 	if (n === 1) return word;
 	if (plural) return plural;

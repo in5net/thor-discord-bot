@@ -29,7 +29,7 @@ export async function loadSlashCommands(dirPath: string) {
 	}
 
 	logger.info(
-		`Loaded ${commands.size} slash ${pluralize("command", commands.size)}`
+		`Loaded ${commands.size} slash ${pluralize("command", commands.size)}`,
 	);
 
 	return commands;

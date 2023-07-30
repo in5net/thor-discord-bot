@@ -2,7 +2,7 @@ type Response =
 	| string
 	| ((
 			times: number,
-			wrong: boolean
+			wrong: boolean,
 	  ) =>
 			| string
 			| {

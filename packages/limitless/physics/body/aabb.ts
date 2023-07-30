@@ -3,7 +3,7 @@ export default class AABB {
 		public x: number,
 		public y: number,
 		public width: number,
-		public height = width
+		public height = width,
 	) {}
 
 	intersects(o: AABB): boolean {

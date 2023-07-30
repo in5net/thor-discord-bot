@@ -15,5 +15,5 @@ export default command(
 			},
 		},
 	},
-	async (i, { offset, message }) => i.reply(encrypt(message, -offset))
+	async (i, { offset, message }) => i.reply(encrypt(message, -offset)),
 );

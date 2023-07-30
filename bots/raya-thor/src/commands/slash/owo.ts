@@ -15,5 +15,5 @@ export default command(
 		await i.deferReply();
 		await i.deleteReply();
 		await i.channel?.send(owofire(message));
-	}
+	},
 );

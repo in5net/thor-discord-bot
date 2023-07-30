@@ -29,7 +29,9 @@ export default function atom<T>(value?: T): Store<T> {
 	const store: Store<T> = (...args) => {
 		if (!args.length) return read();
 
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		const newValue: T =
+			// @ts-expect-error
 			typeof args[0] === "function" ? args[0](read()) : args[0];
 		if (newValue === value) return;
 

@@ -46,7 +46,7 @@ export default command(
 		const gl = new GL(size, size, true);
 		await gl.createProgramFromPaths(
 			new URL("../../../assets/cube/shader.vert", import.meta.url).pathname,
-			new URL("../../../assets/cube/shader.frag", import.meta.url).pathname
+			new URL("../../../assets/cube/shader.frag", import.meta.url).pathname,
 		);
 
 		gl.createVertexBuffer(GL.unitCubeTextured.vertexData);
@@ -63,7 +63,7 @@ export default command(
 			Math.PI / 3,
 			1,
 			0.1,
-			1000
+			1000,
 		);
 		gl.uniform("projectionMatrix", "mat4", projectionMatrix);
 		const modelViewMatrix = mat4.create();
@@ -98,7 +98,7 @@ export default command(
 							angle = Math.PI * 2 * t * speed;
 							render();
 						},
-					}
+					},
 			  );
 
 		await i.editReply("Uploading cube...");
@@ -122,5 +122,5 @@ export default command(
 				files: [new AttachmentBuilder(fileURL, { name: `cube.${extension}` })],
 			});
 		});
-	}
+	},
 );

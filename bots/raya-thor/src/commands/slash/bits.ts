@@ -13,7 +13,7 @@ export default command(
 		return i.reply(
 			`You have ${bits}/${MAX_BITS} ${
 				bits < 6 ? "🔴" : bits < MAX_BITS ? "🟢" : "🔵"
-			} bits.${bits ? "" : " no bits?"}`
+			} bits.${bits ? "" : " no bits?"}`,
 		);
-	}
+	},
 );

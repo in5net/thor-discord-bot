@@ -57,7 +57,7 @@ export default command(
 		async function write() {
 			const path = join(
 				temporaryDir,
-				`frame${(index++).toString().padStart(4, "0")}.png`
+				`frame${(index++).toString().padStart(4, "0")}.png`,
 			);
 			await writeFile(path, await canvas.encode("png"));
 			await sleep(0);
@@ -81,7 +81,7 @@ export default command(
 						x * cellWidth,
 						y * cellHeight,
 						cellWidth,
-						cellHeight
+						cellHeight,
 					);
 			}
 		}
@@ -108,13 +108,13 @@ export default command(
 					start.x * cellWidth,
 					start.y * cellHeight,
 					cellWidth,
-					cellHeight
+					cellHeight,
 				);
 				ctx.fillRect(
 					target.x * cellWidth,
 					target.y * cellHeight,
 					cellWidth,
-					cellHeight
+					cellHeight,
 				);
 
 				const current = Vector2.lerp(start, target, t / tMax);
@@ -127,7 +127,7 @@ export default command(
 					current.x * cellWidth,
 					current.y * cellHeight,
 					cellWidth,
-					cellHeight
+					cellHeight,
 				);
 
 				await write();
@@ -148,7 +148,7 @@ export default command(
 				.outputOptions(["-pix_fmt yuv420p"])
 				.save(name)
 				.once("end", resolve)
-				.once("error", reject)
+				.once("error", reject),
 		);
 
 		const outputPath = join(temporaryDir, name);
@@ -158,5 +158,5 @@ export default command(
 		return i.editReply({
 			files: [new AttachmentBuilder(stream, { name })],
 		});
-	}
+	},
 );

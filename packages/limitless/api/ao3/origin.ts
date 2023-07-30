@@ -1,2 +1,2 @@
-const ORIGIN = 'https://archiveofourown.org';
+const ORIGIN = "https://archiveofourown.org";
 export default ORIGIN;

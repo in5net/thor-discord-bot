@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-confusing-void-expression */
 /* eslint-disable no-new-wrappers */
 /* eslint-disable @typescript-eslint/ban-types */
 
@@ -49,7 +50,7 @@ export default class Interpreter implements ExecuteIndex {
 
 	visitIdentifierNode(
 		{ token: { value: name } }: IdentifierNode,
-		scope: Scope
+		scope: Scope,
 	): Value {
 		const value = scope.get(name);
 		if (!value) this.error(`'./{name}' is not defined`);
@@ -58,7 +59,7 @@ export default class Interpreter implements ExecuteIndex {
 
 	visitUnaryOpNode(
 		{ node, operator: { value: operator } }: UnaryOpNode,
-		scope: Scope
+		scope: Scope,
 	): Value {
 		const value = this.visit(node, scope);
 
@@ -71,7 +72,7 @@ export default class Interpreter implements ExecuteIndex {
 
 	visitBinaryOpNode(
 		{ left, operator, right }: BinaryOpNode,
-		scope: Scope
+		scope: Scope,
 	): Value {
 		const leftValue = this.visit(left, scope);
 		const rightValue = this.visit(right, scope);
@@ -88,7 +89,7 @@ export default class Interpreter implements ExecuteIndex {
 		if (!(func instanceof Function)) this.error(`${name} is not a function`);
 		const argValues = args.map(arg => this.visit(arg, scope));
 		const argNums = argValues.map(arg =>
-			arg instanceof Number ? arg.value : globalThis.Number.NaN
+			arg instanceof Number ? arg.value : globalThis.Number.NaN,
 		);
 		const value = func.execute(...argNums);
 		return new Number(value);
@@ -96,7 +97,7 @@ export default class Interpreter implements ExecuteIndex {
 
 	visitGroupingNode(
 		{ node, groupings: [left, right] }: GroupingNode,
-		scope: Scope
+		scope: Scope,
 	): Value {
 		const value = this.visit(node, scope);
 		const operator = (left.value + right.value) as Exclude<GroupingOp, "[]">;

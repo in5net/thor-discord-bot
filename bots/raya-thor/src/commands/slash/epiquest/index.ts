@@ -38,7 +38,7 @@ export default command(
 
 			const embed = new EmbedBuilder()
 				.setTitle(
-					stringReplace(typeof text === "string" ? text : text(inventory))
+					stringReplace(typeof text === "string" ? text : text(inventory)),
 				)
 				.setDescription(`${i.user.username}'s epiquest`)
 				.setColor(env.COLOR);
@@ -53,8 +53,8 @@ export default command(
 							emoji,
 							label: stringReplace(typeof text === "string" ? text : text()),
 							value: emoji,
-						}))
-					)
+						})),
+					),
 			);
 
 			await i.followUp({ embeds: [embed], components: [row] });
@@ -145,8 +145,8 @@ export default command(
 							emoji,
 							label: stringReplace(text),
 							value: emoji,
-						}))
-					)
+						})),
+					),
 			);
 
 			await i.followUp({ embeds: [embed], components: [row] });
@@ -238,5 +238,5 @@ export default command(
 		}
 
 		return i.followUp(`Epiquest is over!`);
-	}
+	},
 );

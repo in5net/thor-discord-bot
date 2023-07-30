@@ -22,7 +22,7 @@ export default event(
 						const voice = voices.get(guildId);
 						await voice?.stop();
 						timeouts.delete(guildId);
-					}, FIVE_MINUTES)
+					}, FIVE_MINUTES),
 				);
 			}
 		} else {
@@ -32,5 +32,5 @@ export default event(
 				timeouts.delete(guildId);
 			}
 		}
-	}
+	},
 );

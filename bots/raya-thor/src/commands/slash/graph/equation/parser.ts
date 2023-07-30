@@ -49,9 +49,7 @@ export default class Parser {
 
 				default: {
 					const begin = strs.slice(0, -2);
-					this.error(
-						`Expected ${begin.join(", ")}, or ${strs[strs.length - 1]}`
-					);
+					this.error(`Expected ${begin.join(", ")}, or ${strs.at(-1)}`);
 				}
 			}
 
@@ -90,7 +88,7 @@ export default class Parser {
 		if (
 			this.token.is("number") &&
 			!["number", "superscript", "newline", "eof"].includes(
-				this.nextToken.type
+				this.nextToken.type,
 			) &&
 			!(
 				this.nextToken.is("operator") &&
@@ -123,7 +121,7 @@ export default class Parser {
 			this.advance();
 			return new UnaryOpNode(
 				this.factor(),
-				token as Token<"operator", UnaryOp>
+				token as Token<"operator", UnaryOp>,
 			);
 		}
 
@@ -247,7 +245,7 @@ export default class Parser {
 			result = new BinaryOpNode(
 				result,
 				(token as Token<"operator", BinaryOp>).value,
-				right.call(this)
+				right.call(this),
 			);
 		}
 

@@ -43,7 +43,7 @@ const YOUTUBE_CHANNEL_REGEX = createRegExp(
 	"/",
 	exactly("channel").or("c"),
 	"/",
-	oneOrMore(anyOf(letter.lowercase, digit, charIn("_-")))
+	oneOrMore(anyOf(letter.lowercase, digit, charIn("_-"))),
 );
 
 const URL_REGEX = createRegExp(
@@ -52,7 +52,7 @@ const URL_REGEX = createRegExp(
 	anyOf(letter.lowercase, digit, charIn("()")).times.between(1, 6),
 	wordBoundary,
 	anyOf(letter.lowercase, digit, charIn("-()@:%_+.~#?&//=")).times.any(),
-	[caseInsensitive]
+	[caseInsensitive],
 );
 
 export default class Voice extends TypedEmitter<{
@@ -113,7 +113,7 @@ export default class Voice extends TypedEmitter<{
 
 	async getSongs(
 		message: Message,
-		query?: string
+		query?: string,
 	): Promise<Array<SongType | Album<YouTubeSong>>> {
 		const { stream } = this;
 		const queue = await this.getQueue();
@@ -241,7 +241,7 @@ export default class Voice extends TypedEmitter<{
 				}
 			} else if (URL_REGEX.test(query)) {
 				try {
-					const song = await URLSong.fromURL(query, requester);
+					const song = URLSong.fromURL(query, requester);
 					songs.push(song);
 					songsCache.set(query, [song]);
 				} catch (error) {
@@ -255,15 +255,15 @@ export default class Voice extends TypedEmitter<{
 					songsCache.set(query, [song]);
 				} catch (error) {
 					logger.error(error);
-					this.send("🚫 Invalid YouTube query");
+					await this.send("🚫 Invalid YouTube query");
 				}
 			}
 		}
 
 		for (const song of songs) {
 			if ("songs" in song) {
-				for (const song of song.songs) {
-					song.log();
+				for (const s of song.songs) {
+					s.log();
 				}
 			} else song.log();
 		}
@@ -289,7 +289,7 @@ export default class Voice extends TypedEmitter<{
 				`⏏️ Added${shuff ? " & shuffled" : ""} ${songs
 					.map(song => song.title)
 					.slice(0, 10)
-					.join(", ")}${songs.length > 10 ? ", ..." : ""} to queue`
+					.join(", ")}${songs.length > 10 ? ", ..." : ""} to queue`,
 			);
 
 		return this.play();

@@ -48,7 +48,7 @@ export default command(
 					uid: user.id,
 					name: user.username,
 				},
-				name
+				name,
 			)
 			.catch(() => []);
 		const { length } = songs;
@@ -70,7 +70,7 @@ export default command(
 			.setStyle(ButtonStyle.Primary);
 		const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
 			backButton,
-			nextButton
+			nextButton,
 		);
 
 		let page = 0;
@@ -82,7 +82,7 @@ export default command(
 			nextButton.setDisabled(page * pageSize + pageSize >= length);
 			embed.setFooter({
 				text: `Page ${page + 1}/${Math.ceil(
-					length / pageSize
+					length / pageSize,
 				)}, total: ${length}`,
 			});
 
@@ -117,5 +117,5 @@ export default command(
 				generateEmbed();
 				await i.editReply({ embeds: [embed], components: [row] });
 			});
-	}
+	},
 );

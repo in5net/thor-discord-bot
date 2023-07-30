@@ -32,8 +32,8 @@ export default command(
 		});
 
 		const url = `https://${env.FILES_DOMAIN}/kraccbacc/${encodeURIComponent(
-			video.name
+			video.name,
 		)}`;
 		return i.editReply(url);
-	}
+	},
 );

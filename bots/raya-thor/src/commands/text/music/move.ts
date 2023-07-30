@@ -35,5 +35,5 @@ export default musicCommand(
 			return message.reply(`${woof()}, please provide valid numbers`);
 
 		return voice.move(i, index);
-	}
+	},
 );

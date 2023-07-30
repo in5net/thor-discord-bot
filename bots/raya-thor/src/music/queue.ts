@@ -36,7 +36,7 @@ const nextButton = new ButtonBuilder()
 	.setStyle(ButtonStyle.Primary);
 const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
 	backButton,
-	nextButton
+	nextButton,
 );
 
 const queuesReference = firestore.collection("queues") as CollectionReference<{
@@ -117,7 +117,7 @@ export default class Queue extends Array<SongType> {
 		const length = super.push(...items);
 		this.docRef.update({
 			songs: FieldValue.arrayUnion(
-				...items.map(song => ({ ...song.toJSON(), requester: song.requester }))
+				...items.map(song => ({ ...song.toJSON(), requester: song.requester })),
 			),
 		});
 		return length;

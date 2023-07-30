@@ -4,7 +4,12 @@ import AABB from "./aabb";
 import type ConvexPolygon from "./convex-polygon";
 
 export default class Circle extends Body {
-	constructor(x: number, y: number, public radius: number, mass?: number) {
+	constructor(
+		x: number,
+		y: number,
+		public radius: number,
+		mass?: number,
+	) {
 		super(x, y, mass);
 	}
 

@@ -24,5 +24,5 @@ export default event(
 			optionalPrefixCommands.some(name => lowercase.startsWith(name))
 		)
 			await handleTextCommand(message);
-	}
+	},
 );

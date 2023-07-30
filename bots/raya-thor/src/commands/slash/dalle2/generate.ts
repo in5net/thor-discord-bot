@@ -46,5 +46,5 @@ export default command(
 			files: data.map(({ url = "" }) => url),
 		});
 		return subtractBits(i.user.id, cost);
-	}
+	},
 );

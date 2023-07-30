@@ -40,14 +40,14 @@ export default command(
 
 		const attachment = new AttachmentBuilder(buffer, { name: "glsl.png" });
 		return message_.edit({ content: null, files: [attachment] });
-	}
+	},
 );
 
 export async function render(
 	url: string,
 	width: number,
 	height: number,
-	source: string
+	source: string,
 ): Promise<Buffer> {
 	const gl = await GL.screen(
 		width,
@@ -60,7 +60,7 @@ varying vec2 texCoord;
 
 void main() {
     ${source}
-}`
+}`,
 	);
 
 	await gl.createTexture(url, { param: gl.gl.REPEAT });

@@ -14,7 +14,7 @@ export default command(
 		return i.reply(
 			`Filters: ${[...voice.stream.filters.values()]
 				.map(filter => `\`${filter}\``)
-				.join(", ")}`
+				.join(", ")}`,
 		);
-	}
+	},
 );

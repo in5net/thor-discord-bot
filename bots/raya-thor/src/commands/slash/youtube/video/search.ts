@@ -38,7 +38,7 @@ export default command(
 				.setURL(
 					`https://www.youtube.com/results?search_query=${query
 						.split(" ")
-						.join("+")}`
+						.join("+")}`,
 				)
 				.addFields(fields);
 
@@ -49,5 +49,5 @@ export default command(
 			logger.error(error);
 			throw new Error("Failed to search for YouTube videos");
 		}
-	}
+	},
 );

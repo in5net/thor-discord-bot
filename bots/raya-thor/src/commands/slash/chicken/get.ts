@@ -51,5 +51,5 @@ export default command(
 				files: [new AttachmentBuilder(url)],
 			});
 		return i.editReply(url);
-	}
+	},
 );

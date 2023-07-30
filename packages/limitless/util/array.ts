@@ -117,13 +117,13 @@ export function range(max: number): Generator<number>;
 export function range(
 	min: number,
 	max: number,
-	step?: number
+	step?: number,
 ): Generator<number>;
 export function range(max: number): number;
 export function* range(
 	minOrMaxOrArray: number | number[],
 	maxValue?: number,
-	step = 1
+	step = 1,
 ): number | Generator<number> {
 	if (Array.isArray(minOrMaxOrArray))
 		return max(minOrMaxOrArray) - min(minOrMaxOrArray);
@@ -160,7 +160,7 @@ export function meanAbsDev(array: number[]): number {
 export function pick<T>(array: T[], numberItems: number): T[] {
 	if (!array.length || !numberItems) return [];
 	return Array.from<T>({ length: numberItems }).map(
-		() => array[randomInt(array.length)]!
+		() => array[randomInt(array.length)]!,
 	);
 }
 
@@ -176,7 +176,7 @@ export function arraysEqual<T>(a: ArrayLike<T>, b: ArrayLike<T>): boolean {
 
 export function dedupe<T extends { [K in keyof T]: T[K] }>(
 	array: readonly T[],
-	key: keyof T
+	key: keyof T,
 ): T[] {
 	const array_ = [...array];
 	const values = new Set<string>();

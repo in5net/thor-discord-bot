@@ -20,5 +20,5 @@ export default command(
 			.setTitle(`${user.username}'s profile picture`)
 			.setImage(avatar);
 		return i.reply({ embeds: [embed] });
-	}
+	},
 );

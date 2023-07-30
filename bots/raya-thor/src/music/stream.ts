@@ -42,7 +42,7 @@ export default class Stream extends TypedEmitter<{
 		if (!channel) return;
 
 		logger.info(
-			`From: voice connection status ${connection?.state.status || "gone"}`
+			`From: voice connection status ${connection?.state.status || "gone"}`,
 		);
 
 		switch (connection?.state.status) {
@@ -68,7 +68,7 @@ export default class Stream extends TypedEmitter<{
 		}
 
 		logger.info(
-			`To: voice connection status ${this.connection?.state.status || "gone"}`
+			`To: voice connection status ${this.connection?.state.status || "gone"}`,
 		);
 	}
 

@@ -18,7 +18,7 @@ export default command(
 	async i => {
 		await i.deferReply();
 		const [cat] = await got(
-			"https://api.thecatapi.com/v1/images/search"
+			"https://api.thecatapi.com/v1/images/search",
 		).json<Data>();
 		if (!cat) throw new Error("No cat found");
 
@@ -31,5 +31,5 @@ export default command(
 				iconURL: "https://thecatapi.com/favicon.ico",
 			});
 		return i.editReply({ embeds: [embed] });
-	}
+	},
 );

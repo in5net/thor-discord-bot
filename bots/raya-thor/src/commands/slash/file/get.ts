@@ -24,11 +24,11 @@ export default command(
 			return i.reply(
 				["googas.mp4", "gradi.png"]
 					.map(name => `https://${env.FILES_DOMAIN}/discord/${name}`)
-					.join(" ")
+					.join(" "),
 			);
 
 		const file = await getRandomFile(type);
 		if (!file) return i.reply("No file found");
 		return sendFile(i, file);
-	}
+	},
 );

@@ -45,7 +45,7 @@ export default command(
 						name: "Likes",
 						value: like_count.toLocaleString(),
 						inline: true,
-					}
+					},
 				);
 			if (title) embed.setTitle(title);
 			if (channel) embed.setAuthor(channel);
@@ -57,7 +57,7 @@ export default command(
 				embed.setDescription(
 					description.length < maxDesc
 						? description
-						: `${description.slice(0, maxDesc - 3)}...`
+						: `${description.slice(0, maxDesc - 3)}...`,
 				);
 
 			return await i.reply({
@@ -70,5 +70,5 @@ export default command(
 				ephemeral: true,
 			});
 		}
-	}
+	},
 );

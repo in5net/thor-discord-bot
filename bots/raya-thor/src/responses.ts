@@ -14,7 +14,7 @@ interface RandomResponse {
 }
 
 export const randomResponsesRef = firestore.collection(
-	"random-responses"
+	"random-responses",
 ) as CollectionReference<RandomResponse>;
 
 const randomResponses = trkl<Array<RandomResponse & { id: string }>>([]);
@@ -22,6 +22,6 @@ export default randomResponses;
 
 randomResponsesRef.onSnapshot(({ docs }) => {
 	randomResponses(
-		docs.map(document => ({ ...document.data(), id: document.id }))
+		docs.map(document => ({ ...document.data(), id: document.id })),
 	);
 });

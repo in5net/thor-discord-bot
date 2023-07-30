@@ -9,16 +9,16 @@ import { cache } from "$services/prisma";
 
 const chatGPTSystemPath = new URL(
 	"../../../chatgpt-system.txt",
-	import.meta.url
+	import.meta.url,
 );
 const chatGPTDescPath = new URL("../../../chatgpt-desc.txt", import.meta.url);
 const system = ttlCache(
 	async () => readFile(chatGPTSystemPath, "utf8"),
-	ms("10 min")
+	ms("10 min"),
 );
 const desc = ttlCache(
 	async () => readFile(chatGPTDescPath, "utf8"),
-	ms("10 min")
+	ms("10 min"),
 );
 
 export default command(
@@ -87,7 +87,7 @@ export default command(
 						[
 							{ role: "user", content: q },
 							{ role: "assistant", content: a },
-						] as const
+						] as const,
 				),
 				{ role: "user", content: prompt },
 			],
@@ -124,5 +124,5 @@ export default command(
 				answer: reply,
 			},
 		});
-	}
+	},
 );

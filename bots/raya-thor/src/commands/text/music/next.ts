@@ -7,5 +7,5 @@ export default musicCommand(
 		args: {},
 		permissions: ["vc"],
 	},
-	async ({ voice }) => voice.next()
+	async ({ voice }) => voice.next(),
 );

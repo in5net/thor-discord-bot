@@ -12,5 +12,5 @@ export default command(
 		await i.deferReply();
 		const text = await got(url).text();
 		return i.editReply(text);
-	}
+	},
 );

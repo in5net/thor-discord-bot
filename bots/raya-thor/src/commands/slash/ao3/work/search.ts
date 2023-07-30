@@ -131,7 +131,7 @@ export default command(
 			tag,
 			order_by,
 			order,
-		}
+		},
 	) => {
 		const works = await searchWorks({
 			title,
@@ -157,8 +157,8 @@ export default command(
 			works.slice(0, 5).map(async work => {
 				const author = await getUser(work.author);
 				return createWorkEmbedBuilder(work, author);
-			})
+			}),
 		);
 		return i.reply({ embeds, ephemeral: true });
-	}
+	},
 );

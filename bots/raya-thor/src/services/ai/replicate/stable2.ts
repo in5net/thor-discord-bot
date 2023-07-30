@@ -8,7 +8,7 @@ export const model = new Model(
 		prompt_strength: 0.8,
 		num_inference_steps: 50,
 		guidance_scale: 7.5,
-	}
+	},
 );
 
 export const generate = (
@@ -16,5 +16,5 @@ export const generate = (
 	{
 		num_outputs,
 		negative_prompt,
-	}: { num_outputs: number; negative_prompt?: string }
+	}: { num_outputs: number; negative_prompt?: string },
 ) => model.generate({ prompt, negative_prompt, num_outputs });

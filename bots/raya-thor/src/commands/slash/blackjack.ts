@@ -165,7 +165,7 @@ export default command(
 				{
 					name: "Your cards",
 					value: player.map(card => card2Name[card]).join(", "),
-				}
+				},
 			);
 		}
 
@@ -180,8 +180,8 @@ export default command(
 					emoji: "💰",
 					label: "Stand",
 					value: "stand",
-				}
-			)
+				},
+			),
 		);
 
 		while (playerScore < threshold && dealerScore < threshold) {
@@ -226,7 +226,7 @@ export default command(
 			{
 				name: "Your cards",
 				value: player.map(card => card2Name[card]).join(", "),
-			}
+			},
 		);
 		let value = "";
 		if (playerScore > threshold) value = `You went over ${threshold}!`;
@@ -240,10 +240,10 @@ export default command(
 				name: "Your score",
 				value: playerScore.toString(),
 			},
-			{ name: "Result", value }
+			{ name: "Result", value },
 		);
 		return i.editReply({ embeds: [embed], components: [] });
-	}
+	},
 );
 
 function cards2Score(cards: Card[]) {

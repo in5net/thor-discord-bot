@@ -56,7 +56,7 @@ export default command(
 			1,
 			"1024x1024",
 			"url",
-			i.user.id
+			i.user.id,
 		);
 		const { data } =
 			(await response.json()) as ResponseTypes["createImageVariation"];
@@ -66,5 +66,5 @@ export default command(
 		});
 		await subtractBits(i.user.id, cost);
 		return rm(temporaryDir, { recursive: true });
-	}
+	},
 );

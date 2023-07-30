@@ -93,5 +93,5 @@ export default command(
 			.map(() => kana[Math.floor(Math.random() * kana.length)])
 			.join("");
 		return i.reply(text);
-	}
+	},
 );

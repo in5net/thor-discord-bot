@@ -22,5 +22,5 @@ export default musicCommand(
 		if (play.is_expired()) await play.refreshToken();
 
 		return voice.seek(seconds);
-	}
+	},
 );

@@ -11,5 +11,5 @@ export default musicCommand(
 		voice.setChannels(message);
 		voice.stream.join();
 		if (queue.length) await voice.play();
-	}
+	},
 );

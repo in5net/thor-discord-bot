@@ -17,5 +17,5 @@ export default musicCommand(
 		const queue = await voice.getQueue();
 		await voice.add(message, queries);
 		return voice.move(queue.length - 1, 0);
-	}
+	},
 );

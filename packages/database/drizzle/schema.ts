@@ -43,9 +43,9 @@ export const playlists = mysqlTable(
 	table => ({
 		userIdNameKey: uniqueIndex("Playlist_userId_name_key").on(
 			table.userId,
-			table.name
+			table.name,
 		),
-	})
+	}),
 );
 export const playlistsRelations = relations(playlists, ({ one, many }) => ({
 	author: one(users, {
@@ -105,7 +105,7 @@ export const ratios = mysqlTable(
 	},
 	table => ({
 		contentKey: uniqueIndex("Ratio_content_key").on(table.content),
-	})
+	}),
 );
 
 export const files = mysqlTable("File", {
@@ -205,7 +205,7 @@ export const albumsToPlaylists = mysqlTable(
 	table => ({
 		abUnique: uniqueIndex("_AlbumToPlaylist_AB_unique").on(table.a, table.b),
 		albumToPlaylistAB: primaryKey(table.a, table.b),
-	})
+	}),
 );
 export const albumsToPlaylistsRelations = relations(
 	albumsToPlaylists,
@@ -218,5 +218,5 @@ export const albumsToPlaylistsRelations = relations(
 			fields: [albumsToPlaylists.b],
 			references: [playlists.id],
 		}),
-	})
+	}),
 );

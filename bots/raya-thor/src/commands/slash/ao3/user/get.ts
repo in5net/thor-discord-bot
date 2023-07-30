@@ -29,5 +29,5 @@ export default command(
 			logger.error(error);
 			return i.reply({ content: "Invalid AO3 url", ephemeral: true });
 		}
-	}
+	},
 );

@@ -30,7 +30,7 @@ export class UnaryOpNode implements Node {
 	constructor(
 		readonly node: Node,
 		readonly operator: Token<"operator", UnaryOp>,
-		readonly postfix = false
+		readonly postfix = false,
 	) {}
 
 	toString(): string {
@@ -44,7 +44,7 @@ export class BinaryOpNode implements Node {
 	constructor(
 		readonly left: Node,
 		readonly operator: BinaryOp,
-		readonly right: Node
+		readonly right: Node,
 	) {}
 
 	toString(): string {
@@ -53,7 +53,10 @@ export class BinaryOpNode implements Node {
 }
 
 export class FuncCallNode implements Node {
-	constructor(readonly name: IdentifierNode, readonly args: Node[]) {}
+	constructor(
+		readonly name: IdentifierNode,
+		readonly args: Node[],
+	) {}
 
 	toString(): string {
 		const { name } = this;
@@ -66,8 +69,8 @@ export class GroupingNode implements Node {
 		readonly node: Node,
 		readonly groupings: [
 			Token<"grouping", LeftGrouping>,
-			Token<"grouping", RightGrouping>
-		]
+			Token<"grouping", RightGrouping>,
+		],
 	) {}
 
 	toString(): string {

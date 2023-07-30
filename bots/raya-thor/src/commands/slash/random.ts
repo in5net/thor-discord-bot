@@ -17,13 +17,13 @@ export default command(
 		const image = ctx.createImageData(size, size);
 		image.data.set(
 			new Uint8ClampedArray(size * size * 4).map(() =>
-				Math.floor(Math.random() * 256)
-			)
+				Math.floor(Math.random() * 256),
+			),
 		);
 		ctx.putImageData(image, 0, 0);
 
 		return i.editReply({
 			files: [new AttachmentBuilder(canvas.toBuffer("image/png"))],
 		});
-	}
+	},
 );

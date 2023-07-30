@@ -29,7 +29,7 @@ type ValueFromChoices<T extends Choices> = T extends readonly Choice[]
 
 export type AutocompleteHandler = (
 	option: string,
-	i: AutocompleteInteraction
+	i: AutocompleteInteraction,
 ) => Promise<Choices>;
 interface Option<T extends Type = Type, C extends Choices = Choices> {
 	type: T;
@@ -57,7 +57,7 @@ type Handler<T extends Options = Options> = (
 	i: ChatInputCommandInteraction,
 	options: {
 		[K in keyof T]: OptionValue<T[K]>;
-	}
+	},
 ) => Awaitable<any>;
 
 type Permission = "vc";
@@ -76,7 +76,7 @@ export const slashCommandSymbol = Symbol("slash command");
 
 const command = <T extends Options>(
 	options: CommandOptions<T>,
-	handler: Handler<T>
+	handler: Handler<T>,
 ): SlashCommand<T> => ({ ...options, handler, symbol: slashCommandSymbol });
 export default command;
 

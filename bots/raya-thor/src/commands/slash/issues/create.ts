@@ -56,5 +56,5 @@ export default command(
 		return i.reply({
 			embeds: [embed],
 		});
-	}
+	},
 );

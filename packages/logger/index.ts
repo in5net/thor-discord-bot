@@ -10,7 +10,7 @@ if (!existsSync(logsPath)) mkdirSync(logsPath);
 
 const destination = join(
 	logsPath,
-	`${new Date().toISOString().replaceAll(":", "-")}.log`
+	`${new Date().toISOString().replaceAll(":", "-")}.log`,
 );
 const targets: TransportTargetOptions[] = [
 	{

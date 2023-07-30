@@ -4,7 +4,7 @@ export type Response =
 	| string
 	| ((
 			inventory: string[],
-			item: Item
+			item: Item,
 	  ) =>
 			| string
 			| {

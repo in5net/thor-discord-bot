@@ -13,7 +13,7 @@ export function map(
 	fromMin: number,
 	fromMax: number,
 	toMin: number,
-	toMax: number
+	toMax: number,
 ): number {
 	return lerp(toMin, toMax, norm(x, fromMin, fromMax));
 }
@@ -31,7 +31,7 @@ export function overlap(
 	min1: number,
 	max1: number,
 	min2: number,
-	max2: number
+	max2: number,
 ): number {
 	[min1, max1] = minmax(min1, max1);
 	[min2, max2] = minmax(min2, max2);
@@ -50,7 +50,7 @@ export function random(min?: number, max?: number): number;
 export function random<T>(array: T[]): T[][number];
 export function random<T>(
 	min?: number | T[],
-	max?: number
+	max?: number,
 ): number | T[][number] | undefined {
 	if (Array.isArray(min)) return min[Math.floor(Math.random() * min.length)];
 
@@ -109,7 +109,7 @@ export const fahrenheit = (celsius: number): number => celsius * (9 / 5) + 32;
  * @returns the line of best fit in terms of m and b in the form y = mx + b
  */
 export function bestFitLine(
-	points: Array<{ x: number; y: number }>
+	points: Array<{ x: number; y: number }>,
 ): [m: number, b: number] {
 	const xs = points.map(p => p.x);
 	const ys = points.map(p => p.y);
@@ -134,7 +134,7 @@ export function bestFitLine(
 export function derivative(
 	f: (x: number) => number,
 	x: number,
-	h = 0.000_01
+	h = 0.000_01,
 ): number {
 	return (f(x + h) - f(x)) / h;
 }

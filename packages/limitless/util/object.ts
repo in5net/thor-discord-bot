@@ -5,7 +5,7 @@ export const hasOwn = (object: any, key: PropertyKey) =>
 
 export function shallowEquals<
 	A extends Record<any, any>,
-	B extends Record<any, any>
+	B extends Record<any, any>,
 >(a: A, b: B): boolean {
 	// @ts-expect-error it is possible for A and B to be the same object
 	if (a === b) return true;
@@ -22,7 +22,7 @@ export function shallowEquals<
 
 export function deepEquals<
 	A extends Record<any, any>,
-	B extends Record<any, any>
+	B extends Record<any, any>,
 >(a: A, b: B): boolean {
 	// @ts-expect-error it is possible for A and B to be the same object
 	if (a === b) return true;
@@ -68,7 +68,7 @@ export function deepCopy<T>(object: T): T {
 }
 
 export function value2Keys<K extends string, T extends string>(
-	object: Record<K, T[]>
+	object: Record<K, T[]>,
 ): Record<T, K[]> {
 	// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 	const result = {} as Record<T, K[]>;

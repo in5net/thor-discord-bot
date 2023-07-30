@@ -105,5 +105,5 @@ export default command(
 		return i.editReply({
 			files: [new AttachmentBuilder(await canvas.encode("png"))],
 		});
-	}
+	},
 );

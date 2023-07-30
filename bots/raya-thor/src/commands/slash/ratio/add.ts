@@ -22,5 +22,5 @@ export default command(
 			skipDuplicates: true,
 		});
 		return i.editReply("Added to ratios");
-	}
+	},
 );

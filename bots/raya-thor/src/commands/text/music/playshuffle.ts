@@ -15,5 +15,5 @@ export default musicCommand(
 		permissions: ["vc"],
 	},
 	async ({ message, args: { queries }, voice }) =>
-		voice.add(message, queries, true)
+		voice.add(message, queries, true),
 );

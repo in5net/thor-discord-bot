@@ -1,5 +1,8 @@
 export default class Complex {
-	constructor(public real = 0, public imaginary = 0) {}
+	constructor(
+		public real = 0,
+		public imaginary = 0,
+	) {}
 
 	toString(): string {
 		return `${this.real} + ${this.imaginary}i`;

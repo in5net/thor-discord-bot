@@ -15,7 +15,7 @@ export default class QuadTree extends AABB {
 		y: number,
 		width: number,
 		height: number,
-		public capacity = 4
+		public capacity = 4,
 	) {
 		super(x, y, width, height);
 	}
@@ -50,7 +50,7 @@ export default class QuadTree extends AABB {
 			y + height / 2,
 			width / 2,
 			height / 2,
-			capacity
+			capacity,
 		);
 
 		this.divided = true;

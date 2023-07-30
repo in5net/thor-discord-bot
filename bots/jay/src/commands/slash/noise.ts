@@ -25,9 +25,10 @@ export default command(
 			size,
 			glsl(
 				await GL.loadFile(
-					new URL("../../../assets/noise/shader.frag", import.meta.url).pathname
-				)
-			)
+					new URL("../../../assets/noise/shader.frag", import.meta.url)
+						.pathname,
+				),
+			),
 		);
 		gl.uniform("scale", "float", scale);
 
@@ -42,7 +43,7 @@ export default command(
 						gl.uniform("offset", "float", offset);
 					},
 				}),
-				{ name: "noise.gif" }
+				{ name: "noise.gif" },
 			);
 		} else {
 			gl.uniform("offset", "float", offset);
@@ -56,5 +57,5 @@ export default command(
 			content: null,
 			files: [attachment],
 		});
-	}
+	},
 );

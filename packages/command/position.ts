@@ -3,7 +3,7 @@ export class Position {
 		readonly text: string,
 		public row = 0,
 		public col = 0,
-		public index = 0
+		public index = 0,
 	) {}
 
 	static EOF = new Position("", -1, -1, -1);

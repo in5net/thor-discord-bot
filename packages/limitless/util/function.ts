@@ -2,7 +2,7 @@ type Func = (...args: any[]) => any;
 
 export function throttle<T extends Func>(
 	func: T,
-	ms: number
+	ms: number,
 ): (...args: Parameters<T>) => void {
 	let timeout: number | undefined;
 	return (...args) => {
@@ -16,7 +16,7 @@ export function throttle<T extends Func>(
 
 export function debounce<T extends Func>(
 	func: T,
-	ms: number
+	ms: number,
 ): (...args: Parameters<T>) => void {
 	let timeout: number;
 	return (...args) => {

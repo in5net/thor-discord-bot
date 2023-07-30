@@ -11,14 +11,14 @@ export default class SpatialHashGrid extends AABB {
 		y: number,
 		width: number,
 		height: number,
-		readonly divisionSize = 100
+		readonly divisionSize = 100,
 	) {
 		super(x, y, width, height);
 		this.reset();
 	}
 
 	private getIntersectingIndices(
-		aabb: AABB
+		aabb: AABB,
 	): [min: [i: number, j: number], max: [i: number, j: number]] {
 		const { divisionSize } = this;
 

@@ -35,7 +35,7 @@ export default command(
 			const bits = await getBits(i.user.id);
 			if (bits < BITS_PRICE)
 				return i.reply(
-					`You need ${BITS_PRICE - bits} more bits to use ${NAME}`
+					`You need ${BITS_PRICE - bits} more bits to use ${NAME}`,
 				);
 		}
 
@@ -63,5 +63,5 @@ export default command(
 		}
 
 		return subtractBits(i.user.id, BITS_PRICE);
-	}
+	},
 );

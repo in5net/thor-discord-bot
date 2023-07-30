@@ -34,14 +34,14 @@ export default musicCommand(
 				`Filters not found: ${filters
 					.filter(filter => !audioFilters.some(af => af.name === filter))
 					.map(filter => `\`${filter}\``)
-					.join(", ")}`
+					.join(", ")}`,
 			);
 
 		await voice.setFilters(audioFilters.map(f => f.value));
 		return voice.send(
 			`🎚️ Filters set to ${audioFilters
 				.map(({ name }) => `\`${name}\``)
-				.join(", ")}`
+				.join(", ")}`,
 		);
-	}
+	},
 );

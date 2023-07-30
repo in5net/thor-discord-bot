@@ -15,7 +15,7 @@ export function* shuffleGen<T>(array: T[]): SortingGenerator {
 
 export function* bubble<T>(
 	array: T[],
-	compare: (a: T, b: T) => number
+	compare: (a: T, b: T) => number,
 ): SortingGenerator {
 	const { length } = array;
 	for (let i = 0; i < length; i++) {
@@ -28,7 +28,7 @@ export function* bubble<T>(
 
 export function* cocktail<T>(
 	array: T[],
-	compare: (a: T, b: T) => number
+	compare: (a: T, b: T) => number,
 ): SortingGenerator {
 	const { length } = array;
 	let start = 0;
@@ -51,7 +51,7 @@ export function* cocktail<T>(
 
 export function* selection<T>(
 	array: T[],
-	compare: (a: T, b: T) => number
+	compare: (a: T, b: T) => number,
 ): SortingGenerator {
 	const { length } = array;
 	for (let i = 0; i < length; i++) {
@@ -68,7 +68,7 @@ export function* selection<T>(
 
 export function* insertion<T>(
 	array: T[],
-	compare: (a: T, b: T) => number
+	compare: (a: T, b: T) => number,
 ): SortingGenerator {
 	const { length } = array;
 	for (let i = 1; i < length; i++) {
@@ -83,7 +83,7 @@ export function* insertion<T>(
 
 export function* quick<T>(
 	array: T[],
-	compare: (a: T, b: T) => number
+	compare: (a: T, b: T) => number,
 ): SortingGenerator {
 	const { length } = array;
 	function* sort(left: number, right: number): SortingGenerator {
@@ -108,7 +108,7 @@ export function* quick<T>(
 
 export function* shell<T>(
 	array: T[],
-	compare: (a: T, b: T) => number
+	compare: (a: T, b: T) => number,
 ): SortingGenerator {
 	const { length } = array;
 	let gap = Math.floor(length / 2);
@@ -128,7 +128,7 @@ export function* shell<T>(
 
 export function* merge<T>(
 	array: T[],
-	compare: (a: T, b: T) => number
+	compare: (a: T, b: T) => number,
 ): SortingGenerator {
 	const { length } = array;
 	function* mergeSort(left: number, right: number): SortingGenerator {
@@ -178,7 +178,7 @@ export function* merge<T>(
 
 export function* heap<T>(
 	array: T[],
-	compare: (a: T, b: T) => number
+	compare: (a: T, b: T) => number,
 ): SortingGenerator {
 	const { length } = array;
 	function* heapify(i: number, length: number): SortingGenerator {
@@ -209,7 +209,7 @@ export function* heap<T>(
 
 export function* binaryInsertion<T>(
 	array: T[],
-	compare: (a: T, b: T) => number
+	compare: (a: T, b: T) => number,
 ): SortingGenerator {
 	const { length } = array;
 	for (let i = 1; i < length; i++) {
@@ -234,7 +234,7 @@ export function* binaryInsertion<T>(
 
 export function* comb<T>(
 	array: T[],
-	compare: (a: T, b: T) => number
+	compare: (a: T, b: T) => number,
 ): SortingGenerator {
 	const { length } = array;
 	let gap = Math.floor(length / 2);
@@ -254,7 +254,7 @@ export function* comb<T>(
 
 export function* gnome<T>(
 	array: T[],
-	compare: (a: T, b: T) => number
+	compare: (a: T, b: T) => number,
 ): SortingGenerator {
 	const { length } = array;
 	let i = 0;
@@ -271,7 +271,7 @@ export function* gnome<T>(
 
 export function* cycle<T>(
 	array: T[],
-	compare: (a: T, b: T) => number
+	compare: (a: T, b: T) => number,
 ): SortingGenerator {
 	const { length } = array;
 	for (let start = 0; start < length - 1; start++) {

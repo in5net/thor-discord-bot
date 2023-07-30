@@ -9,5 +9,5 @@ export default musicCommand(
 	async ({ voice }) => {
 		voice.queue?.shuffle();
 		return voice.send("🔀 Shuffled queue");
-	}
+	},
 );

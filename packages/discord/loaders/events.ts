@@ -22,14 +22,14 @@ export async function loadDiscordEvents(dirPath: string, client: Client) {
 	}
 
 	logger.info(
-		`Loaded ${filePaths.length} ${pluralize("event", filePaths.length)}`
+		`Loaded ${filePaths.length} ${pluralize("event", filePaths.length)}`,
 	);
 }
 
 function createEventListener<T extends keyof ClientEvents>(
 	name: string,
 	client: Client,
-	listener: EventListener<T>
+	listener: EventListener<T>,
 ) {
 	return async (...args: ClientEvents[T]) => {
 		try {

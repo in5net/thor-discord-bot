@@ -21,5 +21,5 @@ export default command(
 			})
 			.setDescription(desc.length > 1000 ? `${desc.slice(0, 1000)}...` : desc);
 		await i.reply({ embeds: [embed], ephemeral: true });
-	}
+	},
 );

@@ -47,7 +47,7 @@ export default command(
 		line(size / 2, 0, size / 2, size);
 
 		const sides = equation.split("=");
-		const eq = sides[sides.length - 1] || "";
+		const eq = sides.at(-1) || "";
 		const run = runner(eq);
 
 		// Curve
@@ -66,5 +66,5 @@ export default command(
 		return i.editReply({
 			files: [new AttachmentBuilder(await canvas.encode("png"))],
 		});
-	}
+	},
 );

@@ -91,11 +91,11 @@ export default command(
 				.on("finish", () => {
 					resolve(`https://${env.FILES_DOMAIN}/${path}`);
 				})
-				.on("error", reject)
+				.on("error", reject),
 		);
 
 		return i.editReply(fileURL);
-	}
+	},
 );
 
 export async function render({
@@ -114,15 +114,15 @@ export async function render({
 	iterations: number;
 }): Promise<Buffer> {
 	const fragmentSource = await GL.loadFile(
-		new URL("../../../assets/fractal/shader.frag", import.meta.url).pathname
+		new URL("../../../assets/fractal/shader.frag", import.meta.url).pathname,
 	);
 	const gl = await GL.screen(
 		width * shapeSize,
 		height * shapeSize,
 		fragmentSource.replaceAll(
 			"#define COORDS_LENGTH 1",
-			`#define COORDS_LENGTH ${coords.length.toString()}`
-		)
+			`#define COORDS_LENGTH ${coords.length.toString()}`,
+		),
 	);
 
 	gl.uniform("iterations", "int", iterations);

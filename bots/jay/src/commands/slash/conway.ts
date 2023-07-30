@@ -50,7 +50,7 @@ export default command(
 		let grid = Array.from<boolean[]>({ length }).map(() =>
 			Array.from<boolean>({ length })
 				.fill(false)
-				.map(() => Math.random() > 0.5)
+				.map(() => Math.random() > 0.5),
 		);
 
 		for (let iter = 0; iter < iterations; iter++) {
@@ -66,7 +66,7 @@ export default command(
 			}
 
 			const next = Array.from<boolean[]>({ length }).map(() =>
-				Array.from<boolean>({ length }).fill(false)
+				Array.from<boolean>({ length }).fill(false),
 			);
 
 			for (let x = 0; x < length; x++) {
@@ -85,7 +85,7 @@ export default command(
 
 			const path = join(
 				temporaryDir,
-				`frame${iter.toString().padStart(4, "0")}.png`
+				`frame${iter.toString().padStart(4, "0")}.png`,
 			);
 			await writeFile(path, canvas.toBuffer("image/png"));
 
@@ -113,7 +113,7 @@ export default command(
 				.outputOptions(["-pix_fmt yuv420p"])
 				.save("output.mp4")
 				.once("end", resolve)
-				.once("error", reject)
+				.once("error", reject),
 		);
 		console.log(temporaryDir);
 
@@ -125,5 +125,5 @@ export default command(
 		return i.editReply({
 			files: [new AttachmentBuilder(stream)],
 		});
-	}
+	},
 );

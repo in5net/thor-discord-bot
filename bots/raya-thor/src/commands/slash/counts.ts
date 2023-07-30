@@ -21,9 +21,9 @@ export default command(
 				...Object.entries(data.counts).map(([name, count]) => ({
 					name,
 					value: `${count}`,
-				}))
+				})),
 			);
 		else embed.setDescription("No counts found");
 		return i.reply({ embeds: [embed], ephemeral: true });
-	}
+	},
 );

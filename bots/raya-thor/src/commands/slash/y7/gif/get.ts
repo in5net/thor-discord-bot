@@ -21,5 +21,5 @@ export default command(
 
 		const url = `https://${env.FILES_DOMAIN}/y7/images/${gif.name}`;
 		return i.reply(url);
-	}
+	},
 );

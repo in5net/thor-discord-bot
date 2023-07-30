@@ -18,7 +18,7 @@ export default command(
 	async i => {
 		await i.deferReply();
 		const [dog] = await got(
-			"https://api.thedogapi.com/v1/images/search"
+			"https://api.thedogapi.com/v1/images/search",
 		).json<Data>();
 		if (!dog) throw new Error("No dog found");
 
@@ -31,5 +31,5 @@ export default command(
 				iconURL: "https://thedogapi.com/favicon.ico",
 			});
 		return i.editReply({ embeds: [embed] });
-	}
+	},
 );

@@ -13,5 +13,5 @@ export default command(
 	async i => {
 		const data = await got("http://yerkee.com/api/fortune").json<Data>();
 		return i.reply(data.fortune);
-	}
+	},
 );

@@ -26,7 +26,7 @@ interface QOI extends Header {
 
 const magicStr = "qoif";
 const magicBytes = Uint8Array.from(
-	magicStr.split("").map(c => c.codePointAt(0) || 0)
+	magicStr.split("").map(c => c.codePointAt(0) || 0),
 );
 
 const QOI_OP_RGB = 0b1111_1110;

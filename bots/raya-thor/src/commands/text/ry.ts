@@ -64,7 +64,7 @@ export default command(
 ${previous.map(
 	({ question: q, answer: a }) => `You: ${q}
 ${env.NAME}: ${a}
-`
+`,
 )}
 You: ${prompt}
 ${env.NAME}:`,
@@ -78,5 +78,5 @@ ${env.NAME}:`,
 		const data = (await response.json()) as ResponseTypes["createCompletion"];
 		const reply = data.choices?.[0]?.text || "";
 		return channel.send(reply);
-	}
+	},
 );

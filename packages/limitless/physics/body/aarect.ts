@@ -14,7 +14,7 @@ export default class AARect extends Body {
 		y: number,
 		width: number,
 		height = width,
-		mass?: number
+		mass?: number,
 	) {
 		super(x, y, mass);
 		this.size = vec2(width, height);

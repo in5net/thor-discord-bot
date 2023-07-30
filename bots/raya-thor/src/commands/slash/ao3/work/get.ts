@@ -19,5 +19,5 @@ export default command(
 
 		const embed = createWorkEmbedBuilder(work, author);
 		return i.reply({ embeds: [embed], ephemeral: true });
-	}
+	},
 );

@@ -13,5 +13,5 @@ export default command(
 
 		await voice.setFilters();
 		return i.reply("🎚️ Filters cleared");
-	}
+	},
 );

@@ -27,7 +27,7 @@ export default command(
 						take: 5,
 					});
 					return Object.fromEntries(
-						playlists.map(({ id, name }) => [name, id])
+						playlists.map(({ id, name }) => [name, id]),
 					);
 				},
 			},
@@ -47,5 +47,5 @@ export default command(
 					: `Removed #${n} from playlist ${name}`,
 			ephemeral: true,
 		});
-	}
+	},
 );

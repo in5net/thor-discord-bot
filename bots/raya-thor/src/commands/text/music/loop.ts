@@ -9,5 +9,5 @@ export default musicCommand(
 	async ({ voice }) => {
 		voice.queue?.toggleLoop();
 		return voice.send(`🔁 Loop ${voice.queue?.loop ? "enabled" : "disabled"}`);
-	}
+	},
 );

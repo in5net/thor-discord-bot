@@ -28,6 +28,6 @@ await test("adjugate", () => {
 await test("inverse", () => {
 	const ans = a.inv();
 	assert(
-		ans.equals([-0.1, 1, -1, 8 / 70, -3 / 7, 2 / 7, -1 / 35, -1 / 7, 3 / 7])
+		ans.equals([-0.1, 1, -1, 8 / 70, -3 / 7, 2 / 7, -1 / 35, -1 / 7, 3 / 7]),
 	);
 });

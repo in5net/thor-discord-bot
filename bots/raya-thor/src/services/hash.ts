@@ -8,7 +8,7 @@ export function strTo16x16(input: string): boolean[][] {
 	const digest = hash.digest("hex");
 
 	const grid = Array.from<boolean[]>({ length: size }).map(() =>
-		Array.from<boolean>({ length: size }).fill(false)
+		Array.from<boolean>({ length: size }).fill(false),
 	);
 
 	for (const [i, char] of digest.split("").entries()) {

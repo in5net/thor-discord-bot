@@ -11,7 +11,7 @@ export interface MessageCommand {
 	symbol: symbol;
 }
 
-const messageCommandSymbol = Symbol("message commanda");
+const messageCommandSymbol = Symbol("message command");
 
 const command = (name: string, handler: Handler): MessageCommand => ({
 	name,

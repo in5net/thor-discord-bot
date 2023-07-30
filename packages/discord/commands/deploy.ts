@@ -9,11 +9,11 @@ import { type CommandOptionType, type SlashCommand } from "./slash";
 export async function deploy(
 	commands: Collection<string, SlashCommand>,
 	token: string,
-	applicationId: string
+	applicationId: string,
 ) {
 	const data: RESTPutAPIApplicationCommandsJSONBody = [];
 	for (const [name, command] of commands.sort((_a, _b, aName, bName) =>
-		aName.localeCompare(bName)
+		aName.localeCompare(bName),
 	)) {
 		const [commandName = "", groupName, subName] = name.split(" ");
 		if (subName && groupName) {
@@ -28,7 +28,7 @@ export async function deploy(
 			}
 
 			let groupData = commandData.options?.find(
-				({ name }) => name === groupName
+				({ name }) => name === groupName,
 			);
 			if (!groupData) {
 				groupData = {
@@ -40,6 +40,8 @@ export async function deploy(
 				commandData.options?.push(groupData);
 			}
 
+			// @ts-expect-error TypeScript doesn't know enough
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 			groupData.options?.push({
 				type: ApplicationCommandOptionType.Subcommand,
 				...build(subName, command),
@@ -137,7 +139,7 @@ function build(name: string, { desc, options }: SlashCommand) {
 				}
 
 				return data;
-			}
+			},
 		),
 	};
 }

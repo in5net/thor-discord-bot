@@ -14,5 +14,5 @@ export default command(
 		} catch {
 			return i.editReply("So sad, looks like yyyyyyy.info is down ):");
 		}
-	}
+	},
 );

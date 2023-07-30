@@ -9,7 +9,7 @@ export default class Rect extends ConvexPolygon {
 		y: number,
 		width: number,
 		height = width,
-		mass?: number
+		mass?: number,
 	) {
 		const vertices = [
 			vec2(-width / 2, +height / 2),

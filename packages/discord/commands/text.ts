@@ -77,7 +77,7 @@ export const textCommandSymbol = Symbol("text command");
 
 const command = <T extends Arguments>(
 	cmd: TextCommandParams<T>,
-	exec: Exec<T>
+	exec: Exec<T>,
 ): TextCommand<T> => ({ ...cmd, exec, symbol: textCommandSymbol });
 export default command;
 

@@ -7,7 +7,7 @@ export default {
 	dbCredentials: {
 		connectionString: env.DATABASE_URL.replace(
 			"sslaccept=strict",
-			'ssl={"rejectUnauthorized":true}'
+			'ssl={"rejectUnauthorized":true}',
 		),
 	},
 } satisfies Config;

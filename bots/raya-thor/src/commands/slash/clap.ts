@@ -13,5 +13,5 @@ export default command(
 	async (i, { text }) => {
 		const clapped = text.split(" ").join(" 👏 ");
 		return i.reply(clapped);
-	}
+	},
 );

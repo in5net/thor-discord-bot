@@ -106,7 +106,7 @@ scheduleJob(
 		minute: 20,
 		tz,
 	},
-	async () => webhook.send("420 BLAZE IT!!! 🔥🔥🔥")
+	async () => webhook.send("420 BLAZE IT!!! 🔥🔥🔥"),
 );
 scheduleJob(
 	{
@@ -114,7 +114,7 @@ scheduleJob(
 		minute: 0,
 		tz,
 	},
-	async () => webhook.send("it's high noon ☀️🤠")
+	async () => webhook.send("it's high noon ☀️🤠"),
 );
 scheduleJob(
 	{
@@ -122,7 +122,7 @@ scheduleJob(
 		minute: 0,
 		tz,
 	},
-	async () => webhook.send("alarm time ●_●")
+	async () => webhook.send("alarm time ●_●"),
 );
 scheduleJob(
 	{
@@ -132,7 +132,7 @@ scheduleJob(
 	() => {
 		client.user?.setActivity("its 7:00 somewhere");
 		setTimeout(() => client.user?.setActivity(activity), ms("1 min"));
-	}
+	},
 );
 
 const randomCatboyScheduleRule = new RecurrenceRule();

@@ -26,7 +26,11 @@ export default abstract class Body {
 
 	abstract aabb: AABB;
 
-	constructor(x: number, y: number, public mass = 1) {
+	constructor(
+		x: number,
+		y: number,
+		public mass = 1,
+	) {
 		this.position = vec2(x, y);
 	}
 
@@ -120,10 +124,10 @@ export default abstract class Body {
 		const m2 = (dpNorm2 * (o.mass - mass) + 2 * mass * dpNorm1) / m;
 
 		velocity.set(
-			Vector2.add(Vector2.mult(tangent, dpTan1), Vector2.mult(normal, m1))
+			Vector2.add(Vector2.mult(tangent, dpTan1), Vector2.mult(normal, m1)),
 		);
 		o.velocity.set(
-			Vector2.add(Vector2.mult(tangent, dpTan2), Vector2.mult(normal, m2))
+			Vector2.add(Vector2.mult(tangent, dpTan2), Vector2.mult(normal, m2)),
 		);
 	}
 

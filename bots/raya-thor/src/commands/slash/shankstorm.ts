@@ -21,5 +21,5 @@ export default command(
 			.map(() => (Math.random() < 0.5 ? "🍗" : "🍖"))
 			.join("");
 		return i.channel?.send(text);
-	}
+	},
 );

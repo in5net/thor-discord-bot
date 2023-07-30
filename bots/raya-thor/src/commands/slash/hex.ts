@@ -27,5 +27,5 @@ export default command(
 		return i.reply({
 			files: [new AttachmentBuilder(canvas.toBuffer("image/png"))],
 		});
-	}
+	},
 );

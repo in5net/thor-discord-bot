@@ -69,8 +69,8 @@ async function handleSlash(i: ChatInputCommandInteraction) {
 					}
 
 					return [name, (value ?? d)!];
-				})
-			)
+				}),
+			),
 		);
 		await prisma.commandExecution.create({
 			data: {
@@ -121,7 +121,7 @@ async function handleAutocomplete(i: AutocompleteInteraction) {
 				: Object.entries(options).map(([name, value]) => ({
 						name,
 						value,
-				  }))
+				  })),
 		)
 		.catch(logger.error);
 }

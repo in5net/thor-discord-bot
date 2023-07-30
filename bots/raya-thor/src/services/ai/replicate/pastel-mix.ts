@@ -8,10 +8,10 @@ export const model = new Model(
 		steps: 20,
 		guidance_scale: 10,
 		hires: true,
-	}
+	},
 );
 
 export const generate = (
 	prompt: string,
-	{ neg_prompt }: { neg_prompt?: string }
+	{ neg_prompt }: { neg_prompt?: string },
 ) => model.generate({ prompt, neg_prompt });

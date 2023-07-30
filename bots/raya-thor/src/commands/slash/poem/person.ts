@@ -108,7 +108,7 @@ export default class Person {
 	constructor(
 		readonly firstName: string,
 		readonly middleName?: string,
-		readonly lastName?: string
+		readonly lastName?: string,
 	) {}
 
 	get fullName() {

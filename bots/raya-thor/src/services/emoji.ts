@@ -84,4 +84,5 @@ const supplemental = [
 
 const rsEmoji = `(?:${supplemental})`;
 
+// eslint-disable-next-line no-misleading-character-class
 export const emojiRegex = new RegExp(rsEmoji);

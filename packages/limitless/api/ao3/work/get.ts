@@ -105,10 +105,10 @@ export interface Work {
 export async function getWork(id: string): Promise<Work> {
 	const response = await fetch(`${query}${id}?view_adult=true`);
 	const html = await response.text();
-	const $ = await load(html);
+	const $ = load(html);
 
 	const rating = $(
-		"#main > div.wrapper > dl > dd.rating.tags > ul > li > a"
+		"#main > div.wrapper > dl > dd.rating.tags > ul > li > a",
 	).text();
 	const warnings = $("#main > div.wrapper > dl > dd.warning.tags a")
 		.map((_, el) => $(el).text())
@@ -117,7 +117,7 @@ export async function getWork(id: string): Promise<Work> {
 		.map((_, el) => $(el).text())
 		.get();
 	const series = $(
-		"#main div.wrapper > dl > dd.series > span > span.position > a"
+		"#main div.wrapper > dl > dd.series > span > span.position > a",
 	);
 	const stats = $("#main div.wrapper > dl > dd.stats > dl");
 	const status = stats.find("dd.status").text();
@@ -135,13 +135,13 @@ export async function getWork(id: string): Promise<Work> {
 				: (warnings.map(
 						warning =>
 							Object.entries(contentWarnings).find(
-								([, x]) => warning === x
-							)?.[0]
+								([, x]) => warning === x,
+							)?.[0],
 				  ) as Warning[]),
 		categories: categories.map(
 			category =>
 				Object.entries(categories).find(([, x]) => category === x)?.[0] ||
-				"other"
+				"other",
 		) as Category[],
 		fandoms: $("#main > div.wrapper > dl > dd.fandom.tags > ul > li > a")
 			.map((_, el) => $(el).text())

@@ -49,5 +49,5 @@ export default musicCommand(
 			output: string;
 		};
 		return channel.send(output);
-	}
+	},
 );

@@ -26,7 +26,7 @@ export async function loadTextCommands(dirPath: string) {
 	}
 
 	logger.info(
-		`Loaded ${commands.size} text ${pluralize("command", commands.size)}`
+		`Loaded ${commands.size} text ${pluralize("command", commands.size)}`,
 	);
 
 	return commands;

@@ -6,5 +6,5 @@ export default command(
 		desc: "Flip a coin",
 		options: {},
 	},
-	async i => i.reply(random(["Heads", "Tails"]))
+	async i => i.reply(random(["Heads", "Tails"])),
 );

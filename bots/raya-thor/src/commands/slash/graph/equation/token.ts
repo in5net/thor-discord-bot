@@ -40,11 +40,14 @@ enum TokenName {
 
 export default class Token<
 	T extends keyof TokenMap = keyof TokenMap,
-	V = TokenMap[T]
+	V = TokenMap[T],
 > {
 	static EOF = new Token("eof", undefined);
 
-	constructor(public type: T, public value: V) {}
+	constructor(
+		public type: T,
+		public value: V,
+	) {}
 
 	toString(): string {
 		const { type, value } = this;
@@ -53,7 +56,7 @@ export default class Token<
 
 	is<Type extends keyof TokenMap, Value = TokenMap[Type]>(
 		type: Type,
-		value?: Value
+		value?: Value,
 	): this is Token<Type, NonNullable<Value>> {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-expect-error

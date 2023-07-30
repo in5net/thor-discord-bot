@@ -15,5 +15,5 @@ export default command(
 		});
 		if (!boss) return message.reply("No boss found");
 		return message.reply(boss.url);
-	}
+	},
 );

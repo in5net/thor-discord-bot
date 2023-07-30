@@ -23,7 +23,7 @@ export default command(
 		const stream = Writable.toWeb(
 			filesBucket.file(path).createWriteStream({
 				gzip: true,
-			})
+			}),
 		);
 		await body?.pipeTo(stream);
 		const fileURL = `https://${env.ILES_DOMAIN}/${path}`;
@@ -31,5 +31,5 @@ export default command(
 
 		return i.reply(`Chicken added
 ${fileURL}`);
-	}
+	},
 );

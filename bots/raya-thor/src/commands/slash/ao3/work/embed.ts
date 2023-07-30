@@ -25,14 +25,14 @@ export function createWorkEmbedBuilder(
 		stats: { published, updated, words, chapters, kudos, bookmarks, hits },
 		symbols,
 	}: Work,
-	{ url: authorURL, iconURL }: User
+	{ url: authorURL, iconURL }: User,
 ) {
 	const embed = createEmbedBuilder()
 		.setTitle(title)
 		.setAuthor({ name: author, url: authorURL, iconURL })
 		.setURL(`${query}${id}`)
 		.setThumbnail(
-			`https://${env.FILES_DOMAIN}/ao3/squares/${symbols.rating}_${symbols.category}_${symbols.warning}_${symbols.complete}.png`
+			`https://${env.FILES_DOMAIN}/ao3/squares/${symbols.rating}_${symbols.category}_${symbols.warning}_${symbols.complete}.png`,
 		);
 	if (rating) embed.addFields({ name: "Rating", value: ratings[rating] });
 	if (warnings.length)

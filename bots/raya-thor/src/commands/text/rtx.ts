@@ -18,7 +18,7 @@ export default command(
 		await message.channel.send(
 			`You can buy ${count.toLocaleString("en-US", {
 				maximumFractionDigits: 2,
-			})} ${pluralize("RTX 4090", count)} with $${price}`
+			})} ${pluralize("RTX 4090", count)} with $${price}`,
 		);
-	}
+	},
 );

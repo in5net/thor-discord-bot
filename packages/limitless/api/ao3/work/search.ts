@@ -211,14 +211,14 @@ export async function searchWorks({
 		searchParams.push(
 			...warnings.map(
 				warning =>
-					["include_work_search[archive_warning_ids][]", warning] as const
-			)
+					["include_work_search[archive_warning_ids][]", warning] as const,
+			),
 		);
 	if (categories)
 		searchParams.push(
 			...categories.map(
-				category => ["include_work_search[category_ids][]", category] as const
-			)
+				category => ["include_work_search[category_ids][]", category] as const,
+			),
 		);
 	if (characters)
 		searchParams.push(["work_search[character_names]", characters]);
@@ -260,22 +260,22 @@ export async function searchWorks({
 			const ratingElement = $(symbolsElement).find(".rating");
 			const rating =
 				objectKeys(symbols.rating).find(rating =>
-					ratingElement.hasClass(symbols.rating[rating])
+					ratingElement.hasClass(symbols.rating[rating]),
 				) || "none";
 			const categoryElement = $(symbolsElement).find(".category");
 			const category =
 				objectKeys(symbols.category).find(category =>
-					categoryElement.hasClass(symbols.category[category])
+					categoryElement.hasClass(symbols.category[category]),
 				) || "none";
 			const warningsElement = $(symbolsElement).find(".warnings");
 			const warning =
 				objectKeys(symbols.warning).find(warning =>
-					warningsElement.hasClass(symbols.warning[warning])
+					warningsElement.hasClass(symbols.warning[warning]),
 				) || "choosenot";
 			const completeElement = $(symbolsElement).find(".iswip");
 			const complete =
 				objectKeys(symbols.complete).find(complete =>
-					completeElement.hasClass(symbols.complete[complete])
+					completeElement.hasClass(symbols.complete[complete]),
 				) || "unknown";
 
 			const tagsElement = $(work).find(".tags");
@@ -302,7 +302,7 @@ export async function searchWorks({
 			const datetime = new Date($(work).find(".datetime").text());
 			const language = $(statsElement).find("dd.language").text();
 			const words = Number.parseInt(
-				$(statsElement).find("dd.words").text().replaceAll(",", "")
+				$(statsElement).find("dd.words").text().replaceAll(",", ""),
 			);
 			const chapters = $(statsElement)
 				.find("dd.chapters")
@@ -310,16 +310,16 @@ export async function searchWorks({
 				.split("/")
 				.map(x => Number.parseInt(x)) as [number, number];
 			const comments = Number.parseInt(
-				$(statsElement).find("dd.comme").text().replaceAll(",", "")
+				$(statsElement).find("dd.comme").text().replaceAll(",", ""),
 			);
 			const kudos = Number.parseInt(
-				$(statsElement).find("dd.kudos").text().replaceAll(",", "")
+				$(statsElement).find("dd.kudos").text().replaceAll(",", ""),
 			);
 			const bookmarks = Number.parseInt(
-				$(statsElement).find("dd.bookmarks").text().replaceAll(",", "")
+				$(statsElement).find("dd.bookmarks").text().replaceAll(",", ""),
 			);
 			const hits = Number.parseInt(
-				$(statsElement).find("dd.h").text().replaceAll(",", "")
+				$(statsElement).find("dd.h").text().replaceAll(",", ""),
 			);
 
 			const data: Work = {
@@ -332,8 +332,8 @@ export async function searchWorks({
 						: (warnings.map(
 								warning =>
 									Object.entries(contentWarnings).find(
-										([, x]) => warning === x
-									)?.[0]
+										([, x]) => warning === x,
+									)?.[0],
 						  ) as IWarning[]),
 				categories: category === "none" ? [] : [category],
 				fandoms,

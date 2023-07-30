@@ -17,8 +17,8 @@ export default command(
 		if (!food) return i.reply("No food found");
 
 		const url = `https://${env.FILES_DOMAIN}/rotatingfood5/${encodeURIComponent(
-			food.name
+			food.name,
 		)}`;
 		return i.reply(url);
-	}
+	},
 );

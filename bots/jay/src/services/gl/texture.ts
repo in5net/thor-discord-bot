@@ -14,7 +14,7 @@ export default class Texture {
 	static async fromURL(
 		url: string,
 		gl: WebGLRenderingContext,
-		{ param, mipmap = false }: { param?: GLenum; mipmap?: boolean } = {}
+		{ param, mipmap = false }: { param?: GLenum; mipmap?: boolean } = {},
 	): Promise<Texture> {
 		// Create the texture
 
@@ -46,17 +46,17 @@ export default class Texture {
 			0,
 			gl.RGBA,
 			gl.UNSIGNED_BYTE,
-			imageData.data
+			imageData.data,
 		);
 		gl.texParameteri(
 			gl.TEXTURE_2D,
 			gl.TEXTURE_WRAP_S,
-			param || gl.CLAMP_TO_EDGE
+			param || gl.CLAMP_TO_EDGE,
 		);
 		gl.texParameteri(
 			gl.TEXTURE_2D,
 			gl.TEXTURE_WRAP_T,
-			param || gl.CLAMP_TO_EDGE
+			param || gl.CLAMP_TO_EDGE,
 		);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);

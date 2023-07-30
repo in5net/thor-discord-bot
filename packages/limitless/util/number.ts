@@ -9,9 +9,9 @@ export const suffixes: Array<
 			ending: string,
 			symbol: string,
 			first?: string,
-			firstSymbol?: string
+			firstSymbol?: string,
 		],
-		prefixes: Array<[long: string, short: string]>
+		prefixes: Array<[long: string, short: string]>,
 	]
 > = [
 	[

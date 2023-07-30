@@ -12,5 +12,5 @@ export default command(
 		await i.deleteReply();
 		await i.channel?.send(`https://${env.FILES_DOMAIN}/discord/cheesecat.png`);
 		await incCount(i.user.id, "cheese");
-	}
+	},
 );

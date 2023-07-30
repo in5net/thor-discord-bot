@@ -8,7 +8,7 @@ const registerFont = memo(async () => {
 	const { GlobalFonts } = await import("@napi-rs/canvas");
 	const success = GlobalFonts.registerFromPath(
 		new URL("../../assets/fonts/impact.ttf", import.meta.url).pathname,
-		font
+		font,
 	);
 	logger.debug(`${font} font registered:`, success);
 });
@@ -46,7 +46,7 @@ export default command(
 		return i.editReply({
 			files: [new AttachmentBuilder(canvas.toBuffer("image/png"))],
 		});
-	}
+	},
 );
 
 export async function generate({

@@ -62,5 +62,5 @@ export default command(
 		return i.editReply({
 			files: [new AttachmentBuilder(canvas.toBuffer("image/png"))],
 		});
-	}
+	},
 );

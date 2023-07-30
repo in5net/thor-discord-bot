@@ -28,7 +28,7 @@ export async function handleTextCommand(message: Message) {
 			const lowerArgument = argument.toLowerCase();
 			const subcommand = client.textCommands.find(
 				({ aliases }, name) =>
-					name === lowerArgument || aliases?.includes(lowerArgument)
+					name === lowerArgument || aliases?.includes(lowerArgument),
 			);
 			if (!subcommand) break;
 			trueArguments.shift();
@@ -60,7 +60,7 @@ export async function handleTextCommand(message: Message) {
 									.map(alias => `\`${alias}\``)
 									.join(", ")})`
 							: ""
-					}?`
+					}?`,
 				);
 		}
 	}
@@ -70,7 +70,7 @@ export async function runCommand(
 	name: string,
 	command: TextCommand,
 	trueArguments: string[],
-	message: Message
+	message: Message,
 ) {
 	const { client, author, channelId } = message;
 	try {
@@ -101,7 +101,7 @@ export async function runCommand(
 function parseArgs(
 	command: TextCommand,
 	trueArguments: string[],
-	message: Message
+	message: Message,
 ) {
 	const parsedArguments: Record<string, ArgumentValue | undefined> = {};
 	for (const [name, argument] of Object.entries(command.args)) {
@@ -113,7 +113,7 @@ function parseArgs(
 					const n = Number.parseInt(argumentString);
 					if (Number.isNaN(n))
 						throw new Error(
-							`Argument \`${name}\` must be an integer, got \`${argumentString}\``
+							`Argument \`${name}\` must be an integer, got \`${argumentString}\``,
 						);
 					value = n;
 				}
@@ -127,7 +127,7 @@ function parseArgs(
 					const n = Number.parseFloat(argumentString);
 					if (Number.isNaN(n))
 						throw new Error(
-							`Argument \`${name}\` must be an float, got \`${argumentString}\``
+							`Argument \`${name}\` must be an float, got \`${argumentString}\``,
 						);
 					value = n;
 				}
