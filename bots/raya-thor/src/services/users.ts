@@ -1,3 +1,5 @@
+import db, { eq } from "database/drizzle";
+import { users } from "database/drizzle/schema";
 import prisma from "./prisma";
 
 export async function getUser(id: string) {
@@ -10,13 +12,11 @@ export async function getUser(id: string) {
 }
 
 export const incCount = async (id: string, name: string) => {
-	const user = await prisma.user.findUnique({
-		where: {
-			id,
-		},
-		select: {
+	const user = await db.query.users.findFirst({
+		columns: {
 			counts: true,
 		},
+		where: eq(users.id, id),
 	});
 	const counts = (user?.counts || {}) as Record<string, number>;
 	return prisma.user.upsert({

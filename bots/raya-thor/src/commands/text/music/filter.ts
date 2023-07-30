@@ -1,5 +1,6 @@
+import db, { inArray } from "database/drizzle";
+import { audioFilters } from "database/drizzle/schema";
 import musicCommand from "./command";
-import prisma from "$services/prisma";
 
 export default musicCommand(
 	{
@@ -22,24 +23,20 @@ export default musicCommand(
 			return voice.send("🎚️ Filters cleared");
 		}
 
-		const audioFilters = await prisma.audioFilter.findMany({
-			where: {
-				name: {
-					in: filters,
-				},
-			},
+		const results = await db.query.audioFilters.findMany({
+			where: inArray(audioFilters.name, filters),
 		});
-		if (audioFilters.length !== filters.length)
+		if (results.length !== filters.length)
 			return message.reply(
 				`Filters not found: ${filters
-					.filter(filter => !audioFilters.some(af => af.name === filter))
+					.filter(filter => !results.some(af => af.name === filter))
 					.map(filter => `\`${filter}\``)
 					.join(", ")}`,
 			);
 
-		await voice.setFilters(audioFilters.map(f => f.value));
+		await voice.setFilters(results.map(f => f.value));
 		return voice.send(
-			`🎚️ Filters set to ${audioFilters
+			`🎚️ Filters set to ${results
 				.map(({ name }) => `\`${name}\``)
 				.join(", ")}`,
 		);

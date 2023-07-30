@@ -1,6 +1,7 @@
 import { env } from "node:process";
 import command from "discord/commands/slash";
-import prisma from "$services/prisma";
+import db, { and, ne, icontains } from "database/drizzle";
+import { y7Files } from "database/drizzle/schema";
 
 export default command(
 	{
@@ -10,24 +11,18 @@ export default command(
 				type: "string",
 				desc: "The file name to search for",
 				async autocomplete(search) {
-					const images = await prisma.y7File.findMany({
-						select: {
+					const results = await db.query.y7Files.findMany({
+						columns: {
 							name: true,
 						},
-						where: {
-							name: {
-								contains: search,
-							},
-							extension: {
-								not: "gif",
-							},
-						},
-						orderBy: {
-							name: "asc",
-						},
-						take: 5,
+						where: and(
+							icontains(y7Files.name, search),
+							ne(y7Files.extension, "gif"),
+						),
+						orderBy: y7Files.name,
+						limit: 5,
 					});
-					return images.map(({ name }) => name);
+					return results.map(({ name }) => name);
 				},
 			},
 		},

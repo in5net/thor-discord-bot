@@ -1,7 +1,8 @@
 import { time } from "discord.js";
 import command from "discord/commands/slash";
+import db, { eq, icontains } from "database/drizzle";
+import { issues } from "database/drizzle/schema";
 import { createEmbed } from "$services/embed";
-import prisma from "$services/prisma";
 
 export default command(
 	{
@@ -11,38 +12,30 @@ export default command(
 				type: "int",
 				desc: "The name off the issue search for",
 				async autocomplete(search) {
-					const issues = await prisma.issue.findMany({
-						select: {
+					const results = await db.query.issues.findMany({
+						columns: {
 							id: true,
 							name: true,
 						},
-						where: {
-							name: {
-								contains: search,
-							},
-						},
-						orderBy: {
-							name: "asc",
-						},
-						take: 5,
+						where: icontains(issues.name, search),
+						orderBy: issues.name,
+						limit: 5,
 					});
-					return Object.fromEntries(issues.map(({ id, name }) => [name, id]));
+					return Object.fromEntries(results.map(({ id, name }) => [name, id]));
 				},
 			},
 		},
 	},
 	async (i, { name: id }) => {
-		const issue = await prisma.issue.findUnique({
-			select: {
+		const issue = await db.query.issues.findFirst({
+			columns: {
 				createdAt: true,
 				name: true,
 				type: true,
 				desc: true,
 				closedAt: true,
 			},
-			where: {
-				id,
-			},
+			where: eq(issues.id, id),
 		});
 		if (!issue) return i.reply("Issue not found");
 		const { createdAt, name, type, desc, closedAt } = issue;

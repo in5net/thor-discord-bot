@@ -2,6 +2,8 @@ import { env } from "node:process";
 import { objectKeys } from "@in5net/limitless";
 import { IssueReason } from "database";
 import command from "discord/commands/slash";
+import db, { and, isNull, icontains } from "database/drizzle";
+import { issues } from "database/drizzle/schema";
 import { createEmbed } from "$services/embed";
 import prisma from "$services/prisma";
 
@@ -13,23 +15,16 @@ export default command(
 				type: "int",
 				desc: "The name off the issue search for",
 				async autocomplete(search) {
-					const issues = await prisma.issue.findMany({
-						select: {
+					const results = await db.query.issues.findMany({
+						columns: {
 							id: true,
 							name: true,
 						},
-						where: {
-							name: {
-								contains: search,
-							},
-							closedAt: null,
-						},
-						orderBy: {
-							name: "asc",
-						},
-						take: 5,
+						where: and(icontains(issues.name, search), isNull(issues.closedAt)),
+						orderBy: issues.name,
+						limit: 5,
 					});
-					return Object.fromEntries(issues.map(({ id, name }) => [name, id]));
+					return Object.fromEntries(results.map(({ id, name }) => [name, id]));
 				},
 			},
 			reason: {

@@ -1,6 +1,7 @@
 import command from "discord/commands/slash";
+import db, { eq, icontains } from "database/drizzle";
+import { files } from "database/drizzle/schema";
 import { sendFile } from "./shared";
-import prisma from "$services/prisma";
 
 export default command(
 	{
@@ -10,33 +11,25 @@ export default command(
 				type: "string",
 				desc: "The file name to search for",
 				async autocomplete(search) {
-					const files = await prisma.file.findMany({
-						select: {
+					const results = await db.query.files.findMany({
+						columns: {
 							id: true,
 							base: true,
 						},
-						where: {
-							base: {
-								contains: search,
-							},
-						},
-						orderBy: {
-							base: "asc",
-						},
-						take: 5,
+						where: icontains(files.base, search),
+						orderBy: files.base,
+						limit: 5,
 					});
 					return Object.fromEntries(
-						files.map(({ id, base }) => [id.toString(), base]),
+						results.map(({ id, base }) => [id.toString(), base]),
 					);
 				},
 			},
 		},
 	},
 	async (i, { file }) => {
-		const fileData = await prisma.file.findUnique({
-			where: {
-				id: BigInt(file),
-			},
+		const fileData = await db.query.files.findFirst({
+			where: eq(files.id, BigInt(file)),
 		});
 		if (!fileData) return i.reply("No file found");
 		return sendFile(i, fileData);

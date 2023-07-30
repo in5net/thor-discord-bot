@@ -1,9 +1,10 @@
 import { shuffle } from "@in5net/limitless";
 import { ChannelType, GuildMember } from "discord.js";
 import command from "discord/commands/slash";
+import db, { and, eq, icontains } from "database/drizzle";
+import { playlists } from "database/drizzle/schema";
 import * as playlist from "$src/music/playlist";
 import { getVoice } from "$src/music/voice-manager";
-import prisma from "$services/prisma";
 
 export default command(
 	{
@@ -13,22 +14,18 @@ export default command(
 				type: "string",
 				desc: "The name of the playlist",
 				async autocomplete(search, i) {
-					const playlists = await prisma.playlist.findMany({
-						select: {
+					const results = await db.query.playlists.findMany({
+						columns: {
 							name: true,
 						},
-						where: {
-							userId: i.user.id,
-							name: {
-								contains: search,
-							},
-						},
-						orderBy: {
-							name: "asc",
-						},
-						take: 5,
+						where: and(
+							eq(playlists.userId, i.user.id),
+							icontains(playlists.name, search),
+						),
+						orderBy: playlists.name,
+						limit: 5,
 					});
-					return playlists.map(({ name }) => name);
+					return results.map(({ name }) => name);
 				},
 			},
 			shuffle: {

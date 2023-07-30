@@ -1,13 +1,13 @@
+import db, { eq } from "database/drizzle";
+import { users } from "database/drizzle/schema";
 import prisma from "$services/prisma";
 
 export const MAX_BITS = 32;
 export const NEW_BITS = 24;
 
 async function getCreditAt(uid: string) {
-	const user = await prisma.user.findUnique({
-		where: {
-			id: uid,
-		},
+	const user = await db.query.users.findFirst({
+		where: eq(users.id, uid),
 	});
 
 	let creditAt = user?.creditAt;

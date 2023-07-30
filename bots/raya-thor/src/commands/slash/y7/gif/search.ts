@@ -1,7 +1,8 @@
 import { env } from "node:process";
 import command from "discord/commands/slash";
+import db, { and, eq, ne, icontains } from "database/drizzle";
+import { y7Files } from "database/drizzle/schema";
 import { NSFW_FILE_NAME } from "./shared";
-import prisma from "$services/prisma";
 
 export default command(
 	{
@@ -11,23 +12,19 @@ export default command(
 				type: "string",
 				desc: "The file name to search for",
 				async autocomplete(search) {
-					const gifs = await prisma.y7File.findMany({
-						select: {
+					const results = await db.query.y7Files.findMany({
+						columns: {
 							name: true,
 						},
-						where: {
-							name: {
-								contains: search,
-								not: NSFW_FILE_NAME,
-							},
-							extension: "gif",
-						},
-						orderBy: {
-							name: "asc",
-						},
-						take: 5,
+						where: and(
+							icontains(y7Files.name, search),
+							ne(y7Files.name, NSFW_FILE_NAME),
+							eq(y7Files.extension, "gif"),
+						),
+						orderBy: y7Files.name,
+						limit: 5,
 					});
-					return gifs.map(({ name }) => name);
+					return results.map(({ name }) => name);
 				},
 			},
 		},

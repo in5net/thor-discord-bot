@@ -1,6 +1,7 @@
 import { env } from "node:process";
 import { drizzle } from "drizzle-orm/planetscale-serverless";
 import { connect } from "@planetscale/database";
+import { type AnyColumn, ilike } from "drizzle-orm";
 import "./env";
 import * as schema from "./drizzle/schema";
 
@@ -13,3 +14,6 @@ const db = drizzle(conn, { schema });
 export default db;
 
 export * from "drizzle-orm";
+
+export const icontains = (column: AnyColumn, value: string) =>
+	ilike(column, `%${value}%`);

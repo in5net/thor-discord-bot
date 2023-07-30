@@ -1,5 +1,5 @@
 import command from "discord/commands/slash";
-import prisma from "$services/prisma";
+import db from "database/drizzle";
 
 export default command(
 	{
@@ -7,8 +7,8 @@ export default command(
 		options: {},
 	},
 	async i => {
-		const filters = await prisma.audioFilter.findMany({
-			select: {
+		const filters = await db.query.audioFilters.findMany({
+			columns: {
 				name: true,
 			},
 		});
