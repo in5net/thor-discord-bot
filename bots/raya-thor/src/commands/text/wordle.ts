@@ -5,7 +5,7 @@ import command from "discord/commands/text";
 
 const words = readFileSync(
 	new URL("../../../assets/wordle.txt", import.meta.url),
-	"utf8"
+	"utf8",
 ).split("\n");
 
 const channel2Word = new Map<Snowflake, string>();
@@ -19,7 +19,7 @@ export default command(
 		const word = random(words);
 		channel2Word.set(channel.id, word);
 		return channel.send("Picked word, time to guess!");
-	}
+	},
 );
 
 export async function handleWordleMessage({ channel, content }: Message) {

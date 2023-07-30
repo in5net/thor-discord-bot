@@ -5,7 +5,9 @@ import { ChannelType, userMention, type Message } from "discord.js";
 import { Timestamp } from "firebase-admin/firestore";
 import {
 	caseInsensitive,
+	charIn,
 	createRegExp,
+	digit,
 	exactly,
 	global,
 	whitespace,
@@ -36,7 +38,7 @@ export default event(
 		const noWhitespace = lowercase.replaceAll(whitespaceRegex, "");
 		if (
 			["among", "imposter", "imposta", "amogus", "mongus"].some(string_ =>
-				noWhitespace.includes(string_)
+				noWhitespace.includes(string_),
 			) &&
 			author.id !== client.user?.id
 		) {
@@ -58,7 +60,7 @@ export default event(
 				prefixRegex.test(content) ||
 				client.textCommands.some(
 					({ optionalPrefix }, name) =>
-						optionalPrefix && lowercase.startsWith(name)
+						optionalPrefix && lowercase.startsWith(name),
 				)
 			)
 				await handleTextCommand(message);
@@ -87,14 +89,16 @@ export default event(
 					};
 				}),
 			});
-	}
+	},
 );
 
 async function handleRandomResponse(message: Message) {
 	const { content, author, channel, member } = message;
-	if (content.length === 5) await handleWordleMessage(message);
+	const lowercase = content.toLowerCase().replaceAll(/<@!?\d+>/g, "");
 
-	const lowercase = content.toLowerCase().replace(/<@!?\d+>/g, "");
+	if (content.length === 5) await handleWordleMessage(message);
+	await handleDiceMessage(message);
+
 	if (lowercase.includes("ratio")) await incCount(author.id, "ratio");
 	if (["noway", "norway"].includes(lowercase.replace(" ", ""))) {
 		await channel.send(Math.random() < 0.1 ? "Norway" : "no way");
@@ -136,6 +140,29 @@ async function handleRandomResponse(message: Message) {
 				.join(" ")
 				.replaceAll("{name}", member?.displayName || author.username);
 			await channel.send(message_);
+		}
+	}
+}
+
+const diceRegex = createRegExp(
+	digit.times.between(1, 2).groupedAs("count"),
+	charIn("dD"),
+	digit.times.between(1, 3).groupedAs("sides"),
+);
+
+async function handleDiceMessage(message: Message) {
+	const { content, channel } = message;
+	const matchResult = content.match(diceRegex);
+	if (matchResult) {
+		const { groups } = matchResult;
+		const count = Number.parseInt(groups.count || "1");
+		const sides = Number.parseInt(groups.sides || "1");
+		if (count > 0 && sides > 0) {
+			const rolls = Array.from(
+				{ length: count },
+				() => Math.floor(Math.random() * sides) + 1,
+			);
+			await channel.send(rolls.join(", "));
 		}
 	}
 }
