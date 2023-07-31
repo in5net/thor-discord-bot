@@ -14,7 +14,6 @@ import {
 import { z } from "zod";
 import logger from "logger";
 import { memo } from "@in5net/limitless";
-import Video from "node_modules/youtubei.js/dist/src/parser/classes/Video";
 import youtube from "$services/youtube";
 
 interface SongJSON {
@@ -293,15 +292,25 @@ ${title} (${url})
 		requester: Requester,
 	): Promise<YouTubeSong> {
 		const { videos } = await youtube.search(query, { type: "video" });
-		const { id, title, description, duration, best_thumbnail } = videos
-			.first()
-			.as(Video);
+		const { id, title, description, duration, best_thumbnail } = z
+			.object({
+				id: z.string(),
+				title: z.coerce.string(),
+				description: z.string(),
+				duration: z.object({
+					seconds: z.number(),
+				}),
+				best_thumbnail: z.object({
+					url: z.string(),
+				}),
+			})
+			.parse(videos.first());
 		return new YouTubeSong({
 			id,
-			title: title.toString(),
+			title,
 			description,
 			duration: duration.seconds,
-			thumbnail: best_thumbnail?.url,
+			thumbnail: best_thumbnail.url,
 			requester,
 		});
 	}
@@ -554,7 +563,7 @@ ${title} (${url})
 		const { videos } = await youtube.search(`${name} ${artist?.name || ""}`, {
 			type: "video",
 		});
-		const { id } = videos.first().as(Video);
+		const { id } = z.object({ id: z.string() }).parse(videos.first());
 		ytId = id;
 
 		return new SpotifySong({
