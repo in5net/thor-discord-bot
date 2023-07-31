@@ -12,7 +12,7 @@
     "deploy": "turbo run deploy"
   },
   "dependencies": {
-    "turbo": "^1.10.11"
+    "turbo": "^1.10.12"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.7",
