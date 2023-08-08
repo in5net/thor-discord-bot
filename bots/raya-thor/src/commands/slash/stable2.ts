@@ -1,7 +1,8 @@
-import { generate } from "$services/ai/replicate/stable2";
 import { getBits, subtractBits } from "$services/ai/shared";
 import { ADMIN_IDS } from "$services/env";
+import { replicate } from "$src/services/ai/replicate";
 import command from "discord/commands/slash";
+import { z } from "zod";
 
 const NAME = "Stable Diffusion 2";
 const BITS_PER_IMAGE = 2;
@@ -41,27 +42,27 @@ export default command(
 
 		await i.reply(`Running ${NAME}...`);
 
-		for await (const { outputs, status, error } of generate(prompt, {
-			negative_prompt,
-			num_outputs,
-		})) {
-			if (error) return i.followUp(`Error: ${error}`);
-			if (outputs)
-				await i.editReply({
-					content: `**${prompt}**
-${outputs.join(" ")}`,
-				});
-			else
-				switch (status) {
-					case "failed": {
-						return i.followUp(`${NAME} failed to generate images`);
-					}
+		const outputs = await replicate.run(
+			"stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4",
+			{
+				input: {
+					prompt,
+					negative_prompt,
+					num_outputs,
+					width: 512,
+					height: 512,
+					prompt_strength: 0.8,
+					num_inference_steps: 50,
+					guidance_scale: 7.5,
+				},
+			},
+		);
+		const urls = z.array(z.string()).parse(outputs);
 
-					case "canceled": {
-						return i.followUp(`${NAME} was canceled`);
-					}
-				}
-		}
+		await i.editReply({
+			content: `**${prompt}**
+${urls.join(" ")}`,
+		});
 
 		return subtractBits(i.user.id, BITS_PRICE);
 	},

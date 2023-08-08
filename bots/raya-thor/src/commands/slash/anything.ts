@@ -1,7 +1,8 @@
-import { generate } from "$services/ai/replicate/anything";
 import { getBits, subtractBits } from "$services/ai/shared";
 import { ADMIN_IDS } from "$services/env";
+import { replicate } from "$src/services/ai/replicate";
 import command from "discord/commands/slash";
+import { z } from "zod";
 
 const NAME = "Anything v4";
 const BITS_PER_IMAGE = 1;
@@ -41,27 +42,22 @@ export default command(
 
 		await i.reply(`Running ${NAME}...`);
 
-		for await (const { outputs, status, error } of generate(prompt, {
-			negative_prompt,
-			num_outputs: n,
-		})) {
-			if (error) return i.followUp(`Error: ${error}`);
-			if (outputs)
-				await i.editReply({
-					content: `**${prompt}**
-${outputs.join(" ")}`,
-				});
-			else
-				switch (status) {
-					case "failed": {
-						return i.followUp(`${NAME} failed to generate images`);
-					}
+		const outputs = await replicate.run(
+			"cjwbw/anything-v4.0:42a996d39a96aedc57b2e0aa8105dea39c9c89d9d266caf6bb4327a1c191b061",
+			{
+				input: {
+					prompt,
+					negative_prompt,
+					num_outputs,
+				},
+			},
+		);
+		const urls = z.array(z.string()).parse(outputs);
 
-					case "canceled": {
-						return i.followUp(`${NAME} was canceled`);
-					}
-				}
-		}
+		await i.editReply({
+			content: `**${prompt}**
+${urls.join(" ")}`,
+		});
 
 		return subtractBits(i.user.id, BITS_PRICE);
 	},
