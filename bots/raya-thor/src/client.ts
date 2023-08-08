@@ -1,11 +1,11 @@
 import { randomInt } from "@in5net/limitless";
 import {
-    ActivityType,
-    Client,
-    Options,
-    WebhookClient,
-    type ActivityOptions,
-    type Collection,
+	ActivityType,
+	Client,
+	Options,
+	WebhookClient,
+	type ActivityOptions,
+	type Collection,
 } from "discord.js";
 import { type MessageCommand } from "discord/commands/message";
 import { type SlashCommand } from "discord/commands/slash";
