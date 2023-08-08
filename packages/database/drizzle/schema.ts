@@ -20,10 +20,8 @@ export const users = mysqlTable("User", {
 	id: char("id", { length: 18 }).primaryKey(),
 	createdAt: datetime("createdAt", { fsp: 3 })
 		.default(sql`(CURRENT_TIMESTAMP(3))`)
-		.notNull(
-			),
-				updatedAt: datetim
-		e("updatedAt", { fsp: 3 }).notNull(),
+		.notNull(),
+	updatedAt: datetime("updatedAt", { fsp: 3 }).notNull(),
 	counts: json("counts"),
 	creditAt: datetime("creditAt", { fsp: 3 }),
 	admin: boolean("admin").default(false).notNull(),
@@ -39,10 +37,8 @@ export const playlists = mysqlTable(
 		id: varchar("id", { length: 191 }).primaryKey(),
 		createdAt: datetime("createdAt", { fsp: 3 })
 			.default(sql`(CURRENT_TIMESTAMP(3))`)
-			.notNull
-				(),
-						updatedAt: datet
-			ime("updatedAt", { fsp: 3 }).notNull(),
+			.notNull(),
+		updatedAt: datetime("updatedAt", { fsp: 3 }).notNull(),
 		name: varchar("name", { length: 100 }).notNull(),
 		userId: char("userId", { length: 18 }).notNull(),
 	},
@@ -66,10 +62,8 @@ export const albums = mysqlTable("Album", {
 	id: varchar("id", { length: 191 }).primaryKey(),
 	createdAt: datetime("createdAt", { fsp: 3 })
 		.default(sql`(CURRENT_TIMESTAMP(3))`)
-		.notNull(
-			),
-				updatedAt: datetim
-		e("updatedAt", { fsp: 3 }).notNull(),
+		.notNull(),
+	updatedAt: datetime("updatedAt", { fsp: 3 }).notNull(),
 	name: varchar("name", { length: 100 }).notNull(),
 	data: json("data").notNull(),
 });
@@ -82,10 +76,8 @@ export const songs = mysqlTable("Song", {
 	id: varchar("id", { length: 191 }).primaryKey(),
 	createdAt: datetime("createdAt", { fsp: 3 })
 		.default(sql`(CURRENT_TIMESTAMP(3))`)
-		.notNull(
-			),
-				updatedAt: datetim
-		e("updatedAt", { fsp: 3 }).notNull(),
+		.notNull(),
+	updatedAt: datetime("updatedAt", { fsp: 3 }).notNull(),
 	playlistId: varchar("playlistId", { length: 191 }),
 	albumId: varchar("albumId", { length: 191 }),
 	title: text("title").notNull(),
@@ -108,10 +100,8 @@ export const ratios = mysqlTable("Ratio", {
 	id: varchar("id", { length: 191 }).primaryKey(),
 	createdAt: datetime("createdAt", { fsp: 3 })
 		.default(sql`(CURRENT_TIMESTAMP(3))`)
-		.notNull(
-			),
-				content: varchar("
-		content", { length: 191 }).notNull().unique(),
+		.notNull(),
+	content: varchar("content", { length: 191 }).notNull().unique(),
 });
 
 export const files = mysqlTable("File", {
@@ -126,12 +116,10 @@ export const files = mysqlTable("File", {
 	proxyUrl: text("proxyURL").notNull(),
 	createdAt: datetime("createdAt", { fsp: 3 })
 		.default(sql`(CURRENT_TIMESTAMP(3))`)
-		.notNull(
-			),
-			});
+		.notNull(),
+});
 
-			export const y
-		7Files = mysqlTable("Y7File", {
+export const y7Files = mysqlTable("Y7File", {
 	name: varchar("name", { length: 100 }).primaryKey(),
 	extension: varchar("extension", { length: 4 }).notNull(),
 });
@@ -166,10 +154,8 @@ export const issues = mysqlTable("Issue", {
 	id: int("id").autoincrement().primaryKey(),
 	createdAt: datetime("createdAt", { fsp: 3 })
 		.default(sql`(CURRENT_TIMESTAMP(3))`)
-		.notNull(
-			),
-				updatedAt: datetim
-		e("updatedAt", { fsp: 3 }).notNull(),
+		.notNull(),
+	updatedAt: datetime("updatedAt", { fsp: 3 }).notNull(),
 	userId: char("userId", { length: 18 }).notNull(),
 	name: varchar("name", { length: 100 }).notNull(),
 	type: mysqlEnum("type", ["Bug", "Feature", "Enhancement"]).notNull(),
@@ -197,10 +183,8 @@ export const commandExecutions = mysqlTable("CommandExecution", {
 	id: varchar("id", { length: 191 }).primaryKey(),
 	createdAt: datetime("createdAt", { fsp: 3 })
 		.default(sql`(CURRENT_TIMESTAMP(3))`)
-		.notNull(
-			),
-				name: varchar("nam
-		e", { length: 191 }).notNull(),
+		.notNull(),
+	name: varchar("name", { length: 191 }).notNull(),
 	type: mysqlEnum("type", ["Text", "Slash", "Message"]).notNull(),
 	userId: bigint("userId", { mode: "bigint" }).notNull(),
 	messageId: bigint("messageId", { mode: "bigint" }),
