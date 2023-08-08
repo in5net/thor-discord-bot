@@ -1,5 +1,5 @@
-import { env } from "node:process";
 import command from "discord/commands/slash";
+import { env } from "node:process";
 import { getRandomFile, sendFile, types } from "./shared";
 
 export default command(

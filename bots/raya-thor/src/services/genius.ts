@@ -1,5 +1,5 @@
-import { env } from "node:process";
 import { Client } from "genius-lyrics";
+import { env } from "node:process";
 
 const client = new Client(env.GENIUS_TOKEN);
 

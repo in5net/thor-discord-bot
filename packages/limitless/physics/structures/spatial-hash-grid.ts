@@ -1,6 +1,6 @@
-import { AABB } from "../body";
-import type Body from "../body";
 import { toFloor } from "../../util/number";
+import type Body from "../body";
+import { AABB } from "../body";
 
 export default class SpatialHashGrid extends AABB {
 	bodies: Body[] = [];

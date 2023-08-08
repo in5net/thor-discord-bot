@@ -1,5 +1,5 @@
-import { unorderedRemove } from "../../util/array";
 import { vec2, type Vector2 } from "../../math/vector";
+import { unorderedRemove } from "../../util/array";
 import type Particle from "./particle";
 
 export default class ParticleSystem<T extends Particle = Particle> {

@@ -1,6 +1,6 @@
-import command from "discord/commands/slash";
 import db, { eq, icontains } from "database/drizzle";
 import { files } from "database/drizzle/schema";
+import command from "discord/commands/slash";
 import { sendFile } from "./shared";
 
 export default command(

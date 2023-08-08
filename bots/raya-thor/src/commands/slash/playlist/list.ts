@@ -1,7 +1,7 @@
-import { env } from "node:process";
+import { list } from "$src/music/playlist";
 import { EmbedBuilder } from "discord.js";
 import command from "discord/commands/slash";
-import { list } from "$src/music/playlist";
+import { env } from "node:process";
 
 export default command(
 	{

@@ -1,4 +1,3 @@
-import { env } from "node:process";
 import {
 	categories,
 	contentWarnings,
@@ -7,6 +6,7 @@ import {
 	type User,
 	type Work,
 } from "@in5net/limitless/api/ao3";
+import { env } from "node:process";
 import { createEmbedBuilder } from "../embed";
 
 export function createWorkEmbedBuilder(

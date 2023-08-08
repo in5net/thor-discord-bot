@@ -1,6 +1,6 @@
-import { env } from "node:process";
-import { mkdirSync, existsSync } from "node:fs";
+import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
+import { env } from "node:process";
 import pino, { type TransportTargetOptions } from "pino";
 
 const prod = env.NODE_ENV === "production";

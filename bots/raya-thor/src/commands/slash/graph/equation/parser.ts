@@ -8,16 +8,16 @@ import {
 	UnaryOpNode,
 } from "./node";
 import Token, {
+	binaryOps,
+	groupings,
+	postfixUnaryOps,
+	prefixUnaryOps,
 	type BinaryOp,
 	type LeftGrouping,
 	type PostfixUnaryOp,
 	type PrefixUnaryOp,
 	type RightGrouping,
 	type UnaryOp,
-	binaryOps,
-	groupings,
-	postfixUnaryOps,
-	prefixUnaryOps,
 } from "./token";
 
 export default class Parser {

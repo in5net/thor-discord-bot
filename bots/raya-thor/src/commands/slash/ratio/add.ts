@@ -1,5 +1,6 @@
+import db from "database/drizzle";
+import { cuid2, ratios } from "database/drizzle/schema";
 import command from "discord/commands/slash";
-import prisma from "$services/prisma";
 
 export default command(
 	{
@@ -11,16 +12,15 @@ export default command(
 			},
 		},
 	},
-	async (i, { ratios }) => {
+	async (i, { ratios: r }) => {
 		await i.deferReply();
-		const ratioStrs = ratios
+		const ratioStrs = r
 			.split("+")
 			.map(s => s.trim())
 			.filter(Boolean);
-		await prisma.ratio.createMany({
-			data: ratioStrs.map(s => ({ content: s })),
-			skipDuplicates: true,
-		});
+		await db
+			.insert(ratios)
+			.values(ratioStrs.map(s => ({ id: cuid2(), content: s })));
 		return i.editReply("Added to ratios");
 	},
 );

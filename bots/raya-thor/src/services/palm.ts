@@ -1,7 +1,7 @@
-import { readFile } from "node:fs/promises";
-import { env } from "node:process";
 import { TextServiceClient } from "@google-ai/generativelanguage";
 import { GoogleAuth } from "google-auth-library";
+import { readFile } from "node:fs/promises";
+import { env } from "node:process";
 
 const { NAME, MAKERSUITE_API_KEY } = env;
 

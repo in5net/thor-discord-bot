@@ -1,7 +1,7 @@
-import { shuffle } from "@in5net/limitless";
-import command from "discord/commands/slash";
-import db, { sql } from "database/drizzle";
 import { incCount } from "$services/users";
+import { shuffle } from "@in5net/limitless";
+import db, { sql } from "database/drizzle";
+import command from "discord/commands/slash";
 
 const NUM_RATIOS = 50;
 

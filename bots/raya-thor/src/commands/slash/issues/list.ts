@@ -1,9 +1,9 @@
+import { createEmbed } from "$services/embed";
 import { objectKeys } from "@in5net/limitless";
 import { IssueType } from "database";
-import command from "discord/commands/slash";
 import db, { and, eq, isNotNull } from "database/drizzle";
 import { issues } from "database/drizzle/schema";
-import { createEmbed } from "$services/embed";
+import command from "discord/commands/slash";
 
 export default command(
 	{

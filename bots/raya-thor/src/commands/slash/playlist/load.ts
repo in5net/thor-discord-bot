@@ -1,10 +1,10 @@
-import { shuffle } from "@in5net/limitless";
-import { ChannelType, GuildMember } from "discord.js";
-import command from "discord/commands/slash";
-import db, { and, eq, icontains } from "database/drizzle";
-import { playlists } from "database/drizzle/schema";
 import * as playlist from "$src/music/playlist";
 import { getVoice } from "$src/music/voice-manager";
+import { shuffle } from "@in5net/limitless";
+import db, { and, eq, icontains } from "database/drizzle";
+import { playlists } from "database/drizzle/schema";
+import { ChannelType, GuildMember } from "discord.js";
+import command from "discord/commands/slash";
 
 export default command(
 	{

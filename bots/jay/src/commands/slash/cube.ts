@@ -1,10 +1,10 @@
-import { env } from "node:process";
+import GL from "$services/gl";
 import { AttachmentBuilder } from "discord.js";
+import command from "discord/commands/slash";
 import { mat4 } from "gl-matrix";
 import { nanoid } from "nanoid";
+import { env } from "node:process";
 import { filesBucket } from "storage";
-import command from "discord/commands/slash";
-import GL from "$services/gl";
 
 const size = 512;
 

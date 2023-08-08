@@ -1,5 +1,5 @@
-import { env } from "node:process";
 import { customsearch } from "@googleapis/customsearch";
+import { env } from "node:process";
 
 export const api = customsearch({
 	version: "v1",

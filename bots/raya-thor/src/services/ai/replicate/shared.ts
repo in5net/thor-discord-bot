@@ -1,7 +1,7 @@
-import { env } from "node:process";
 import { sleep } from "@in5net/limitless";
 import got from "got";
 import logger from "logger";
+import { env } from "node:process";
 
 export interface Prediction {
 	id: string;

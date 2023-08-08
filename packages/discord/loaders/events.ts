@@ -1,7 +1,7 @@
-import { join } from "node:path";
-import { type Client, type ClientEvents } from "discord.js";
 import { pluralize } from "@in5net/limitless";
+import { type Client, type ClientEvents } from "discord.js";
 import logger from "logger";
+import { join } from "node:path";
 import { type Event, type EventListener } from "../event";
 import { noTestGlob } from "./shared";
 

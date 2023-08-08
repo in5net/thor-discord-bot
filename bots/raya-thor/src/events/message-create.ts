@@ -1,7 +1,11 @@
-import { parse } from "node:path";
-import { env } from "node:process";
+import { emojiRegex } from "$services/emoji";
+import { incCount } from "$services/users";
 import { random, shuffle } from "@in5net/limitless";
+import db from "database/drizzle";
+import { files } from "database/drizzle/schema";
 import { ChannelType, userMention, type Message } from "discord.js";
+import event from "discord/event";
+import { handleTextCommand } from "discord/events/message-create";
 import { Timestamp } from "firebase-admin/firestore";
 import {
 	caseInsensitive,
@@ -12,15 +16,12 @@ import {
 	global,
 	whitespace,
 } from "magic-regexp";
-import event from "discord/event";
-import { handleTextCommand } from "discord/events/message-create";
+import { parse } from "node:path";
+import { env } from "node:process";
+import { handleWordleMessage } from "../commands/text/wordle";
 import randomResponses, {
 	randomResponsesRef as randomResponsesReference,
 } from "../responses";
-import { handleWordleMessage } from "../commands/text/wordle";
-import prisma from "$services/prisma";
-import { incCount } from "$services/users";
-import { emojiRegex } from "$services/emoji";
 
 const prefix = env.PREFIX;
 const prefixRegex = createRegExp(exactly(prefix).at.lineStart(), [
@@ -73,8 +74,8 @@ export default event(
 			!channel.isThread() &&
 			!channel.nsfw
 		)
-			await prisma.file.createMany({
-				data: attachments.map(({ id, name: fileName, proxyURL }) => {
+			await db.insert(files).values(
+				attachments.map(({ id, name: fileName, proxyURL }) => {
 					const { base, name, ext } = parse(fileName);
 					return {
 						id: BigInt(id),
@@ -85,10 +86,10 @@ export default event(
 						messageId: BigInt(message.id),
 						channelId: BigInt(channelId),
 						guildId: BigInt(channel.guildId),
-						proxyURL,
+						proxyUrl: proxyURL,
 					};
 				}),
-			});
+			);
 	},
 );
 

@@ -1,17 +1,17 @@
 /* eslint-disable no-new-wrappers */
 import {
-	acot,
-	acoth,
-	acsc,
-	acsch,
-	asec,
-	asech,
-	cot,
-	coth,
-	csc,
-	csch,
-	sec,
-	sech,
+    acot,
+    acoth,
+    acsc,
+    acsch,
+    asec,
+    asech,
+    cot,
+    coth,
+    csc,
+    csch,
+    sec,
+    sech,
 } from "@in5net/limitless";
 import Interpreter from "./interpreter";
 import Lexer from "./lexer";

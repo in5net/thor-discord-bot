@@ -1,7 +1,7 @@
-import { ChannelType, type ColorResolvable, EmbedBuilder } from "discord.js";
+import { incCount } from "$services/users";
+import { ChannelType, EmbedBuilder, type ColorResolvable } from "discord.js";
 import command from "discord/commands/slash";
 import got from "got";
-import { incCount } from "$services/users";
 
 interface TagModel {
 	/** Tag Id */

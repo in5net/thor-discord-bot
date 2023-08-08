@@ -1,7 +1,7 @@
-import { AttachmentBuilder } from "discord.js";
-import glsl from "glslify";
-import command from "discord/commands/slash";
 import GL from "$services/gl";
+import { AttachmentBuilder } from "discord.js";
+import command from "discord/commands/slash";
+import glsl from "glslify";
 
 const size = 512;
 const scale = 100;

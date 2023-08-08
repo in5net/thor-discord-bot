@@ -1,11 +1,11 @@
-import { readFile } from "node:fs/promises";
-import { env } from "node:process";
-import command from "discord/commands/text";
-import { ttlCache } from "@in5net/limitless";
-import ms from "ms";
-import { type ResponseTypes } from "@nick.heiner/openai-edge";
 import { filter, openai } from "$services/openai";
 import { cache } from "$services/prisma";
+import { ttlCache } from "@in5net/limitless";
+import { type ResponseTypes } from "@nick.heiner/openai-edge";
+import command from "discord/commands/text";
+import ms from "ms";
+import { readFile } from "node:fs/promises";
+import { env } from "node:process";
 
 const gpt3DescPath = new URL("../../../gpt3-desc.txt", import.meta.url);
 const desc = ttlCache(async () => readFile(gpt3DescPath, "utf8"), ms("10 min"));

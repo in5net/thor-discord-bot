@@ -1,9 +1,9 @@
-import { env } from "node:process";
-import { drizzle } from "drizzle-orm/planetscale-serverless";
 import { connect } from "@planetscale/database";
-import { type AnyColumn, ilike } from "drizzle-orm";
-import "./env";
+import { ilike, type AnyColumn } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/planetscale-serverless";
+import { env } from "node:process";
 import * as schema from "./drizzle/schema";
+import "./env";
 
 const conn = connect({
 	host: env.DATABASE_HOST,

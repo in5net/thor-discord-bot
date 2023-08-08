@@ -1,9 +1,9 @@
+import { firestore } from "$services/firebase";
 import {
-	type CollectionReference,
-	type Timestamp,
+    type CollectionReference,
+    type Timestamp,
 } from "firebase-admin/firestore";
 import trkl from "trkl";
-import { firestore } from "$services/firebase";
 
 interface RandomResponse {
 	words: string[];

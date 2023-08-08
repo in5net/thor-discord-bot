@@ -1,5 +1,5 @@
-import command from "discord/commands/slash";
 import db from "database/drizzle";
+import command from "discord/commands/slash";
 
 export default command(
 	{

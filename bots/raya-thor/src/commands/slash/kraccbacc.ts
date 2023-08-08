@@ -1,7 +1,7 @@
-import { env } from "node:process";
+import db, { eq, isNotNull, lt, sql } from "database/drizzle";
+import { kraccBacc } from "database/drizzle/schema";
 import command from "discord/commands/slash";
-import db, { lt, isNotNull, sql } from "database/drizzle";
-import prisma from "$services/prisma";
+import { env } from "node:process";
 
 export default command(
 	{
@@ -22,14 +22,12 @@ export default command(
 			orderBy: sql`rand()`,
 		});
 		if (!video) return i.editReply("No video found!");
-		await prisma.kraccBacc.update({
-			data: {
+		await db
+			.update(kraccBacc)
+			.set({
 				sentAt: new Date(),
-			},
-			where: {
-				name: video.name,
-			},
-		});
+			})
+			.where(eq(kraccBacc.name, video.name));
 
 		const url = `https://${env.FILES_DOMAIN}/kraccbacc/${encodeURIComponent(
 			video.name,

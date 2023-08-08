@@ -1,10 +1,10 @@
-import { env } from "node:process";
-import { pipeline } from "node:stream/promises";
-import { filesBucket } from "storage";
+import { ADMIN_IDS } from "$services/env";
 import command from "discord/commands/slash";
 import got from "got";
 import logger from "logger";
-import { ADMIN_IDS } from "$services/env";
+import { env } from "node:process";
+import { pipeline } from "node:stream/promises";
+import { filesBucket } from "storage";
 
 export default command(
 	{

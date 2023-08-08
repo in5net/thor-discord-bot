@@ -1,6 +1,6 @@
-import { env } from "node:process";
+import db, { ne, sql } from "database/drizzle";
 import command from "discord/commands/slash";
-import db, { sql, ne } from "database/drizzle";
+import { env } from "node:process";
 import { NSFW_FILE_NAME } from "./shared";
 
 export default command(

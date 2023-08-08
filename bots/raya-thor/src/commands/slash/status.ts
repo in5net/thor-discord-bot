@@ -1,7 +1,7 @@
-import { cpus, freemem, totalmem } from "node:os";
-import { arch, memoryUsage, platform, uptime, versions } from "node:process";
 import { EmbedBuilder, version } from "discord.js";
 import command from "discord/commands/slash";
+import { cpus, freemem, totalmem } from "node:os";
+import { arch, memoryUsage, platform, uptime, versions } from "node:process";
 
 export default command(
 	{

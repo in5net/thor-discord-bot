@@ -1,8 +1,8 @@
+import youtube from "$services/youtube";
 import { type APIEmbedField } from "discord.js";
 import command from "discord/commands/slash";
 import logger from "logger";
 import { createEmbedBuilder } from "../embed";
-import youtube from "$services/youtube";
 
 export default command(
 	{

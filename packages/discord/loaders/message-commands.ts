@@ -1,8 +1,8 @@
-import { join, parse } from "node:path";
-import { Collection } from "discord.js";
 import { pluralize } from "@in5net/limitless";
+import { Collection } from "discord.js";
 import logger from "logger";
-import { type MessageCommand, isMessageCommand } from "../commands/message";
+import { join, parse } from "node:path";
+import { isMessageCommand, type MessageCommand } from "../commands/message";
 import { noTestGlob } from "./shared";
 
 export async function loadMessageCommands(dirPath: string) {

@@ -1,6 +1,6 @@
-import { env } from "node:process";
 import "dotenv/config";
 import logger from "logger";
+import { env } from "node:process";
 import { z } from "zod";
 
 declare global {

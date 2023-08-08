@@ -1,15 +1,15 @@
-import { env } from "node:process";
 import { random } from "@in5net/limitless";
 import { getText } from "@in5net/limitless/api/y7";
 import {
-	ActionRowBuilder,
-	ComponentType,
-	EmbedBuilder,
-	StringSelectMenuBuilder,
+    ActionRowBuilder,
+    ComponentType,
+    EmbedBuilder,
+    StringSelectMenuBuilder,
 } from "discord.js";
 import command from "discord/commands/slash";
 import logger from "logger";
 import ms from "ms";
+import { env } from "node:process";
 import items from "./items";
 import { part, type Part } from "./labyrinth";
 import questions from "./questions";

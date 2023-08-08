@@ -1,4 +1,4 @@
-import { env } from "node:process";
+import ImageSearch from "$services/customsearch";
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
@@ -7,7 +7,7 @@ import {
 } from "discord.js";
 import command from "discord/commands/slash";
 import ms from "ms";
-import ImageSearch from "$services/customsearch";
+import { env } from "node:process";
 
 export default command(
 	{

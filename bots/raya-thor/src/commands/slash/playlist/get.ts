@@ -1,4 +1,7 @@
-import { env } from "node:process";
+import { sec2Str } from "$services/time";
+import * as playlist from "$src/music/playlist";
+import db, { and, eq, icontains } from "database/drizzle";
+import { playlists } from "database/drizzle/schema";
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
@@ -8,10 +11,7 @@ import {
 } from "discord.js";
 import command from "discord/commands/slash";
 import ms from "ms";
-import db, { and, eq, icontains } from "database/drizzle";
-import { playlists } from "database/drizzle/schema";
-import * as playlist from "$src/music/playlist";
-import { sec2Str } from "$services/time";
+import { env } from "node:process";
 
 export default command(
 	{

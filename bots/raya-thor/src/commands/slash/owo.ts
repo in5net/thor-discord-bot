@@ -1,5 +1,5 @@
-import owofire from "owofire";
 import command from "discord/commands/slash";
+import owofire from "owofire";
 
 export default command(
 	{

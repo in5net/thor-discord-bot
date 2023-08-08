@@ -1,7 +1,7 @@
-import { env } from "node:process";
+import { api } from "$services/customsearch";
 import { EmbedBuilder, hyperlink } from "discord.js";
 import command from "discord/commands/text";
-import { api } from "$services/customsearch";
+import { env } from "node:process";
 
 export default command(
 	{

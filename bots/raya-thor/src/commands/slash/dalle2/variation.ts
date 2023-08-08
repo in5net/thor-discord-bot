@@ -1,16 +1,16 @@
+import { getBits, subtractBits } from "$services/ai/shared";
+import { ADMIN_IDS } from "$services/env";
+import { openai } from "$services/openai";
+import { type ResponseTypes } from "@nick.heiner/openai-edge";
+import command from "discord/commands/slash";
+import got from "got";
+import { nanoid } from "nanoid";
 import { createReadStream, createWriteStream } from "node:fs";
 import { mkdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pipeline } from "node:stream/promises";
-import { nanoid } from "nanoid";
-import command from "discord/commands/slash";
-import got from "got";
-import { type ResponseTypes } from "@nick.heiner/openai-edge";
 import { BITS_PRICE } from "./shared";
-import { getBits, subtractBits } from "$services/ai/shared";
-import { ADMIN_IDS } from "$services/env";
-import { openai } from "$services/openai";
 
 export default command(
 	{

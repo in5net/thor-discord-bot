@@ -1,7 +1,7 @@
-import command from "discord/commands/slash";
 import { generate } from "$services/ai/replicate/stable2";
 import { getBits, subtractBits } from "$services/ai/shared";
 import { ADMIN_IDS } from "$services/env";
+import command from "discord/commands/slash";
 
 const NAME = "Stable Diffusion 2";
 const BITS_PER_IMAGE = 2;

@@ -1,7 +1,7 @@
-import command from "discord/commands/slash";
 import { generate } from "$services/ai/replicate/pastel-mix";
 import { getBits, subtractBits } from "$services/ai/shared";
 import { ADMIN_IDS } from "$services/env";
+import command from "discord/commands/slash";
 
 const NAME = "Pastel Mix";
 const BITS_PER_IMAGE = 1;

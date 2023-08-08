@@ -1,7 +1,7 @@
-import { join, parse } from "node:path";
-import { Collection } from "discord.js";
 import { pluralize } from "@in5net/limitless";
+import { Collection } from "discord.js";
 import logger from "logger";
+import { join, parse } from "node:path";
 import { isTextCommand, type TextCommand } from "../commands/text";
 import { noTestGlob } from "./shared";
 

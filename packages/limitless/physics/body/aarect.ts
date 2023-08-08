@@ -1,6 +1,6 @@
 import { vec2, type Vector2 } from "../../math";
-import Body from "./body";
 import AABB from "./aabb";
+import Body from "./body";
 import ConvexPolygon from "./convex-polygon";
 import Rect from "./rect";
 

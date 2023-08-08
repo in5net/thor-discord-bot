@@ -1,10 +1,10 @@
+import GL from "$services/gl";
+import { randomInt } from "@in5net/limitless";
+import command from "discord/commands/slash";
+import { nanoid } from "nanoid";
 import { type Buffer } from "node:buffer";
 import { env } from "node:process";
-import { randomInt } from "@in5net/limitless";
-import { nanoid } from "nanoid";
 import { filesBucket } from "storage";
-import command from "discord/commands/slash";
-import GL from "$services/gl";
 
 const MAX_IMAGE_SIZE = 2048;
 

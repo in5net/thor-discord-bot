@@ -1,6 +1,6 @@
+import { getUser } from "$services/users";
 import { EmbedBuilder } from "discord.js";
 import command from "discord/commands/slash";
-import { getUser } from "$services/users";
 
 export default command(
 	{

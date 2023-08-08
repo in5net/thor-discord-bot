@@ -1,10 +1,10 @@
+import type Token from "./token";
 import {
 	type BinaryOp,
 	type LeftGrouping,
 	type RightGrouping,
 	type UnaryOp,
 } from "./token";
-import type Token from "./token";
 
 export default abstract class Node {
 	abstract toString(): string;

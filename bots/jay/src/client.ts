@@ -1,14 +1,14 @@
-import process from "node:process";
 import {
 	ActivityType,
 	Client,
-	type Collection,
 	Options,
 	WebhookClient,
+	type Collection,
 } from "discord.js";
+import { type SlashCommand } from "discord/commands/slash";
 import { type TextCommand } from "discord/commands/text";
 import { loadDiscordEvents } from "discord/loaders/events";
-import { type SlashCommand } from "discord/commands/slash";
+import process from "node:process";
 import { slashCommands, textCommands } from "./commands";
 
 const { NAME, DISCORD_TOKEN, NODE_ENV } = process.env;

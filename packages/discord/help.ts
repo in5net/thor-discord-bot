@@ -1,6 +1,6 @@
-import { env } from "node:process";
-import { type Collection, EmbedBuilder } from "discord.js";
+import { EmbedBuilder, type Collection } from "discord.js";
 import { createRegExp, exactly, word } from "magic-regexp";
+import { env } from "node:process";
 import command, { argumentType2Name, type TextCommand } from "./commands/text";
 
 export default command(

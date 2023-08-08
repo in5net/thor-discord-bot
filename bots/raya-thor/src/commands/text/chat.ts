@@ -1,11 +1,11 @@
-import { readFile } from "node:fs/promises";
-import { type Message } from "discord.js";
-import command from "discord/commands/text";
-import { throttle, ttlCache } from "@in5net/limitless";
-import ms from "ms";
-import { OpenAIStream as openAIStream } from "ai";
 import { filter, openai } from "$services/openai";
 import { cache } from "$services/prisma";
+import { throttle, ttlCache } from "@in5net/limitless";
+import { OpenAIStream as openAIStream } from "ai";
+import { type Message } from "discord.js";
+import command from "discord/commands/text";
+import ms from "ms";
+import { readFile } from "node:fs/promises";
 
 const chatGPTSystemPath = new URL(
 	"../../../chatgpt-system.txt",

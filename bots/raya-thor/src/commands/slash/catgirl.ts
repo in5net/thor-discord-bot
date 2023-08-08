@@ -1,7 +1,7 @@
+import { incCount } from "$services/users";
 import { EmbedBuilder } from "discord.js";
 import command from "discord/commands/slash";
 import got from "got";
-import { incCount } from "$services/users";
 
 export default command(
 	{

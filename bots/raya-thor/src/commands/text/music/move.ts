@@ -1,5 +1,5 @@
-import musicCommand from "./command";
 import woof from "$services/woof";
+import musicCommand from "./command";
 
 export default musicCommand(
 	{

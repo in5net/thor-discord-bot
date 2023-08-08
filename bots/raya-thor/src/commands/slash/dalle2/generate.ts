@@ -1,9 +1,9 @@
-import command from "discord/commands/slash";
-import { type ResponseTypes } from "@nick.heiner/openai-edge";
-import { BITS_PRICE } from "./shared";
 import { getBits, subtractBits } from "$services/ai/shared";
 import { ADMIN_IDS } from "$services/env";
 import { openai } from "$services/openai";
+import { type ResponseTypes } from "@nick.heiner/openai-edge";
+import command from "discord/commands/slash";
+import { BITS_PRICE } from "./shared";
 
 export default command(
 	{

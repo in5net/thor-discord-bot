@@ -1,21 +1,21 @@
-import process, { env } from "node:process";
 import { randomInt } from "@in5net/limitless";
 import {
-	type ActivityOptions,
-	ActivityType,
-	Client,
-	Options,
-	WebhookClient,
-	type Collection,
+    ActivityType,
+    Client,
+    Options,
+    WebhookClient,
+    type ActivityOptions,
+    type Collection,
 } from "discord.js";
-import { RecurrenceRule, scheduleJob } from "node-schedule";
-import ms from "ms";
-import { loadDiscordEvents } from "discord/loaders/events";
-import { type TextCommand } from "discord/commands/text";
-import { type SlashCommand } from "discord/commands/slash";
 import { type MessageCommand } from "discord/commands/message";
-import { getCatboyEmbed } from "./commands/slash/catboy";
+import { type SlashCommand } from "discord/commands/slash";
+import { type TextCommand } from "discord/commands/text";
+import { loadDiscordEvents } from "discord/loaders/events";
+import ms from "ms";
+import { RecurrenceRule, scheduleJob } from "node-schedule";
+import process, { env } from "node:process";
 import { messageCommands, slashCommands, textCommands } from "./commands";
+import { getCatboyEmbed } from "./commands/slash/catboy";
 
 const { NAME, DISCORD_TOKEN } = process.env;
 console.log(`⏳ ${NAME} is starting...`);

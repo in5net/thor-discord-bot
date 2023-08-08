@@ -1,15 +1,17 @@
+import prisma from "$services/prisma";
 import { type Prisma } from "database";
+import db, { and, eq } from "database/drizzle";
+import { playlists } from "database/drizzle/schema";
 import logger from "logger";
 import {
-	type Album,
-	type SongJSONType,
-	type SongType,
-	SoundCloudSong,
-	SpotifySong,
-	URLSong,
-	YouTubeSong,
+    SoundCloudSong,
+    SpotifySong,
+    URLSong,
+    YouTubeSong,
+    type Album,
+    type SongJSONType,
+    type SongType,
 } from "./song";
-import prisma from "$services/prisma";
 
 async function getPlaylist(uid: string, name: string) {
 	const { id, songs } = await prisma.playlist.findFirstOrThrow({
@@ -247,15 +249,10 @@ export async function add(
 export async function remove(uid: string, name: string, n?: number) {
 	try {
 		if (n === undefined)
-			await prisma.playlist.delete({
-				where: {
-					userId_name: {
-						userId: uid,
-						name,
-					},
-				},
-			});
-		else {
+			await db
+				.delete(playlists)
+				.where(and(eq(playlists.userId, uid), eq(playlists.name, name)));
+		else
 			await prisma.song.deleteMany({
 				where: {
 					playlist: {
@@ -265,7 +262,6 @@ export async function remove(uid: string, name: string, n?: number) {
 					playlistIndex: n - 1,
 				},
 			});
-		}
 	} catch (error) {
 		logger.error(error);
 		throw new Error("Playlist not found");

@@ -1,5 +1,5 @@
-import test from "node:test";
 import assert from "node:assert";
+import test from "node:test";
 import { getEpisode, getURL } from "./eam";
 
 await test("get E1S1", async () => {

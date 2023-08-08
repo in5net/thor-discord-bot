@@ -1,5 +1,5 @@
-import { env } from "node:process";
 import { deploy } from "discord/commands/deploy";
+import { env } from "node:process";
 import { slashCommands } from "./commands";
 import "./env";
 

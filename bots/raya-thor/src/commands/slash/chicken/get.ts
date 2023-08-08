@@ -1,8 +1,8 @@
-import { env } from "node:process";
+import db, { eq, isNotNull, lt, sql } from "database/drizzle";
+import { chickens } from "database/drizzle/schema";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
-import db, { lt, isNotNull, sql } from "database/drizzle";
-import prisma from "$services/prisma";
+import { env } from "node:process";
 
 const stickenFileName = "stick.png";
 
@@ -33,14 +33,12 @@ export default command(
 				orderBy: sql`rand()`,
 			});
 			if (!chicken) return i.editReply("No chicken found!");
-			await prisma.chicken.update({
-				data: {
+			await db
+				.update(chickens)
+				.set({
 					sentAt: new Date(),
-				},
-				where: {
-					name: chicken.name,
-				},
-			});
+				})
+				.where(eq(chickens.name, chicken.name));
 			name = chicken.name;
 		}
 

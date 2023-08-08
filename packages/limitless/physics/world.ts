@@ -1,5 +1,5 @@
-import { QuadTree, SpatialHashGrid, Naive } from "./structures";
 import type Body from "./body";
+import { Naive, QuadTree, SpatialHashGrid } from "./structures";
 
 export default class World {
 	bodies: Body[] = [];

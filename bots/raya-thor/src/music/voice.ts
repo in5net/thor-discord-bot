@@ -1,37 +1,37 @@
+import { getLyrics } from "$services/genius";
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { shuffle } from "@in5net/limitless";
 import {
-	ChannelType,
-	type Message,
-	type MessageCreateOptions,
-	type TextChannel,
+    ChannelType,
+    type Message,
+    type MessageCreateOptions,
+    type TextChannel,
 } from "discord.js";
+import logger from "logger";
 import {
-	anyOf,
-	caseInsensitive,
-	charIn,
-	createRegExp,
-	digit,
-	exactly,
-	letter,
-	maybe,
-	oneOrMore,
-	wordBoundary,
+    anyOf,
+    caseInsensitive,
+    charIn,
+    createRegExp,
+    digit,
+    exactly,
+    letter,
+    maybe,
+    oneOrMore,
+    wordBoundary,
 } from "magic-regexp";
 import { TypedEmitter } from "tiny-typed-emitter";
-import logger from "logger";
 import * as playlist from "./playlist";
 import Queue from "./queue";
 import {
-	type Album,
-	type SongType,
-	SoundCloudSong,
-	SpotifySong,
-	URLSong,
-	YouTubeSong,
+    SoundCloudSong,
+    SpotifySong,
+    URLSong,
+    YouTubeSong,
+    type Album,
+    type SongType,
 } from "./song";
 import Stream from "./stream";
-import { getLyrics } from "$services/genius";
 
 const YOUTUBE_CHANNEL_REGEX = createRegExp(
 	"http",

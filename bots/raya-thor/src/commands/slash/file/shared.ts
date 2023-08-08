@@ -1,12 +1,12 @@
-import {
-	type BaseMessageOptions,
-	type MessagePayload,
-	hyperlink,
-	userMention,
-} from "discord.js";
-import db, { sql, inArray, type InferModel } from "database/drizzle";
-import { type files } from "database/drizzle/schema";
 import { createEmbed } from "$services/embed";
+import db, { inArray, sql, type InferModel } from "database/drizzle";
+import { type files } from "database/drizzle/schema";
+import {
+    hyperlink,
+    userMention,
+    type BaseMessageOptions,
+    type MessagePayload,
+} from "discord.js";
 
 export const types = ["image", "video", "audio"] as const;
 export type Type = (typeof types)[number];

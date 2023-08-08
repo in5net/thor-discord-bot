@@ -1,6 +1,6 @@
-import command from "discord/commands/text";
 import { answer } from "$services/palm";
 import { cache } from "$services/prisma";
+import command from "discord/commands/text";
 
 export default command(
 	{

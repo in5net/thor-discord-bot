@@ -1,6 +1,6 @@
+import { strTo16x16 } from "$services/hash";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
-import { strTo16x16 } from "$services/hash";
 
 const size = 16;
 const zoom = 4;

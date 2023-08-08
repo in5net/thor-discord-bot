@@ -1,7 +1,7 @@
-import { EmbedBuilder } from "discord.js";
-import { fetchRandom, type NB_CATEGORIES } from "nekos-best.js";
-import command from "discord/commands/slash";
 import { incCount } from "$services/users";
+import { EmbedBuilder } from "discord.js";
+import command from "discord/commands/slash";
+import { fetchRandom, type NB_CATEGORIES } from "nekos-best.js";
 
 const CATEGORIES: NB_CATEGORIES[] = [
 	"baka",

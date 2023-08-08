@@ -1,30 +1,30 @@
+import {
+    bubble,
+    cocktail,
+    comb,
+    cycle,
+    gnome,
+    heap,
+    insertion,
+    map,
+    max,
+    merge,
+    objectKeys,
+    quick,
+    randomInt,
+    selection,
+    shell,
+    sleep,
+    swap,
+} from "@in5net/limitless";
+import { AttachmentBuilder } from "discord.js";
+import command from "discord/commands/slash";
+import ffmpeg from "fluent-ffmpeg";
+import { nanoid } from "nanoid";
 import { createReadStream } from "node:fs";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import {
-	bubble,
-	cocktail,
-	comb,
-	cycle,
-	gnome,
-	heap,
-	insertion,
-	map,
-	max,
-	merge,
-	objectKeys,
-	quick,
-	randomInt,
-	selection,
-	shell,
-	sleep,
-	swap,
-} from "@in5net/limitless";
-import { AttachmentBuilder } from "discord.js";
-import ffmpeg from "fluent-ffmpeg";
-import { nanoid } from "nanoid";
-import command from "discord/commands/slash";
 
 const size = 512;
 const algorithms = {

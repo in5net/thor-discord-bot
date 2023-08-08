@@ -1,6 +1,6 @@
 import Vector2 from "../../math/vector/vec2";
-import Body from "./body";
 import AABB from "./aabb";
+import Body from "./body";
 import type ConvexPolygon from "./convex-polygon";
 
 export default class Circle extends Body {

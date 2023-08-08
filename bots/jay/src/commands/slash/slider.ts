@@ -1,12 +1,12 @@
+import { Vector2, sleep, vec2 } from "@in5net/limitless";
+import { AttachmentBuilder } from "discord.js";
+import command from "discord/commands/slash";
+import ffmpeg from "fluent-ffmpeg";
+import { nanoid } from "nanoid";
 import { createReadStream } from "node:fs";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { Vector2, sleep, vec2 } from "@in5net/limitless";
-import { AttachmentBuilder } from "discord.js";
-import ffmpeg from "fluent-ffmpeg";
-import { nanoid } from "nanoid";
-import command from "discord/commands/slash";
 
 const startGrid: number[][] = [
 	[1, 2, 3],

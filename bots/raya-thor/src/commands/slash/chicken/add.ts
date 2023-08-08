@@ -1,9 +1,9 @@
-import { Writable } from "node:stream";
-import { env } from "node:process";
-import { filesBucket } from "storage";
+import { ADMIN_IDS } from "$services/env";
 import command from "discord/commands/slash";
 import logger from "logger";
-import { ADMIN_IDS } from "$services/env";
+import { env } from "node:process";
+import { Writable } from "node:stream";
+import { filesBucket } from "storage";
 
 export default command(
 	{

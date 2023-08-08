@@ -1,5 +1,5 @@
-import command from "discord/commands/text";
 import { cache } from "$services/prisma";
+import command from "discord/commands/text";
 
 export default command(
 	{

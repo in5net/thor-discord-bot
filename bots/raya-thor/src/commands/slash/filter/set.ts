@@ -1,7 +1,7 @@
-import command from "discord/commands/slash";
+import { getVoice } from "$src/music/voice-manager";
 import db, { eq, icontains } from "database/drizzle";
 import { audioFilters } from "database/drizzle/schema";
-import { getVoice } from "$src/music/voice-manager";
+import command from "discord/commands/slash";
 
 export default command(
 	{

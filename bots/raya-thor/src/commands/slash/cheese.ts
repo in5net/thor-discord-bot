@@ -1,6 +1,6 @@
-import { env } from "node:process";
-import command from "discord/commands/slash";
 import { incCount } from "$services/users";
+import command from "discord/commands/slash";
+import { env } from "node:process";
 
 export default command(
 	{

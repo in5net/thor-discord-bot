@@ -1,8 +1,8 @@
+import { sec2Str } from "$services/time";
+import youtube from "$services/youtube";
 import command from "discord/commands/slash";
 import logger from "logger";
 import { createEmbedBuilder } from "../embed";
-import { sec2Str } from "$services/time";
-import youtube from "$services/youtube";
 
 export default command(
 	{

@@ -1,7 +1,7 @@
-import { env } from "node:process";
-import command from "discord/commands/slash";
-import db, { and, ne, icontains } from "database/drizzle";
+import db, { and, icontains, ne } from "database/drizzle";
 import { y7Files } from "database/drizzle/schema";
+import command from "discord/commands/slash";
+import { env } from "node:process";
 
 export default command(
 	{

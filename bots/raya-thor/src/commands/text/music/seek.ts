@@ -1,6 +1,6 @@
+import { str2Seconds } from "$services/time";
 import play from "play-dl";
 import musicCommand from "./command";
-import { str2Seconds } from "$services/time";
 
 export default musicCommand(
 	{

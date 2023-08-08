@@ -1,5 +1,5 @@
-import { env } from "node:process";
 import type { Config } from "drizzle-kit";
+import { env } from "node:process";
 
 export default {
 	out: "./drizzle",

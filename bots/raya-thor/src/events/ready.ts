@@ -1,6 +1,6 @@
-import process, { env } from "node:process";
 import { WebhookClient } from "discord.js";
 import event from "discord/event";
+import process, { env } from "node:process";
 
 const { WEBHOOK_URL, NAME, NODE_ENV } = env;
 

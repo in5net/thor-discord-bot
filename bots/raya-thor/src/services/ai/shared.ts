@@ -1,6 +1,5 @@
 import db, { eq } from "database/drizzle";
 import { users } from "database/drizzle/schema";
-import prisma from "$services/prisma";
 
 export const MAX_BITS = 32;
 export const NEW_BITS = 24;
@@ -40,17 +39,18 @@ export async function subtractBits(uid: string, price: number) {
 	if (hours < price) return false;
 
 	creditAt.setHours(creditAt.getHours() + price);
-	await prisma.user.upsert({
-		create: {
+	await db
+		.insert(users)
+		.values({
 			id: uid,
+			updatedAt: new Date(),
 			creditAt,
-		},
-		update: {
-			creditAt,
-		},
-		where: {
-			id: uid,
-		},
-	});
+		})
+		.onDuplicateKeyUpdate({
+			set: {
+				updatedAt: new Date(),
+				creditAt,
+			},
+		});
 	return true;
 }

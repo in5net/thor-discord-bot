@@ -1,9 +1,10 @@
-import { env } from "node:process";
+import db from "database/drizzle";
+import { commandExecutions, cuid2 } from "database/drizzle/schema";
 import { EmbedBuilder, type Message, type TextBasedChannel } from "discord.js";
-import { caseInsensitive, createRegExp, exactly } from "magic-regexp";
 import Fuse from "fuse.js";
 import logger from "logger";
-import prisma from "../prisma";
+import { caseInsensitive, createRegExp, exactly } from "magic-regexp";
+import { env } from "node:process";
 import { type ArgumentValue, type TextCommand } from "../commands/text";
 
 const prefixRegex = createRegExp(exactly(env.PREFIX).at.lineStart(), [
@@ -82,15 +83,14 @@ export async function runCommand(
 			client,
 		});
 		if (typeof result === "string") await message.channel.send(result);
-		await prisma.commandExecution.create({
-			data: {
-				name,
-				type: "Text",
-				userId: BigInt(author.id),
-				messageId: BigInt(message.id),
-				channelId: BigInt(channelId),
-				guildId: message.guildId ? BigInt(message.guildId) : undefined,
-			},
+		await db.insert(commandExecutions).values({
+			id: cuid2(),
+			name,
+			type: "Text",
+			userId: BigInt(author.id),
+			messageId: BigInt(message.id),
+			channelId: BigInt(channelId),
+			guildId: message.guildId ? BigInt(message.guildId) : undefined,
 		});
 	} catch (error) {
 		await sendError(message.channel, error);

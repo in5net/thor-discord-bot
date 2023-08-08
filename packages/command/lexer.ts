@@ -1,5 +1,5 @@
 import { Position } from "./position";
-import { type Str, type Token, booleans } from "./token";
+import { booleans, type Str, type Token } from "./token";
 
 const WHITESPACE = /[ \t\r]/;
 const DIGITS = /\d/;

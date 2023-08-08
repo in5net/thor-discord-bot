@@ -10,6 +10,7 @@
     "drizzle:introspect": "dotenv drizzle-kit introspect:mysql"
   },
   "dependencies": {
+    "@paralleldrive/cuid2": "^2.2.1",
     "@planetscale/database": "^1.10.0",
     "@prisma/client": "5.1.1",
     "drizzle-orm": "^0.28.1",

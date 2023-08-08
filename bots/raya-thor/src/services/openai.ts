@@ -1,9 +1,9 @@
-import { env } from "node:process";
 import {
 	Configuration,
 	OpenAIApi,
 	type ResponseTypes,
 } from "@nick.heiner/openai-edge";
+import { env } from "node:process";
 
 const { OPENAI_API_KEY } = env;
 

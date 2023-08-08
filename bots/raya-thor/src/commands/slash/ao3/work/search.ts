@@ -1,16 +1,16 @@
 import {
-	getUser,
-	searchCharacters,
-	searchFandoms,
-	searchRelationships,
-	searchTags,
+    getUser,
+    searchCharacters,
+    searchFandoms,
+    searchRelationships,
+    searchTags,
 } from "@in5net/limitless/api/ao3";
 import {
-	Category,
-	OrderBy,
-	Rating,
-	Warning,
-	searchWorks,
+    Category,
+    OrderBy,
+    Rating,
+    Warning,
+    searchWorks,
 } from "@in5net/limitless/api/ao3/work/search";
 import command from "discord/commands/slash";
 import { createWorkEmbedBuilder } from "./embed";

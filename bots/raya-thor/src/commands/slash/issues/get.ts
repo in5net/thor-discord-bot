@@ -1,8 +1,8 @@
-import { time } from "discord.js";
-import command from "discord/commands/slash";
+import { createEmbed } from "$services/embed";
 import db, { eq, icontains } from "database/drizzle";
 import { issues } from "database/drizzle/schema";
-import { createEmbed } from "$services/embed";
+import { time } from "discord.js";
+import command from "discord/commands/slash";
 
 export default command(
 	{

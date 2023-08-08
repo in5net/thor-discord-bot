@@ -1,13 +1,14 @@
+import db from "database/drizzle";
+import { commandExecutions, cuid2 } from "database/drizzle/schema";
 import {
-	type AutocompleteInteraction,
-	type ChatInputCommandInteraction,
-	EmbedBuilder,
-	type MessageContextMenuCommandInteraction,
+    EmbedBuilder,
+    type AutocompleteInteraction,
+    type ChatInputCommandInteraction,
+    type MessageContextMenuCommandInteraction,
 } from "discord.js";
 import logger from "logger";
-import event from "../event";
 import { type OptionValue } from "../commands/slash";
-import prisma from "../prisma";
+import event from "../event";
 
 export default event({ name: "interactionCreate" }, async ({ args: [i] }) => {
 	if (i.isChatInputCommand()) await handleSlash(i);
@@ -72,14 +73,13 @@ async function handleSlash(i: ChatInputCommandInteraction) {
 				}),
 			),
 		);
-		await prisma.commandExecution.create({
-			data: {
-				name,
-				type: "Slash",
-				userId: BigInt(i.user.id),
-				channelId: BigInt(i.channelId),
-				guildId: i.guildId ? BigInt(i.guildId) : undefined,
-			},
+		await db.insert(commandExecutions).values({
+			id: cuid2(),
+			name,
+			type: "Slash",
+			userId: BigInt(i.user.id),
+			channelId: BigInt(i.channelId),
+			guildId: i.guildId ? BigInt(i.guildId) : undefined,
 		});
 	} catch (error) {
 		logger.error(`Error while running command '${name}':`, error);
@@ -134,15 +134,14 @@ async function handleMessageMenu(i: MessageContextMenuCommandInteraction) {
 	const name = i.commandName;
 	try {
 		await handler(i);
-		await prisma.commandExecution.create({
-			data: {
-				name,
-				type: "Message",
-				userId: BigInt(i.user.id),
-				messageId: BigInt(i.targetId),
-				channelId: BigInt(i.channelId),
-				guildId: i.guildId ? BigInt(i.guildId) : undefined,
-			},
+		await db.insert(commandExecutions).values({
+			id: cuid2(),
+			name,
+			type: "Message",
+			userId: BigInt(i.user.id),
+			messageId: BigInt(i.targetId),
+			channelId: BigInt(i.channelId),
+			guildId: i.guildId ? BigInt(i.guildId) : undefined,
 		});
 	} catch (error) {
 		logger.error(`Error while running command '${name}':`, error);

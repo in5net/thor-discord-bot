@@ -1,7 +1,7 @@
-import command from "discord/commands/slash";
+import * as playlist from "$src/music/playlist";
 import db, { and, eq, icontains } from "database/drizzle";
 import { playlists } from "database/drizzle/schema";
-import * as playlist from "$src/music/playlist";
+import command from "discord/commands/slash";
 
 export default command(
 	{

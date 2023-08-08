@@ -1,7 +1,7 @@
-import command from "discord/commands/slash";
 import { generate } from "$services/ai/replicate/anything";
 import { getBits, subtractBits } from "$services/ai/shared";
 import { ADMIN_IDS } from "$services/env";
+import command from "discord/commands/slash";
 
 const NAME = "Anything v4";
 const BITS_PER_IMAGE = 1;

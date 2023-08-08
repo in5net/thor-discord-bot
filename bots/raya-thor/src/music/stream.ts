@@ -1,15 +1,15 @@
 import {
 	AudioPlayerStatus,
+	VoiceConnectionStatus,
 	createAudioPlayer,
 	joinVoiceChannel,
-	VoiceConnectionStatus,
 	type AudioResource,
 	type VoiceConnection,
 } from "@discordjs/voice";
 import { type VoiceChannel } from "discord.js";
-import { TypedEmitter } from "tiny-typed-emitter";
 import logger from "logger";
-import { type SongType, YouTubeSong } from "./song";
+import { TypedEmitter } from "tiny-typed-emitter";
+import { YouTubeSong, type SongType } from "./song";
 
 export default class Stream extends TypedEmitter<{
 	idle: () => void;

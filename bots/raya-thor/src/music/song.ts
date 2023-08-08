@@ -1,9 +1,12 @@
-import { type Readable } from "node:stream";
+import youtube from "$services/youtube";
 import { createAudioResource, StreamType } from "@discordjs/voice";
+import { memo } from "@in5net/limitless";
 import chalk from "chalk-template";
-import { type Awaitable, EmbedBuilder } from "discord.js";
+import { EmbedBuilder, type Awaitable } from "discord.js";
 import got from "got";
+import logger from "logger";
 import { createRegExp, digit, oneOrMore } from "magic-regexp";
+import { type Readable } from "node:stream";
 import {
 	type SoundCloudPlaylist,
 	type SoundCloudTrack,
@@ -12,9 +15,6 @@ import {
 	type SpotifyTrack,
 } from "play-dl";
 import { z } from "zod";
-import logger from "logger";
-import { memo } from "@in5net/limitless";
-import youtube from "$services/youtube";
 
 interface SongJSON {
 	title: string;

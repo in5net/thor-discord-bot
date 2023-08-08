@@ -1,14 +1,14 @@
 import { load } from "cheerio";
-import ORIGIN from "../origin";
 import { objectKeys } from "../../../util";
+import ORIGIN from "../origin";
 import {
 	contentWarnings,
 	symbols,
 	type Warning as IWarning,
 	type Work as IWork,
 } from "./get";
-import { type Language } from "./languages";
 import type languages from "./languages";
+import { type Language } from "./languages";
 
 interface Work extends IWork {
 	summary: string;

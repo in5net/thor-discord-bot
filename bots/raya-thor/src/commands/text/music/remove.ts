@@ -1,6 +1,6 @@
+import woof from "$services/woof";
 import logger from "logger";
 import musicCommand from "./command";
-import woof from "$services/woof";
 
 export default musicCommand(
 	{

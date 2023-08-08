@@ -1,14 +1,14 @@
-import { readFile } from "node:fs/promises";
-import {
-	anyOf,
-	caseInsensitive,
-	char,
-	createRegExp,
-	global,
-} from "magic-regexp";
+import { cache } from "$services/prisma";
 import command from "discord/commands/text";
 import got from "got";
-import { cache } from "$services/prisma";
+import {
+    anyOf,
+    caseInsensitive,
+    char,
+    createRegExp,
+    global,
+} from "magic-regexp";
+import { readFile } from "node:fs/promises";
 
 export default command(
 	{
