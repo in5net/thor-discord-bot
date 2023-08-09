@@ -1,8 +1,5 @@
 import { createEmbed } from "$services/embed";
-import prisma from "$services/prisma";
-import { objectKeys } from "@in5net/limitless";
-import { IssueReason } from "database";
-import db, { and, icontains, isNull } from "database/drizzle";
+import db, { and, eq, icontains, isNull } from "database/drizzle";
 import { issues } from "database/drizzle/schema";
 import command from "discord/commands/slash";
 import { env } from "node:process";
@@ -30,7 +27,7 @@ export default command(
 			reason: {
 				type: "choice",
 				desc: "Reason for closing",
-				choices: objectKeys(IssueReason),
+				choices: issues.reason.enumValues,
 			},
 		},
 	},
@@ -38,23 +35,27 @@ export default command(
 		if (i.user.id !== env.OWNER_ID)
 			return i.reply("Only my owner can update issues");
 
-		const { name } = await prisma.issue.update({
-			select: {
+		const result = await db.query.issues.findFirst({
+			columns: {
 				name: true,
 			},
-			data: {
+			where: eq(issues.id, issue),
+		});
+		if (!result) return i.reply("Issue not found");
+
+		await db
+			.update(issues)
+			.set({
 				closedAt: new Date(),
 				reason,
-			},
-			where: {
-				id: issue,
-			},
-		});
+			})
+			.where(eq(issues.id, issue));
+
 		return i.reply({
 			embeds: [
 				createEmbed()
 					.setTitle("Issue closed")
-					.setDescription(`#${issue}: ${name}`),
+					.setDescription(`#${issue}: ${result.name}`),
 			],
 		});
 	},

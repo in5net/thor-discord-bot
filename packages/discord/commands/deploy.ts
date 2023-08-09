@@ -1,7 +1,7 @@
 import {
-    ApplicationCommandOptionType,
-    Routes,
-    type RESTPutAPIApplicationCommandsJSONBody,
+	ApplicationCommandOptionType,
+	Routes,
+	type RESTPutAPIApplicationCommandsJSONBody,
 } from "discord-api-types/v10";
 import { REST, type Collection } from "discord.js";
 import { type CommandOptionType, type SlashCommand } from "./slash";

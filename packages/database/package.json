@@ -6,8 +6,8 @@
   "types": "./index.ts",
   "scripts": {
     "db:generate": "prisma generate && prisma db push --schema prisma/cache.prisma",
-    "db:push": "prisma db push --skip-generate",
-    "drizzle:introspect": "dotenv drizzle-kit introspect:mysql"
+    "drizzle:introspect": "drizzle-kit introspect:mysql",
+    "db:push": "drizzle-kit push:mysql"
   },
   "dependencies": {
     "@paralleldrive/cuid2": "^2.2.1",

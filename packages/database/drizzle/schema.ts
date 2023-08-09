@@ -1,29 +1,28 @@
-import { relations, sql } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import {
 	bigint,
 	boolean,
 	char,
-	datetime,
+	index,
 	int,
 	json,
 	mysqlEnum,
 	mysqlTable,
 	primaryKey,
 	text,
-	uniqueIndex,
+	timestamp,
+	unique,
 	varchar,
 } from "drizzle-orm/mysql-core";
 
 export { createId as cuid2 } from "@paralleldrive/cuid2";
 
-export const users = mysqlTable("User", {
+export const users = mysqlTable("users", {
 	id: char("id", { length: 18 }).primaryKey(),
-	createdAt: datetime("createdAt", { fsp: 3 })
-		.default(sql`(CURRENT_TIMESTAMP(3))`)
-		.notNull(),
-	updatedAt: datetime("updatedAt", { fsp: 3 }).notNull(),
+	createdAt: timestamp("created_at").notNull().defaultNow(),
+	updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
 	counts: json("counts"),
-	creditAt: datetime("creditAt", { fsp: 3 }),
+	creditAt: timestamp("credit_at"),
 	admin: boolean("admin").default(false).notNull(),
 });
 export const usersRelations = relations(users, ({ many }) => ({
@@ -32,21 +31,16 @@ export const usersRelations = relations(users, ({ many }) => ({
 }));
 
 export const playlists = mysqlTable(
-	"Playlist",
+	"playlists",
 	{
 		id: varchar("id", { length: 191 }).primaryKey(),
-		createdAt: datetime("createdAt", { fsp: 3 })
-			.default(sql`(CURRENT_TIMESTAMP(3))`)
-			.notNull(),
-		updatedAt: datetime("updatedAt", { fsp: 3 }).notNull(),
+		createdAt: timestamp("created_at").notNull().defaultNow(),
+		updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
+		userId: char("user_id", { length: 18 }).notNull(),
 		name: varchar("name", { length: 100 }).notNull(),
-		userId: char("userId", { length: 18 }).notNull(),
 	},
 	table => ({
-		userIdNameKey: uniqueIndex("Playlist_userId_name_key").on(
-			table.userId,
-			table.name,
-		),
+		uniqueUserIdName: unique().on(table.userId, table.name),
 	}),
 );
 export const playlistsRelations = relations(playlists, ({ one, many }) => ({
@@ -58,12 +52,10 @@ export const playlistsRelations = relations(playlists, ({ one, many }) => ({
 	albums: many(albums),
 }));
 
-export const albums = mysqlTable("Album", {
+export const albums = mysqlTable("albums", {
 	id: varchar("id", { length: 191 }).primaryKey(),
-	createdAt: datetime("createdAt", { fsp: 3 })
-		.default(sql`(CURRENT_TIMESTAMP(3))`)
-		.notNull(),
-	updatedAt: datetime("updatedAt", { fsp: 3 }).notNull(),
+	createdAt: timestamp("created_at").notNull().defaultNow(),
+	updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
 	name: varchar("name", { length: 100 }).notNull(),
 	data: json("data").notNull(),
 });
@@ -72,20 +64,55 @@ export const albumsRelations = relations(albums, ({ many }) => ({
 	songs: many(albums),
 }));
 
-export const songs = mysqlTable("Song", {
-	id: varchar("id", { length: 191 }).primaryKey(),
-	createdAt: datetime("createdAt", { fsp: 3 })
-		.default(sql`(CURRENT_TIMESTAMP(3))`)
-		.notNull(),
-	updatedAt: datetime("updatedAt", { fsp: 3 }).notNull(),
-	playlistId: varchar("playlistId", { length: 191 }),
-	albumId: varchar("albumId", { length: 191 }),
-	title: text("title").notNull(),
-	duration: int("duration").notNull(),
-	data: json("data").notNull(),
-	playlistIndex: int("playlistIndex"),
-	albumIndex: int("albumIndex"),
-});
+export const albumsToPlaylists = mysqlTable(
+	"albums_to_playlists",
+	{
+		albumId: varchar("album_id", { length: 191 }).notNull(),
+		playlistId: varchar("playlist_id", { length: 191 }).notNull(),
+	},
+	table => ({
+		pk: primaryKey(table.albumId, table.playlistId),
+	}),
+);
+export const albumsToPlaylistsRelations = relations(
+	albumsToPlaylists,
+	({ one }) => ({
+		album: one(albums, {
+			fields: [albumsToPlaylists.albumId],
+			references: [albums.id],
+		}),
+		playlist: one(playlists, {
+			fields: [albumsToPlaylists.playlistId],
+			references: [playlists.id],
+		}),
+	}),
+);
+
+export const songs = mysqlTable(
+	"songs",
+	{
+		id: varchar("id", { length: 191 }).primaryKey(),
+		createdAt: timestamp("created_at").notNull().defaultNow(),
+		updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
+		playlistId: varchar("playlist_id", { length: 191 }),
+		albumId: varchar("album_id", { length: 191 }),
+		title: text("title").notNull(),
+		duration: int("duration").notNull(),
+		data: json("data").notNull(),
+		playlistIndex: int("playlist_index"),
+		albumIndex: int("album_index"),
+	},
+	table => ({
+		playlistIndex: index("songs_playlist_id_playlist_idx").on(
+			table.playlistId,
+			table.playlistIndex,
+		),
+		albumIndex: index("songs_album_id_album_idx").on(
+			table.albumId,
+			table.albumIndex,
+		),
+	}),
+);
 export const songsRelations = relations(songs, ({ one }) => ({
 	playlist: one(playlists, {
 		fields: [songs.playlistId],
@@ -96,73 +123,92 @@ export const songsRelations = relations(songs, ({ one }) => ({
 		references: [albums.id],
 	}),
 }));
-export const ratios = mysqlTable("Ratio", {
+
+export const ratios = mysqlTable("ratios", {
 	id: varchar("id", { length: 191 }).primaryKey(),
-	createdAt: datetime("createdAt", { fsp: 3 })
-		.default(sql`(CURRENT_TIMESTAMP(3))`)
-		.notNull(),
+	createdAt: timestamp("created_at").notNull().defaultNow(),
 	content: varchar("content", { length: 191 }).notNull().unique(),
 });
 
-export const files = mysqlTable("File", {
-	id: bigint("id", { mode: "bigint" }).primaryKey(),
-	base: varchar("base", { length: 191 }).notNull(),
-	name: varchar("name", { length: 191 }).notNull(),
-	ext: varchar("ext", { length: 191 }).notNull(),
-	authorId: bigint("authorId", { mode: "bigint" }).notNull(),
-	messageId: bigint("messageId", { mode: "bigint" }).notNull(),
-	channelId: bigint("channelId", { mode: "bigint" }).notNull(),
-	guildId: bigint("guildId", { mode: "bigint" }).notNull(),
-	proxyUrl: text("proxyURL").notNull(),
-	createdAt: datetime("createdAt", { fsp: 3 })
-		.default(sql`(CURRENT_TIMESTAMP(3))`)
-		.notNull(),
-});
+export const files = mysqlTable(
+	"files",
+	{
+		id: bigint("id", { mode: "bigint" }).primaryKey(),
+		createdAt: timestamp("created_at").notNull().defaultNow(),
+		base: varchar("base", { length: 191 }).notNull(),
+		name: varchar("name", { length: 191 }).notNull(),
+		ext: varchar("ext", { length: 191 }).notNull(),
+		authorId: bigint("author_id", { mode: "bigint" }).notNull(),
+		messageId: bigint("message_id", { mode: "bigint" }).notNull(),
+		channelId: bigint("channel_id", { mode: "bigint" }).notNull(),
+		guildId: bigint("guild_id", { mode: "bigint" }).notNull(),
+		proxyUrl: text("proxy_url").notNull(),
+	},
+	table => ({
+		createdAtIndex: index("files_created_at_idx").on(table.createdAt),
+		baseIndex: index("files_base_idx").on(table.base),
+		nameIndex: index("files_name_idx").on(table.name),
+		extIndex: index("files_ext_idx").on(table.ext),
+		authorIdIndex: index("files_author_id_idx").on(table.authorId),
+		messageIdIndex: index("files_message_id_idx").on(table.messageId),
+		channelIdIndex: index("files_channel_id_idx").on(table.channelId),
+		guildIdIndex: index("files_guild_id_idx").on(table.guildId),
+	}),
+);
 
-export const y7Files = mysqlTable("Y7File", {
+export const y7Files = mysqlTable("y7_files", {
 	name: varchar("name", { length: 100 }).primaryKey(),
 	extension: varchar("extension", { length: 4 }).notNull(),
 });
 
-export const chickens = mysqlTable("Chicken", {
+export const chickens = mysqlTable("chickens", {
 	name: varchar("name", { length: 100 }).primaryKey(),
-	sentAt: datetime("sentAt", { fsp: 3 }),
+	sentAt: timestamp("sent_at"),
 });
 
-export const speechBubbles = mysqlTable("SpeechBubble", {
+export const speechBubbles = mysqlTable("speech_bubbles", {
 	name: varchar("name", { length: 100 }).primaryKey(),
-	sentAt: datetime("sentAt", { fsp: 3 }),
+	sentAt: timestamp("sent_at"),
 });
 
-export const hopOn = mysqlTable("HopOn", {
+export const hopOns = mysqlTable("hop_ons", {
 	id: varchar("id", { length: 191 }).primaryKey(),
-	sentAt: datetime("sentAt", { fsp: 3 }),
+	sentAt: timestamp("sent_at"),
 });
 
-export const kraccBacc = mysqlTable("KraccBacc", {
+export const kraccBaccVideos = mysqlTable("kracc_bacc_videos", {
 	name: varchar("name", { length: 191 }).primaryKey(),
-	sentAt: datetime("sentAt", { fsp: 3 }),
+	sentAt: timestamp("sent_at"),
 });
 
-export const bossFiles = mysqlTable("BossFile", {
+export const bossFiles = mysqlTable("boss_files", {
 	id: varchar("id", { length: 191 }).primaryKey(),
 	url: text("url").notNull(),
-	sentAt: datetime("sentAt", { fsp: 3 }),
+	sentAt: timestamp("sent_at"),
 });
 
-export const issues = mysqlTable("Issue", {
-	id: int("id").autoincrement().primaryKey(),
-	createdAt: datetime("createdAt", { fsp: 3 })
-		.default(sql`(CURRENT_TIMESTAMP(3))`)
-		.notNull(),
-	updatedAt: datetime("updatedAt", { fsp: 3 }).notNull(),
-	userId: char("userId", { length: 18 }).notNull(),
-	name: varchar("name", { length: 100 }).notNull(),
-	type: mysqlEnum("type", ["Bug", "Feature", "Enhancement"]).notNull(),
-	desc: text("desc").notNull(),
-	closedAt: datetime("closedAt", { fsp: 3 }),
-	reason: mysqlEnum("reason", ["Completed", "WontFix", "Duplicate", "Invalid"]),
-});
+export const issues = mysqlTable(
+	"issues",
+	{
+		id: int("id").primaryKey().autoincrement(),
+		createdAt: timestamp("created_at").notNull().defaultNow(),
+		updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
+		userId: char("user_id", { length: 18 }).notNull(),
+		name: varchar("name", { length: 100 }).notNull(),
+		type: mysqlEnum("type", ["bug", "feature", "enhancement"]).notNull(),
+		desc: text("desc").notNull(),
+		closedAt: timestamp("closed_at"),
+		reason: mysqlEnum("reason", [
+			"completed",
+			"wont_fix",
+			"duplicate",
+			"invalid",
+		]),
+	},
+	table => ({
+		userIndex: index("issues_user_id_idx").on(table.userId),
+	}),
+);
 export const issuesRelations = relations(issues, ({ one }) => ({
 	user: one(users, {
 		fields: [issues.userId],
@@ -170,49 +216,37 @@ export const issuesRelations = relations(issues, ({ one }) => ({
 	}),
 }));
 
-export const rotatingFood = mysqlTable("RotatingFood", {
+export const rotatingFood = mysqlTable("rotating_food", {
 	name: varchar("name", { length: 100 }).primaryKey(),
 });
 
-export const audioFilters = mysqlTable("AudioFilter", {
+export const audioFilters = mysqlTable("audio_filters", {
 	name: varchar("name", { length: 100 }).primaryKey(),
 	value: varchar("value", { length: 191 }).notNull(),
 });
 
-export const commandExecutions = mysqlTable("CommandExecution", {
-	id: varchar("id", { length: 191 }).primaryKey(),
-	createdAt: datetime("createdAt", { fsp: 3 })
-		.default(sql`(CURRENT_TIMESTAMP(3))`)
-		.notNull(),
-	name: varchar("name", { length: 191 }).notNull(),
-	type: mysqlEnum("type", ["Text", "Slash", "Message"]).notNull(),
-	userId: bigint("userId", { mode: "bigint" }).notNull(),
-	messageId: bigint("messageId", { mode: "bigint" }),
-	channelId: bigint("channelId", { mode: "bigint" }).notNull(),
-	guildId: bigint("guildId", { mode: "bigint" }),
-});
-
-export const albumsToPlaylists = mysqlTable(
-	"_AlbumToPlaylist",
+export const commandExecutions = mysqlTable(
+	"command_executions",
 	{
-		a: varchar("A", { length: 191 }).notNull(),
-		b: varchar("B", { length: 191 }).notNull(),
+		id: varchar("id", { length: 191 }).primaryKey(),
+		createdAt: timestamp("created_at").notNull().defaultNow(),
+		name: varchar("name", { length: 191 }).notNull(),
+		type: mysqlEnum("type", ["text", "slash", "message"]).notNull(),
+		userId: bigint("user_id", { mode: "bigint" }).notNull(),
+		messageId: bigint("message_id", { mode: "bigint" }),
+		channelId: bigint("channel_id", { mode: "bigint" }).notNull(),
+		guildId: bigint("guild_id", { mode: "bigint" }),
 	},
 	table => ({
-		abUnique: uniqueIndex("_AlbumToPlaylist_AB_unique").on(table.a, table.b),
-		albumToPlaylistAB: primaryKey(table.a, table.b),
-	}),
-);
-export const albumsToPlaylistsRelations = relations(
-	albumsToPlaylists,
-	({ one }) => ({
-		album: one(albums, {
-			fields: [albumsToPlaylists.a],
-			references: [albums.id],
-		}),
-		playlist: one(playlists, {
-			fields: [albumsToPlaylists.b],
-			references: [playlists.id],
-		}),
+		createdAtIndex: index("command_executions_created_at_idx").on(
+			table.createdAt,
+		),
+		nameIndex: index("command_executions_name_idx").on(table.name),
+		messageIdIndex: index("command_executions_message_id_idx").on(
+			table.messageId,
+		),
+		channelIdIndex: index("command_executions_channel_id_idx").on(
+			table.channelId,
+		),
 	}),
 );

@@ -1,5 +1,5 @@
 import db, { eq, isNotNull, lt, sql } from "database/drizzle";
-import { kraccBacc } from "database/drizzle/schema";
+import { kraccBaccVideos } from "database/drizzle/schema";
 import command from "discord/commands/slash";
 import { env } from "node:process";
 
@@ -13,7 +13,7 @@ export default command(
 
 		const date = new Date();
 		date.setMinutes(date.getMinutes() - 1);
-		const video = await db.query.kraccBacc.findFirst({
+		const video = await db.query.kraccBaccVideos.findFirst({
 			columns: {
 				name: true,
 			},
@@ -23,11 +23,11 @@ export default command(
 		});
 		if (!video) return i.editReply("No video found!");
 		await db
-			.update(kraccBacc)
+			.update(kraccBaccVideos)
 			.set({
 				sentAt: new Date(),
 			})
-			.where(eq(kraccBacc.name, video.name));
+			.where(eq(kraccBaccVideos.name, video.name));
 
 		const url = `https://${env.FILES_DOMAIN}/kraccbacc/${encodeURIComponent(
 			video.name,

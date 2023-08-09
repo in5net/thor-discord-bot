@@ -1,8 +1,8 @@
 import Token, {
-    groupings,
-    operators,
-    type Operator,
-    type TokenMap,
+	groupings,
+	operators,
+	type Operator,
+	type TokenMap,
 } from "./token";
 
 const WHITESPACE = /[ \t\r]/;

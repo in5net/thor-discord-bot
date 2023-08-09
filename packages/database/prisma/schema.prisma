@@ -11,24 +11,26 @@ datasource db {
 
 model User {
   id        String   @id @db.Char(18)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp
 
   counts   Json?
-  creditAt DateTime?
+  creditAt DateTime? @map("credit_at") @db.Timestamp
   admin    Boolean   @default(false)
 
   playlists Playlist[]
   issues    Issue[]
+
+  @@map("users")
 }
 
 model Playlist {
   id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @db.Char(18)
+  userId String @map("user_id") @db.Char(18)
 
   name String @db.VarChar(100)
 
@@ -36,12 +38,13 @@ model Playlist {
   albums Album[]
 
   @@unique([userId, name])
+  @@map("playlists")
 }
 
 model Album {
   id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp
 
   playlists Playlist[]
 
@@ -49,12 +52,14 @@ model Album {
   data Json
 
   songs Song[]
+
+  @@map("albums")
 }
 
 model Song {
   id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp
 
   playlist   Playlist? @relation(fields: [playlistId], references: [id], onDelete: Cascade)
   playlistId String?
@@ -62,144 +67,153 @@ model Song {
   albumId    String?
 
   title         String @db.Text
-  duration      Int    @db.UnsignedInt
+  duration      Int
   data          Json
-  playlistIndex Int?   @db.UnsignedInt
-  albumIndex    Int?   @db.UnsignedInt
+  playlistIndex Int?   @map("playlist_index")
+  albumIndex    Int?   @map("album_index")
 
   @@index([playlistId, playlistIndex])
   @@index([albumId, albumIndex])
+  @@map("songs")
 }
 
 model Ratio {
   id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
 
   content String @unique
+
+  @@map("ratios")
 }
 
 model File {
   id        BigInt   @id
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
 
   base String
   name String
   ext  String
 
-  authorId  BigInt
-  messageId BigInt
-  channelId BigInt
-  guildId   BigInt
+  authorId  BigInt @map("author_id")
+  messageId BigInt @map("message_id")
+  channelId BigInt @map("channel_id")
+  guildId   BigInt @map("guild_id")
 
-  proxyURL String @db.Text
+  proxyURL String @map("proxy_url") @db.Text
 
-  @@index([createdAt])
-  @@index([base])
-  @@index([name])
-  @@index([ext])
-  @@index([authorId])
-  @@index([messageId])
-  @@index([channelId])
-  @@index([guildId])
+  @@map("files")
 }
 
 model Y7File {
   name String @id @db.VarChar(100)
 
   extension String @db.VarChar(4)
+
+  @@map("y7_files")
 }
 
 model Chicken {
   name String @id @db.VarChar(100)
 
-  sentAt DateTime?
+  sentAt DateTime? @map("sent_at") @db.Timestamp
+
+  @@map("chickens")
 }
 
 model SpeechBubble {
   name String @id @db.VarChar(100)
 
-  sentAt DateTime?
+  sentAt DateTime? @map("sent_at") @db.Timestamp
+
+  @@map("speech_bubbles")
 }
 
 model HopOn {
   id String @id
 
-  sentAt DateTime?
+  sentAt DateTime? @map("sent_at") @db.Timestamp
+
+  @@map("hop_ons")
 }
 
 model KraccBacc {
   name String @id
 
-  sentAt DateTime?
+  sentAt DateTime? @map("sent_at") @db.Timestamp
+
+  @@map("kracc_bacc_videos")
 }
 
 model BossFile {
   id String @id @default(cuid())
 
   url    String    @db.Text
-  sentAt DateTime?
+  sentAt DateTime? @map("sent_at") @db.Timestamp
+
+  @@map("boss_files")
 }
 
 model Issue {
   id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp
 
   user   User   @relation(fields: [userId], references: [id])
-  userId String @db.Char(18)
+  userId String @map("user_id") @db.Char(18)
 
   name     String       @db.VarChar(100)
   type     IssueType
   desc     String       @db.Text
-  closedAt DateTime?
+  closedAt DateTime?    @map("closed_at") @db.Timestamp
   reason   IssueReason?
 
   @@index([userId])
+  @@map("issues")
 }
 
 enum IssueType {
-  Bug
-  Feature
-  Enhancement
+  Bug         @map("bug")
+  Feature     @map("feature")
+  Enhancement @map("enhancement")
 }
 
 enum IssueReason {
-  Completed
-  WontFix
-  Duplicate
-  Invalid
+  Completed @map("completed")
+  WontFix   @map("wont_fix")
+  Duplicate @map("duplicate")
+  Invalid   @map("invalid")
 }
 
 model RotatingFood {
   name String @id @db.VarChar(100)
+
+  @@map("rotating_food")
 }
 
 model AudioFilter {
   name  String @id @db.VarChar(100)
   value String
+
+  @@map("audio_filters")
 }
 
 model CommandExecution {
   id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
 
   name String
   type CommandType
 
-  userId    BigInt
-  messageId BigInt?
-  channelId BigInt
-  guildId   BigInt?
+  userId    BigInt  @map("user_id")
+  messageId BigInt? @map("message_id")
+  channelId BigInt  @map("channel_id")
+  guildId   BigInt? @map("guild_id")
 
-  @@index([createdAt])
-  @@index([name])
-  @@index([messageId])
-  @@index([channelId])
-  @@index([guildId])
+  @@map("command_executions")
 }
 
 enum CommandType {
-  Text
-  Slash
-  Message
+  Text    @map("text")
+  Slash   @map("slash")
+  Message @map("message")
 }

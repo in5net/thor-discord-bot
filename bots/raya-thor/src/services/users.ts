@@ -21,14 +21,12 @@ export const incCount = async (id: string, name: string) => {
 		.insert(users)
 		.values({
 			id,
-			updatedAt: new Date(),
 			counts: {
 				[name]: 1,
 			},
 		})
 		.onDuplicateKeyUpdate({
 			set: {
-				updatedAt: new Date(),
 				counts: {
 					...counts,
 					[name]: (counts[name] || 0) + 1,

@@ -43,12 +43,10 @@ export async function subtractBits(uid: string, price: number) {
 		.insert(users)
 		.values({
 			id: uid,
-			updatedAt: new Date(),
 			creditAt,
 		})
 		.onDuplicateKeyUpdate({
 			set: {
-				updatedAt: new Date(),
 				creditAt,
 			},
 		});

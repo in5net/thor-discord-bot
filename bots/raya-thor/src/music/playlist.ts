@@ -1,33 +1,34 @@
-import prisma from "$services/prisma";
+import prisma from "$src/services/prisma";
 import { type Prisma } from "database";
 import db, { and, eq } from "database/drizzle";
 import { playlists } from "database/drizzle/schema";
 import logger from "logger";
 import {
-    SoundCloudSong,
-    SpotifySong,
-    URLSong,
-    YouTubeSong,
-    type Album,
-    type SongJSONType,
-    type SongType,
+	SoundCloudSong,
+	SpotifySong,
+	URLSong,
+	YouTubeSong,
+	type Album,
+	type SongJSONType,
+	type SongType,
 } from "./song";
 
 async function getPlaylist(uid: string, name: string) {
-	const { id, songs } = await prisma.playlist.findFirstOrThrow({
-		select: {
+	const playlist = await db.query.playlists.findFirst({
+		columns: {
 			id: true,
+		},
+		with: {
 			songs: true,
 		},
-		where: {
-			userId: uid,
-			name,
-		},
+		where: and(eq(playlists.userId, uid), eq(playlists.name, name)),
 	});
+	if (!playlist) throw new Error("Playlist not found");
+	const { id, songs } = playlist;
 	return {
 		id,
 		songs: songs.map(({ title, duration, data }) => ({
-			...(data as unknown as SongJSONType),
+			...(data as SongJSONType),
 			title,
 			duration,
 		})),
@@ -71,15 +72,13 @@ export async function get(
 }
 
 export async function list(uid: string): Promise<string[]> {
-	const playlists = await prisma.playlist.findMany({
-		select: {
+	const results = await db.query.playlists.findMany({
+		columns: {
 			name: true,
 		},
-		where: {
-			userId: uid,
-		},
+		where: eq(playlists.userId, uid),
 	});
-	return playlists.map(({ name }) => name) || [];
+	return results.map(({ name }) => name) || [];
 }
 
 export async function save(

@@ -1,10 +1,10 @@
 import db from "database/drizzle";
 import { commandExecutions, cuid2 } from "database/drizzle/schema";
 import {
-    EmbedBuilder,
-    type AutocompleteInteraction,
-    type ChatInputCommandInteraction,
-    type MessageContextMenuCommandInteraction,
+	EmbedBuilder,
+	type AutocompleteInteraction,
+	type ChatInputCommandInteraction,
+	type MessageContextMenuCommandInteraction,
 } from "discord.js";
 import logger from "logger";
 import { type OptionValue } from "../commands/slash";

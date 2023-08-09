@@ -3,12 +3,12 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import type Node from "./node";
 import {
-    type BinaryOpNode,
-    type FuncCallNode,
-    type GroupingNode,
-    type IdentifierNode,
-    type NumberNode,
-    type UnaryOpNode,
+	type BinaryOpNode,
+	type FuncCallNode,
+	type GroupingNode,
+	type IdentifierNode,
+	type NumberNode,
+	type UnaryOpNode,
 } from "./node";
 import type Scope from "./scope";
 import { type GroupingOp } from "./token";
