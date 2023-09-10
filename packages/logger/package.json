@@ -4,12 +4,15 @@
   "type": "module",
   "main": "./index.ts",
   "types": "./index.ts",
+  "scripts": {
+    "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u"
+  },
   "dependencies": {
     "cloud-pine": "^2.0.0",
-    "pino": "^8.14.1"
+    "pino": "^8.15.1"
   },
   "devDependencies": {
-    "@types/node": "18.17.0",
-    "pino-pretty": "^10.0.0"
+    "@types/node": "18.17.1",
+    "pino-pretty": "^10.2.0"
   }
 }

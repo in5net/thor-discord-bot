@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "commit": "commit",
-    "update": "export NPM_CHECK_INSTALLER=pnpm; npm-check -u && cd bots/jay && npm-check -u && cd ../raya-thor && npm-check -u && cd ../../packages/database && npm-check -u && cd ../limitless && npm-check -u && cd ../storage && npm-check -u",
+    "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u; pnpm run -r --sequential update",
     "lint": "xo",
     "dev:raya": "turbo run dev --filter raya-thor",
     "start:raya": "turbo run start --filter raya-thor",
@@ -12,16 +12,16 @@
     "deploy": "turbo run deploy"
   },
   "dependencies": {
-    "turbo": "^1.10.12"
+    "turbo": "^1.10.13"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.6.7",
-    "@commitlint/config-conventional": "^17.6.7",
-    "@commitlint/prompt-cli": "^17.6.7",
+    "@commitlint/cli": "^17.7.1",
+    "@commitlint/config-conventional": "^17.7.0",
+    "@commitlint/prompt-cli": "^17.7.1",
     "@in5net/prettier-config": "^1.1.0",
     "@in5net/xo-config": "^1.4.1",
     "husky": "^8.0.3",
-    "typescript": "5.1.6",
-    "xo": "^0.55.1"
+    "typescript": "5.2.2",
+    "xo": "^0.56.0"
   }
 }
