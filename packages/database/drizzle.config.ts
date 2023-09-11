@@ -11,4 +11,6 @@ export default {
 			'ssl={"rejectUnauthorized":true}',
 		),
 	},
+	verbose: true,
+	strict: true,
 } satisfies Config;

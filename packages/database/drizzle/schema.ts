@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
 	bigint,
 	boolean,
@@ -17,10 +17,17 @@ import {
 
 export { createId as cuid2 } from "@paralleldrive/cuid2";
 
+const createdAt = timestamp("created_at")
+	.notNull()
+	.default(sql`CURRENT_TIMESTAMP()`);
+const updatedAt = timestamp("updated_at")
+	.notNull()
+	.default(sql`CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()`);
+
 export const users = mysqlTable("users", {
 	id: char("id", { length: 18 }).primaryKey(),
-	createdAt: timestamp("created_at").notNull().defaultNow(),
-	updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
+	createdAt,
+	updatedAt,
 	counts: json("counts"),
 	creditAt: timestamp("credit_at"),
 	admin: boolean("admin").default(false).notNull(),
@@ -34,8 +41,8 @@ export const playlists = mysqlTable(
 	"playlists",
 	{
 		id: varchar("id", { length: 191 }).primaryKey(),
-		createdAt: timestamp("created_at").notNull().defaultNow(),
-		updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
+		createdAt,
+		updatedAt,
 		userId: char("user_id", { length: 18 }).notNull(),
 		name: varchar("name", { length: 100 }).notNull(),
 	},
@@ -54,8 +61,8 @@ export const playlistsRelations = relations(playlists, ({ one, many }) => ({
 
 export const albums = mysqlTable("albums", {
 	id: varchar("id", { length: 191 }).primaryKey(),
-	createdAt: timestamp("created_at").notNull().defaultNow(),
-	updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
+	createdAt,
+	updatedAt,
 	name: varchar("name", { length: 100 }).notNull(),
 	data: json("data").notNull(),
 });
@@ -92,8 +99,8 @@ export const songs = mysqlTable(
 	"songs",
 	{
 		id: varchar("id", { length: 191 }).primaryKey(),
-		createdAt: timestamp("created_at").notNull().defaultNow(),
-		updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
+		createdAt,
+		updatedAt,
 		playlistId: varchar("playlist_id", { length: 191 }),
 		albumId: varchar("album_id", { length: 191 }),
 		title: text("title").notNull(),
@@ -126,7 +133,7 @@ export const songsRelations = relations(songs, ({ one }) => ({
 
 export const ratios = mysqlTable("ratios", {
 	id: varchar("id", { length: 191 }).primaryKey(),
-	createdAt: timestamp("created_at").notNull().defaultNow(),
+	createdAt,
 	content: varchar("content", { length: 191 }).notNull().unique(),
 });
 
@@ -134,7 +141,7 @@ export const files = mysqlTable(
 	"files",
 	{
 		id: bigint("id", { mode: "bigint" }).primaryKey(),
-		createdAt: timestamp("created_at").notNull().defaultNow(),
+		createdAt,
 		base: varchar("base", { length: 191 }).notNull(),
 		name: varchar("name", { length: 191 }).notNull(),
 		ext: varchar("ext", { length: 191 }).notNull(),
@@ -191,8 +198,8 @@ export const issues = mysqlTable(
 	"issues",
 	{
 		id: int("id").primaryKey().autoincrement(),
-		createdAt: timestamp("created_at").notNull().defaultNow(),
-		updatedAt: timestamp("updated_at").notNull().defaultNow().onUpdateNow(),
+		createdAt,
+		updatedAt,
 		userId: char("user_id", { length: 18 }).notNull(),
 		name: varchar("name", { length: 100 }).notNull(),
 		type: mysqlEnum("type", ["bug", "feature", "enhancement"]).notNull(),
@@ -229,7 +236,7 @@ export const commandExecutions = mysqlTable(
 	"command_executions",
 	{
 		id: varchar("id", { length: 191 }).primaryKey(),
-		createdAt: timestamp("created_at").notNull().defaultNow(),
+		createdAt,
 		name: varchar("name", { length: 191 }).notNull(),
 		type: mysqlEnum("type", ["text", "slash", "message"]).notNull(),
 		userId: bigint("user_id", { mode: "bigint" }).notNull(),
@@ -250,3 +257,8 @@ export const commandExecutions = mysqlTable(
 		),
 	}),
 );
+
+export const messages = mysqlTable("messages", {
+	id: bigint("id", { mode: "bigint" }).primaryKey(),
+	data: json("data").notNull(),
+});
