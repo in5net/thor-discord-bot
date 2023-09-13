@@ -258,7 +258,45 @@ export const commandExecutions = mysqlTable(
 	}),
 );
 
-export const messages = mysqlTable("messages", {
+export const guilds = mysqlTable("guilds", {
 	id: bigint("id", { mode: "bigint" }).primaryKey(),
 	data: json("data").notNull(),
+	deleted: boolean("deleted").notNull().default(false),
 });
+export const guildsRelations = relations(guilds, ({ many }) => ({
+	channels: many(channels),
+	messages: many(messages),
+}));
+
+export const channels = mysqlTable("channels", {
+	id: bigint("id", { mode: "bigint" }).primaryKey(),
+	guildId: bigint("guild_id", { mode: "bigint" }),
+	data: json("data").notNull(),
+	deleted: boolean("deleted").notNull().default(false),
+});
+export const channelsRelations = relations(channels, ({ one, many }) => ({
+	guild: one(guilds, {
+		fields: [channels.guildId],
+		references: [guilds.id],
+	}),
+	messages: many(messages),
+}));
+
+export const messages = mysqlTable("messages", {
+	id: bigint("id", { mode: "bigint" }).primaryKey(),
+	guildId: bigint("guild_id", { mode: "bigint" }),
+	channelId: bigint("channel_id", { mode: "bigint" }),
+	authorId: bigint("author_id", { mode: "bigint" }),
+	data: json("data").notNull(),
+	deleted: boolean("deleted").notNull().default(false),
+});
+export const messagesRelations = relations(messages, ({ one }) => ({
+	guild: one(guilds, {
+		fields: [messages.guildId],
+		references: [guilds.id],
+	}),
+	channel: one(channels, {
+		fields: [messages.channelId],
+		references: [channels.id],
+	}),
+}));
