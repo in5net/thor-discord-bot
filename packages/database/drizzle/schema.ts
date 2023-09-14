@@ -13,9 +13,20 @@ import {
 	timestamp,
 	unique,
 	varchar,
+	type MySqlColumn,
 } from "drizzle-orm/mysql-core";
 
 export { createId as cuid2 } from "@paralleldrive/cuid2";
+
+const namedIndex = (column: MySqlColumn, ...columns: MySqlColumn[]) =>
+	index(
+		`${column.uniqueName?.replace(`_${column.name}_unique`, "")}_${[
+			column,
+			...columns,
+		]
+			.map(column => column.name)
+			.join("_")}_idx`,
+	).on(column, ...columns);
 
 const createdAt = timestamp("created_at")
 	.notNull()
@@ -110,14 +121,8 @@ export const songs = mysqlTable(
 		albumIndex: int("album_index"),
 	},
 	table => ({
-		playlistIndex: index("songs_playlist_id_playlist_idx").on(
-			table.playlistId,
-			table.playlistIndex,
-		),
-		albumIndex: index("songs_album_id_album_idx").on(
-			table.albumId,
-			table.albumIndex,
-		),
+		playlistIndex: namedIndex(table.playlistId, table.playlistIndex),
+		albumIndex: namedIndex(table.albumId, table.albumIndex),
 	}),
 );
 export const songsRelations = relations(songs, ({ one }) => ({
@@ -152,14 +157,14 @@ export const files = mysqlTable(
 		proxyUrl: text("proxy_url").notNull(),
 	},
 	table => ({
-		createdAtIndex: index("files_created_at_idx").on(table.createdAt),
-		baseIndex: index("files_base_idx").on(table.base),
-		nameIndex: index("files_name_idx").on(table.name),
-		extIndex: index("files_ext_idx").on(table.ext),
-		authorIdIndex: index("files_author_id_idx").on(table.authorId),
-		messageIdIndex: index("files_message_id_idx").on(table.messageId),
-		channelIdIndex: index("files_channel_id_idx").on(table.channelId),
-		guildIdIndex: index("files_guild_id_idx").on(table.guildId),
+		createdAtIndex: namedIndex(table.createdAt),
+		baseIndex: namedIndex(table.base),
+		nameIndex: namedIndex(table.name),
+		extIndex: namedIndex(table.ext),
+		authorIdIndex: namedIndex(table.authorId),
+		messageIdIndex: namedIndex(table.messageId),
+		channelIdIndex: namedIndex(table.channelId),
+		guildIdIndex: namedIndex(table.guildId),
 	}),
 );
 
@@ -213,7 +218,7 @@ export const issues = mysqlTable(
 		]),
 	},
 	table => ({
-		userIndex: index("issues_user_id_idx").on(table.userId),
+		userIndex: namedIndex(table.userId),
 	}),
 );
 export const issuesRelations = relations(issues, ({ one }) => ({
@@ -245,35 +250,42 @@ export const commandExecutions = mysqlTable(
 		guildId: bigint("guild_id", { mode: "bigint" }),
 	},
 	table => ({
-		createdAtIndex: index("command_executions_created_at_idx").on(
-			table.createdAt,
-		),
-		nameIndex: index("command_executions_name_idx").on(table.name),
-		messageIdIndex: index("command_executions_message_id_idx").on(
-			table.messageId,
-		),
-		channelIdIndex: index("command_executions_channel_id_idx").on(
-			table.channelId,
-		),
+		createdAtIndex: namedIndex(table.createdAt),
+		nameIndex: namedIndex(table.name),
+		messageIdIndex: namedIndex(table.messageId),
+		channelIdIndex: namedIndex(table.channelId),
 	}),
 );
 
-export const guilds = mysqlTable("guilds", {
-	id: bigint("id", { mode: "bigint" }).primaryKey(),
-	data: json("data").notNull(),
-	deleted: boolean("deleted").notNull().default(false),
-});
+export const guilds = mysqlTable(
+	"guilds",
+	{
+		id: bigint("id", { mode: "bigint" }).primaryKey(),
+		data: json("data").notNull(),
+		deleted: boolean("deleted").notNull().default(false),
+	},
+	table => ({
+		deletedIdx: namedIndex(table.deleted),
+	}),
+);
 export const guildsRelations = relations(guilds, ({ many }) => ({
 	channels: many(channels),
 	messages: many(messages),
 }));
 
-export const channels = mysqlTable("channels", {
-	id: bigint("id", { mode: "bigint" }).primaryKey(),
-	guildId: bigint("guild_id", { mode: "bigint" }),
-	data: json("data").notNull(),
-	deleted: boolean("deleted").notNull().default(false),
-});
+export const channels = mysqlTable(
+	"channels",
+	{
+		id: bigint("id", { mode: "bigint" }).primaryKey(),
+		guildId: bigint("guild_id", { mode: "bigint" }).notNull(),
+		data: json("data").notNull(),
+		deleted: boolean("deleted").notNull().default(false),
+	},
+	table => ({
+		guildIdIdx: namedIndex(table.guildId),
+		deletedIdx: namedIndex(table.deleted),
+	}),
+);
 export const channelsRelations = relations(channels, ({ one, many }) => ({
 	guild: one(guilds, {
 		fields: [channels.guildId],
@@ -282,14 +294,30 @@ export const channelsRelations = relations(channels, ({ one, many }) => ({
 	messages: many(messages),
 }));
 
-export const messages = mysqlTable("messages", {
-	id: bigint("id", { mode: "bigint" }).primaryKey(),
-	guildId: bigint("guild_id", { mode: "bigint" }),
-	channelId: bigint("channel_id", { mode: "bigint" }),
-	authorId: bigint("author_id", { mode: "bigint" }),
-	data: json("data").notNull(),
-	deleted: boolean("deleted").notNull().default(false),
-});
+/**
+ * @see https://discord.com/developers/docs/resources/channel#message-object
+ */
+export const messages = mysqlTable(
+	"messages",
+	{
+		id: bigint("id", { mode: "bigint" }).primaryKey(),
+		createdAt: timestamp("timestamp", { fsp: 3 }),
+		updatedAt: timestamp("edited_timestamp", { fsp: 3 }),
+		guildId: bigint("guild_id", { mode: "bigint" }),
+		channelId: bigint("channel_id", { mode: "bigint" }).notNull(),
+		authorId: bigint("author_id", { mode: "bigint" }).notNull(),
+		content: varchar("content", { length: 4000 }),
+		everyone: boolean("mention_everyone").notNull().default(false),
+		deleted: boolean("deleted").notNull().default(false),
+		data: json("data").notNull(),
+	},
+	table => ({
+		guildIdIdx: namedIndex(table.guildId),
+		channelIdIdx: namedIndex(table.channelId),
+		authorIdIdx: namedIndex(table.authorId),
+		deletedIdx: namedIndex(table.deleted),
+	}),
+);
 export const messagesRelations = relations(messages, ({ one }) => ({
 	guild: one(guilds, {
 		fields: [messages.guildId],
