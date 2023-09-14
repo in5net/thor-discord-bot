@@ -306,7 +306,7 @@ export const messages = mysqlTable(
 		guildId: bigint("guild_id", { mode: "bigint" }),
 		channelId: bigint("channel_id", { mode: "bigint" }).notNull(),
 		authorId: bigint("author_id", { mode: "bigint" }).notNull(),
-		content: varchar("content", { length: 4000 }),
+		content: varchar("content", { length: 16_000 }),
 		everyone: boolean("mention_everyone").notNull().default(false),
 		deleted: boolean("deleted").notNull().default(false),
 		data: json("data").notNull(),
@@ -315,6 +315,7 @@ export const messages = mysqlTable(
 		guildIdIdx: namedIndex(table.guildId),
 		channelIdIdx: namedIndex(table.channelId),
 		authorIdIdx: namedIndex(table.authorId),
+		contentIdx: namedIndex(table.content),
 		deletedIdx: namedIndex(table.deleted),
 	}),
 );
