@@ -1,4 +1,3 @@
-import { randomInt } from "@in5net/limitless";
 import {
 	ActivityType,
 	Client,
@@ -12,10 +11,9 @@ import { type SlashCommand } from "discord/commands/slash";
 import { type TextCommand } from "discord/commands/text";
 import { loadDiscordEvents } from "discord/loaders/events";
 import ms from "ms";
-import { RecurrenceRule, scheduleJob } from "node-schedule";
+import { scheduleJob } from "node-schedule";
 import process, { env } from "node:process";
 import { messageCommands, slashCommands, textCommands } from "./commands";
-import { getCatboyEmbed } from "./commands/slash/catboy";
 
 const { NAME, DISCORD_TOKEN } = process.env;
 console.log(`⏳ ${NAME} is starting...`);
@@ -134,19 +132,3 @@ scheduleJob(
 		setTimeout(() => client.user?.setActivity(activity), ms("1 min"));
 	},
 );
-
-const randomCatboyScheduleRule = new RecurrenceRule();
-randomCatboyScheduleRule.dayOfWeek = 0;
-randomCatboyScheduleRule.tz = "America/New_York";
-randomizeCatboySchedule();
-function randomizeCatboySchedule() {
-	randomCatboyScheduleRule.hour = randomInt(24);
-	randomCatboyScheduleRule.minute = randomInt(60);
-}
-
-const randomCatboySchedule = scheduleJob(randomCatboyScheduleRule, async () => {
-	const embed = await getCatboyEmbed();
-	await webhook.send({ embeds: [embed] });
-	randomizeCatboySchedule();
-	randomCatboySchedule.reschedule(randomCatboyScheduleRule);
-});

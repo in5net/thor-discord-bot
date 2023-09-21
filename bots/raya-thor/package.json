@@ -19,7 +19,6 @@
     "@napi-rs/canvas": "0.1.44",
     "@nick.heiner/openai-edge": "1.0.1-7",
     "ai": "^2.2.13",
-    "catboys": "^1.0.7",
     "chalk-template": "^1.1.0",
     "cheerio": "1.0.0-rc.12",
     "database": "workspace:*",
