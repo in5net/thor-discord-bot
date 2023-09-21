@@ -28,18 +28,18 @@
     "glslify": "^7.1.1",
     "got": "13.0.0",
     "magic-regexp": "^0.7.0",
-    "nanoid": "4.0.2",
+    "nanoid": "5.0.1",
     "pngjs": "^7.0.0",
     "storage": "workspace:*",
     "tsconfig": "workspace:*",
-    "tsx": "^3.12.8",
+    "tsx": "^3.12.10",
     "zod": "^3.22.2"
   },
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.5.1",
-    "@types/fluent-ffmpeg": "^2.1.21",
-    "@types/gif-encoder": "^0.7.1",
-    "@types/gl": "6.0.2",
+    "@types/fluent-ffmpeg": "^2.1.22",
+    "@types/gif-encoder": "^0.7.2",
+    "@types/gl": "6.0.3",
     "@types/node": "18.17.1",
     "@types/pngjs": "^6.0.1",
     "typescript": "5.2.2"
