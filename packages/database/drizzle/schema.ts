@@ -142,32 +142,6 @@ export const ratios = mysqlTable("ratios", {
 	content: varchar("content", { length: 191 }).notNull().unique(),
 });
 
-export const files = mysqlTable(
-	"files",
-	{
-		id: bigint("id", { mode: "bigint" }).primaryKey(),
-		createdAt,
-		base: varchar("base", { length: 191 }).notNull(),
-		name: varchar("name", { length: 191 }).notNull(),
-		ext: varchar("ext", { length: 191 }).notNull(),
-		authorId: bigint("author_id", { mode: "bigint" }).notNull(),
-		messageId: bigint("message_id", { mode: "bigint" }).notNull(),
-		channelId: bigint("channel_id", { mode: "bigint" }).notNull(),
-		guildId: bigint("guild_id", { mode: "bigint" }).notNull(),
-		proxyUrl: text("proxy_url").notNull(),
-	},
-	table => ({
-		createdAtIndex: namedIndex(table.createdAt),
-		baseIndex: namedIndex(table.base),
-		nameIndex: namedIndex(table.name),
-		extIndex: namedIndex(table.ext),
-		authorIdIndex: namedIndex(table.authorId),
-		messageIdIndex: namedIndex(table.messageId),
-		channelIdIndex: namedIndex(table.channelId),
-		guildIdIndex: namedIndex(table.guildId),
-	}),
-);
-
 export const y7Files = mysqlTable("y7_files", {
 	name: varchar("name", { length: 100 }).primaryKey(),
 	extension: varchar("extension", { length: 4 }).notNull(),

@@ -1,4 +1,4 @@
-import db, { and, icontains, ne } from "database/drizzle";
+import db, { and, contains, ne } from "database/drizzle";
 import { y7Files } from "database/drizzle/schema";
 import command from "discord/commands/slash";
 import { env } from "node:process";
@@ -16,7 +16,7 @@ export default command(
 							name: true,
 						},
 						where: and(
-							icontains(y7Files.name, search),
+							contains(y7Files.name, search),
 							ne(y7Files.extension, "gif"),
 						),
 						orderBy: y7Files.name,

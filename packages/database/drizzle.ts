@@ -2,7 +2,7 @@ import "./env";
 
 import { Pool, neonConfig } from "@neondatabase/serverless";
 import { connect } from "@planetscale/database";
-import { like, type AnyColumn } from "drizzle-orm";
+import { ilike, like, type AnyColumn } from "drizzle-orm";
 import { drizzle as neonDrizzle } from "drizzle-orm/neon-serverless";
 import { drizzle } from "drizzle-orm/planetscale-serverless";
 import { env } from "node:process";
@@ -25,5 +25,7 @@ export const neon = neonDrizzle(pool, { schema: neonSchema });
 
 export * from "drizzle-orm";
 
-export const icontains = (column: AnyColumn, value: string) =>
+export const contains = (column: AnyColumn, value: string) =>
 	like(column, `%${value}%`);
+export const icontains = (column: AnyColumn, value: string) =>
+	ilike(column, `%${value}%`);

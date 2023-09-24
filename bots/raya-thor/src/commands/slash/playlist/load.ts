@@ -1,7 +1,7 @@
 import * as playlist from "$src/music/playlist";
 import { getVoice } from "$src/music/voice-manager";
 import { shuffle } from "@in5net/limitless";
-import db, { and, eq, icontains } from "database/drizzle";
+import db, { and, contains, eq } from "database/drizzle";
 import { playlists } from "database/drizzle/schema";
 import { ChannelType, GuildMember } from "discord.js";
 import command from "discord/commands/slash";
@@ -20,7 +20,7 @@ export default command(
 						},
 						where: and(
 							eq(playlists.userId, i.user.id),
-							icontains(playlists.name, search),
+							contains(playlists.name, search),
 						),
 						orderBy: playlists.name,
 						limit: 5,

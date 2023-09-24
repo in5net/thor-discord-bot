@@ -86,24 +86,6 @@ model Ratio {
   @@map("ratios")
 }
 
-model File {
-  id        BigInt   @id
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
-
-  base String
-  name String
-  ext  String
-
-  authorId  BigInt @map("author_id")
-  messageId BigInt @map("message_id")
-  channelId BigInt @map("channel_id")
-  guildId   BigInt @map("guild_id")
-
-  proxyURL String @map("proxy_url") @db.Text
-
-  @@map("files")
-}
-
 model Y7File {
   name String @id @db.VarChar(100)
 

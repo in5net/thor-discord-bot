@@ -1,5 +1,5 @@
 import { createEmbed } from "$services/embed";
-import db, { and, eq, icontains, isNull } from "database/drizzle";
+import db, { and, contains, eq, isNull } from "database/drizzle";
 import { issues } from "database/drizzle/schema";
 import command from "discord/commands/slash";
 import { env } from "node:process";
@@ -17,7 +17,7 @@ export default command(
 							id: true,
 							name: true,
 						},
-						where: and(icontains(issues.name, search), isNull(issues.closedAt)),
+						where: and(contains(issues.name, search), isNull(issues.closedAt)),
 						orderBy: issues.name,
 						limit: 5,
 					});

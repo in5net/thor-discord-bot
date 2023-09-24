@@ -1,9 +1,7 @@
 import { emojiRegex } from "$services/emoji";
 import { incCount } from "$services/users";
 import { random, shuffle } from "@in5net/limitless";
-import db from "database/drizzle";
-import { files } from "database/drizzle/schema";
-import { ChannelType, userMention, type Message } from "discord.js";
+import { userMention, type Message } from "discord.js";
 import event from "discord/event";
 import { handleTextCommand } from "discord/events/message-create";
 import { Timestamp } from "firebase-admin/firestore";
@@ -16,7 +14,6 @@ import {
 	global,
 	whitespace,
 } from "magic-regexp";
-import { parse } from "node:path";
 import { env } from "node:process";
 import { handleWordleMessage } from "../commands/text/wordle";
 import randomResponses, {
@@ -32,7 +29,7 @@ const whitespaceRegex = createRegExp(whitespace, [global]);
 export default event(
 	{ name: "messageCreate" },
 	async ({ client, args: [message] }) => {
-		const { content, channel, channelId, author, attachments } = message;
+		const { content, channel, author } = message;
 		if (author.bot) return;
 		if (!("send" in channel)) return;
 		const lowercase = content.toLowerCase();
@@ -67,29 +64,6 @@ export default event(
 				await handleTextCommand(message);
 			else await handleRandomResponse(message);
 		}
-
-		if (
-			channel.isTextBased() &&
-			channel.type !== ChannelType.DM &&
-			!channel.isThread() &&
-			!channel.nsfw
-		)
-			await db.insert(files).values(
-				attachments.map(({ id, name: fileName, proxyURL }) => {
-					const { base, name, ext } = parse(fileName);
-					return {
-						id: BigInt(id),
-						base,
-						name,
-						ext,
-						authorId: BigInt(author.id),
-						messageId: BigInt(message.id),
-						channelId: BigInt(channelId),
-						guildId: BigInt(channel.guildId),
-						proxyUrl: proxyURL,
-					};
-				}),
-			);
 	},
 );
 

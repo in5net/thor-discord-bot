@@ -1,5 +1,5 @@
 import { getVoice } from "$src/music/voice-manager";
-import db, { eq, icontains } from "database/drizzle";
+import db, { contains, eq } from "database/drizzle";
 import { audioFilters } from "database/drizzle/schema";
 import command from "discord/commands/slash";
 
@@ -15,7 +15,7 @@ export default command(
 						columns: {
 							name: true,
 						},
-						where: icontains(audioFilters.name, search),
+						where: contains(audioFilters.name, search),
 						orderBy: audioFilters.name,
 						limit: 5,
 					});

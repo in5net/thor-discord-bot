@@ -1,5 +1,5 @@
 import { createEmbed } from "$services/embed";
-import db, { and, eq, icontains } from "database/drizzle";
+import db, { and, contains, eq } from "database/drizzle";
 import { issues } from "database/drizzle/schema";
 import command from "discord/commands/slash";
 import { env } from "node:process";
@@ -21,7 +21,7 @@ export default command(
 							i.user.id === env.OWNER_ID
 								? undefined
 								: eq(issues.userId, i.user.id),
-							icontains(issues.name, search),
+							contains(issues.name, search),
 						),
 						orderBy: issues.name,
 						limit: 5,

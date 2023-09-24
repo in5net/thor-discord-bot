@@ -1,5 +1,5 @@
 import { createEmbed } from "$services/embed";
-import db, { eq, icontains } from "database/drizzle";
+import db, { contains, eq } from "database/drizzle";
 import { issues } from "database/drizzle/schema";
 import { time } from "discord.js";
 import command from "discord/commands/slash";
@@ -17,7 +17,7 @@ export default command(
 							id: true,
 							name: true,
 						},
-						where: icontains(issues.name, search),
+						where: contains(issues.name, search),
 						orderBy: issues.name,
 						limit: 5,
 					});
