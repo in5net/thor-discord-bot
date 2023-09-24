@@ -1,6 +1,6 @@
 import { createEmbed } from "$services/embed";
-import db, { inArray, sql, type InferModel } from "database/drizzle";
-import { type files } from "database/drizzle/schema";
+import { and, eq, inArray, neon, not, sql } from "database/drizzle";
+import { attachments, messages } from "database/drizzle/neon";
 import {
 	hyperlink,
 	userMention,
@@ -17,10 +17,12 @@ export const extensions: Record<Type, string[]> = {
 };
 
 export async function getRandomFile(type?: Type) {
-	const file = await db.query.files.findFirst({
-		where: table =>
-			inArray(table.ext, type ? extensions[type].map(ext => `.${ext}`) : []),
-		orderBy: sql`rand()`,
+	const file = await neon.query.attachments.findFirst({
+		where: and(
+			inArray(attachments.ext, type ? extensions[type] : []),
+			not(attachments.bot),
+		),
+		orderBy: sql`random()`,
 	});
 	return file;
 }
@@ -29,16 +31,21 @@ export async function sendFile(
 	replyable: {
 		reply(options: MessagePayload | BaseMessageOptions): Promise<any>;
 	},
-	{
-		createdAt,
-		ext,
-		authorId,
-		messageId,
-		channelId,
-		guildId,
-		proxyUrl,
-	}: InferModel<typeof files>,
+	{ messageId, url, proxyUrl, ext }: (typeof attachments)["$inferSelect"],
 ) {
+	if (!messageId) return;
+	const message = await neon.query.messages.findFirst({
+		columns: {
+			createdAt: true,
+			guildId: true,
+			channelId: true,
+			authorId: true,
+		},
+		where: eq(messages.id, messageId),
+	});
+	if (!message) return;
+	const { createdAt, guildId, channelId, authorId } = message;
+
 	const embed = createEmbed()
 		.setFields(
 			{
@@ -55,7 +62,7 @@ export async function sendFile(
 			},
 		)
 		.setTimestamp(createdAt);
-	const extension = ext.replace(".", "");
+	const extension = ext || "";
 	if (extensions.image.includes(extension)) {
 		embed.setImage(proxyUrl);
 		return replyable.reply({
@@ -65,6 +72,6 @@ export async function sendFile(
 
 	return replyable.reply({
 		embeds: [embed],
-		files: [proxyUrl],
+		files: [proxyUrl || url],
 	});
 }

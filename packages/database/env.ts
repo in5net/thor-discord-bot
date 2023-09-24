@@ -13,6 +13,7 @@ const EnvironmentVariables = z.object({
 	DATABASE_HOST: z.string(),
 	DATABASE_USERNAME: z.string(),
 	DATABASE_PASSWORD: z.string(),
+	NEON_DATABASE_URL: z.string(),
 });
 
 EnvironmentVariables.parse(env);
