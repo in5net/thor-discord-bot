@@ -1,13 +1,16 @@
 import "./env";
 
-import { Pool } from "@neondatabase/serverless";
+import { Pool, neonConfig } from "@neondatabase/serverless";
 import { connect } from "@planetscale/database";
 import { like, type AnyColumn } from "drizzle-orm";
 import { drizzle as neonDrizzle } from "drizzle-orm/neon-serverless";
 import { drizzle } from "drizzle-orm/planetscale-serverless";
 import { env } from "node:process";
+import ws from "ws";
 import * as neonSchema from "./drizzle/neon";
 import * as schema from "./drizzle/schema";
+
+neonConfig.webSocketConstructor = ws;
 
 const conn = connect({
 	host: env.DATABASE_HOST,
