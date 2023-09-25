@@ -21,6 +21,7 @@ export async function getRandomFile(type?: Type) {
 		where: and(
 			inArray(attachments.ext, type ? extensions[type] : []),
 			not(attachments.bot),
+			not(attachments.nsfw),
 		),
 		orderBy: sql`random()`,
 	});
