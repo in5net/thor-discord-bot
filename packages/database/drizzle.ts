@@ -17,11 +17,11 @@ const conn = connect({
 	username: env.DATABASE_USERNAME,
 	password: env.DATABASE_PASSWORD,
 });
-const db = drizzle(conn, { schema });
+const db = drizzle(conn, { schema, logger: true });
 export default db;
 
 const pool = new Pool({ connectionString: env.NEON_DATABASE_URL });
-export const neon = neonDrizzle(pool, { schema: neonSchema });
+export const neon = neonDrizzle(pool, { schema: neonSchema, logger: true });
 
 export * from "drizzle-orm";
 
