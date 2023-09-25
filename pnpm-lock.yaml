@@ -16,8 +16,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       '@in5net/xo-config':
-        specifier: ^1.4.1
-        version: 1.4.1
+        specifier: ^1.5.0
+        version: 1.5.0
       husky:
         specifier: ^8.0.3
         version: 8.0.3
@@ -52,8 +52,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/discord
       discord-api-types:
-        specifier: 0.37.56
-        version: 0.37.56
+        specifier: 0.37.57
+        version: 0.37.57
       discord.js:
         specifier: 14.13.0
         version: 14.13.0
@@ -97,8 +97,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/tsconfig
       tsx:
-        specifier: ^3.12.10
-        version: 3.12.10
+        specifier: ^3.13.0
+        version: 3.13.0
       zod:
         specifier: ^3.22.2
         version: 3.22.2
@@ -119,8 +119,8 @@ importers:
         specifier: 18.17.1
         version: 18.17.1
       '@types/pngjs':
-        specifier: ^6.0.1
-        version: 6.0.1
+        specifier: ^6.0.2
+        version: 6.0.2
       typescript:
         specifier: 5.2.2
         version: 5.2.2
@@ -170,8 +170,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/discord
       discord-api-types:
-        specifier: 0.37.56
-        version: 0.37.56
+        specifier: 0.37.57
+        version: 0.37.57
       discord-ytdl-core:
         specifier: ^5.0.4
         version: 5.0.4(@discordjs/opus@0.9.0)
@@ -197,8 +197,8 @@ importers:
         specifier: 13.0.0
         version: 13.0.0
       langchain:
-        specifier: ^0.0.152
-        version: 0.0.152(@google-ai/generativelanguage@1.1.0)(cheerio@1.0.0-rc.12)(firebase-admin@11.10.1)(google-auth-library@9.0.0)(replicate@0.18.0)(youtubei.js@6.4.0)
+        specifier: ^0.0.153
+        version: 0.0.153(@google-ai/generativelanguage@1.1.0)(cheerio@1.0.0-rc.12)(firebase-admin@11.10.1)(google-auth-library@9.0.0)(replicate@0.18.1)(youtubei.js@6.4.0)
       libsodium-wrappers:
         specifier: ^0.7.13
         version: 0.7.13
@@ -224,11 +224,11 @@ importers:
         specifier: ^1.0.4
         version: 1.0.4
       play-dl:
-        specifier: 1.9.6
-        version: 1.9.6
+        specifier: 1.9.7
+        version: 1.9.7
       replicate:
-        specifier: ^0.18.0
-        version: 0.18.0
+        specifier: ^0.18.1
+        version: 0.18.1
       storage:
         specifier: workspace:*
         version: link:../../packages/storage
@@ -242,8 +242,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/tsconfig
       tsx:
-        specifier: ^3.12.10
-        version: 3.12.10
+        specifier: ^3.13.0
+        version: 3.13.0
       youtubei.js:
         specifier: 6.4.0
         version: 6.4.0
@@ -270,11 +270,11 @@ importers:
         specifier: 18.17.1
         version: 18.17.1
       '@types/node-schedule':
-        specifier: ^2.1.0
-        version: 2.1.0
+        specifier: ^2.1.1
+        version: 2.1.1
       '@types/pngjs':
-        specifier: ^6.0.1
-        version: 6.0.1
+        specifier: ^6.0.2
+        version: 6.0.2
       typescript:
         specifier: 5.2.2
         version: 5.2.2
@@ -324,8 +324,8 @@ importers:
         specifier: workspace:*
         version: link:../database
       discord-api-types:
-        specifier: 0.37.56
-        version: 0.37.56
+        specifier: 0.37.57
+        version: 0.37.57
       discord.js:
         specifier: 14.13.0
         version: 14.13.0
@@ -553,7 +553,7 @@ packages:
     engines: {node: '>=16.9.0'}
     dependencies:
       '@types/ws': 8.5.5
-      discord-api-types: 0.37.56
+      discord-api-types: 0.37.57
       prism-media: 1.3.5(@discordjs/opus@0.9.0)
       tslib: 2.6.1
       ws: 8.13.0
@@ -588,13 +588,6 @@ packages:
     resolution: {integrity: sha512-ps5qF0tMxWRVu+V5gvCRrQNqlY92aTnIKdq27gm9LZMSdaKYZt6AVvSK1dlUMzs6Rt0Jm80b+eWct6xShBKhIw==}
     dev: true
 
-  /@esbuild-kit/cjs-loader@2.4.2:
-    resolution: {integrity: sha512-BDXFbYOJzT/NBEtp71cvsrGPwGAMGRB/349rwKuoxNSiKjPraNNnlK6MIIabViCjqZugu6j+xeMDlEkWdHHJSg==}
-    dependencies:
-      '@esbuild-kit/core-utils': 3.3.2
-      get-tsconfig: 4.7.0
-    dev: false
-
   /@esbuild-kit/core-utils@3.2.2:
     resolution: {integrity: sha512-Ub6LaRaAgF80dTSzUdXpFLM1pVDdmEVB9qb5iAzSpyDlX/mfJTFGOnZ516O05p5uWWteNviMKi4PAyEuRxI5gA==}
     dependencies:
@@ -602,26 +595,12 @@ packages:
       source-map-support: 0.5.21
     dev: true
 
-  /@esbuild-kit/core-utils@3.3.2:
-    resolution: {integrity: sha512-sPRAnw9CdSsRmEtnsl2WXWdyquogVpB3yZ3dgwJfe8zrOzTsV7cJvmwrKVa+0ma5BoiGJ+BoqkMvawbayKUsqQ==}
-    dependencies:
-      esbuild: 0.18.20
-      source-map-support: 0.5.21
-    dev: false
-
   /@esbuild-kit/esm-loader@2.5.5:
     resolution: {integrity: sha512-Qwfvj/qoPbClxCRNuac1Du01r9gvNOT+pMYtJDapfB1eoGN1YlJ1BixLyL9WVENRx5RXgNLdfYdx/CuswlGhMw==}
     dependencies:
       '@esbuild-kit/core-utils': 3.2.2
       get-tsconfig: 4.6.2
     dev: true
-
-  /@esbuild-kit/esm-loader@2.6.5:
-    resolution: {integrity: sha512-FxEMIkJKnodyA1OaCUoEvbYRkoZlLZ4d/eXFu9Fh8CbBBgP5EmZxrfTRyN0qpXZ4vOvqnE5YdRdcrmUUXuU+dA==}
-    dependencies:
-      '@esbuild-kit/core-utils': 3.3.2
-      get-tsconfig: 4.7.0
-    dev: false
 
   /@esbuild/android-arm64@0.18.19:
     resolution: {integrity: sha512-4+jkUFQxZkQfQOOxfGVZB38YUWHMJX2ihZwF+2nh8m7bHdWXpixiurgGRN3c/KMSwlltbYI0/i929jwBRMFzbA==}
@@ -1321,8 +1300,8 @@ packages:
     resolution: {integrity: sha512-oxHsgHM7tfkQeDI8xtDPbR+Uq1b1hB2O2KSgAhYpAkEmPLtNRbahgq5IZ/9F4kM8Qj3pPeoDtBp1fXNhjW3Fqg==}
     dev: true
 
-  /@in5net/xo-config@1.4.1:
-    resolution: {integrity: sha512-bUmLz56c6WpuB0FmVtxHqBaNksbqbLNlGIkA0UcsDtZSysV3BpKnHse3C5M1gnjPS0RLXN3h75T5zIMuqJgHSQ==}
+  /@in5net/xo-config@1.5.0:
+    resolution: {integrity: sha512-WjK88czdMGOwoKUO3cksAAWMLcqbU99ZKz7c0AvmgzrQwDdeZiUWlzeUOFwdsOjPB5URCtTRyv5LnAUKdI95XA==}
     dev: true
 
   /@isaacs/cliui@8.0.2:
@@ -1794,8 +1773,8 @@ packages:
       form-data: 3.0.1
     dev: false
 
-  /@types/node-schedule@2.1.0:
-    resolution: {integrity: sha512-NiTwl8YN3v/1YCKrDFSmCTkVxFDylueEqsOFdgF+vPsm+AlyJKGAo5yzX1FiOxPsZiN6/r8gJitYx2EaSuBmmg==}
+  /@types/node-schedule@2.1.1:
+    resolution: {integrity: sha512-FaqkbBizA+DinA0XWtAhdbEXykUkkqzBWT4BSnhn71z9C+vvcDgNcHvTP59nBhMg3o39E/ZY8zB/AQ6/HGuRag==}
     dependencies:
       '@types/node': 18.17.1
     dev: true
@@ -1815,8 +1794,8 @@ packages:
       pg-types: 2.2.0
     dev: false
 
-  /@types/pngjs@6.0.1:
-    resolution: {integrity: sha512-J39njbdW1U/6YyVXvC9+1iflZghP8jgRf2ndYghdJb5xL49LYDB+1EuAxfbuJ2IBbWIL3AjHPQhgaTxT3YaYeg==}
+  /@types/pngjs@6.0.2:
+    resolution: {integrity: sha512-GO2/2guBQrrb4g+93j55VR30xaMCgmSXa/ifPbHS5MgheDRJy5x12fFB61Hn0juCo+VBFhYMFkJd6CBt8HRx4w==}
     dependencies:
       '@types/node': 18.17.1
     dev: true
@@ -2799,7 +2778,7 @@ packages:
       normalize-path: 3.0.0
       readdirp: 3.6.0
     optionalDependencies:
-      fsevents: 2.3.2
+      fsevents: 2.3.3
     dev: false
 
   /chownr@1.1.4:
@@ -3183,8 +3162,8 @@ packages:
     resolution: {integrity: sha512-X4CDiMnDbA3s3RaUXWXmgAIbY1uxab3fqe3qwzg5XutR3wjqi7M3IkgQbsIBzpqBN2YWr/Qdv7JrFRqSgb4TFg==}
     dev: false
 
-  /discord-api-types@0.37.56:
-    resolution: {integrity: sha512-Ih3wj0ZTaQxaJRqUEXHMIXfXB86bwMGC0wc2nNsyCJqeo3lC4qnxXtFIsC+IGI46+dSIinuayCAZ6sLEEM02Bw==}
+  /discord-api-types@0.37.57:
+    resolution: {integrity: sha512-EGZgYrNVFVYux2tWZNMnemNgZh6sjQmKj1d9PS7++fYzHx7ksXtO5e++PqOZXzXkQ38z2uJ2tRlPFS8iKHl7qw==}
     dev: false
 
   /discord-ytdl-core@5.0.4(@discordjs/opus@0.9.0):
@@ -4447,8 +4426,8 @@ packages:
   /fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
 
-  /fsevents@2.3.2:
-    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+  /fsevents@2.3.3:
+    resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
     requiresBuild: true
@@ -4635,8 +4614,8 @@ packages:
       resolve-pkg-maps: 1.0.0
     dev: true
 
-  /get-tsconfig@4.7.0:
-    resolution: {integrity: sha512-pmjiZ7xtB8URYm74PlGJozDNyhvsVLUcpBa8DZBG3bWHwaHa9bPiRpiSfovw+fjhwONSCWKRyk+JQHEGZmMrzw==}
+  /get-tsconfig@4.7.2:
+    resolution: {integrity: sha512-wuMsz4leaj5hbGgg4IvDU0bqJagpftG5l5cXIAvo8uZrqn0NJqwtfupTN00VnkQJPcIRrxYrm1Ue24btpCha2A==}
     dependencies:
       resolve-pkg-maps: 1.0.0
     dev: false
@@ -5786,8 +5765,8 @@ packages:
       graceful-fs: 4.2.11
     dev: false
 
-  /langchain@0.0.152(@google-ai/generativelanguage@1.1.0)(cheerio@1.0.0-rc.12)(firebase-admin@11.10.1)(google-auth-library@9.0.0)(replicate@0.18.0)(youtubei.js@6.4.0):
-    resolution: {integrity: sha512-/G7eF+ojrA7hCgMs2S9Lb23z3aA+1NhoS0Z1cKNre/mV6hyNTxvt/Lvo1tFsNAPwV8KdH5Jeyp7LFcmjhvMFEw==}
+  /langchain@0.0.153(@google-ai/generativelanguage@1.1.0)(cheerio@1.0.0-rc.12)(firebase-admin@11.10.1)(google-auth-library@9.0.0)(replicate@0.18.1)(youtubei.js@6.4.0):
+    resolution: {integrity: sha512-CzNwKN8Zb6CM2nrnIj7vL+4zOpLdV6Bu9XzlUb6srpCpqb6CpzpEaLriZLZsF3ZWlOKGNDtxI8zYiDiSp6DzTA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@aws-crypto/sha256-js': ^5.0.0
@@ -6057,7 +6036,7 @@ packages:
       openapi-types: 12.1.3
       p-queue: 6.6.2
       p-retry: 4.6.2
-      replicate: 0.18.0
+      replicate: 0.18.1
       uuid: 9.0.0
       yaml: 2.3.1
       youtubei.js: 6.4.0
@@ -7315,8 +7294,8 @@ packages:
     resolution: {integrity: sha512-ZAqHUKkQLix2Iga7pPbsf1LpUoBjcpwU93F1l3qBIfxYddQLhxS6GKmS0d3jV8kSVaUbr6NnOEcEMFvuX93SWQ==}
     dev: false
 
-  /play-dl@1.9.6:
-    resolution: {integrity: sha512-JW44bQbME9fNfGhGXQ/rdcsHr4BfgJabVlSgpS9QY/NscfprFH1asv+q9atrZThP3+hHIpgtFNABccg9rFWlwg==}
+  /play-dl@1.9.7:
+    resolution: {integrity: sha512-KpgerWxUCY4s9Mhze2qdqPhiqd8Ve6HufpH9mBH3FN+vux55qSh6WJKDabfie8IBHN7lnrAlYcT/UdGax58c2A==}
     engines: {node: '>=16.0.0'}
     dependencies:
       play-audio: 0.5.2
@@ -7711,8 +7690,8 @@ packages:
       jsesc: 0.5.0
     dev: true
 
-  /replicate@0.18.0:
-    resolution: {integrity: sha512-b1SabhR4XFXqWbM4551tmc7hL+x+dnzka9YA6lcbzbyGDPHKELRdgRc6nn9jxK1VyTg70O39mCIo0e15DVZELw==}
+  /replicate@0.18.1:
+    resolution: {integrity: sha512-JFK5qWL7AAajsIjtkW/nTaoX+yKp8zkaANe+pQpBh9RjH5vIy6/tn/sVNlRF1z5bCJLupshJBHFgnHRdWjbKXg==}
     engines: {git: '>=2.11.0', node: '>=18.0.0', npm: '>=7.19.0', yarn: '>=1.7.0'}
     dev: false
 
@@ -8518,15 +8497,15 @@ packages:
   /tslib@2.6.1:
     resolution: {integrity: sha512-t0hLfiEKfMUoqhG+U1oid7Pva4bbDPHYfJNiB7BiIjRkj1pyC++4N3huJfqY6aRH6VTB0rvtzQwjM4K6qpfOig==}
 
-  /tsx@3.12.10:
-    resolution: {integrity: sha512-2+46h4xvUt1aLDNvk5YBT8Uzw+b7BolGbn7iSMucYqCXZiDc+1IMghLVdw8kKjING32JFOeO+Am9posvjkeclA==}
+  /tsx@3.13.0:
+    resolution: {integrity: sha512-rjmRpTu3as/5fjNq/kOkOtihgLxuIz6pbKdj9xwP4J5jOLkBxw/rjN5ANw+KyrrOXV5uB7HC8+SrrSJxT65y+A==}
     hasBin: true
     dependencies:
-      '@esbuild-kit/cjs-loader': 2.4.2
-      '@esbuild-kit/core-utils': 3.3.2
-      '@esbuild-kit/esm-loader': 2.6.5
+      esbuild: 0.18.20
+      get-tsconfig: 4.7.2
+      source-map-support: 0.5.21
     optionalDependencies:
-      fsevents: 2.3.2
+      fsevents: 2.3.3
     dev: false
 
   /tunnel-agent@0.6.0:
