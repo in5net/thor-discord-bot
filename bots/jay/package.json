@@ -17,7 +17,7 @@
     "database": "workspace:*",
     "decode-gif": "^1.0.1",
     "discord": "workspace:*",
-    "discord-api-types": "0.37.59",
+    "discord-api-types": "0.37.60",
     "discord.js": "14.13.0",
     "dotenv": "^16.3.1",
     "fluent-ffmpeg": "^2.1.2",
@@ -33,7 +33,7 @@
     "storage": "workspace:*",
     "tsconfig": "workspace:*",
     "tsx": "^3.13.0",
-    "zod": "^3.22.2"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.5.1",

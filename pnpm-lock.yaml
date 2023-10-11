@@ -18,8 +18,8 @@ importers:
         specifier: ^8.0.3
         version: 8.0.3
       turbo:
-        specifier: ^1.10.14
-        version: 1.10.14
+        specifier: ^1.10.15
+        version: 1.10.15
       typescript:
         specifier: 5.2.2
         version: 5.2.2
@@ -51,8 +51,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/discord
       discord-api-types:
-        specifier: 0.37.59
-        version: 0.37.59
+        specifier: 0.37.60
+        version: 0.37.60
       discord.js:
         specifier: 14.13.0
         version: 14.13.0
@@ -99,8 +99,8 @@ importers:
         specifier: ^3.13.0
         version: 3.13.0
       zod:
-        specifier: ^3.22.2
-        version: 3.22.2
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@total-typescript/ts-reset':
         specifier: ^0.5.1
@@ -151,8 +151,8 @@ importers:
         specifier: 1.0.1-7
         version: 1.0.1-7
       ai:
-        specifier: ^2.2.14
-        version: 2.2.14(react@18.2.0)(solid-js@1.7.9)(svelte@4.1.2)(vue@3.3.4)
+        specifier: ^2.2.15
+        version: 2.2.15(react@18.2.0)(solid-js@1.7.9)(svelte@4.1.2)(vue@3.3.4)
       chalk-template:
         specifier: ^1.1.0
         version: 1.1.0
@@ -169,8 +169,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/discord
       discord-api-types:
-        specifier: 0.37.59
-        version: 0.37.59
+        specifier: 0.37.60
+        version: 0.37.60
       discord-ytdl-core:
         specifier: ^5.0.4
         version: 5.0.4(@discordjs/opus@0.9.0)
@@ -190,14 +190,14 @@ importers:
         specifier: 4.4.6
         version: 4.4.6
       google-auth-library:
-        specifier: ^9.0.0
-        version: 9.0.0
+        specifier: ^9.1.0
+        version: 9.1.0
       got:
         specifier: 13.0.0
         version: 13.0.0
       langchain:
-        specifier: ^0.0.157
-        version: 0.0.157(@google-ai/generativelanguage@1.1.0)(cheerio@1.0.0-rc.12)(firebase-admin@11.11.0)(google-auth-library@9.0.0)(replicate@0.18.1)(youtubei.js@6.4.1)
+        specifier: ^0.0.165
+        version: 0.0.165(@google-ai/generativelanguage@1.1.0)(cheerio@1.0.0-rc.12)(firebase-admin@11.11.0)(google-auth-library@9.1.0)(replicate@0.20.1)(youtubei.js@6.4.1)
       libsodium-wrappers:
         specifier: ^0.7.13
         version: 0.7.13
@@ -226,8 +226,8 @@ importers:
         specifier: 1.9.7
         version: 1.9.7
       replicate:
-        specifier: ^0.18.1
-        version: 0.18.1
+        specifier: ^0.20.1
+        version: 0.20.1
       storage:
         specifier: workspace:*
         version: link:../../packages/storage
@@ -250,8 +250,8 @@ importers:
         specifier: ^4.11.5
         version: 4.11.5
       zod:
-        specifier: ^3.22.2
-        version: 3.22.2
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@total-typescript/ts-reset':
         specifier: ^0.5.1
@@ -292,24 +292,24 @@ importers:
         specifier: ^1.11.0
         version: 1.11.0
       '@prisma/client':
-        specifier: 5.3.1
-        version: 5.3.1(prisma@5.3.1)
+        specifier: 5.4.2
+        version: 5.4.2(prisma@5.4.2)
       drizzle-orm:
         specifier: ^0.28.6
         version: 0.28.6(@neondatabase/serverless@0.6.0)(@planetscale/database@1.11.0)
       prisma:
-        specifier: 5.3.1
-        version: 5.3.1
+        specifier: 5.4.2
+        version: 5.4.2
       ws:
         specifier: ^8.14.2
         version: 8.14.2
       zod:
-        specifier: ^3.22.2
-        version: 3.22.2
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@types/ws':
-        specifier: ^8.5.5
-        version: 8.5.5
+        specifier: ^8.5.7
+        version: 8.5.7
       drizzle-kit:
         specifier: ^0.19.13
         version: 0.19.13
@@ -323,8 +323,8 @@ importers:
         specifier: workspace:*
         version: link:../database
       discord-api-types:
-        specifier: 0.37.59
-        version: 0.37.59
+        specifier: 0.37.60
+        version: 0.37.60
       discord.js:
         specifier: 14.13.0
         version: 14.13.0
@@ -351,8 +351,8 @@ importers:
         specifier: 1.0.0-rc.12
         version: 1.0.0-rc.12
       zod:
-        specifier: ^3.22.2
-        version: 3.22.2
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@types/node':
         specifier: 18.18.0
@@ -364,24 +364,24 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0
       pino:
-        specifier: ^8.15.1
-        version: 8.15.1
+        specifier: ^8.16.0
+        version: 8.16.0
     devDependencies:
       '@types/node':
         specifier: 18.18.0
         version: 18.18.0
       pino-pretty:
-        specifier: ^10.2.0
-        version: 10.2.0
+        specifier: ^10.2.3
+        version: 10.2.3
 
   packages/storage:
     dependencies:
       '@google-cloud/storage':
-        specifier: 7.1.0
-        version: 7.1.0
+        specifier: 7.2.0
+        version: 7.2.0
       zod:
-        specifier: ^3.22.2
-        version: 3.22.2
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@types/node':
         specifier: 18.18.0
@@ -552,7 +552,7 @@ packages:
     engines: {node: '>=16.9.0'}
     dependencies:
       '@types/ws': 8.5.5
-      discord-api-types: 0.37.59
+      discord-api-types: 0.37.60
       prism-media: 1.3.5(@discordjs/opus@0.9.0)
       tslib: 2.6.1
       ws: 8.13.0
@@ -1219,8 +1219,8 @@ packages:
     dev: false
     optional: true
 
-  /@google-cloud/storage@7.1.0:
-    resolution: {integrity: sha512-kAtniePZT5Ms9wayYcbT44H+1jwkYvRaA+E3IGnmBLG+aGwMTM0q9Xn0CCIez4D8toeBYczNkhQsQfRT1TDy7A==}
+  /@google-cloud/storage@7.2.0:
+    resolution: {integrity: sha512-g3j/LoGPydCo5MUfWS1GupBjjPmesKWIo6dH8kUWiVMBmvSG4dpwXVL1NvG1DZTkJSiyjvqRWi9lHJxRfxWbsw==}
     engines: {node: '>=14'}
     dependencies:
       '@google-cloud/paginator': 5.0.0
@@ -1231,7 +1231,7 @@ packages:
       compressible: 2.0.18
       duplexify: 4.1.2
       ent: 2.2.0
-      fast-xml-parser: 4.2.7
+      fast-xml-parser: 4.3.2
       gaxios: 6.0.4
       google-auth-library: 9.0.0
       mime: 3.0.0
@@ -1522,8 +1522,8 @@ packages:
     engines: {node: '>=16'}
     dev: false
 
-  /@prisma/client@5.3.1(prisma@5.3.1):
-    resolution: {integrity: sha512-ArOKjHwdFZIe1cGU56oIfy7wRuTn0FfZjGuU/AjgEBOQh+4rDkB6nF+AGHP8KaVpkBIiHGPQh3IpwQ3xDMdO0Q==}
+  /@prisma/client@5.4.2(prisma@5.4.2):
+    resolution: {integrity: sha512-2xsPaz4EaMKj1WS9iW6MlPhmbqtBsXAOeVttSePp8vTFTtvzh2hZbDgswwBdSCgPzmmwF+tLB259QzggvCmJqA==}
     engines: {node: '>=16.13'}
     requiresBuild: true
     peerDependencies:
@@ -1532,16 +1532,16 @@ packages:
       prisma:
         optional: true
     dependencies:
-      '@prisma/engines-version': 5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59
-      prisma: 5.3.1
+      '@prisma/engines-version': 5.4.1-2.ac9d7041ed77bcc8a8dbd2ab6616b39013829574
+      prisma: 5.4.2
     dev: false
 
-  /@prisma/engines-version@5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59:
-    resolution: {integrity: sha512-y5qbUi3ql2Xg7XraqcXEdMHh0MocBfnBzDn5GbV1xk23S3Mq8MGs+VjacTNiBh3dtEdUERCrUUG7Z3QaJ+h79w==}
+  /@prisma/engines-version@5.4.1-2.ac9d7041ed77bcc8a8dbd2ab6616b39013829574:
+    resolution: {integrity: sha512-wvupDL4AA1vf4TQNANg7kR7y98ITqPsk6aacfBxZKtrJKRIsWjURHkZCGcQliHdqCiW/hGreO6d6ZuSv9MhdAA==}
     dev: false
 
-  /@prisma/engines@5.3.1:
-    resolution: {integrity: sha512-6QkILNyfeeN67BNEPEtkgh3Xo2tm6D7V+UhrkBbRHqKw9CTaz/vvTP/ROwYSP/3JT2MtIutZm/EnhxUiuOPVDA==}
+  /@prisma/engines@5.4.2:
+    resolution: {integrity: sha512-fqeucJ3LH0e1eyFdT0zRx+oETLancu5+n4lhiYECyEz6H2RDskPJHJYHkVc0LhkU4Uv7fuEnppKU3nVKNzMh8g==}
     requiresBuild: true
     dev: false
 
@@ -1846,6 +1846,13 @@ packages:
     resolution: {integrity: sha512-lwhs8hktwxSjf9UaZ9tG5M03PGogvFaH8gUgLNbN9HKIg0dvv6q+gkSuJ8HN4/VbyxkuLzCjlN7GquQ0gUJfIg==}
     dependencies:
       '@types/node': 18.18.0
+    dev: false
+
+  /@types/ws@8.5.7:
+    resolution: {integrity: sha512-6UrLjiDUvn40CMrAubXuIVtj2PEfKDffJS7ychvnPU44j+KVeXmdHHTgqcM/dxLUTHxlXHiFM8Skmb8ozGdTnQ==}
+    dependencies:
+      '@types/node': 18.18.0
+    dev: true
 
   /@typescript-eslint/eslint-plugin@6.3.0(@typescript-eslint/parser@6.3.0)(eslint@8.46.0)(typescript@5.2.2):
     resolution: {integrity: sha512-IZYjYZ0ifGSLZbwMqIip/nOamFiWJ9AH+T/GYNZBWkVcyNQOFGtSMoWV7RvY4poYCMZ/4lHzNl796WOSNxmk8A==}
@@ -2251,8 +2258,8 @@ packages:
       indent-string: 4.0.0
     dev: false
 
-  /ai@2.2.14(react@18.2.0)(solid-js@1.7.9)(svelte@4.1.2)(vue@3.3.4):
-    resolution: {integrity: sha512-4kL2iYPVhH1pl6jJFIJCYcgx5mHzGOmdwiSYWVadmSkNOxKqokgevHyJKiyL9B9DjlreM9cDqkQop56Hdfkb0w==}
+  /ai@2.2.15(react@18.2.0)(solid-js@1.7.9)(svelte@4.1.2)(vue@3.3.4):
+    resolution: {integrity: sha512-pl3cWgb2aM6HQo/heX/oIH0TlXXI9hOyT2n6KokNPjLTfWiPFGZ6thXLEi80xaS0tvtAc30qJqwt8VtSsfLNLA==}
     engines: {node: '>=14.6'}
     peerDependencies:
       react: ^18.2.0
@@ -3158,8 +3165,8 @@ packages:
     resolution: {integrity: sha512-X4CDiMnDbA3s3RaUXWXmgAIbY1uxab3fqe3qwzg5XutR3wjqi7M3IkgQbsIBzpqBN2YWr/Qdv7JrFRqSgb4TFg==}
     dev: false
 
-  /discord-api-types@0.37.59:
-    resolution: {integrity: sha512-75CxNb6dtxlgsIa3mD2ohoDLIZLMv/upsadRCYlqv2UgPTJ/p2MzSSbrH2AGBvL90/fAsB6fj8hCPOWzBkPkZQ==}
+  /discord-api-types@0.37.60:
+    resolution: {integrity: sha512-5BELXTsv7becqVHrD81nZrqT4oEyXXWBwbsO/kwDDu6X3u19VV1tYDB5I5vaVAK+c1chcDeheI9zACBLm41LiQ==}
     dev: false
 
   /discord-ytdl-core@5.0.4(@discordjs/opus@0.9.0):
@@ -3271,7 +3278,7 @@ packages:
       hanji: 0.0.5
       json-diff: 0.9.0
       minimatch: 7.4.6
-      zod: 3.22.2
+      zod: 3.22.4
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -4228,6 +4235,14 @@ packages:
     dependencies:
       strnum: 1.0.5
     dev: false
+    optional: true
+
+  /fast-xml-parser@4.3.2:
+    resolution: {integrity: sha512-rmrXUXwbJedoXkStenj1kkljNF7ugn5ZjR9FJcwmCfcCbtOMDghPajbc+Tck6vE6F5XsDmx+Pr2le9fw8+pXBg==}
+    hasBin: true
+    dependencies:
+      strnum: 1.0.5
+    dev: false
 
   /fastq@1.15.0:
     resolution: {integrity: sha512-wBrocU2LCXXa+lWBt8RoIRD89Fi8OdABODa/kEnyeyjS5aZO5/GNvI5sEINADqP/h8M29UHTHUb53sUu5Ihqdw==}
@@ -4886,6 +4901,22 @@ packages:
       - supports-color
     dev: false
 
+  /google-auth-library@9.1.0:
+    resolution: {integrity: sha512-1M9HdOcQNPV5BwSXqwwT238MTKodJFBxZ/V2JP397ieOLv4FjQdfYb9SooR7Mb+oUT2IJ92mLJQf804dyx0MJA==}
+    engines: {node: '>=14'}
+    dependencies:
+      base64-js: 1.5.1
+      ecdsa-sig-formatter: 1.0.11
+      gaxios: 6.0.4
+      gcp-metadata: 6.0.0
+      gtoken: 7.0.1
+      jws: 4.0.0
+      lru-cache: 6.0.0
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+    dev: false
+
   /google-gax@3.6.1:
     resolution: {integrity: sha512-g/lcUjGcB6DSw2HxgEmCDOrI/CByOwqRvsuUvNalHUK2iPPPlmAIpbMbl62u0YufGMr8zgE3JL7th6dCb1Ry+w==}
     engines: {node: '>=12'}
@@ -4921,7 +4952,7 @@ packages:
       '@types/long': 4.0.2
       abort-controller: 3.0.0
       duplexify: 4.1.2
-      google-auth-library: 9.0.0
+      google-auth-library: 9.1.0
       node-fetch: 2.6.12
       object-hash: 3.0.0
       proto3-json-serializer: 1.1.1
@@ -4947,7 +4978,7 @@ packages:
     dependencies:
       extend: 3.0.2
       gaxios: 6.0.4
-      google-auth-library: 9.0.0
+      google-auth-library: 9.1.0
       qs: 6.11.2
       url-template: 2.0.8
       uuid: 9.0.0
@@ -5761,11 +5792,12 @@ packages:
       graceful-fs: 4.2.11
     dev: false
 
-  /langchain@0.0.157(@google-ai/generativelanguage@1.1.0)(cheerio@1.0.0-rc.12)(firebase-admin@11.11.0)(google-auth-library@9.0.0)(replicate@0.18.1)(youtubei.js@6.4.1):
-    resolution: {integrity: sha512-G69Azp9KN/0ispqTM/Ns+UyaOm+GR4TAh3U41idA1gTyyG2n8zcO1hEC/HA4TwcxyNvWVHgX0vLo956Is5DcgQ==}
+  /langchain@0.0.165(@google-ai/generativelanguage@1.1.0)(cheerio@1.0.0-rc.12)(firebase-admin@11.11.0)(google-auth-library@9.1.0)(replicate@0.20.1)(youtubei.js@6.4.1):
+    resolution: {integrity: sha512-CpbNpjwaE+9lzjdw+pZz0VgnRrFivEgr7CVp9dDaAb5JpaJAA4V2v6uQ9ZPN+TSqupTQ79HFn2sfyZVEl2EG7Q==}
     engines: {node: '>=18'}
     peerDependencies:
       '@aws-crypto/sha256-js': ^5.0.0
+      '@aws-sdk/client-bedrock-runtime': ^3.422.0
       '@aws-sdk/client-dynamodb': ^3.310.0
       '@aws-sdk/client-kendra': ^3.352.0
       '@aws-sdk/client-lambda': ^3.310.0
@@ -5786,7 +5818,7 @@ packages:
       '@mozilla/readability': '*'
       '@notionhq/client': ^2.2.10
       '@opensearch-project/opensearch': '*'
-      '@pinecone-database/pinecone': '*'
+      '@pinecone-database/pinecone': ^1.1.0
       '@planetscale/database': ^1.8.0
       '@qdrant/js-client-rest': ^1.2.0
       '@raycast/api': ^1.55.2
@@ -5807,6 +5839,7 @@ packages:
       '@zilliz/milvus2-sdk-node': '>=2.2.7'
       apify-client: ^2.7.1
       axios: '*'
+      cassandra-driver: ^4.6.4
       cheerio: ^1.0.0-rc.12
       chromadb: '*'
       cohere-ai: '>=6.0.0'
@@ -5816,12 +5849,14 @@ packages:
       fast-xml-parser: ^4.2.7
       firebase-admin: ^11.9.0
       google-auth-library: ^8.9.0
+      googleapis: ^126.0.1
       hnswlib-node: ^1.4.2
       html-to-text: ^9.0.5
       ignore: ^5.2.0
       ioredis: ^5.3.2
       jsdom: '*'
       llmonitor: '*'
+      lodash: ^4.17.21
       mammoth: '*'
       mongodb: ^5.2.0
       mysql2: ^3.3.3
@@ -5834,6 +5869,7 @@ packages:
       pg-copy-streams: ^6.0.5
       pickleparser: ^0.1.0
       playwright: ^1.32.1
+      portkey-ai: ^0.1.11
       puppeteer: ^19.7.2
       redis: ^4.6.4
       replicate: ^0.18.0
@@ -5850,6 +5886,8 @@ packages:
       youtubei.js: ^5.8.0
     peerDependenciesMeta:
       '@aws-crypto/sha256-js':
+        optional: true
+      '@aws-sdk/client-bedrock-runtime':
         optional: true
       '@aws-sdk/client-dynamodb':
         optional: true
@@ -5933,6 +5971,8 @@ packages:
         optional: true
       axios:
         optional: true
+      cassandra-driver:
+        optional: true
       cheerio:
         optional: true
       chromadb:
@@ -5951,6 +5991,8 @@ packages:
         optional: true
       google-auth-library:
         optional: true
+      googleapis:
+        optional: true
       hnswlib-node:
         optional: true
       html-to-text:
@@ -5962,6 +6004,8 @@ packages:
       jsdom:
         optional: true
       llmonitor:
+        optional: true
+      lodash:
         optional: true
       mammoth:
         optional: true
@@ -5986,6 +6030,8 @@ packages:
       pickleparser:
         optional: true
       playwright:
+        optional: true
+      portkey-ai:
         optional: true
       puppeteer:
         optional: true
@@ -6026,7 +6072,7 @@ packages:
       expr-eval: 2.0.2
       firebase-admin: 11.11.0
       flat: 5.0.2
-      google-auth-library: 9.0.0
+      google-auth-library: 9.1.0
       js-tiktoken: 1.0.7
       js-yaml: 4.1.0
       jsonpointer: 5.0.1
@@ -6038,12 +6084,12 @@ packages:
       openapi-types: 12.1.3
       p-queue: 6.6.2
       p-retry: 4.6.2
-      replicate: 0.18.1
+      replicate: 0.20.1
       uuid: 9.0.0
       yaml: 2.3.1
       youtubei.js: 6.4.1
-      zod: 3.22.2
-      zod-to-json-schema: 3.21.4(zod@3.22.2)
+      zod: 3.22.4
+      zod-to-json-schema: 3.21.4(zod@3.22.4)
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -7213,8 +7259,8 @@ packages:
       readable-stream: 4.4.2
       split2: 4.2.0
 
-  /pino-pretty@10.2.0:
-    resolution: {integrity: sha512-tRvpyEmGtc2D+Lr3FulIZ+R1baggQ4S3xD2Ar93KixFEDx6SEAUP3W5aYuEw1C73d6ROrNcB2IXLteW8itlwhA==}
+  /pino-pretty@10.2.3:
+    resolution: {integrity: sha512-4jfIUc8TC1GPUfDyMSlW1STeORqkoxec71yhxIpLDQapUu8WOuoz2TTCoidrIssyz78LZC69whBMPIKCMbi3cw==}
     hasBin: true
     dependencies:
       colorette: 2.0.20
@@ -7229,7 +7275,7 @@ packages:
       pump: 3.0.0
       readable-stream: 4.4.2
       secure-json-parse: 2.7.0
-      sonic-boom: 3.3.0
+      sonic-boom: 3.7.0
       strip-json-comments: 3.1.1
     dev: true
 
@@ -7237,8 +7283,8 @@ packages:
     resolution: {integrity: sha512-cHjPPsE+vhj/tnhCy/wiMh3M3z3h/j15zHQX+S9GkTBgqJuTuJzYJ4gUyACLhDaJ7kk9ba9iRDmbH2tJU03OiA==}
     dev: false
 
-  /pino@8.15.1:
-    resolution: {integrity: sha512-Cp4QzUQrvWCRJaQ8Lzv0mJzXVk4z2jlq8JNKMGaixC2Pz5L4l2p95TkuRvYbrEbe85NQsDKrAd4zalf7Ml6WiA==}
+  /pino@8.16.0:
+    resolution: {integrity: sha512-UUmvQ/7KTZt/vHjhRrnyS7h+J7qPBQnpG80V56xmIC+o9IqYmQOw/UIny9S9zYDfRBR0ClouCr464EkBMIT7Fw==}
     hasBin: true
     dependencies:
       atomic-sleep: 1.0.0
@@ -7250,7 +7296,7 @@ packages:
       quick-format-unescaped: 4.0.4
       real-require: 0.2.0
       safe-stable-stringify: 2.4.3
-      sonic-boom: 3.3.0
+      sonic-boom: 3.7.0
       thread-stream: 2.3.0
     dev: false
 
@@ -7398,13 +7444,13 @@ packages:
       '@discordjs/opus': 0.9.0
     dev: false
 
-  /prisma@5.3.1:
-    resolution: {integrity: sha512-Wp2msQIlMPHe+5k5Od6xnsI/WNG7UJGgFUJgqv/ygc7kOECZapcSz/iU4NIEzISs3H1W9sFLjAPbg/gOqqtB7A==}
+  /prisma@5.4.2:
+    resolution: {integrity: sha512-GDMZwZy7mysB2oXU+angQqJ90iaPFdD0rHaZNkn+dio5NRkGLmMqmXs31//tg/qXT3iB0cTQwnGGQNuirhSTZg==}
     engines: {node: '>=16.13'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@prisma/engines': 5.3.1
+      '@prisma/engines': 5.4.2
     dev: false
 
   /process-nextick-args@2.0.1:
@@ -7676,8 +7722,8 @@ packages:
       jsesc: 0.5.0
     dev: true
 
-  /replicate@0.18.1:
-    resolution: {integrity: sha512-JFK5qWL7AAajsIjtkW/nTaoX+yKp8zkaANe+pQpBh9RjH5vIy6/tn/sVNlRF1z5bCJLupshJBHFgnHRdWjbKXg==}
+  /replicate@0.20.1:
+    resolution: {integrity: sha512-QVyI1rowGsSfNuDrRmumYPdCHa/fN/RkI3NHpcK0i5hSSiWK69URAyheAC/0MIAiS3oUs4kD56PB9zEI4oHENw==}
     engines: {git: '>=2.11.0', node: '>=18.0.0', npm: '>=7.19.0', yarn: '>=1.7.0'}
     dev: false
 
@@ -7968,8 +8014,8 @@ packages:
       swr-store: 0.10.6
     dev: false
 
-  /sonic-boom@3.3.0:
-    resolution: {integrity: sha512-LYxp34KlZ1a2Jb8ZQgFCK3niIHzibdwtwNUWKg0qQRzsDoJ3Gfgkf8KdBTFU3SkejDEIlWwnSnpVdOZIhFMl/g==}
+  /sonic-boom@3.7.0:
+    resolution: {integrity: sha512-IudtNvSqA/ObjN97tfgNmOKyDOs4dNcg4cUUsHDebqsgb8wGBBwb31LIgShNO8fye0dFI52X1+tFoKKI6Rq1Gg==}
     dependencies:
       atomic-sleep: 1.0.0
 
@@ -8500,64 +8546,64 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
-  /turbo-darwin-64@1.10.14:
-    resolution: {integrity: sha512-I8RtFk1b9UILAExPdG/XRgGQz95nmXPE7OiGb6ytjtNIR5/UZBS/xVX/7HYpCdmfriKdVwBKhalCoV4oDvAGEg==}
+  /turbo-darwin-64@1.10.15:
+    resolution: {integrity: sha512-Sik5uogjkRTe1XVP9TC2GryEMOJCaKE2pM/O9uLn4koQDnWKGcLQv+mDU+H+9DXvKLnJnKCD18OVRkwK5tdpoA==}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-darwin-arm64@1.10.14:
-    resolution: {integrity: sha512-KAdUWryJi/XX7OD0alOuOa0aJ5TLyd4DNIYkHPHYcM6/d7YAovYvxRNwmx9iv6Vx6IkzTnLeTiUB8zy69QkG9Q==}
+  /turbo-darwin-arm64@1.10.15:
+    resolution: {integrity: sha512-xwqyFDYUcl2xwXyGPmHkmgnNm4Cy0oNzMpMOBGRr5x64SErS7QQLR4VHb0ubiR+VAb8M+ECPklU6vD1Gm+wekg==}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-64@1.10.14:
-    resolution: {integrity: sha512-BOBzoREC2u4Vgpap/WDxM6wETVqVMRcM8OZw4hWzqCj2bqbQ6L0wxs1LCLWVrghQf93JBQtIGAdFFLyCSBXjWQ==}
+  /turbo-linux-64@1.10.15:
+    resolution: {integrity: sha512-dM07SiO3RMAJ09Z+uB2LNUSkPp3I1IMF8goH5eLj+d8Kkwoxd/+qbUZOj9RvInyxU/IhlnO9w3PGd3Hp14m/nA==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-arm64@1.10.14:
-    resolution: {integrity: sha512-D8T6XxoTdN5D4V5qE2VZG+/lbZX/89BkAEHzXcsSUTRjrwfMepT3d2z8aT6hxv4yu8EDdooZq/2Bn/vjMI32xw==}
+  /turbo-linux-arm64@1.10.15:
+    resolution: {integrity: sha512-MkzKLkKYKyrz4lwfjNXH8aTny5+Hmiu4SFBZbx+5C0vOlyp6fV5jZANDBvLXWiDDL4DSEAuCEK/2cmN6FVH1ow==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-64@1.10.14:
-    resolution: {integrity: sha512-zKNS3c1w4i6432N0cexZ20r/aIhV62g69opUn82FLVs/zk3Ie0GVkSB6h0rqIvMalCp7enIR87LkPSDGz9K4UA==}
+  /turbo-windows-64@1.10.15:
+    resolution: {integrity: sha512-3TdVU+WEH9ThvQGwV3ieX/XHebtYNHv9HARHauPwmVj3kakoALkpGxLclkHFBLdLKkqDvmHmXtcsfs6cXXRHJg==}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-arm64@1.10.14:
-    resolution: {integrity: sha512-rkBwrTPTxNSOUF7of8eVvvM+BkfkhA2OvpHM94if8tVsU+khrjglilp8MTVPHlyS9byfemPAmFN90oRIPB05BA==}
+  /turbo-windows-arm64@1.10.15:
+    resolution: {integrity: sha512-l+7UOBCbfadvPMYsX08hyLD+UIoAkg6ojfH+E8aud3gcA1padpjCJTh9gMpm3QdMbKwZteT5uUM+wyi6Rbbyww==}
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo@1.10.14:
-    resolution: {integrity: sha512-hr9wDNYcsee+vLkCDIm8qTtwhJ6+UAMJc3nIY6+PNgUTtXcQgHxCq8BGoL7gbABvNWv76CNbK5qL4Lp9G3ZYRA==}
+  /turbo@1.10.15:
+    resolution: {integrity: sha512-mKKkqsuDAQy1wCCIjCdG+jOCwUflhckDMSRoeBPcIL/CnCl7c5yRDFe7SyaXloUUkt4tUR0rvNIhVCcT7YeQpg==}
     hasBin: true
     optionalDependencies:
-      turbo-darwin-64: 1.10.14
-      turbo-darwin-arm64: 1.10.14
-      turbo-linux-64: 1.10.14
-      turbo-linux-arm64: 1.10.14
-      turbo-windows-64: 1.10.14
-      turbo-windows-arm64: 1.10.14
+      turbo-darwin-64: 1.10.15
+      turbo-darwin-arm64: 1.10.15
+      turbo-linux-64: 1.10.15
+      turbo-linux-arm64: 1.10.15
+      turbo-windows-64: 1.10.15
+      turbo-windows-arm64: 1.10.15
     dev: true
 
   /type-check@0.3.2:
@@ -9124,13 +9170,13 @@ packages:
       sax: 1.2.4
     dev: false
 
-  /zod-to-json-schema@3.21.4(zod@3.22.2):
+  /zod-to-json-schema@3.21.4(zod@3.22.4):
     resolution: {integrity: sha512-fjUZh4nQ1s6HMccgIeE0VP4QG/YRGPmyjO9sAh890aQKPEk3nqbfUXhMFaC+Dr5KvYBm8BCyvfpZf2jY9aGSsw==}
     peerDependencies:
       zod: ^3.21.4
     dependencies:
-      zod: 3.22.2
+      zod: 3.22.4
     dev: false
 
-  /zod@3.22.2:
-    resolution: {integrity: sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==}
+  /zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
