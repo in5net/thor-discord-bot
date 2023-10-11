@@ -125,11 +125,13 @@ async function handleRandomResponse(message: Message) {
 		if (msgs.length) {
 			const message_ = shuffle(msgs)
 				.join(" ")
-				.replaceAll(responseVariableRegex, (_, variable: string) => {
+				.replaceAll(responseVariableRegex, match => {
+					const variable = match.slice(1, -1);
 					if (variable === "name")
 						return member?.displayName || author.username;
 					const props = variable.split(".");
 					const $words = words();
+					console.log({ match, variable, props, $words });
 					let value: any = $words.themes;
 					for (const prop of props) {
 						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
