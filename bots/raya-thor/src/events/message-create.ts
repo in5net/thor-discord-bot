@@ -136,7 +136,7 @@ async function handleRandomResponse(message: Message) {
 						value = value[prop];
 					}
 
-					return random(`${value}`);
+					return random(value as string[]);
 				});
 			await channel.send(message_);
 		}
