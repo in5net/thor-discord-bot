@@ -1,23 +1,28 @@
 import { emojiRegex } from "$services/emoji";
 import { incCount } from "$services/users";
-import { random, shuffle } from "@in5net/limitless";
+import { shuffle } from "@in5net/std/array";
+import { random } from "@in5net/std/random";
 import { userMention, type Message } from "discord.js";
 import event from "discord/event";
 import { handleTextCommand } from "discord/events/message-create";
 import { Timestamp } from "firebase-admin/firestore";
 import {
+	anyOf,
 	caseInsensitive,
 	charIn,
 	createRegExp,
 	digit,
 	exactly,
 	global,
+	letter,
+	oneOrMore,
 	whitespace,
 } from "magic-regexp";
 import { env } from "node:process";
 import { handleWordleMessage } from "../commands/text/wordle";
 import randomResponses, {
 	randomResponsesRef as randomResponsesReference,
+	words,
 } from "../responses";
 
 const prefix = env.PREFIX;
@@ -25,6 +30,13 @@ const prefixRegex = createRegExp(exactly(prefix).at.lineStart(), [
 	caseInsensitive,
 ]);
 const whitespaceRegex = createRegExp(whitespace, [global]);
+
+const responseVariableRegex = createRegExp(
+	"{",
+	oneOrMore(anyOf(letter, charIn("._"))).grouped(),
+	"}",
+	[global],
+);
 
 export default event(
 	{ name: "messageCreate" },
@@ -113,7 +125,19 @@ async function handleRandomResponse(message: Message) {
 		if (msgs.length) {
 			const message_ = shuffle(msgs)
 				.join(" ")
-				.replaceAll("{name}", member?.displayName || author.username);
+				.replaceAll(responseVariableRegex, (_, variable: string) => {
+					if (variable === "name")
+						return member?.displayName || author.username;
+					const props = variable.split(".");
+					const $words = words();
+					let value: any = $words;
+					for (const prop of props) {
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+						value = value[prop];
+					}
+
+					return random(`${value}`);
+				});
 			await channel.send(message_);
 		}
 	}

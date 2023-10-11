@@ -16,6 +16,7 @@
     "@google-ai/generativelanguage": "^1.1.0",
     "@googleapis/customsearch": "1.0.4",
     "@in5net/limitless": "workspace:*",
+    "@in5net/std": "^0.8.2",
     "@napi-rs/canvas": "0.1.44",
     "@nick.heiner/openai-edge": "1.0.1-7",
     "ai": "^2.2.15",

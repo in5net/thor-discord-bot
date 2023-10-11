@@ -1,5 +1,6 @@
 import { firestore } from "$services/firebase";
 import {
+	type DocumentReference,
 	type CollectionReference,
 	type Timestamp,
 } from "firebase-admin/firestore";
@@ -24,4 +25,16 @@ randomResponsesRef.onSnapshot(({ docs }) => {
 	randomResponses(
 		docs.map(document => ({ ...document.data(), id: document.id })),
 	);
+});
+
+interface Words {
+	themes: Record<string, Record<string, string[]>>;
+}
+
+const wordsRef = firestore.doc("config/words") as DocumentReference<Words>;
+
+export const words = trkl<Words>({ themes: {} });
+
+wordsRef.onSnapshot(snap => {
+	words(snap.data() || { themes: {} });
 });

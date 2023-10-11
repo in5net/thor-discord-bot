@@ -144,6 +144,9 @@ importers:
       '@in5net/limitless':
         specifier: workspace:*
         version: link:../../packages/limitless
+      '@in5net/std':
+        specifier: ^0.8.2
+        version: 0.8.2
       '@napi-rs/canvas':
         specifier: 0.1.44
         version: 0.1.44
@@ -1298,6 +1301,10 @@ packages:
   /@in5net/prettier-config@1.1.0:
     resolution: {integrity: sha512-oxHsgHM7tfkQeDI8xtDPbR+Uq1b1hB2O2KSgAhYpAkEmPLtNRbahgq5IZ/9F4kM8Qj3pPeoDtBp1fXNhjW3Fqg==}
     dev: true
+
+  /@in5net/std@0.8.2:
+    resolution: {integrity: sha512-augsOpd1L7IyuikmM3t2BM8NnxzUA8eLgV5MqaPwODAHg1/aI+BAleA5ZkQ6URmpkrZ2hGpTXYN72/uSs3axfg==}
+    dev: false
 
   /@in5net/xo-config@1.5.0:
     resolution: {integrity: sha512-WjK88czdMGOwoKUO3cksAAWMLcqbU99ZKz7c0AvmgzrQwDdeZiUWlzeUOFwdsOjPB5URCtTRyv5LnAUKdI95XA==}
