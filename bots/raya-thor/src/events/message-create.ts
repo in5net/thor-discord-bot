@@ -130,7 +130,7 @@ async function handleRandomResponse(message: Message) {
 						return member?.displayName || author.username;
 					const props = variable.split(".");
 					const $words = words();
-					let value: any = $words;
+					let value: any = $words.themes;
 					for (const prop of props) {
 						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 						value = value[prop];
