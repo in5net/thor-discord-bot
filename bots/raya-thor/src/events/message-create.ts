@@ -42,21 +42,20 @@ export default event(
 	{ name: "messageCreate" },
 	async ({ client, args: [message] }) => {
 		const { content, channel, author } = message;
-		if (author.bot) return;
-		if (!("send" in channel)) return;
+		if (author.bot || !("send" in channel)) return;
 		const lowercase = content.toLowerCase();
 		const noWhitespace = lowercase.replaceAll(whitespaceRegex, "");
 		if (
-			["among", "imposter", "imposta", "amogus", "mongus"].some(string_ =>
-				noWhitespace.includes(string_),
+			["among", "imposter", "imposta", "amogus", "mongus"].some(str =>
+				noWhitespace.includes(str),
 			) &&
 			author.id !== client.user?.id
 		) {
 			await message.delete();
-			let message_ = "salad mundus detected";
+			let msg = "salad mundus detected";
 			if (Math.random() < 0.3)
-				message_ += ` gave 1 strike to ${userMention(message.author.id)}`;
-			await channel.send(message_);
+				msg += ` gave 1 strike to ${userMention(message.author.id)}`;
+			await channel.send(msg);
 			await incCount(author.id, "salad_mundus");
 		} else {
 			const [first = "", second = "", third = ""] = noWhitespace;
@@ -80,10 +79,10 @@ export default event(
 );
 
 async function handleRandomResponse(message: Message) {
-	const { content, author, channel, member } = message;
-	const lowercase = content.toLowerCase().replaceAll(/<@!?\d+>/g, "");
+	const { cleanContent, author, channel, member } = message;
+	const lowercase = cleanContent.toLowerCase();
 
-	if (content.length === 5) await handleWordleMessage(message);
+	if (cleanContent.length === 5) await handleWordleMessage(message);
 	await handleDiceMessage(message);
 
 	if (lowercase.includes("ratio")) await incCount(author.id, "ratio");
@@ -123,7 +122,7 @@ async function handleRandomResponse(message: Message) {
 		}
 
 		if (msgs.length) {
-			const message_ = shuffle(msgs)
+			const msg = shuffle(msgs)
 				.join(" ")
 				.replaceAll(responseVariableRegex, match => {
 					const variable = match.slice(1, -1);
@@ -140,7 +139,7 @@ async function handleRandomResponse(message: Message) {
 
 					return random(value as string[]);
 				});
-			await channel.send(message_);
+			await channel.send(msg);
 		}
 	}
 }
