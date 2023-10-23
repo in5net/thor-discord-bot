@@ -1,7 +1,6 @@
 import { emojiRegex } from "$services/emoji";
 import { incCount } from "$services/users";
-import { shuffle } from "@in5net/std/array";
-import { random } from "@in5net/std/random";
+import { choice, shuffle } from "@in5net/std/random";
 import { userMention, type Message } from "discord.js";
 import event from "discord/event";
 import { handleTextCommand } from "discord/events/message-create";
@@ -114,7 +113,7 @@ async function handleRandomResponse(message: Message) {
 				Math.random() < chance &&
 				(!sentAt || now - sentAt.toMillis() > cooldown)
 			) {
-				msgs.push(random(responses));
+				msgs.push(choice(responses) || "");
 				await randomResponsesReference.doc(id).update({
 					sentAt: Timestamp.now(),
 				});
@@ -137,7 +136,7 @@ async function handleRandomResponse(message: Message) {
 						value = value[prop];
 					}
 
-					return random(value as string[]);
+					return choice(value as string[]) || "";
 				});
 			await channel.send(msg);
 		}

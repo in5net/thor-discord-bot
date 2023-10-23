@@ -15,7 +15,7 @@
     "@in5net/prettier-config": "^1.1.0",
     "@in5net/xo-config": "^1.5.0",
     "husky": "^8.0.3",
-    "turbo": "^1.10.15",
+    "turbo": "^1.10.16",
     "typescript": "5.2.2",
     "xo": "^0.56.0"
   }

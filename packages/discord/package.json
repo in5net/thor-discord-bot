@@ -8,7 +8,7 @@
   "dependencies": {
     "@in5net/limitless": "workspace:*",
     "database": "workspace:*",
-    "discord-api-types": "0.37.60",
+    "discord-api-types": "0.37.61",
     "discord.js": "14.13.0",
     "fast-glob": "^3.3.1",
     "fuse.js": "^6.6.2",
@@ -16,6 +16,6 @@
     "magic-regexp": "^0.7.0"
   },
   "devDependencies": {
-    "@types/node": "18.18.0"
+    "@types/node": "18.18.2"
   }
 }
