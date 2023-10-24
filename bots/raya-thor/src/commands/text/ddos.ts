@@ -18,8 +18,8 @@ export default command(
 		await sleep(random(5000));
 		await channel.send("Launching attack...");
 		await sleep(random(5000));
-		await channel.send("Attack launched!");
-		await sleep(random(5000));
+		await channel.send("Attack launched! Please wait...");
+		await sleep(random(30_000));
 		await channel.send(
 			`Attack finished, ${randomInt(100)}% packet loss, ${randomInt(
 				100,
