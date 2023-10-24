@@ -11,8 +11,5 @@ export default command(
 			},
 		},
 	},
-	async ({ args: { input } }) => {
-		const hex = createHash("sha256").update(input).digest("hex");
-		return hex;
-	},
+	({ args: { input } }) => createHash("sha256").update(input).digest("hex"),
 );
