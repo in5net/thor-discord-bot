@@ -3,6 +3,7 @@ import { and, eq, inArray, neon, not, sql } from "database/drizzle";
 import { attachments, messages } from "database/drizzle/neon";
 import {
 	hyperlink,
+	messageLink,
 	userMention,
 	type BaseMessageOptions,
 	type MessagePayload,
@@ -57,7 +58,7 @@ export async function sendFile(
 				name: "Where",
 				value: hyperlink(
 					"Original message",
-					`https://discord.com/channels/${guildId}/${channelId}/${messageId}`,
+					messageLink(`${channelId}`, `${messageId}`, `${guildId}`),
 				),
 				inline: true,
 			},
@@ -72,7 +73,7 @@ export async function sendFile(
 	}
 
 	return replyable.reply({
+		content: proxyUrl || url,
 		embeds: [embed],
-		files: [proxyUrl || url],
 	});
 }
