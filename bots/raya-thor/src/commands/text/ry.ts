@@ -1,7 +1,6 @@
 import { filter, openai } from "$services/openai";
 import { cache } from "$services/prisma";
 import { ttlCache } from "@in5net/limitless";
-import { type ResponseTypes } from "@nick.heiner/openai-edge";
 import command from "discord/commands/text";
 import ms from "ms";
 import { readFile } from "node:fs/promises";
@@ -23,7 +22,7 @@ export default command(
 	},
 	async ({ message, args: { prompt } }) => {
 		const channelId = BigInt(message.channelId);
-		const { channel, author } = message;
+		const { author } = message;
 
 		if (prompt === "CLEAR") {
 			await cache.context.deleteMany({
@@ -57,8 +56,8 @@ export default command(
 			take: 5,
 		});
 
-		const response = await openai.createCompletion({
-			model: "text-curie-001",
+		const response = await openai.completions.create({
+			model: "gpt-3.5-turbo-instruct",
 			prompt: `${await desc()} Current date: ${new Date().toDateString()}
 
 ${previous.map(
@@ -75,8 +74,7 @@ ${env.NAME}:`,
 			stop: ["You:"],
 			user: author.id,
 		});
-		const data = (await response.json()) as ResponseTypes["createCompletion"];
-		const reply = data.choices?.[0]?.text || "";
-		return channel.send(reply);
+		const reply = response.choices?.[0]?.text || "";
+		return reply;
 	},
 );

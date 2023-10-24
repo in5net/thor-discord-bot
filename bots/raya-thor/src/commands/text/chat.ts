@@ -68,7 +68,7 @@ export default command(
 			take: 5,
 		});
 
-		const response = await openai.createChatCompletion({
+		const stream = await openai.chat.completions.create({
 			model: "gpt-3.5-turbo",
 			stream: true,
 			max_tokens: 512,
@@ -101,7 +101,7 @@ export default command(
 				else responseMessage = await channel.send(reply);
 			}
 		}, 500);
-		openAIStream(response, {
+		openAIStream(stream, {
 			async onToken(token) {
 				reply += token;
 				send();

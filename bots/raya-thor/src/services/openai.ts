@@ -1,20 +1,13 @@
-import {
-	Configuration,
-	OpenAIApi,
-	type ResponseTypes,
-} from "@nick.heiner/openai-edge";
 import { env } from "node:process";
+import OpenAI from "openai";
 
 const { OPENAI_API_KEY } = env;
 
-export const openai = new OpenAIApi(
-	new Configuration({
-		apiKey: OPENAI_API_KEY,
-	}),
-);
+export const openai = new OpenAI({
+	apiKey: OPENAI_API_KEY,
+});
 
 export async function filter(input: string): Promise<boolean> {
-	const response = await openai.createModeration({ input });
-	const data = (await response.json()) as ResponseTypes["createModeration"];
-	return !data.results[0]?.flagged;
+	const response = await openai.moderations.create({ input });
+	return !response.results[0]?.flagged;
 }
