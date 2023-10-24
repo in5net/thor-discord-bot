@@ -1,4 +1,4 @@
-import command from "discord/commands/slash";
+import command from "discord/commands/text";
 
 const kana = [
 	"ア",
@@ -76,8 +76,9 @@ const kana = [
 
 export default command(
 	{
+		aliases: ["カタカナ"],
 		desc: "Sends a bunch of random katakana characters to practice reading",
-		options: {
+		args: {
 			length: {
 				type: "int",
 				desc: "The number of kana to send",
@@ -87,11 +88,9 @@ export default command(
 			},
 		},
 	},
-	async (i, { length }) => {
-		const text = Array.from({ length })
+	({ args: { length } }) =>
+		Array.from({ length })
 			.fill(0)
 			.map(() => kana[Math.floor(Math.random() * kana.length)])
-			.join("");
-		return i.reply(text);
-	},
+			.join(""),
 );

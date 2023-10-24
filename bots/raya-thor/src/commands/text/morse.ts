@@ -1,4 +1,4 @@
-import command from "discord/commands/slash";
+import command from "discord/commands/text";
 
 const codes: Record<string, string> = {
 	a: ".-",
@@ -49,16 +49,14 @@ const codes: Record<string, string> = {
 export default command(
 	{
 		desc: "Encodes a message in Morse code",
-		options: {
+		args: {
 			message: {
-				type: "string",
+				type: "text",
 				desc: "The message to encode",
 			},
 		},
 	},
-	async (i, { message }) => {
-		await i.deferReply();
-		await i.deleteReply();
+	async ({ args: { message } }) => {
 		const morse = message
 			.toLowerCase()
 			.split(" ")
@@ -69,6 +67,6 @@ export default command(
 					.join(" "),
 			)
 			.join(" / ");
-		return i.channel?.send(morse);
+		return morse;
 	},
 );

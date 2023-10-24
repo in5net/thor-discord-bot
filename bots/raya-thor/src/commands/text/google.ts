@@ -5,7 +5,7 @@ import { env } from "node:process";
 
 export default command(
 	{
-		aliases: ["g", "goog"],
+		aliases: ["g", "gg", "abc", "goog"],
 		desc: "Google Search",
 		args: {
 			query: {

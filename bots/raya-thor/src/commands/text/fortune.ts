@@ -1,4 +1,4 @@
-import command from "discord/commands/slash";
+import command from "discord/commands/text";
 import got from "got";
 
 interface Data {
@@ -8,10 +8,10 @@ interface Data {
 export default command(
 	{
 		desc: "Get a random fortune cookie",
-		options: {},
+		args: {},
 	},
-	async i => {
+	async () => {
 		const data = await got("http://yerkee.com/api/fortune").json<Data>();
-		return i.reply(data.fortune);
+		return data.fortune;
 	},
 );

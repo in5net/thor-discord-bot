@@ -1,16 +1,14 @@
 import db, { eq, isNotNull, lt, sql } from "database/drizzle";
 import { kraccBaccVideos } from "database/drizzle/schema";
-import command from "discord/commands/slash";
+import command from "discord/commands/text";
 import { env } from "node:process";
 
 export default command(
 	{
 		desc: "Sends a random kraccbacc video",
-		options: {},
+		args: {},
 	},
-	async i => {
-		await i.deferReply();
-
+	async ({ message }) => {
 		const date = new Date();
 		date.setMinutes(date.getMinutes() - 1);
 		const video = await db.query.kraccBaccVideos.findFirst({
@@ -21,7 +19,7 @@ export default command(
 				or(lt(table.sentAt, date), isNotNull(table.sentAt)),
 			orderBy: sql`rand()`,
 		});
-		if (!video) return i.editReply("No video found!");
+		if (!video) return message.reply("No video found!");
 		await db
 			.update(kraccBaccVideos)
 			.set({
@@ -32,6 +30,6 @@ export default command(
 		const url = `https://${env.FILES_DOMAIN}/kraccbacc/${encodeURIComponent(
 			video.name,
 		)}`;
-		return i.editReply(url);
+		return message.reply(url);
 	},
 );

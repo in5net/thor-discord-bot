@@ -1,9 +1,9 @@
-import command from "discord/commands/slash";
+import command from "discord/commands/text";
 
 export default command(
 	{
 		desc: "Shankstorm!",
-		options: {
+		args: {
 			length: {
 				type: "int",
 				desc: "The number of shanks to send",
@@ -13,13 +13,11 @@ export default command(
 			},
 		},
 	},
-	async (i, { length }) => {
-		await i.deferReply();
-		await i.deleteReply();
+	async ({ message: { channel }, args: { length } }) => {
 		const text = Array.from<number>({ length })
 			.fill(0)
 			.map(() => (Math.random() < 0.5 ? "🍗" : "🍖"))
 			.join("");
-		return i.channel?.send(text);
+		await channel.send(text);
 	},
 );

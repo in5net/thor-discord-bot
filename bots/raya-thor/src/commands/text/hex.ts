@@ -1,30 +1,32 @@
 import { AttachmentBuilder } from "discord.js";
-import command from "discord/commands/slash";
+import command from "discord/commands/text";
 
 const size = 16;
 
 export default command(
 	{
+		aliases: ["color"],
 		desc: "Gives you a 16x16 image of a hex code",
-		options: {
+		args: {
 			code: {
-				type: "string",
+				type: "word",
 				desc: "The hex code to convert to an image",
 			},
 		} as const,
 	},
-	async (i, { code }) => {
+	async ({ message, args: { code } }) => {
 		const { createCanvas } = await import("@napi-rs/canvas");
 		const canvas = createCanvas(size, size);
 		const ctx = canvas.getContext("2d");
 
 		if (code.startsWith("#")) code = code.slice(1);
-		if (![3, 4, 6, 8].includes(code.length)) return i.reply("Invalid hex code");
+		if (![3, 4, 6, 8].includes(code.length))
+			return message.reply("Invalid hex code");
 
 		ctx.fillStyle = `#${code}`;
 		ctx.fillRect(0, 0, size, size);
 
-		return i.reply({
+		return message.reply({
 			files: [new AttachmentBuilder(canvas.toBuffer("image/png"))],
 		});
 	},

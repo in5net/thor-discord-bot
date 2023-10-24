@@ -1,6 +1,6 @@
 import { strTo16x16 } from "$services/hash";
 import { AttachmentBuilder } from "discord.js";
-import command from "discord/commands/slash";
+import command from "discord/commands/text";
 
 const size = 16;
 const zoom = 4;
@@ -9,16 +9,16 @@ const iterations = 100;
 
 export default command(
 	{
+		aliases: ["lh", "life"],
 		desc: "Runs Conway's Game of Life on a SHA-256 hash of a message",
-		options: {
+		args: {
 			message: {
-				type: "string",
+				type: "text",
 				desc: "The message to hash and convert to a lifehash",
 			},
 		},
 	},
-	async (i, { message }) => {
-		await i.deferReply();
+	async ({ message: { channel }, args: { message } }) => {
 		const { createCanvas } = await import("@napi-rs/canvas");
 		const canvas = createCanvas(width, width);
 		const ctx = canvas.getContext("2d");
@@ -60,7 +60,7 @@ export default command(
 			}
 		}
 
-		return i.editReply({
+		await channel.send({
 			files: [new AttachmentBuilder(canvas.toBuffer("image/png"))],
 		});
 	},

@@ -1,5 +1,5 @@
-import { random } from "@in5net/limitless";
-import command from "discord/commands/slash";
+import { choice } from "@in5net/std/random";
+import command from "discord/commands/text";
 
 const answers = [
 	"As I see it, yes.",
@@ -27,13 +27,13 @@ const answers = [
 export default command(
 	{
 		desc: "Ask the magic 8-ball a question, and you will get an answer",
-		options: {
+		args: {
 			question: {
-				type: "string",
+				type: "text",
 				desc: "The question to ask the 8-ball",
 				optional: true,
 			},
 		},
 	},
-	async i => i.reply(random(answers)),
+	async ({ message }) => message.reply(choice(answers) || ""),
 );

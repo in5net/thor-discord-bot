@@ -15,8 +15,8 @@ export default command(
 			},
 		},
 	},
-	async ({ message: { client, channel }, args: { command: arguments_ } }) => {
-		if (!arguments_)
+	async ({ message: { client, channel }, args: { command: args } }) => {
+		if (!args)
 			return channel.send({
 				embeds: [
 					new EmbedBuilder()
@@ -35,7 +35,7 @@ export default command(
 		let commandManual: TextCommand | undefined;
 		let commandManuals = client.textCommands;
 		const usage: string[] = [];
-		const commandNames = arguments_.map(argument => argument.toLowerCase());
+		const commandNames = args.map(argument => argument.toLowerCase());
 		for (const command of commandNames) {
 			commandManual = commandManuals.find(
 				({ aliases }, name) => name === command || aliases?.includes(command),
@@ -58,13 +58,10 @@ export default command(
 						}>`,
 				),
 			);
-		else
-			return channel.send(
-				`No help found for command \`${arguments_.join(" ")}\``,
-			);
+		else return channel.send(`No help found for command \`${args.join(" ")}\``);
 
 		const embed = new EmbedBuilder()
-			.setTitle(`${env.NAME} Help: ${arguments_.join(" ")}`)
+			.setTitle(`${env.NAME} Help: ${args.join(" ")}`)
 			.setDescription(commandManual.desc)
 			.setColor(env.COLOR)
 			.addFields({

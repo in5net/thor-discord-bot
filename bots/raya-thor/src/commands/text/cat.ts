@@ -1,5 +1,5 @@
 import { EmbedBuilder } from "discord.js";
-import command from "discord/commands/slash";
+import command from "discord/commands/text";
 import got from "got";
 
 type Data = Array<{
@@ -13,10 +13,9 @@ type Data = Array<{
 export default command(
 	{
 		desc: "Sends a random cat",
-		options: {},
+		args: {},
 	},
-	async i => {
-		await i.deferReply();
+	async ({ message }) => {
 		const [cat] = await got(
 			"https://api.thecatapi.com/v1/images/search",
 		).json<Data>();
@@ -30,6 +29,6 @@ export default command(
 				text: "Powered by The Cat API",
 				iconURL: "https://thecatapi.com/favicon.ico",
 			});
-		return i.editReply({ embeds: [embed] });
+		await message.reply({ embeds: [embed] });
 	},
 );

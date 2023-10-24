@@ -1,14 +1,14 @@
 import { EmbedBuilder, version } from "discord.js";
-import command from "discord/commands/slash";
+import command from "discord/commands/text";
 import { cpus, freemem, totalmem } from "node:os";
 import { arch, memoryUsage, platform, uptime, versions } from "node:process";
 
 export default command(
 	{
 		desc: "Gets information on the bot's environment",
-		options: {},
+		args: {},
 	},
-	async i => {
+	async ({ message }) => {
 		const { node, v8 } = versions;
 		const embed = new EmbedBuilder()
 			.setTitle("Status")
@@ -59,6 +59,6 @@ export default command(
 					value: `${cpus().length} cores`,
 				},
 			);
-		return i.reply({ embeds: [embed] });
+		await message.reply({ embeds: [embed] });
 	},
 );

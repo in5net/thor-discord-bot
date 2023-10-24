@@ -1,15 +1,15 @@
 import { AttachmentBuilder } from "discord.js";
-import command from "discord/commands/slash";
+import command from "discord/commands/text";
 
 const size = 128;
 
 export default command(
 	{
+		aliases: ["rand"],
 		desc: "Generates a (literally) random image",
-		options: {},
+		args: {},
 	},
-	async i => {
-		await i.deferReply();
+	async ({ message }) => {
 		const { createCanvas } = await import("@napi-rs/canvas");
 		const canvas = createCanvas(size, size);
 		const ctx = canvas.getContext("2d");
@@ -22,7 +22,7 @@ export default command(
 		);
 		ctx.putImageData(image, 0, 0);
 
-		return i.editReply({
+		return message.reply({
 			files: [new AttachmentBuilder(canvas.toBuffer("image/png"))],
 		});
 	},

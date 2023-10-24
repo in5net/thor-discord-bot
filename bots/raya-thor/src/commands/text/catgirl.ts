@@ -1,18 +1,17 @@
 import { incCount } from "$services/users";
 import { EmbedBuilder } from "discord.js";
-import command from "discord/commands/slash";
+import command from "discord/commands/text";
 import got from "got";
 
 export default command(
 	{
 		desc: "Sends a random catgirl",
-		options: {},
+		args: {},
 	},
-	async i => {
-		await i.deferReply();
+	async ({ message }) => {
 		const embed = await getCatgirlEmbed();
-		await i.editReply({ embeds: [embed] });
-		return incCount(i.user.id, "weeb");
+		await message.reply({ embeds: [embed] });
+		await incCount(message.author.id, "weeb");
 	},
 );
 

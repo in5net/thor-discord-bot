@@ -1,4 +1,4 @@
-import command from "discord/commands/slash";
+import command from "discord/commands/text";
 
 const chars = "abcdefghijklmnoprstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ0123456789";
 const superscript =
@@ -7,14 +7,14 @@ const superscript =
 export default command(
 	{
 		desc: "Converts a message to superscript",
-		options: {
+		args: {
 			message: {
-				type: "string",
+				type: "text",
 				desc: "The message to convert",
 			},
 		},
 	},
-	async (i, { message }) => {
+	async ({ args: { message } }) => {
 		const converted = message
 			.split("")
 			.map(char => {
@@ -22,6 +22,6 @@ export default command(
 				return superscript[index] || char;
 			})
 			.join("");
-		return i.reply(converted);
+		return converted;
 	},
 );

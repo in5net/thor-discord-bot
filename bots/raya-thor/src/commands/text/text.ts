@@ -1,18 +1,17 @@
 import { getText } from "@in5net/limitless/api/y7";
-import command from "discord/commands/slash";
+import command from "discord/commands/text";
 
 export default command(
 	{
 		desc: "Sends text from the best website on the internet: yyyyyyy.info",
-		options: {},
+		args: {},
 	},
-	async i => {
-		await i.deferReply();
+	async () => {
 		try {
 			const source = await getText();
-			return await i.editReply(source);
+			return source;
 		} catch {
-			return i.editReply("So sad, looks like yyyyyyy.info is down ):");
+			return "So sad, looks like yyyyyyy.info is down ):";
 		}
 	},
 );
