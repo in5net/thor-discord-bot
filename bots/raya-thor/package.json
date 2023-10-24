@@ -33,7 +33,7 @@
     "genius-lyrics": "4.4.6",
     "google-auth-library": "^9.1.0",
     "got": "13.0.0",
-    "langchain": "^0.0.170",
+    "langchain": "^0.0.171",
     "libsodium-wrappers": "^0.7.13",
     "logger": "workspace:*",
     "magic-regexp": "^0.7.0",
