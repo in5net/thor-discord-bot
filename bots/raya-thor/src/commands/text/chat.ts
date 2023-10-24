@@ -65,13 +65,13 @@ export default command(
 			orderBy: {
 				createdAt: "desc",
 			},
-			take: 5,
+			take: 10,
 		});
 
 		const stream = await openai.chat.completions.create({
 			model: "gpt-3.5-turbo",
 			stream: true,
-			max_tokens: 512,
+			max_tokens: 1024,
 			user: author.id,
 			messages: [
 				{

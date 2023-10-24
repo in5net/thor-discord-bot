@@ -11,7 +11,7 @@ const desc = ttlCache(async () => readFile(gpt3DescPath, "utf8"), ms("10 min"));
 
 export default command(
 	{
-		desc: "Talk to GPT-3",
+		desc: "Talk to GPT-3.5",
 		optionalPrefix: true,
 		args: {
 			prompt: {
@@ -53,12 +53,12 @@ export default command(
 			orderBy: {
 				createdAt: "desc",
 			},
-			take: 5,
+			take: 10,
 		});
 
 		const response = await openai.completions.create({
 			model: "gpt-3.5-turbo-instruct",
-			prompt: `${await desc()} Current date: ${new Date().toDateString()}
+			prompt: `${await desc()} Current time: ${new Date().toLocaleString()}
 
 ${previous.map(
 	({ question: q, answer: a }) => `You: ${q}
@@ -68,7 +68,7 @@ ${env.NAME}: ${a}
 You: ${prompt}
 ${env.NAME}:`,
 			temperature: 0.9,
-			max_tokens: 512,
+			max_tokens: 1024,
 			frequency_penalty: 0.5,
 			presence_penalty: 0.5,
 			stop: ["You:"],
