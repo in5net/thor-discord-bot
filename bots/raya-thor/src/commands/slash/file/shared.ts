@@ -73,7 +73,7 @@ export async function sendFile(
 	}
 
 	return replyable.reply({
-		content: proxyUrl || url,
 		embeds: [embed],
+		files: [proxyUrl || url],
 	});
 }
