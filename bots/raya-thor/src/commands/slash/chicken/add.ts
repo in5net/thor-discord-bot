@@ -1,4 +1,5 @@
-import { ADMIN_IDS } from "$services/env";
+import db, { eq } from "database/drizzle";
+import { users } from "database/drizzle/schema";
 import command from "discord/commands/slash";
 import logger from "logger";
 import { env } from "node:process";
@@ -16,7 +17,13 @@ export default command(
 		},
 	},
 	async (i, { file: { name, proxyURL } }) => {
-		if (!ADMIN_IDS.includes(i.user.id)) return i.reply("You are not an admin");
+		const user = await db.query.users.findFirst({
+			columns: {
+				admin: true,
+			},
+			where: eq(users.id, i.user.id),
+		});
+		if (!user?.admin) return i.reply("You are not an admin");
 
 		const { body } = await fetch(proxyURL);
 		const path = `chicken/${name}`;

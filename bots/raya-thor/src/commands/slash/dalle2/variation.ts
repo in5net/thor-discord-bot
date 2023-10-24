@@ -1,7 +1,8 @@
 import { getBits, subtractBits } from "$services/ai/shared";
-import { ADMIN_IDS } from "$services/env";
 import { openai } from "$services/openai";
 import { type ResponseTypes } from "@nick.heiner/openai-edge";
+import db, { eq } from "database/drizzle";
+import { users } from "database/drizzle/schema";
 import command from "discord/commands/slash";
 import got from "got";
 import { nanoid } from "nanoid";
@@ -32,7 +33,14 @@ export default command(
 	async (i, { image, n }) => {
 		if (i.user.bot) return i.reply("Bots cannot use DALL·E 2");
 		const cost = BITS_PRICE * n;
-		if (!ADMIN_IDS.includes(i.user.id)) {
+
+		const user = await db.query.users.findFirst({
+			columns: {
+				admin: true,
+			},
+			where: eq(users.id, i.user.id),
+		});
+		if (!user?.admin) {
 			const bits = await getBits(i.user.id);
 			if (bits < cost)
 				return i.reply(`You need ${cost - bits} more bits to use DALL·E 2`);

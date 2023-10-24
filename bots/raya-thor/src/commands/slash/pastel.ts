@@ -1,6 +1,7 @@
 import { getBits, subtractBits } from "$services/ai/shared";
-import { ADMIN_IDS } from "$services/env";
 import { replicate } from "$src/services/ai/replicate";
+import db, { eq } from "database/drizzle";
+import { users } from "database/drizzle/schema";
 import command from "discord/commands/slash";
 import { z } from "zod";
 
@@ -32,7 +33,14 @@ export default command(
 		const n = Number.parseInt(num_outputs);
 		const BITS_PRICE = BITS_PER_IMAGE * n;
 		if (i.user.bot) return i.reply(`Bots cannot use ${NAME}`);
-		if (!ADMIN_IDS.includes(i.user.id)) {
+
+		const user = await db.query.users.findFirst({
+			columns: {
+				admin: true,
+			},
+			where: eq(users.id, i.user.id),
+		});
+		if (!user?.admin) {
 			const bits = await getBits(i.user.id);
 			if (bits < BITS_PRICE)
 				return i.reply(
