@@ -4,11 +4,14 @@ export default command(
 	{
 		desc: "Literally just says what you send",
 		args: {
-			message: {
+			msg: {
 				type: "text",
 				desc: "The message to send",
 			},
 		},
 	},
-	async ({ args: { message } }) => message,
+	async ({ message, args: { msg } }) => {
+		await message.delete();
+		return msg;
+	},
 );
