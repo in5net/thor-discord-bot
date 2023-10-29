@@ -33,7 +33,7 @@ export default command(
 			return message.reply("Context cleared");
 		}
 
-		if (prompt.length > 256) return message.reply("Your text is too long");
+		if (prompt.length > 512) return message.reply("Your text is too long");
 		if (!(await filter(prompt)))
 			return message.reply("Your text did not pass the content filter");
 
@@ -75,6 +75,23 @@ ${env.NAME}:`,
 			user: author.id,
 		});
 		const reply = response.choices?.[0]?.text || "";
-		return reply;
+		await message.channel.send(reply);
+
+		return cache.context.create({
+			data: {
+				channel: {
+					connectOrCreate: {
+						create: {
+							id: channelId,
+						},
+						where: {
+							id: channelId,
+						},
+					},
+				},
+				question: prompt,
+				answer: reply,
+			},
+		});
 	},
 );
