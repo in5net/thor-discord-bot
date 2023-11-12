@@ -29,7 +29,6 @@ const EnvironmentVariables = z.object({
 	GCP_PROJECT_ID: z.string(),
 	GOOGLE_APIS_KEY: z.string(),
 	CUSTOM_SEARCH_ID: z.string(),
-	MAKERSUITE_API_KEY: z.string(),
 
 	GENIUS_TOKEN: z.string(),
 
