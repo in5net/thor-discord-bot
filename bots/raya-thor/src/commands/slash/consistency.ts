@@ -5,8 +5,8 @@ import { users } from "database/drizzle/schema";
 import command from "discord/commands/slash";
 import { z } from "zod";
 
-const NAME = "Stable Diffusion XL";
-const BITS_PER_IMAGE = 4;
+const NAME = "Latent Consistency Model";
+const BITS_PER_IMAGE = 1;
 
 export default command(
 	{
@@ -16,7 +16,7 @@ export default command(
 				type: "string",
 				desc: "Prompt to generate",
 			},
-			num_outputs: {
+			num_images: {
 				type: "int",
 				desc: "Number of images to generate",
 				min: 1,
@@ -25,8 +25,8 @@ export default command(
 			},
 		},
 	},
-	async (i, { prompt, num_outputs }) => {
-		const BITS_PRICE = BITS_PER_IMAGE * num_outputs;
+	async (i, { prompt, num_images }) => {
+		const BITS_PRICE = BITS_PER_IMAGE * num_images;
 		if (i.user.bot) return i.reply(`Bots cannot use ${NAME}`);
 
 		const user = await db.query.users.findFirst({
@@ -46,12 +46,11 @@ export default command(
 		await i.reply(`Running ${NAME}...`);
 
 		const outputs = await replicate.run(
-			"stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
+			"luosiallen/latent-consistency-model:553803fd018b3cf875a8bc774c99da9b33f36647badfd88a6eec90d61c5f62fc",
 			{
 				input: {
 					prompt,
-					scheduler: "KarrasDPM",
-					num_outputs,
+					num_images,
 				},
 			},
 		);
