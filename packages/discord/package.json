@@ -9,7 +9,7 @@
     "@in5net/limitless": "workspace:*",
     "database": "workspace:*",
     "discord-api-types": "0.37.63",
-    "discord.js": "14.13.0",
+    "discord.js": "14.14.1",
     "fast-glob": "^3.3.2",
     "fuse.js": "^7.0.0",
     "logger": "workspace:*",
