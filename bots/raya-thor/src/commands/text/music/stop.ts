@@ -7,5 +7,7 @@ export default musicCommand(
 		args: {},
 		permissions: ["vc"],
 	},
-	async ({ voice }) => voice.stop(),
+	({ voice }) => {
+		voice.stop();
+	},
 );

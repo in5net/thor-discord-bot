@@ -39,9 +39,6 @@ export default musicCommand(
 		const seconds =
 			(resource?.metadata.start || 0) +
 			((resource?.playbackDuration || 0) * scale) / 1000;
-		if (voice.channel) {
-			const queue = await voice.getQueue();
-			return queue.embed(voice.channel, seconds);
-		}
+		if (voice.channel) return voice.queue.embed(voice.channel, seconds);
 	},
 );

@@ -14,8 +14,7 @@ export default musicCommand(
 		permissions: ["vc"],
 	},
 	async ({ message, args: { queries }, voice }) => {
-		const queue = await voice.getQueue();
 		await voice.add(message, queries);
-		return voice.move(queue.length - 1, 0);
+		return voice.move(voice.queue.length - 1, 0);
 	},
 );

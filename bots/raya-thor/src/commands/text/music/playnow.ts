@@ -14,12 +14,11 @@ export default musicCommand(
 		permissions: ["vc"],
 	},
 	async ({ message, args: { queries }, voice }) => {
-		const queue = await voice.getQueue();
 		voice.setChannels(message);
 
 		const things = await voice.getSongs(message, queries);
 		const songs = things.flatMap(song => ("songs" in song ? song.songs : song));
-		queue.unshift(...songs);
+		voice.queue.unshift(...songs);
 
 		if (songs.length)
 			await voice.channel?.send(

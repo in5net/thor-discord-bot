@@ -15,7 +15,7 @@ export default musicCommand(
 		permissions: ["vc"],
 	},
 	async ({ message, args: { ns }, voice }) => {
-		const queue = await voice.getQueue();
+		const { queue } = voice;
 
 		const indices: number[] = [];
 		for (const str of ns) {

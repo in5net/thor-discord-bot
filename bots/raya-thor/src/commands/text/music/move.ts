@@ -18,8 +18,7 @@ export default musicCommand(
 		permissions: ["vc"],
 	},
 	async ({ message, args: { from, to }, voice }) => {
-		const queue = await voice.getQueue();
-		const { length } = queue;
+		const { length } = voice.queue;
 
 		const i = from === "last" ? length - 1 : Number.parseInt(from) - 2;
 		const index = to === "last" ? length - 1 : Number.parseInt(to) - 2;

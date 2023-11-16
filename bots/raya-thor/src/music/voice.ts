@@ -61,8 +61,7 @@ export default class Voice extends TypedEmitter<{
 	stream = new Stream()
 		.on("idle", async () => {
 			try {
-				const queue = await this.getQueue();
-				if (queue?.size) {
+				if (this.queue.size) {
 					this.stream.join();
 					await this.play();
 				} else this.stream.stop();
@@ -85,7 +84,7 @@ export default class Voice extends TypedEmitter<{
 	channel?: TextChannel;
 	private message?: Message;
 
-	queue?: Queue;
+	queue = new Queue(this);
 
 	constructor(readonly guildId: string) {
 		super();
@@ -106,17 +105,11 @@ export default class Voice extends TypedEmitter<{
 			this.stream.channel = voiceChannel;
 	}
 
-	async getQueue() {
-		if (!this.queue) this.queue = await Queue.create(this);
-		return this.queue;
-	}
-
 	async getSongs(
 		message: Message,
 		query?: string,
 	): Promise<Array<SongType | Album<YouTubeSong>>> {
-		const { stream } = this;
-		const queue = await this.getQueue();
+		const { queue, stream } = this;
 		const { author, member, attachments } = message;
 		const requester = {
 			uid: author.id,
@@ -274,8 +267,7 @@ export default class Voice extends TypedEmitter<{
 	async add(message: Message, query?: string, shuff = false) {
 		this.setChannels(message);
 
-		const { channel } = this;
-		const queue = await this.getQueue();
+		const { queue, channel } = this;
 
 		const stuff = await this.getSongs(message, query);
 		const songs = stuff.flatMap(song => {
@@ -313,15 +305,13 @@ export default class Voice extends TypedEmitter<{
 	}
 
 	async move(from: number, to: number) {
-		const queue = await this.getQueue();
-		queue.move(from, to);
+		this.queue.move(from, to);
 		return this.send(`➡️ Moved #${from + 2} to #${to + 2}`);
 	}
 
-	async stop() {
+	stop() {
 		this.stream.stop();
-		const queue = await this.getQueue();
-		queue?.reset();
+		this.queue.reset();
 		this.channel = undefined;
 		this.emit("stop");
 	}
@@ -332,11 +322,11 @@ export default class Voice extends TypedEmitter<{
 		if (stream.player.state.status === AudioPlayerStatus.Playing && !skip)
 			return;
 
-		const queue = await this.getQueue();
-		const song = queue?.next();
+		const song = this.queue.next();
 		if (!song) {
 			await this.send("📭 Queue is empty");
-			return this.stop();
+			this.stop();
+			return;
 		}
 
 		const resource = await song.getResource(stream);
@@ -353,13 +343,12 @@ export default class Voice extends TypedEmitter<{
 	}
 
 	async songQueueEmbed(n: number) {
-		const queue = await this.getQueue();
-		return queue.songEmbed(n - 1);
+		return this.queue.songEmbed(n - 1);
 	}
 
 	async getLyrics(query?: string) {
 		if (query) return getLyrics(query);
-		const { current } = await this.getQueue();
+		const { current } = this.queue;
 		if (current) {
 			const { title } = current;
 			if (current instanceof SpotifySong)
@@ -375,7 +364,7 @@ export default class Voice extends TypedEmitter<{
 	}
 
 	async playlistSave(message: Message, name: string, query?: string) {
-		const queue = await this.getQueue();
+		const { queue } = this;
 		const { author, channel } = message;
 		const songs = query
 			? await this.getSongs(message, query)
@@ -386,7 +375,7 @@ export default class Voice extends TypedEmitter<{
 	}
 
 	async playlistAdd(message: Message, name: string, query?: string) {
-		const queue = await this.getQueue();
+		const { queue } = this;
 		const { author, channel } = message;
 		const songs = query
 			? await this.getSongs(message, query)

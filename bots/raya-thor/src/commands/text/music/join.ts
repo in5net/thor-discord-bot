@@ -7,9 +7,8 @@ export default musicCommand(
 		permissions: ["vc"],
 	},
 	async ({ message, voice }) => {
-		const queue = await voice.getQueue();
 		voice.setChannels(message);
 		voice.stream.join();
-		if (queue.length) await voice.play();
+		if (voice.queue.length) await voice.play();
 	},
 );
