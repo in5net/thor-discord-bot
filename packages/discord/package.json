@@ -6,7 +6,7 @@
     "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u"
   },
   "dependencies": {
-    "@in5net/limitless": "workspace:*",
+    "@in5net/std": "0.15.0",
     "database": "workspace:*",
     "discord-api-types": "0.37.63",
     "discord.js": "14.14.1",

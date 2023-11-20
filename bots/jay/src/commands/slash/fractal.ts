@@ -1,5 +1,5 @@
 import GL from "$services/gl";
-import { randomInt } from "@in5net/limitless";
+import { randomInt } from "@in5net/std/random";
 import command from "discord/commands/slash";
 import { nanoid } from "nanoid";
 import { type Buffer } from "node:buffer";

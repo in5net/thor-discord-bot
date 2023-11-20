@@ -1,4 +1,4 @@
-import { pluralize } from "@in5net/limitless";
+import { pluralize } from "@in5net/std/string";
 import { type Client, type ClientEvents } from "discord.js";
 import logger from "logger";
 import { join } from "node:path";

@@ -1,5 +1,6 @@
 import { parse } from "$services/rcpt";
-import { capitalize, random, randomInt } from "@in5net/limitless";
+import { choice, randomInt } from "@in5net/std/random";
+import { capitalize } from "@in5net/std/string";
 import command from "discord/commands/slash";
 import { readdirSync } from "node:fs";
 import { readFile } from "node:fs/promises";
@@ -23,7 +24,7 @@ export default command(
 			},
 		},
 	},
-	async (i, { theme = random(themes) }) => {
+	async (i, { theme = choice(themes) }) => {
 		const author = randomPerson(Math.random() < 0.9);
 
 		const poemPath = new URL(
@@ -44,7 +45,7 @@ export default command(
 		const text = visit(sections.text || []);
 
 		function visit(section: string[]): string {
-			const line = random(section);
+			const line = choice(section) || "";
 			return line.replaceAll(/<([a-z- \d]+)>/g, (_, key: string) => {
 				const remembered = memory.get(key);
 				if (remembered) return remembered;
@@ -62,7 +63,7 @@ export default command(
 							const numberStrs = key.split(" ");
 							numberStrs.shift();
 							const numbers = numberStrs.map(n => Number.parseInt(n));
-							const [min, max, mul = 1] = numbers;
+							const [min = 0, max = 0, mul = 1] = numbers;
 							const number = randomInt(min, max) * mul;
 							text = number.toString();
 						}

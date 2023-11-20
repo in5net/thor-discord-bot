@@ -29,9 +29,9 @@ importers:
       '@discordjs/rest':
         specifier: 2.2.0
         version: 2.2.0
-      '@in5net/limitless':
-        specifier: workspace:*
-        version: link:../../packages/limitless
+      '@in5net/std':
+        specifier: ^0.15.0
+        version: 0.15.0
       '@napi-rs/canvas':
         specifier: 0.1.44
         version: 0.1.44
@@ -132,12 +132,9 @@ importers:
       '@googleapis/customsearch':
         specifier: 1.0.5
         version: 1.0.5
-      '@in5net/limitless':
-        specifier: workspace:*
-        version: link:../../packages/limitless
       '@in5net/std':
-        specifier: ^0.14.1
-        version: 0.14.1
+        specifier: ^0.15.0
+        version: 0.15.0
       '@napi-rs/canvas':
         specifier: 0.1.44
         version: 0.1.44
@@ -310,9 +307,9 @@ importers:
 
   packages/discord:
     dependencies:
-      '@in5net/limitless':
-        specifier: workspace:*
-        version: link:../limitless
+      '@in5net/std':
+        specifier: 0.15.0
+        version: 0.15.0
       database:
         specifier: workspace:*
         version: link:../database
@@ -334,19 +331,6 @@ importers:
       magic-regexp:
         specifier: ^0.7.0
         version: 0.7.0
-    devDependencies:
-      '@types/node':
-        specifier: 20.9.2
-        version: 20.9.2
-
-  packages/limitless:
-    dependencies:
-      cheerio:
-        specifier: 1.0.0-rc.12
-        version: 1.0.0-rc.12
-      zod:
-        specifier: ^3.22.4
-        version: 3.22.4
     devDependencies:
       '@types/node':
         specifier: 20.9.2
@@ -1356,8 +1340,8 @@ packages:
     resolution: {integrity: sha512-oxHsgHM7tfkQeDI8xtDPbR+Uq1b1hB2O2KSgAhYpAkEmPLtNRbahgq5IZ/9F4kM8Qj3pPeoDtBp1fXNhjW3Fqg==}
     dev: true
 
-  /@in5net/std@0.14.1:
-    resolution: {integrity: sha512-rYdzcAaszPxTOeYKXLIqRv23NQxCRnv8gc/eq2crbYmgF+HwkpaaQG/tay2XkARXlWxg453uy+WI5WJ2QIuSgw==}
+  /@in5net/std@0.15.0:
+    resolution: {integrity: sha512-kSITtm7f5j0ZjlvSJ+YXfkkRUKRZBzwrpBHKZ4+JyWfoVmz4m3YrhMG7PQMyMfhJTe5+ZBV6+lIch0zmITmeKA==}
     dev: false
 
   /@in5net/xo-config@1.5.0:

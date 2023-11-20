@@ -1,4 +1,4 @@
-import { memo } from "@in5net/limitless";
+import { memo } from "@in5net/std/fn";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
 import logger from "logger";

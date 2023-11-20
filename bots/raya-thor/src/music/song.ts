@@ -1,6 +1,6 @@
 import youtube from "$services/youtube";
 import { createAudioResource, StreamType } from "@discordjs/voice";
-import { memo } from "@in5net/limitless";
+import { memo } from "@in5net/std/fn";
 import chalk from "chalk-template";
 import { EmbedBuilder, type Awaitable } from "discord.js";
 import got from "got";

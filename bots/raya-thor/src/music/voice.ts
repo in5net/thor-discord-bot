@@ -1,6 +1,6 @@
 import { getLyrics } from "$services/genius";
 import { AudioPlayerStatus } from "@discordjs/voice";
-import { shuffle } from "@in5net/limitless";
+import { shuffle } from "@in5net/std/random";
 import {
 	ChannelType,
 	type Message,

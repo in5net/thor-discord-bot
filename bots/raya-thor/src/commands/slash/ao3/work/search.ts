@@ -1,18 +1,18 @@
-import {
-    getUser,
-    searchCharacters,
-    searchFandoms,
-    searchRelationships,
-    searchTags,
-} from "@in5net/limitless/api/ao3";
-import {
-    Category,
-    OrderBy,
-    Rating,
-    Warning,
-    searchWorks,
-} from "@in5net/limitless/api/ao3/work/search";
 import command from "discord/commands/slash";
+import {
+	getUser,
+	searchCharacters,
+	searchFandoms,
+	searchRelationships,
+	searchTags,
+} from "../api";
+import {
+	Category,
+	OrderBy,
+	Rating,
+	Warning,
+	searchWorks,
+} from "../api/work/search";
 import { createWorkEmbedBuilder } from "./embed";
 
 export default command(

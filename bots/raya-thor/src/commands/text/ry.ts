@@ -1,6 +1,6 @@
 import { filter, openai } from "$services/openai";
 import { cache } from "$services/prisma";
-import { ttlCache } from "@in5net/limitless";
+import { ttlCache } from "@in5net/std/fn";
 import command from "discord/commands/text";
 import ms from "ms";
 import { readFile } from "node:fs/promises";

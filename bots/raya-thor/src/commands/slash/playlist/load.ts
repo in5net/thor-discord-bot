@@ -1,6 +1,6 @@
 import * as playlist from "$src/music/playlist";
 import { getVoice } from "$src/music/voice-manager";
-import { shuffle } from "@in5net/limitless";
+import { shuffle } from "@in5net/std/random";
 import db, { and, contains, eq } from "database/drizzle";
 import { playlists } from "database/drizzle/schema";
 import { ChannelType, GuildMember } from "discord.js";
@@ -51,8 +51,7 @@ export default command(
 			)
 			.catch(() => []);
 
-		const queue = await voice.getQueue();
-		queue.push(...(doShuffle ? shuffle(songs) : songs));
+		voice.queue.push(...(doShuffle ? shuffle(songs) : songs));
 		await i.reply(`Loaded ${songs.length} songs`);
 		if (member.voice.channel?.type === ChannelType.GuildVoice)
 			voice.stream.channel = member.voice.channel;

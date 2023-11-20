@@ -1,4 +1,5 @@
-import { Vector2, sleep, vec2 } from "@in5net/limitless";
+import { sleep } from "@in5net/std/async";
+import { Vec2, vec2 } from "@in5net/std/math";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
 import ffmpeg from "fluent-ffmpeg";
@@ -95,8 +96,8 @@ export default command(
 				const row = grid[y]!;
 				for (let x = 0; x < 3; x++) {
 					const n = row[x];
-					if (n === move) start.set(x, y);
-					else if (n === 9) target.set(x, y);
+					if (n === move) start.set([x, y]);
+					else if (n === 9) target.set([x, y]);
 				}
 			}
 
@@ -117,7 +118,7 @@ export default command(
 					cellHeight,
 				);
 
-				const current = Vector2.lerp(start, target, t / tMax);
+				const current = Vec2.lerp(start, target, t / tMax);
 				ctx.drawImage(
 					img,
 					sx * cellWidth,

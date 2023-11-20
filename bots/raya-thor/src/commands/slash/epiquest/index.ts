@@ -1,10 +1,10 @@
-import { random } from "@in5net/limitless";
-import { getText } from "@in5net/limitless/api/y7";
+import { getText } from "$services/y7";
+import { choice } from "@in5net/std/random";
 import {
-    ActionRowBuilder,
-    ComponentType,
-    EmbedBuilder,
-    StringSelectMenuBuilder,
+	ActionRowBuilder,
+	ComponentType,
+	EmbedBuilder,
+	StringSelectMenuBuilder,
 } from "discord.js";
 import command from "discord/commands/slash";
 import logger from "logger";
@@ -21,10 +21,10 @@ export default command(
 	},
 	async i => {
 		const titles = ["Under", "Re", "Over", "De", "Underdere"];
-		const title = random(titles);
+		const title = choice(titles);
 		await i.reply(`Welcome to the ${title}titled Epiquest!`);
 
-		const item = random(items)!;
+		const item = choice(items)!;
 		const inventory: string[] = [];
 		let good = 0;
 		let bad = 0;

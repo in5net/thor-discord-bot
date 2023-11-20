@@ -1,6 +1,6 @@
 import { createEmbed } from "$services/embed";
 import prisma from "$services/prisma";
-import { objectKeys } from "@in5net/limitless";
+import { objectKeys } from "@in5net/std/object";
 import { IssueType } from "database";
 import command from "discord/commands/slash";
 

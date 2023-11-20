@@ -1,4 +1,4 @@
-import { getText } from "@in5net/limitless/api/y7";
+import { getText } from "$services/y7";
 import command from "discord/commands/text";
 
 export default command(

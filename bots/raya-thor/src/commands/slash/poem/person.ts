@@ -1,4 +1,4 @@
-import { random } from "@in5net/limitless";
+import { choice } from "@in5net/std/random";
 
 const nordicNamesMale = [
 	"Erik",
@@ -127,7 +127,7 @@ export function randomPerson(male: boolean) {
 }
 
 function nordicName(male: boolean) {
-	return male ? random(nordicNamesMale) : random(nordicNamesFemale);
+	return (male ? choice(nordicNamesMale) : choice(nordicNamesFemale)) || "";
 }
 
 function nordicLastName(male: boolean, parentMale: boolean) {

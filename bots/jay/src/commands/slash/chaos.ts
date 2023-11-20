@@ -1,4 +1,5 @@
-import { randomInt, vec2, Vector2 } from "@in5net/limitless";
+import { Vec2, vec2 } from "@in5net/std/math";
+import { randomInt } from "@in5net/std/random";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
 
@@ -33,16 +34,18 @@ export default command(
 		const canvas = createCanvas(size, size);
 		const ctx = canvas.getContext("2d");
 
-		const points: Vector2[] = [];
+		const points: Vec2[] = [];
 		for (let a = 0; a < Math.PI * 2; a += (Math.PI * 2) / num_points) {
-			const point = vec2(r, 0).setAngle(a).add(r);
+			const point = vec2(r, 0);
+			point.setAngle(a);
+			point.add(r);
 			points.push(point);
 		}
 
 		ctx.fillStyle = "#000";
 		ctx.fillRect(0, 0, size, size);
 
-		const current = Vector2.random(size);
+		const current = Vec2.random(size);
 		for (let i = 0; i < frames; i++) {
 			for (let index = 0; index < itersPerFrame; index++) {
 				const index = randomInt(points.length);

@@ -1,4 +1,4 @@
-import { sum } from "@in5net/limitless";
+import { sum } from "@in5net/std/stats";
 import {
 	ActionRowBuilder,
 	ComponentType,

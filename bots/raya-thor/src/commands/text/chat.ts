@@ -1,6 +1,7 @@
 import { filter, openai } from "$services/openai";
 import { cache } from "$services/prisma";
-import { throttle, ttlCache } from "@in5net/limitless";
+import { throttle } from "@in5net/std/async";
+import { ttlCache } from "@in5net/std/fn";
 import { OpenAIStream as openAIStream } from "ai";
 import { type Message } from "discord.js";
 import command from "discord/commands/text";

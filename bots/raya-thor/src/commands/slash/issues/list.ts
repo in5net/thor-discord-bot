@@ -1,6 +1,4 @@
 import { createEmbed } from "$services/embed";
-import { objectKeys } from "@in5net/limitless";
-import { IssueType } from "database";
 import db, { and, eq, isNotNull } from "database/drizzle";
 import { issues } from "database/drizzle/schema";
 import command from "discord/commands/slash";
@@ -12,7 +10,7 @@ export default command(
 			type: {
 				type: "choice",
 				desc: "Type of issue",
-				choices: objectKeys(IssueType),
+				choices: issues.type.enumValues,
 				optional: true,
 			},
 			closed: {
@@ -44,7 +42,7 @@ export default command(
 					.addFields(
 						results.map(({ id, name, type, desc }) => ({
 							name: `#${id} ${
-								type === "Bug" ? "🐛" : type === "Feature" ? "✨" : "🔧"
+								type === "bug" ? "🐛" : type === "feature" ? "✨" : "🔧"
 							} ${name}`,
 							value: desc,
 						})),

@@ -1,4 +1,4 @@
-import { random } from "@in5net/limitless";
+import { choice } from "@in5net/std/random";
 import { type Message, type Snowflake } from "discord.js";
 import command from "discord/commands/text";
 import { readFileSync } from "node:fs";
@@ -16,7 +16,7 @@ export default command(
 		args: {},
 	},
 	async ({ message: { channel } }) => {
-		const word = random(words);
+		const word = choice(words) || "";
 		channel2Word.set(channel.id, word);
 		return channel.send("Picked word, time to guess!");
 	},

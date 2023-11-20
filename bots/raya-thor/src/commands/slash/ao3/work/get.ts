@@ -1,5 +1,5 @@
-import { getUser, getWork, getWorkId } from "@in5net/limitless/api/ao3";
 import command from "discord/commands/slash";
+import { getUser, getWork, getWorkId } from "../api";
 import { createWorkEmbedBuilder } from "./embed";
 
 export default command(
