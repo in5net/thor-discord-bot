@@ -40,7 +40,8 @@
     },
     "deploy": {
       "inputs": [
-        "src/commands/slash/**"
+        "src/commands/slash/**",
+        "src/deploy.ts"
       ]
     }
   }
