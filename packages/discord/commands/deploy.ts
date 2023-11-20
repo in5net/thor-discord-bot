@@ -1,18 +1,30 @@
 import {
 	ApplicationCommandOptionType,
+	ApplicationCommandType,
 	Routes,
+	type APIApplicationCommandSubcommandGroupOption,
+	type APIApplicationCommandSubcommandOption,
+	type RESTPostAPIChatInputApplicationCommandsJSONBody,
+	type RESTPostAPIContextMenuApplicationCommandsJSONBody,
 	type RESTPutAPIApplicationCommandsJSONBody,
 } from "discord-api-types/v10";
 import { REST, type Collection } from "discord.js";
+import { type MessageCommand } from "./message";
 import { type CommandOptionType, type SlashCommand } from "./slash";
 
 export async function deploy(
-	commands: Collection<string, SlashCommand>,
+	{
+		slash,
+		message,
+	}: {
+		slash: Collection<string, SlashCommand>;
+		message: Collection<string, MessageCommand>;
+	},
 	token: string,
 	applicationId: string,
 ) {
 	const data: RESTPutAPIApplicationCommandsJSONBody = [];
-	for (const [name, command] of commands.sort((_a, _b, aName, bName) =>
+	for (const [name, command] of slash.sort((_a, _b, aName, bName) =>
 		aName.localeCompare(bName),
 	)) {
 		const [commandName = "", groupName, subName] = name.split(" ");
@@ -64,6 +76,10 @@ export async function deploy(
 		} else data.push(build(commandName, command));
 	}
 
+	for (const name of message.keys()) {
+		data.push(buildMessageCommand(name));
+	}
+
 	const rest = new REST().setToken(token);
 	await rest.put(Routes.applicationCommands(applicationId), {
 		body: data,
@@ -84,7 +100,13 @@ const commandOptionTypeMap: Record<
 	attachment: ApplicationCommandOptionType.Attachment,
 };
 
-function build(name: string, { desc, options }: SlashCommand) {
+function build(
+	name: string,
+	{ desc, options }: SlashCommand,
+):
+	| RESTPostAPIChatInputApplicationCommandsJSONBody
+	| APIApplicationCommandSubcommandOption
+	| APIApplicationCommandSubcommandGroupOption {
 	return {
 		name,
 		description: desc,
@@ -141,5 +163,14 @@ function build(name: string, { desc, options }: SlashCommand) {
 				return data;
 			},
 		),
+	};
+}
+
+function buildMessageCommand(
+	name: string,
+): RESTPostAPIContextMenuApplicationCommandsJSONBody {
+	return {
+		name,
+		type: ApplicationCommandType.Message,
 	};
 }
