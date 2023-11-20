@@ -76,7 +76,7 @@ export async function deploy(
 		} else data.push(build(commandName, command));
 	}
 
-	for (const name of message.keys()) {
+	for (const { name } of message.values()) {
 		data.push(buildMessageCommand(name));
 	}
 
