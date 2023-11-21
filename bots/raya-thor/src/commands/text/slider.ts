@@ -1,7 +1,7 @@
 import { sleep } from "@in5net/std/async";
 import { Vec2, vec2 } from "@in5net/std/math";
 import { AttachmentBuilder } from "discord.js";
-import command from "discord/commands/slash";
+import command from "discord/commands/text";
 import ffmpeg from "fluent-ffmpeg";
 import { nanoid } from "nanoid";
 import { createReadStream } from "node:fs";
@@ -24,24 +24,26 @@ const fps = 30;
 export default command(
 	{
 		desc: "Slider puzzle",
-		options: {
+		args: {
 			image: {
-				type: "attachment",
+				type: "image",
 				desc: "The image to slide",
 				optional: true,
 			},
 		},
 	},
-	async (i, { image }) => {
-		await i.deferReply();
+	async ({ message, args: { image } }) => {
 		const url =
-			image?.url || i.user.displayAvatarURL({ extension: "png", size: 256 });
+			image?.url ||
+			message.author.displayAvatarURL({ extension: "png", size: 256 });
 		const { loadImage, createCanvas } = await import("@napi-rs/canvas");
 		const img = await loadImage(url).catch(() => null);
-		if (!img) return i.reply("Could not load image");
+		if (!img) return message.reply("Could not load image");
 		const { width, height } = img;
 		if (width > 512 || height > 512)
-			return i.reply("Image is too large (max 512x512)");
+			return message.reply("Image is too large (max 512x512)");
+
+		message = await message.reply("Processing...");
 
 		const canvas = createCanvas(width, height);
 		const ctx = canvas.getContext("2d");
@@ -156,7 +158,7 @@ export default command(
 		const stream = createReadStream(outputPath);
 		stream.once("close", async () => rm(temporaryDir, { recursive: true }));
 
-		return i.editReply({
+		return message.edit({
 			files: [new AttachmentBuilder(stream, { name })],
 		});
 	},

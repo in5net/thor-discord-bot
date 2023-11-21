@@ -380,31 +380,6 @@ function* heap<T>(
 	}
 }
 
-function* binaryInsertion<T>(
-	array: T[],
-	compare: (a: T, b: T) => number,
-): SortingGenerator {
-	const { length } = array;
-	for (let i = 1; i < length; i++) {
-		const key = array[i]!;
-		let low = 0;
-		let high = i - 1;
-		while (low <= high) {
-			const mid = Math.floor((low + high) / 2);
-			if (compare(key, array[mid]!) < 0) high = mid - 1;
-			else low = mid + 1;
-			yield [i, mid];
-		}
-
-		let j = i;
-		while (j > low) {
-			swap(array, j, j - 1);
-			j--;
-			yield [j, j - 1];
-		}
-	}
-}
-
 function* comb<T>(
 	array: T[],
 	compare: (a: T, b: T) => number,
