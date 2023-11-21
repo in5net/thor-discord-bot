@@ -1,5 +1,5 @@
+import { objectKeys } from "@in5net/std/object";
 import { load } from "cheerio";
-import { objectKeys } from "../../../util";
 import ORIGIN from "../origin";
 import {
 	contentWarnings,
@@ -12,7 +12,7 @@ import { type Language } from "./languages";
 
 interface Work extends IWork {
 	summary: string;
-	stats: IWork["st"] & {
+	stats: IWork["stats"] & {
 		comments: number;
 	};
 }
