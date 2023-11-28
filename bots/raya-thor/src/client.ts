@@ -66,7 +66,7 @@ const client = new Client({
 		ThreadManager: 0,
 		ThreadMemberManager: 0,
 		UserManager: 0,
-		VoiceStateManager: 8,
+		VoiceStateManager: 16,
 	}),
 	sweepers: {
 		...Options.DefaultSweeperSettings,
