@@ -1,4 +1,6 @@
 import woof from "$services/woof";
+import { type SongType } from "$src/music/song";
+import { quantify } from "@in5net/std/string";
 import logger from "logger";
 import musicCommand from "./command";
 
@@ -40,15 +42,15 @@ export default musicCommand(
 				return message.reply(`${woof()}, please provide a valid numbers`);
 		}
 
-		const { length } = queue;
+		const songs: Array<[index: number, song: SongType]> = [];
 		for (const i of indices) {
-			queue.remove(i);
+			const song = queue.remove(i);
+			if (song) songs.push([i, song]);
 		}
 
 		return voice.send(
-			`✂️ Removed ${indices.join(", ")}, total of ${
-				length - queue.length
-			} songs`,
+			`✂️ Removed ${quantify("song", songs.length)}:
+${songs.map(([i, song]) => `${i + 2}. **${song.title}**`).join("\n")}`,
 		);
 	},
 );

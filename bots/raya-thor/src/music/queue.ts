@@ -99,8 +99,9 @@ export default class Queue extends Array<SongType> {
 	}
 
 	remove(index: number) {
-		this.splice(index, 1);
+		const [song] = this.splice(index, 1);
 		this.changeEmitter.emit("change");
+		return song;
 	}
 
 	toggleLoop() {
