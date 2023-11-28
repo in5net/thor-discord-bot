@@ -14,6 +14,7 @@ import {
 	exactly,
 	global,
 	letter,
+	maybe,
 	oneOrMore,
 	whitespace,
 } from "magic-regexp";
@@ -144,9 +145,13 @@ async function handleRandomResponse(message: Message) {
 }
 
 const diceRegex = createRegExp(
-	digit.times.between(1, 2).groupedAs("count"),
+	digit.times.between(1, 2).groupedAs("count").at.lineStart(),
 	charIn("dD"),
 	digit.times.between(1, 3).groupedAs("sides"),
+	maybe(
+		charIn("+-").as("operator"),
+		digit.times.between(1, 2).groupedAs("modifier"),
+	).at.lineEnd(),
 );
 
 async function handleDiceMessage(message: Message) {
@@ -156,11 +161,15 @@ async function handleDiceMessage(message: Message) {
 		const { groups } = matchResult;
 		const count = Number.parseInt(groups.count || "1");
 		const sides = Number.parseInt(groups.sides || "1");
+		const operator = groups.operator || "+";
+		const modifier = Number.parseInt(groups.modifier || "0");
 		if (count > 0 && sides > 0) {
-			const rolls = Array.from(
-				{ length: count },
-				() => Math.floor(Math.random() * sides) + 1,
-			);
+			const rolls = Array.from({ length: count }, () => {
+				let n = Math.floor(Math.random() * sides) + 1;
+				if (operator === "+") n += modifier;
+				else if (operator === "-") n -= modifier;
+				return n;
+			});
 			await channel.send(rolls.join(", "));
 		}
 	}
