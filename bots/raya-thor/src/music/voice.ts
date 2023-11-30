@@ -283,17 +283,6 @@ export default class Voice extends TypedEmitter<{
 		await this.channel?.send("⏩ Next");
 	}
 
-	async prev() {
-		const { queue } = this;
-		let song: SongType | undefined;
-		if (!queue.hasPrev() || !(song = this.queue.prev()))
-			return this.send("There's no previous song");
-
-		const resource = await song.getResource(this.stream);
-		this.stream.play(resource);
-		await this.send(`⏪ Previous: ${song.title}`);
-	}
-
 	async move(from: number, to: number) {
 		this.queue.move(from, to);
 		return this.send(`➡️ Moved #${from + 1} to #${to + 1}`);

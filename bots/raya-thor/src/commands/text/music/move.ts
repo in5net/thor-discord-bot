@@ -4,7 +4,7 @@ import musicCommand from "./command";
 export default musicCommand(
 	{
 		aliases: ["mv"],
-		desc: "Moves song #i to position #j in the queue. You may use `last` to refer to the last song in the queue",
+		desc: "Moves song #from to position #to in the queue. You may use `last` to refer to the last song in the queue",
 		args: {
 			from: {
 				type: "word",
@@ -20,18 +20,17 @@ export default musicCommand(
 	async ({ message, args: { from, to }, voice }) => {
 		const { length } = voice.queue;
 
-		const i = from === "last" ? length - 1 : Number.parseInt(from) - 2;
-		const index = to === "last" ? length - 1 : Number.parseInt(to) - 2;
+		const i = from === "last" ? length - 1 : Number.parseInt(from) - 1;
+		const index = to === "last" ? length - 1 : Number.parseInt(to) - 1;
 
-		if (
-			Number.isNaN(i) ||
-			Number.isNaN(index) ||
-			i < 0 ||
-			index < 0 ||
-			i >= length ||
-			index >= length
-		)
-			return message.reply(`${woof()}, please provide valid numbers`);
+		if (Number.isNaN(i))
+			return message.reply(`${woof()}, \`#from\` is not an integer`);
+		if (Number.isNaN(index))
+			return message.reply(`${woof()}, \`#to\` is not an integer`);
+		if (i < 0) return message.reply(`${woof()}, \`#from\` is too small`);
+		if (index < 0) return message.reply(`${woof()}, \`#to\` is too small`);
+		if (i >= length) return message.reply(`${woof()}, \`#from\` is too big`);
+		if (index >= length) return message.reply(`${woof()}, \`#to\` is too big`);
 
 		return voice.move(i, index);
 	},

@@ -17,6 +17,7 @@ export default command(
 			prompt: {
 				type: "text",
 				desc: "The prompt to send",
+				max: 512,
 			},
 		},
 	},
@@ -33,7 +34,6 @@ export default command(
 			return message.reply("Context cleared");
 		}
 
-		if (prompt.length > 512) return message.reply("Your text is too long");
 		if (!(await filter(prompt)))
 			return message.reply("Your text did not pass the content filter");
 

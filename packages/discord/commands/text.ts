@@ -36,6 +36,8 @@ export const argumentType2Name: Record<ArgumentType, string> = {
 interface Argument<T extends ArgumentType = ArgumentType> {
 	type: T;
 	desc: string;
+	min?: number;
+	max?: number;
 	optional?: boolean;
 	default?: DefaultTypeMap[T];
 }
@@ -46,8 +48,8 @@ export type ArgumentValue<T extends Argument = Argument> =
 	T["default"] extends DefaultTypeMap[ArgumentType]
 		? ArgumentTypeMap[T["type"]]
 		: T["optional"] extends true
-		? ArgumentTypeMap[T["type"]] | undefined
-		: ArgumentTypeMap[T["type"]];
+		  ? ArgumentTypeMap[T["type"]] | undefined
+		  : ArgumentTypeMap[T["type"]];
 
 export type Exec<T extends Arguments> = (params: {
 	message: Message;

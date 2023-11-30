@@ -27,11 +27,11 @@ export default musicCommand(
 				const start = Number.parseInt(startStr);
 				const end = Number.parseInt(endStr);
 				for (let n = start; n <= end; n++) {
-					indices.push(n - 2);
+					indices.push(n - 1);
 				}
 			} else {
 				const n = Number.parseInt(str);
-				indices.push(n - 2);
+				indices.push(n - 1);
 			}
 		}
 

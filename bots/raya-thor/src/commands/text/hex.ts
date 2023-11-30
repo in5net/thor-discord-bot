@@ -11,6 +11,8 @@ export default command(
 			code: {
 				type: "word",
 				desc: "The hex code to convert to an image",
+				min: 3,
+				max: 9,
 			},
 		} as const,
 	},

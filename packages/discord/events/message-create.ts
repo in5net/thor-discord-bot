@@ -105,6 +105,8 @@ function parseArgs(
 	const parsedArguments: Record<string, ArgumentValue | undefined> = {};
 	for (const [name, argument] of Object.entries(command.args)) {
 		let value: ArgumentValue | undefined;
+		const { min = Number.NEGATIVE_INFINITY, max = Number.POSITIVE_INFINITY } =
+			argument;
 		switch (argument.type) {
 			case "int": {
 				const argumentString = trueArguments.shift();
@@ -113,6 +115,18 @@ function parseArgs(
 					if (Number.isNaN(n))
 						throw new Error(
 							`Argument \`${name}\` must be an integer, got \`${argumentString}\``,
+						);
+					const small = n < min;
+					const big = n > max;
+					if (small || big)
+						throw new Error(
+							`Argument \`${name}\` must be ${
+								small && big
+									? `between ${min} and ${max}`
+									: small
+									  ? `no less than ${min}`
+									  : `no more than ${max}`
+							}, got \`${argumentString}\``,
 						);
 					value = n;
 				}
@@ -128,6 +142,18 @@ function parseArgs(
 						throw new Error(
 							`Argument \`${name}\` must be an float, got \`${argumentString}\``,
 						);
+					const small = n < min;
+					const big = n > max;
+					if (small || big)
+						throw new Error(
+							`Argument \`${name}\` must be ${
+								small && big
+									? `between ${min} and ${max}`
+									: small
+									  ? `no less than ${min}`
+									  : `no more than ${max}`
+							}, got \`${argumentString}\``,
+						);
 					value = n;
 				}
 
@@ -136,7 +162,22 @@ function parseArgs(
 
 			case "word": {
 				const argumentString = trueArguments.shift();
-				if (argumentString) value = argumentString;
+				if (argumentString) {
+					value = argumentString;
+					const small = value.length < min;
+					const big = value.length > max;
+					if (small || big)
+						throw new Error(
+							`Argument \`${name}\` must be ${
+								small && big
+									? `between ${min} and ${max}`
+									: small
+									  ? `no less than ${min}`
+									  : `no more than ${max}`
+							} characters long`,
+						);
+				}
+
 				break;
 			}
 
@@ -148,7 +189,22 @@ function parseArgs(
 
 			case "text": {
 				const argumentStrs = [...trueArguments];
-				if (argumentStrs.length) value = argumentStrs.join(" ");
+				if (argumentStrs.length) {
+					value = argumentStrs.join(" ");
+					const small = value.length < min;
+					const big = value.length > max;
+					if (small || big)
+						throw new Error(
+							`Argument \`${name}\` must be ${
+								small && big
+									? `between ${min} and ${max}`
+									: small
+									  ? `no less than ${min}`
+									  : `no more than ${max}`
+							} characters long`,
+						);
+				}
+
 				break;
 			}
 

@@ -13,12 +13,11 @@ export default musicCommand(
 			prompt: {
 				type: "text",
 				desc: "The prompt to send",
+				max: 256,
 			},
 		},
 	},
 	async ({ message, voice, args: { prompt } }) => {
-		if (prompt.length > 256) return message.reply("Your text is too long");
-
 		const { channel, author } = message;
 		await channel.sendTyping();
 

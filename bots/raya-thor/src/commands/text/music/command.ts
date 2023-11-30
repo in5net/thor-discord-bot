@@ -18,7 +18,11 @@ export default function musicCommand<T extends Arguments>(
 		if (!guildId) return;
 		const voice = getVoice(guildId);
 
-		if (!channel.isDMBased() && channel.name.toLowerCase().includes("general"))
+		if (
+			!channel.isDMBased() &&
+			channel.name.toLowerCase().includes("general") &&
+			Math.random() < 0.2
+		)
 			await channel.send("Imagine using music commands in general chat");
 
 		return exec({ message, args, client, voice });
