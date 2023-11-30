@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { createEmbed } from "$services/embed";
 import { sec2Str } from "$services/time";
+import { remove } from "@in5net/std/array";
+import { shuffle } from "@in5net/std/random";
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
@@ -32,7 +34,7 @@ const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
 );
 
 export default class Queue extends Array<SongType> {
-	current?: SongType;
+	currentIndex = -1;
 	loop = false;
 	collector: InteractionCollector<ButtonInteraction<"cached">> | undefined;
 	changeEmitter = new TypedEmitter<{
@@ -47,28 +49,23 @@ export default class Queue extends Array<SongType> {
 		return BigInt(this.voice.guildId);
 	}
 
-	get size(): number {
-		return this.length + (this.current ? 1 : 0);
+	get left() {
+		return this.length - this.currentIndex;
 	}
 
-	getSongs(): SongType[] {
-		const songs = [...this];
-		const { current } = this;
-		if (current) songs.unshift(current);
-		return songs;
+	get current() {
+		return this[this.currentIndex];
 	}
 
 	dequeue(song?: SongType) {
-		if (song) {
-			const index = this.indexOf(song);
-			if (index > -1) this.splice(index, 1);
-		} else this.shift();
+		if (song) remove(this, song);
+		else this.shift();
 		this.changeEmitter.emit("change");
 	}
 
 	clear() {
 		this.length = 0;
-		this.current = undefined;
+		this.currentIndex = -1;
 		this.changeEmitter.emit("change");
 	}
 
@@ -78,16 +75,35 @@ export default class Queue extends Array<SongType> {
 		this.changeEmitter.removeAllListeners();
 	}
 
+	hasNext() {
+		if (this.loop) return !!this.length;
+		return this.currentIndex + 1 < this.length;
+	}
+
+	hasPrev() {
+		if (this.loop) return !!this.length;
+		return this.currentIndex - 1 >= 0;
+	}
+
 	next() {
-		const { current, loop, changeEmitter } = this;
-		if (loop && current) this.push(current);
-		this.current = this.shift();
+		const { loop, length, changeEmitter } = this;
+		this.currentIndex++;
+		if (loop && this.currentIndex >= length) this.currentIndex = 0;
+		changeEmitter.emit("change");
+		return this.current;
+	}
+
+	prev() {
+		const { loop, length, changeEmitter } = this;
+		this.currentIndex--;
+		if (loop && this.currentIndex < 0) this.currentIndex = length - 1;
 		changeEmitter.emit("change");
 		return this.current;
 	}
 
 	shuffle() {
-		this.sort(() => Math.random() - 0.5);
+		shuffle(this);
+		this.currentIndex = 0;
 		this.changeEmitter.emit("change");
 	}
 
@@ -111,7 +127,7 @@ export default class Queue extends Array<SongType> {
 	async embed(channel: TextChannel, seconds?: number) {
 		embed.setTitle(`Queue ${this.loop ? "🔁" : ""}`);
 
-		let page = 0;
+		let page = Math.floor(this.currentIndex / pageSize);
 
 		const generateEmbed = () => {
 			backButton.setDisabled(!page);
@@ -122,23 +138,20 @@ export default class Queue extends Array<SongType> {
 				}`,
 			});
 
-			const { current } = this;
-			if (current && seconds) {
-				const { title, duration = Number.NaN } = current;
-				embed.addFields({
-					name: `▶️ ${title}`,
-					value: `${sec2Str(seconds)}/${sec2Str(duration)}`,
-				});
-			}
-
 			for (let i = page * pageSize; i < (page + 1) * pageSize; i++) {
 				const song = this[i];
 				if (!song) break;
 				const { title, duration = Number.NaN } = song;
-				embed.addFields({
-					name: `${i + 2}. ${title}`,
-					value: `${sec2Str(duration)}`,
-				});
+				if (i === this.currentIndex && seconds)
+					embed.addFields({
+						name: `▶️ ${i + 1}. ${title}`,
+						value: `${sec2Str(seconds)}/${sec2Str(duration)}`,
+					});
+				else
+					embed.addFields({
+						name: `${i + 1}. ${title}`,
+						value: `${sec2Str(duration)}`,
+					});
 			}
 		};
 

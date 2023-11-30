@@ -15,6 +15,7 @@ import {
 	type SpotifyTrack,
 } from "play-dl";
 import { z } from "zod";
+import { getPlayDl } from "./play";
 
 interface SongJSON {
 	title: string;
@@ -233,10 +234,11 @@ ${title} (${url})
 				url: channelURL || undefined,
 				iconURL: channel.thumbnail || undefined,
 			});
+		const MAX_DESCRIPTION_LENGTH = 256;
 		if (description)
 			embed.setDescription(
-				description.length > 1000
-					? `${description.slice(0, 1000)}...`
+				description.length > MAX_DESCRIPTION_LENGTH
+					? `${description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
 					: description,
 			);
 		return embed;
@@ -277,7 +279,7 @@ ${title} (${url})
 		url: string,
 		requester: Requester,
 	): Promise<YouTubeSong> {
-		const { default: play } = await import("play-dl");
+		const play = await getPlayDl();
 		const id = play.extractID(url);
 		const song = await this.fromId(id, requester);
 		const timeRegex = createRegExp("?t=", oneOrMore(digit).as("seconds"));
@@ -385,7 +387,7 @@ ${title} (${url})
 			return {
 				stream: await ytStream(this.url, { seek: seek ?? this.time, filter }),
 			};
-		const { default: play } = await import("play-dl");
+		const play = await getPlayDl();
 		return play.stream(this.url, { seek: seek ?? this.time });
 	}
 }
@@ -548,7 +550,7 @@ ${title} (${url})
 		url: string,
 		requester: Requester,
 	): Promise<SpotifySong> {
-		const { default: play } = await import("play-dl");
+		const play = await getPlayDl();
 		if (play.sp_validate(url) !== "track") throw new Error("Invalid URL");
 
 		const {
@@ -587,7 +589,7 @@ ${title} (${url})
 		url: string,
 		requester: Requester,
 	): Promise<SpotifySong[]> {
-		const { default: play } = await import("play-dl");
+		const play = await getPlayDl();
 		const type = play.sp_validate(url);
 		if (type !== "album" && type !== "playlist") return [];
 
@@ -604,7 +606,7 @@ ${title} (${url})
 }
 
 const playSC = memo(async () => {
-	const { default: play } = await import("play-dl");
+	const play = await getPlayDl();
 	const clientId = await play.getFreeClientID();
 	await play.setToken({
 		soundcloud: {

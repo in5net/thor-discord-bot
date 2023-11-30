@@ -1,5 +1,5 @@
 import db from "database/drizzle";
-import { commandExecutions, cuid2 } from "database/drizzle/schema";
+import { commandExecutions } from "database/drizzle/schema";
 import { EmbedBuilder, type Message, type TextBasedChannel } from "discord.js";
 import Fuse from "fuse.js";
 import logger from "logger";
@@ -84,9 +84,8 @@ export async function runCommand(
 		});
 		if (typeof result === "string") await message.channel.send(result);
 		await db.insert(commandExecutions).values({
-			id: cuid2(),
 			name,
-			type: "Text",
+			type: "text",
 			userId: BigInt(author.id),
 			messageId: BigInt(message.id),
 			channelId: BigInt(channelId),

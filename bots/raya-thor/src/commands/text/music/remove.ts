@@ -50,7 +50,7 @@ export default musicCommand(
 
 		return voice.send(
 			`✂️ Removed ${quantify("song", songs.length)}:
-${songs.map(([i, song]) => `${i + 2}. **${song.title}**`).join("\n")}`,
+${songs.map(([i, song]) => `${i + 1}. **${song.title}**`).join("\n")}`,
 		);
 	},
 );

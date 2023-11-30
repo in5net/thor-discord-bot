@@ -1,5 +1,5 @@
 import db from "database/drizzle";
-import { commandExecutions, cuid2 } from "database/drizzle/schema";
+import { commandExecutions } from "database/drizzle/schema";
 import {
 	EmbedBuilder,
 	type AutocompleteInteraction,
@@ -73,10 +73,10 @@ async function handleSlash(i: ChatInputCommandInteraction) {
 				}),
 			),
 		);
+
 		await db.insert(commandExecutions).values({
-			id: cuid2(),
 			name,
-			type: "Slash",
+			type: "slash",
 			userId: BigInt(i.user.id),
 			channelId: BigInt(i.channelId),
 			guildId: i.guildId ? BigInt(i.guildId) : undefined,
@@ -135,9 +135,8 @@ async function handleMessageMenu(i: MessageContextMenuCommandInteraction) {
 	try {
 		await handler(i);
 		await db.insert(commandExecutions).values({
-			id: cuid2(),
 			name,
-			type: "Message",
+			type: "message",
 			userId: BigInt(i.user.id),
 			messageId: BigInt(i.targetId),
 			channelId: BigInt(i.channelId),

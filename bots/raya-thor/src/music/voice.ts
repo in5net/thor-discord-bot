@@ -1,8 +1,10 @@
 import { getLyrics } from "$services/genius";
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { shuffle } from "@in5net/std/random";
+import { type Awaitable } from "@in5net/std/types";
 import {
 	ChannelType,
+	type Attachment,
 	type Message,
 	type MessageCreateOptions,
 	type TextChannel,
@@ -21,6 +23,7 @@ import {
 	wordBoundary,
 } from "magic-regexp";
 import { TypedEmitter } from "tiny-typed-emitter";
+import { getPlayDl } from "./play";
 import * as playlist from "./playlist";
 import Queue from "./queue";
 import {
@@ -28,7 +31,7 @@ import {
 	SpotifySong,
 	URLSong,
 	YouTubeSong,
-	type Album,
+	type Requester,
 	type SongType,
 } from "./song";
 import Stream from "./stream";
@@ -61,7 +64,7 @@ export default class Voice extends TypedEmitter<{
 	stream = new Stream()
 		.on("idle", async () => {
 			try {
-				if (this.queue.size) {
+				if (this.queue.hasNext()) {
 					this.stream.join();
 					await this.play();
 				} else this.stream.stop();
@@ -105,59 +108,103 @@ export default class Voice extends TypedEmitter<{
 			this.stream.channel = voiceChannel;
 	}
 
-	async getSongs(
-		message: Message,
-		query?: string,
-	): Promise<Array<SongType | Album<YouTubeSong>>> {
-		const { queue, stream } = this;
+	async getSongsFromQuery(message: Message, query?: string) {
 		const { author, member, attachments } = message;
 		const requester = {
 			uid: author.id,
 			name: member?.nickname || author.username,
 		};
 
-		const urlSongsCache = new Map<string, URLSong>();
-		for (const { url } of attachments.values()) {
-			let song = urlSongsCache.get(url);
-			if (!song) {
-				song = URLSong.fromURL(url, requester);
-				urlSongsCache.set(url, song);
-			}
+		await this.queueFiles(attachments.values(), requester);
 
-			queue.push(song);
-			song.log();
-			if (stream.player.state.status === AudioPlayerStatus.Playing)
-				await this.send(`⏏️ Added ${song.title} to queue`);
-		}
+		const queries = query ? splitQueries(query) : [];
 
-		const queries: string[] = [];
-		if (query) {
-			const words = query.split(" ").filter(Boolean);
-			let text = "";
-			for (const word of words) {
-				const isUrl = URL_REGEX.test(word);
-				if (isUrl) {
-					if (text.trim()) {
-						queries.push(text.trim());
-						text = "";
-					}
+		const songs: SongType[] = [];
+		const songsCache = new Map<string, SongType[]>();
+		const play = await getPlayDl(true);
 
-					queries.push(word);
-				} else text += `${word} `;
-			}
+		const matchers: Array<{
+			name: string;
+			check(query: string): Awaitable<boolean>;
+			getSongs(query: string): Promise<SongType[]>;
+		}> = [
+			{
+				name: "YouTube playlist url",
+				check: query => play.yt_validate(query) === "playlist",
+				async getSongs(query) {
+					const id = play.extractID(query);
+					const { songs } = await YouTubeSong.fromPlaylistId(id, requester);
+					return songs;
+				},
+			},
+			{
+				name: "YouTube video url",
+				check: query => play.yt_validate(query) === "video",
+				async getSongs(query) {
+					const song = await YouTubeSong.fromURL(query, requester);
+					return [song];
+				},
+			},
+			{
+				name: "YouTube channel url",
+				check: query => YOUTUBE_CHANNEL_REGEX.test(query),
+				async getSongs(query) {
+					const id = YOUTUBE_CHANNEL_REGEX.exec(query)?.[2] || "";
+					const videos = await YouTubeSong.fromChannelId(id, requester);
+					return videos;
+				},
+			},
+			{
+				name: "Spotify song url",
+				check: query => play.sp_validate(query) === "track",
+				async getSongs(query) {
+					const song = await SpotifySong.fromURL(query, requester);
+					return [song];
+				},
+			},
+			{
+				name: "Spotify album/playlist url",
+				check: query =>
+					["album", "playlist"].includes(play.sp_validate(query) as string),
+				async getSongs(query) {
+					const songs = await SpotifySong.fromListURL(query, requester);
+					return songs;
+				},
+			},
+			{
+				name: "SoundCloud song url",
+				check: async query => (await play.so_validate(query)) === "track",
+				async getSongs(query) {
+					const song = await SoundCloudSong.fromURL(query, requester);
+					return [song];
+				},
+			},
+			{
+				name: "SoundCloud playlist url",
+				check: async query => (await play.so_validate(query)) === "playlist",
+				async getSongs(query) {
+					const songs = await SoundCloudSong.fromListURL(query, requester);
+					return songs;
+				},
+			},
+			{
+				name: "song url",
+				check: query => URL_REGEX.test(query),
+				async getSongs(query) {
+					const song = URLSong.fromURL(query, requester);
+					return [song];
+				},
+			},
+			{
+				name: "YouTube query",
+				check: () => true,
+				async getSongs(query) {
+					const song = await YouTubeSong.fromSearch(query, requester);
+					return [song];
+				},
+			},
+		];
 
-			if (text) {
-				queries.push(...text.trim().split("\n"));
-				text = "";
-			}
-		}
-
-		logger.debug("Queries:", queries);
-
-		const songs: Array<SongType | Album<YouTubeSong>> = [];
-		const songsCache = new Map<string, Array<SongType | Album<YouTubeSong>>>();
-		const { default: play } = await import("play-dl");
-		if (play.is_expired()) await play.refreshToken();
 		for (const query of queries) {
 			const mds = songsCache.get(query);
 			if (mds) {
@@ -165,103 +212,38 @@ export default class Voice extends TypedEmitter<{
 				continue;
 			}
 
-			if (play.yt_validate(query) === "playlist") {
-				const id = play.extractID(query);
-				try {
-					const album = await YouTubeSong.fromPlaylistId(id, requester);
-					songs.push(album);
-					songsCache.set(query, [album]);
-				} catch (error) {
-					logger.error(error);
-					await this.send("🚫 Invalid YouTube playlist url");
-				}
-			} else if (play.yt_validate(query) === "video") {
-				try {
-					const song = await YouTubeSong.fromURL(query, requester);
-					songs.push(song);
-					songsCache.set(query, [song]);
-				} catch (error) {
-					logger.error(error);
-					await this.send("🚫 Invalid YouTube video url");
-				}
-			} else if (YOUTUBE_CHANNEL_REGEX.test(query)) {
-				try {
-					const id = YOUTUBE_CHANNEL_REGEX.exec(query)?.[2] || "";
-					const videos = await YouTubeSong.fromChannelId(id, requester);
-					songs.push(...videos);
-					songsCache.set(query, videos);
-				} catch (error) {
-					logger.error(error);
-					await this.send("🚫 Invalid YouTube channel url");
-				}
-			} else if (play.sp_validate(query) === "track") {
-				try {
-					const song = await SpotifySong.fromURL(query, requester);
-					songs.push(song);
-					songsCache.set(query, [song]);
-				} catch (error) {
-					logger.error(error);
-					await this.send("🚫 Invalid Spotify song url");
-				}
-			} else if (
-				["album", "playlist"].includes(play.sp_validate(query) as string)
-			) {
-				try {
-					const songs = await SpotifySong.fromListURL(query, requester);
-					songs.push(...songs);
-					songsCache.set(query, songs);
-				} catch (error) {
-					logger.error(error);
-					await this.send("🚫 Invalid Spotify album/playlist url");
-				}
-			} else if ((await play.so_validate(query)) === "track") {
-				try {
-					const song = await SoundCloudSong.fromURL(query, requester);
-					songs.push(song);
-					songsCache.set(query, [song]);
-				} catch (error) {
-					logger.error(error);
-					await this.send("🚫 Invalid SoundCloud song url");
-				}
-			} else if ((await play.so_validate(query)) === "playlist") {
-				try {
-					const songs = await SoundCloudSong.fromListURL(query, requester);
-					songs.push(...songs);
-					songsCache.set(query, songs);
-				} catch (error) {
-					logger.error(error);
-					await this.send("🚫 Invalid SoundCloud playlist url");
-				}
-			} else if (URL_REGEX.test(query)) {
-				try {
-					const song = URLSong.fromURL(query, requester);
-					songs.push(song);
-					songsCache.set(query, [song]);
-				} catch (error) {
-					logger.error(error);
-					await this.send("🚫 Invalid song url");
-				}
-			} else {
-				try {
-					const song = await YouTubeSong.fromSearch(query, requester);
-					songs.push(song);
-					songsCache.set(query, [song]);
-				} catch (error) {
-					logger.error(error);
-					await this.send("🚫 Invalid YouTube query");
+			for (const { name, check, getSongs } of matchers) {
+				if (await check(query)) {
+					try {
+						const chunk = await getSongs(query);
+						songs.push(...chunk);
+						songsCache.set(query, chunk);
+						break;
+					} catch (error) {
+						logger.error(error);
+						await this.send(`🚫 Invalid ${name}`);
+					}
 				}
 			}
 		}
 
-		for (const song of songs) {
-			if ("songs" in song) {
-				for (const s of song.songs) {
-					s.log();
-				}
-			} else song.log();
-		}
-
 		return songs;
+	}
+
+	async queueFiles(attachments: Iterable<Attachment>, requester: Requester) {
+		const urlSongsCache = new Map<string, URLSong>();
+		for (const { url } of attachments) {
+			let song = urlSongsCache.get(url);
+			if (!song) {
+				song = URLSong.fromURL(url, requester);
+				urlSongsCache.set(url, song);
+			}
+
+			this.queue.push(song);
+			song.log();
+			if (this.stream.player.state.status === AudioPlayerStatus.Playing)
+				await this.send(`⏏️ Added ${song.title} to queue`);
+		}
 	}
 
 	async add(message: Message, query?: string, shuff = false) {
@@ -269,11 +251,8 @@ export default class Voice extends TypedEmitter<{
 
 		const { queue, channel } = this;
 
-		const stuff = await this.getSongs(message, query);
-		const songs = stuff.flatMap(song => {
-			if ("songs" in song) return song.songs;
-			return song;
-		});
+		const songs = await this.getSongsFromQuery(message, query);
+		console.log(songs);
 		queue.push(...(shuff ? shuffle(songs) : songs));
 
 		if (songs.length)
@@ -284,7 +263,7 @@ export default class Voice extends TypedEmitter<{
 					.join(", ")}${songs.length > 10 ? ", ..." : ""} to queue`,
 			);
 
-		return this.play();
+		await this.play();
 	}
 
 	async seek(seconds: number) {
@@ -304,9 +283,20 @@ export default class Voice extends TypedEmitter<{
 		await this.channel?.send("⏩ Next");
 	}
 
+	async prev() {
+		const { queue } = this;
+		let song: SongType | undefined;
+		if (!queue.hasPrev() || !(song = this.queue.prev()))
+			return this.send("There's no previous song");
+
+		const resource = await song.getResource(this.stream);
+		this.stream.play(resource);
+		await this.send(`⏪ Previous: ${song.title}`);
+	}
+
 	async move(from: number, to: number) {
 		this.queue.move(from, to);
-		return this.send(`➡️ Moved #${from + 2} to #${to + 2}`);
+		return this.send(`➡️ Moved #${from + 1} to #${to + 1}`);
 	}
 
 	stop() {
@@ -318,7 +308,6 @@ export default class Voice extends TypedEmitter<{
 
 	async play(skip = false) {
 		const { stream } = this;
-
 		if (stream.player.state.status === AudioPlayerStatus.Playing && !skip)
 			return;
 
@@ -366,9 +355,7 @@ export default class Voice extends TypedEmitter<{
 	async playlistSave(message: Message, name: string, query?: string) {
 		const { queue } = this;
 		const { author, channel } = message;
-		const songs = query
-			? await this.getSongs(message, query)
-			: queue.getSongs() || [];
+		const songs = query ? await this.getSongsFromQuery(message, query) : queue;
 		await playlist.save(author.id, name, songs);
 		if (channel.type !== ChannelType.GuildStageVoice)
 			await channel.send(`Saved playlist ${name}`);
@@ -377,11 +364,33 @@ export default class Voice extends TypedEmitter<{
 	async playlistAdd(message: Message, name: string, query?: string) {
 		const { queue } = this;
 		const { author, channel } = message;
-		const songs = query
-			? await this.getSongs(message, query)
-			: queue.getSongs() || [];
+		const songs = query ? await this.getSongsFromQuery(message, query) : queue;
 		await playlist.add(author.id, name, songs);
 		if (channel.type !== ChannelType.GuildStageVoice)
 			await channel.send(`Added to playlist ${name}`);
 	}
+}
+function splitQueries(query: string) {
+	const queries: string[] = [];
+
+	const words = query.split(" ").filter(Boolean);
+	let text = "";
+	for (const word of words) {
+		const isUrl = URL_REGEX.test(word);
+		if (isUrl) {
+			if (text.trim()) {
+				queries.push(text.trim());
+				text = "";
+			}
+
+			queries.push(word);
+		} else text += `${word} `;
+	}
+
+	if (text) {
+		queries.push(...text.trim().split("\n"));
+		text = "";
+	}
+
+	return queries;
 }

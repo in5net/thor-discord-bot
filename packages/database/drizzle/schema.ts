@@ -1,3 +1,4 @@
+import { createId as cuid2 } from "@paralleldrive/cuid2";
 import { relations, sql } from "drizzle-orm";
 import {
 	bigint,
@@ -15,8 +16,6 @@ import {
 	varchar,
 	type MySqlColumn,
 } from "drizzle-orm/mysql-core";
-
-export { createId as cuid2 } from "@paralleldrive/cuid2";
 
 const namedIndex = (column: MySqlColumn, ...columns: MySqlColumn[]) =>
 	index(
@@ -137,7 +136,7 @@ export const songsRelations = relations(songs, ({ one }) => ({
 }));
 
 export const ratios = mysqlTable("ratios", {
-	id: varchar("id", { length: 191 }).primaryKey(),
+	id: varchar("id", { length: 191 }).primaryKey().$default(cuid2),
 	createdAt,
 	content: varchar("content", { length: 191 }).notNull().unique(),
 });
@@ -214,7 +213,7 @@ export const audioFilters = mysqlTable("audio_filters", {
 export const commandExecutions = mysqlTable(
 	"command_executions",
 	{
-		id: varchar("id", { length: 191 }).primaryKey(),
+		id: varchar("id", { length: 191 }).primaryKey().$default(cuid2),
 		createdAt,
 		name: varchar("name", { length: 191 }).notNull(),
 		type: mysqlEnum("type", ["text", "slash", "message"]).notNull(),

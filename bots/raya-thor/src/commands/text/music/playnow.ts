@@ -16,8 +16,7 @@ export default musicCommand(
 	async ({ message, args: { queries }, voice }) => {
 		voice.setChannels(message);
 
-		const things = await voice.getSongs(message, queries);
-		const songs = things.flatMap(song => ("songs" in song ? song.songs : song));
+		const songs = await voice.getSongsFromQuery(message, queries);
 		voice.queue.unshift(...songs);
 
 		if (songs.length)
