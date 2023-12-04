@@ -8,10 +8,10 @@
     "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u"
   },
   "dependencies": {
-    "@google-cloud/storage": "7.6.0",
+    "@google-cloud/storage": "7.7.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/node": "20.10.0"
+    "@types/node": "20.10.3"
   }
 }
