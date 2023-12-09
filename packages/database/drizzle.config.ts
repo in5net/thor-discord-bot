@@ -1,16 +1,16 @@
-import type { Config } from "drizzle-kit";
+import { defineConfig } from "drizzle-kit";
 import { env } from "node:process";
 
-export default {
+export default defineConfig({
 	schema: "./drizzle/schema.ts",
 	out: "./drizzle",
 	driver: "mysql2",
 	dbCredentials: {
-		connectionString: env.DATABASE_URL.replace(
+		uri: env.DATABASE_URL.replace(
 			"sslaccept=strict",
 			'ssl={"rejectUnauthorized":true}',
 		),
 	},
 	verbose: true,
 	strict: true,
-} satisfies Config;
+});

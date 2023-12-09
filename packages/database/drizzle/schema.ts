@@ -53,7 +53,9 @@ export const playlists = mysqlTable(
 		id: varchar("id", { length: 191 }).primaryKey(),
 		createdAt,
 		updatedAt,
-		userId: char("user_id", { length: 18 }).notNull(),
+		userId: char("user_id", { length: 18 })
+			.notNull()
+			.references(() => users.id, { onUpdate: "cascade", onDelete: "cascade" }),
 		name: varchar("name", { length: 100 }).notNull(),
 	},
 	table => ({
@@ -84,11 +86,21 @@ export const albumsRelations = relations(albums, ({ many }) => ({
 export const albumsToPlaylists = mysqlTable(
 	"albums_to_playlists",
 	{
-		albumId: varchar("album_id", { length: 191 }).notNull(),
-		playlistId: varchar("playlist_id", { length: 191 }).notNull(),
+		albumId: varchar("album_id", { length: 191 })
+			.notNull()
+			.references(() => albums.id, {
+				onUpdate: "cascade",
+				onDelete: "cascade",
+			}),
+		playlistId: varchar("playlist_id", { length: 191 })
+			.notNull()
+			.references(() => playlists.id, {
+				onUpdate: "cascade",
+				onDelete: "cascade",
+			}),
 	},
 	table => ({
-		pk: primaryKey(table.albumId, table.playlistId),
+		pk: primaryKey({ columns: [table.albumId, table.playlistId] }),
 	}),
 );
 export const albumsToPlaylistsRelations = relations(
@@ -111,13 +123,19 @@ export const songs = mysqlTable(
 		id: varchar("id", { length: 191 }).primaryKey(),
 		createdAt,
 		updatedAt,
-		playlistId: varchar("playlist_id", { length: 191 }),
-		albumId: varchar("album_id", { length: 191 }),
+		playlistId: varchar("playlist_id", { length: 191 }).references(
+			() => playlists.id,
+			{ onUpdate: "cascade", onDelete: "cascade" },
+		),
+		albumId: varchar("album_id", { length: 191 }).references(() => albums.id, {
+			onUpdate: "cascade",
+			onDelete: "cascade",
+		}),
 		title: text("title").notNull(),
-		duration: int("duration").notNull(),
+		duration: int("duration", { unsigned: true }).notNull(),
 		data: json("data").notNull(),
-		playlistIndex: int("playlist_index"),
-		albumIndex: int("album_index"),
+		playlistIndex: int("playlist_index", { unsigned: true }),
+		albumIndex: int("album_index", { unsigned: true }),
 	},
 	table => ({
 		playlistIndex: namedIndex(table.playlistId, table.playlistIndex),
@@ -217,10 +235,13 @@ export const commandExecutions = mysqlTable(
 		createdAt,
 		name: varchar("name", { length: 191 }).notNull(),
 		type: mysqlEnum("type", ["text", "slash", "message"]).notNull(),
-		userId: bigint("user_id", { mode: "bigint" }).notNull(),
-		messageId: bigint("message_id", { mode: "bigint" }),
-		channelId: bigint("channel_id", { mode: "bigint" }).notNull(),
-		guildId: bigint("guild_id", { mode: "bigint" }),
+		userId: bigint("user_id", { mode: "bigint", unsigned: true }).notNull(),
+		messageId: bigint("message_id", { mode: "bigint", unsigned: true }),
+		channelId: bigint("channel_id", {
+			mode: "bigint",
+			unsigned: true,
+		}).notNull(),
+		guildId: bigint("guild_id", { mode: "bigint", unsigned: true }),
 	},
 	table => ({
 		createdAtIndex: namedIndex(table.createdAt),
