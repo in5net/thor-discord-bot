@@ -145,13 +145,13 @@ async function handleRandomResponse(message: Message) {
 }
 
 const diceRegex = createRegExp(
-	digit.times.between(1, 2).groupedAs("count").at.lineStart(),
+	digit.times.between(1, 2).groupedAs("count"),
 	charIn("dD"),
 	digit.times.between(1, 3).groupedAs("sides"),
 	maybe(
 		charIn("+-").as("operator"),
 		digit.times.between(1, 2).groupedAs("modifier"),
-	).at.lineEnd(),
+	),
 );
 
 async function handleDiceMessage(message: Message) {
