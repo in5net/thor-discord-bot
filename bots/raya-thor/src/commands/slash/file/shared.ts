@@ -18,15 +18,27 @@ export const extensions: Record<Type, string[]> = {
 };
 
 export async function getRandomFile(type?: Type) {
-	const file = await neon.query.attachments.findFirst({
-		where: and(
-			inArray(attachments.ext, type ? extensions[type] : []),
-			not(attachments.bot),
-			not(attachments.nsfw),
-		),
-		orderBy: sql`random()`,
-	});
-	return file;
+	const [file] = await neon
+		.select({
+			attachment: attachments,
+		})
+		.from(attachments)
+		.innerJoin(
+			neon
+				.select({ id: attachments.id })
+				.from(messages)
+				.where(
+					and(
+						inArray(attachments.ext, type ? extensions[type] : []),
+						not(attachments.bot),
+						not(attachments.nsfw),
+					),
+				)
+				.orderBy(sql`random()`)
+				.as("tmp"),
+			eq(attachments.id, sql`tmp.id`),
+		);
+	return file?.attachment;
 }
 
 export async function sendFile(
