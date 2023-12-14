@@ -35,6 +35,7 @@ export async function getRandomFile(type?: Type) {
 					),
 				)
 				.orderBy(sql`random()`)
+				.limit(1)
 				.as("tmp"),
 			eq(attachments.id, sql`tmp.id`),
 		);
