@@ -26,7 +26,7 @@ export async function getRandomFile(type?: Type) {
 		.innerJoin(
 			neon
 				.select({ id: attachments.id })
-				.from(messages)
+				.from(attachments)
 				.where(
 					and(
 						inArray(attachments.ext, type ? extensions[type] : []),
