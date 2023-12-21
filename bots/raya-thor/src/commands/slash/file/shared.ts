@@ -41,7 +41,7 @@ export async function getRandomFile(type?: Type) {
 				.as("tmp"),
 			eq(attachments.id, sql`tmp.id`),
 		);
-	logger.debug(`getRandomFile took ${performance.now() - start}ms`);
+	logger.info(`getRandomFile took ${performance.now() - start}ms`);
 	return file?.attachment;
 }
 
