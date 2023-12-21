@@ -8,6 +8,7 @@ import {
 	type BaseMessageOptions,
 	type MessagePayload,
 } from "discord.js";
+import logger from "logger";
 
 export const types = ["image", "video", "audio"] as const;
 export type Type = (typeof types)[number];
@@ -18,6 +19,7 @@ export const extensions: Record<Type, string[]> = {
 };
 
 export async function getRandomFile(type?: Type) {
+	const start = performance.now();
 	const [file] = await neon
 		.select({
 			attachment: attachments,
@@ -29,7 +31,7 @@ export async function getRandomFile(type?: Type) {
 				.from(attachments)
 				.where(
 					and(
-						inArray(attachments.ext, type ? extensions[type] : []),
+						type ? inArray(attachments.ext, extensions[type]) : undefined,
 						not(attachments.bot),
 						not(attachments.nsfw),
 					),
@@ -39,6 +41,7 @@ export async function getRandomFile(type?: Type) {
 				.as("tmp"),
 			eq(attachments.id, sql`tmp.id`),
 		);
+	logger.debug(`getRandomFile took ${performance.now() - start}ms`);
 	return file?.attachment;
 }
 
