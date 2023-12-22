@@ -25,6 +25,7 @@
     "discord-api-types": "0.37.65",
     "discord-ytdl-core": "^5.0.4",
     "discord.js": "14.14.1",
+    "discord.js-minesweeper": "^1.1.0",
     "dotenv": "^16.3.1",
     "emoji-mixer": "^1.0.33",
     "firebase-admin": "^11.11.1",

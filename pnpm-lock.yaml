@@ -165,6 +165,9 @@ importers:
       discord.js:
         specifier: 14.14.1
         version: 14.14.1
+      discord.js-minesweeper:
+        specifier: ^1.1.0
+        version: 1.1.0
       dotenv:
         specifier: ^16.3.1
         version: 16.3.1
@@ -3362,6 +3365,11 @@ packages:
       - ffmpeg-static
       - node-opus
       - opusscript
+    dev: false
+
+  /discord.js-minesweeper@1.1.0:
+    resolution: {integrity: sha512-TpqgzIbX8Nw8L3mJCDqTTyhRKyJS0w3I6NKeiDC6CsI4FoqAueTPMa04F+xM+DbNnga7sD+UjqMoICw9VhGnfQ==}
+    engines: {node: '>=8.0.0'}
     dev: false
 
   /discord.js@14.14.1:
