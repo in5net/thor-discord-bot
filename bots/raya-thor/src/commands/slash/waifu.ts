@@ -80,7 +80,7 @@ export default command(
 			});
 		await i.deferReply();
 
-		const data = await got("https://api.waifu.im/random", {
+		const data = await got("https://api.waifu.im/search", {
 			searchParams: {
 				gif: option === "gif",
 				is_nsfw: option === "nsfw" ? "true" : "false",

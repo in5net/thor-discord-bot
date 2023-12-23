@@ -1,6 +1,6 @@
 import { emojiRegex } from "$services/emoji";
 import { incCount } from "$services/users";
-import { choice, shuffle } from "@in5net/std/random";
+import { choice, randomInt, shuffle } from "@in5net/std/random";
 import { sum } from "@in5net/std/stats";
 import { userMention, type Message } from "discord.js";
 import event from "discord/event";
@@ -168,7 +168,7 @@ async function handleDiceMessage(message: Message) {
 		const modifier = Number.parseInt(groups.modifier || "0");
 		if (count > 0 && sides > 0) {
 			const rolls = Array.from({ length: count }, () => {
-				let n = Math.floor(Math.random() * sides) + 1;
+				let n = randomInt(1, sides);
 				if (operator === "+") n += modifier;
 				else if (operator === "-") n -= modifier;
 				return n;

@@ -1,5 +1,6 @@
-import { Position } from "./position";
-import { booleans, type Str, type Token } from "./token";
+import { CommandError } from "./error";
+import { Range } from "./range";
+import { type Str, type Token } from "./token";
 
 const WHITESPACE = /[ \t\r]/;
 const DIGITS = /\d/;
@@ -12,28 +13,16 @@ const ESCAPE_CHARS: Record<string, string | undefined> = {
 
 const EOF = "\0";
 
-export class LexerError extends Error {
-	constructor(
-		readonly message: string,
-		readonly start: Position,
-		readonly end: Position,
-	) {
-		super(message);
-	}
-}
-
 export default class Lexer {
 	index = 0;
 	char: string;
-	position: Position;
 
 	constructor(private readonly text: string) {
 		this.char = text[0] || EOF;
-		this.position = new Position(text);
 	}
 
-	error(message: string, start: Position): never {
-		throw new LexerError(message, start, this.position.copy());
+	error(message: string, start: number): never {
+		throw new CommandError(message, new Range(start, this.index));
 	}
 
 	lex(): Token[] {
@@ -42,6 +31,7 @@ export default class Lexer {
 		while (token.type !== "eof") {
 			tokens.push(token);
 			token = this.nextToken();
+			console.log(token);
 		}
 
 		tokens.push(token);
@@ -54,42 +44,54 @@ export default class Lexer {
 
 	advance(): void {
 		this.char = this.text[++this.index] || EOF;
-		this.position.advance();
-	}
-
-	get nextChar(): string {
-		return this.text[this.index + 1] || EOF;
 	}
 
 	nextToken(): Token {
-		while (!this.eof()) {
-			const { char } = this;
-			if (WHITESPACE.test(char)) this.advance();
-			else if (char === "\n") {
-				const start = this.position.copy();
+		while (WHITESPACE.test(this.char)) this.advance();
+
+		const { char } = this;
+		const start = this.index;
+		switch (char) {
+			case "\n": {
 				this.advance();
 				return {
 					type: "newline",
 					value: undefined,
-					start,
-					end: this.position.copy(),
+					range: new Range(start, this.index),
 				};
-			} else if (DIGITS.test(char)) return this.number();
-			else if (char === '"') return this.string();
-			else if (/\S/.test(char)) return this.word();
-			else this.error(`Illegal character '${char}'`, this.position.copy());
-		}
+			}
 
-		return {
-			type: "eof",
-			value: undefined,
-			start: Position.EOF,
-			end: Position.EOF,
-		};
+			case '"': {
+				return this.string();
+			}
+
+			case "-": {
+				this.advance();
+				return {
+					type: "minus",
+					value: undefined,
+					range: new Range(start, this.index),
+				};
+			}
+
+			case "\0": {
+				return {
+					type: "eof",
+					value: undefined,
+					range: new Range(start, this.index),
+				};
+			}
+
+			default: {
+				if (DIGITS.test(char)) return this.number();
+				if (/\S/.test(char)) return this.word();
+				this.error(`Invalid character '${char}'`, this.index);
+			}
+		}
 	}
 
 	number(): Token<"int" | "float"> {
-		const start = this.position.copy();
+		const start = this.index;
 
 		let str = this.char;
 		let decimals = 0;
@@ -106,20 +108,19 @@ export default class Lexer {
 		return {
 			type: decimals ? "float" : "int",
 			value: decimals ? Number.parseFloat(str) : Number.parseInt(str),
-			start,
-			end: this.position.copy(),
+			range: new Range(start, this.index),
 		};
 	}
 
 	string(): Token<"str"> {
-		const start = this.position.copy();
+		const start = this.index;
 		this.advance();
 
 		const fragments: Str = [];
 		let str = "";
 		let escapeCharacter = false;
 
-		let fragmentStart = this.position.copy();
+		let fragmentStart = this.index;
 		while (!this.eof() && (this.char !== '"' || escapeCharacter)) {
 			if (escapeCharacter) {
 				str += ESCAPE_CHARS[this.char] || this.char;
@@ -129,12 +130,11 @@ export default class Lexer {
 				fragments.push({
 					type: "str",
 					value: str,
-					start: fragmentStart,
-					end: this.position.copy(),
+					range: new Range(fragmentStart, this.index),
 				});
 				str = "";
 				this.advance();
-				fragmentStart = this.position.copy();
+				fragmentStart = this.index;
 
 				const tokens: Token[] = [];
 				let token = this.nextToken();
@@ -146,7 +146,7 @@ export default class Lexer {
 				tokens.push(token);
 				if ((this.char as string) !== "}")
 					this.error(
-						"When putting expressions in strings, you must wrap the expression in curly braces '{}'. It seems like you forgot the ending '}",
+						"When putting expressions in strings, you must wrap the expression in curly braces '{}'. It seems like you forgot the ending '}'.",
 						start,
 					);
 				fragments.push(tokens);
@@ -159,8 +159,7 @@ export default class Lexer {
 			fragments.push({
 				type: "str",
 				value: str,
-				start: fragmentStart,
-				end: this.position.copy(),
+				range: new Range(fragmentStart, this.index),
 			});
 
 		if (this.char !== '"')
@@ -169,23 +168,31 @@ export default class Lexer {
 				start,
 			);
 		this.advance();
-		return { type: "str", value: fragments, start, end: this.position.copy() };
+		return {
+			type: "str",
+			value: fragments,
+			range: new Range(start, this.index),
+		};
 	}
 
 	word(): Token {
-		const start = this.position.copy();
+		const start = this.index;
 
 		let str = this.char;
 		this.advance();
 
-		while (/\S/.test(this.char)) {
+		while (/\S/.test(this.char) && !this.eof()) {
 			str += this.char;
 			this.advance();
 		}
 
-		const end = this.position.copy();
-		if (booleans.includes(str as (typeof booleans)[number]))
-			return { type: "bool", value: str === "true", start, end };
-		return { type: "ident", value: str, start, end };
+		const end = this.index;
+		if (["true", "false"].includes(str))
+			return {
+				type: "bool",
+				value: str === "true",
+				range: new Range(start, end),
+			};
+		return { type: "ident", value: str, range: new Range(start, end) };
 	}
 }

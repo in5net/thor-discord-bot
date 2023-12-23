@@ -1,6 +1,5 @@
 import { getBits, subtractBits } from "$services/ai/shared";
 import { openai } from "$services/openai";
-import { type ResponseTypes } from "@nick.heiner/openai-edge";
 import db, { eq } from "database/drizzle";
 import { users } from "database/drizzle/schema";
 import command from "discord/commands/slash";
@@ -46,10 +45,12 @@ export default command(
 				return i.reply(`You need ${cost - bits} more bits to use DALL·E 2`);
 		}
 
-		if (image.size > 1024 * 1024 * 4) return i.reply("Image must be under 4MB");
-		if (image.contentType !== "image/png")
-			return i.reply("Image must be a PNG");
-		if (image.width !== image.height) return i.reply("Image must be square");
+		if (
+			image.contentType !== "image/png" ||
+			image.size > 1024 * 1024 * 4 ||
+			image.width !== image.height
+		)
+			return i.reply("Image must be a PNG, under 4MB, and square");
 		await i.deferReply();
 
 		const request = got.stream(image.proxyURL);
@@ -59,15 +60,13 @@ export default command(
 		const filePath = join(temporaryDir, "input.png");
 		await pipeline(request, createWriteStream(filePath));
 
-		const response = await openai.createImageVariation(
-			createReadStream(filePath) as unknown as File,
-			1,
-			"1024x1024",
-			"url",
-			i.user.id,
-		);
-		const { data } =
-			(await response.json()) as ResponseTypes["createImageVariation"];
+		const { data } = await openai.images.createVariation({
+			image: createReadStream(filePath) as unknown as File,
+			n: 1,
+			size: "1024x1024",
+			response_format: "url",
+			user: i.user.id,
+		});
 
 		await i.editReply({
 			files: data.map(({ url = "" }) => url),

@@ -61,7 +61,6 @@ export default command(
 			await new Promise(resolve => setImmediate(resolve));
 		}
 
-		console.log("Done");
 		return i.editReply({
 			files: [new AttachmentBuilder(canvas.toBuffer("image/png"))],
 		});

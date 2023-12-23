@@ -1,6 +1,5 @@
 import { getBits, subtractBits } from "$services/ai/shared";
 import { openai } from "$services/openai";
-import { type ResponseTypes } from "@nick.heiner/openai-edge";
 import db, { eq } from "database/drizzle";
 import { users } from "database/drizzle/schema";
 import command from "discord/commands/slash";
@@ -41,13 +40,12 @@ export default command(
 
 		await i.deferReply();
 
-		const response = await openai.createImage({
+		const { data } = await openai.images.generate({
 			prompt,
 			n,
 			size: "1024x1024",
 			user: i.user.id,
 		});
-		const { data } = (await response.json()) as ResponseTypes["createImage"];
 
 		await i.editReply({
 			content: prompt,

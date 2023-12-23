@@ -42,14 +42,14 @@ export default command(
 		},
 	},
 	async (i, { start, rules, length, angle, iterations, center }) => {
-		await i.deferReply();
-
 		const replacements: Record<string, string> = {};
 		for (const rule of rules.replaceAll(" ", "").split(",")) {
 			const [from, to] = rule.split("=");
 			if (!from || !to) return i.reply(`Invalid rule: ${rule}`);
 			replacements[from] = to;
 		}
+
+		await i.deferReply();
 
 		let result = start;
 		for (let i = 0; i < iterations; i++) {
