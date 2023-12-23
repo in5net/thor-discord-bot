@@ -1,6 +1,7 @@
 import { emojiRegex } from "$services/emoji";
 import { incCount } from "$services/users";
 import { choice, shuffle } from "@in5net/std/random";
+import { sum } from "@in5net/std/stats";
 import { userMention, type Message } from "discord.js";
 import event from "discord/event";
 import { handleTextCommand } from "discord/events/message-create";
@@ -149,8 +150,10 @@ const diceRegex = createRegExp(
 	charIn("dD"),
 	digit.times.between(1, 3).groupedAs("sides"),
 	maybe(
-		charIn("+-").as("operator"),
-		digit.times.between(1, 2).groupedAs("modifier"),
+		exactly(
+			charIn("+-").as("operator"),
+			digit.times.between(1, 2).groupedAs("modifier"),
+		).grouped(),
 	),
 );
 
@@ -170,7 +173,9 @@ async function handleDiceMessage(message: Message) {
 				else if (operator === "-") n -= modifier;
 				return n;
 			});
-			await channel.send(rolls.join(", "));
+			let msg = rolls.join(", ");
+			if (count > 1) msg = `${sum(rolls)} = ${msg}`;
+			await channel.send(msg);
 		}
 	}
 }
