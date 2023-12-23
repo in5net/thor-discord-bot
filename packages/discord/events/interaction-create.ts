@@ -82,7 +82,9 @@ async function handleSlash(i: ChatInputCommandInteraction) {
 			guildId: i.guildId ? BigInt(i.guildId) : undefined,
 		});
 	} catch (error) {
-		logger.error(`Error while running command '${name}':`, error);
+		const msg = `Error while running command '${name}':`;
+		logger.error(msg, error);
+		console.error(msg, error);
 		if (error instanceof Error) {
 			const embed = new EmbedBuilder()
 				.setColor("Red")
