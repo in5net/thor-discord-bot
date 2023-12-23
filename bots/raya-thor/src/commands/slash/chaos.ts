@@ -1,5 +1,5 @@
 import { Vec2, vec2 } from "@in5net/std/math";
-import { randomInt } from "@in5net/std/random";
+import { choice } from "@in5net/std/random";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/slash";
 
@@ -48,9 +48,7 @@ export default command(
 		const current = Vec2.random(size);
 		for (let i = 0; i < frames; i++) {
 			for (let index = 0; index < itersPerFrame; index++) {
-				const index = randomInt(points.length);
-
-				const pt = points[index]!;
+				const pt = choice(points)!;
 
 				current.lerp(pt, stride);
 
