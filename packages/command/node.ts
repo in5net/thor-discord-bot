@@ -7,7 +7,7 @@ export interface NodeMap {
 	bool: Token<"bool">;
 	ident: Token<"ident">;
 	command: {
-		name: Array<Token<"ident">>;
+		name: Node<"ident">;
 		args: Node[];
 	};
 	commands: Array<Node<"command">>;
@@ -17,4 +17,32 @@ export interface NodeMap {
 export interface Node<T extends keyof NodeMap = keyof NodeMap> {
 	type: T;
 	value: NodeMap[T];
+}
+
+export function stringifyNode(node: Node) {
+	switch (node.type) {
+		case "int":
+		case "float":
+		case "str":
+		case "bool":
+		case "ident": {
+			const typedNode = node as Node<
+				"int" | "float" | "str" | "bool" | "ident"
+			>;
+			return typedNode.value.value.toString();
+		}
+
+		case "command": {
+			const typedNode = node as Node<"command">;
+			return `<command ${typedNode.value.name.value.value}>`;
+		}
+
+		case "commands": {
+			return "<commands>";
+		}
+
+		case "eof": {
+			return "<eof>";
+		}
+	}
 }

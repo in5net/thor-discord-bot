@@ -13,7 +13,7 @@ const ESCAPE_CHARS: Record<string, string | undefined> = {
 
 const EOF = "\0";
 
-export default class Lexer {
+export class Lexer {
 	index = 0;
 	char: string;
 

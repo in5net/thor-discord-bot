@@ -5,6 +5,7 @@ import Fuse from "fuse.js";
 import logger from "logger";
 import { caseInsensitive, createRegExp, exactly } from "magic-regexp";
 import { env } from "node:process";
+import { Lexer, Parser, stringifyNode, type Node } from "../../command";
 import { type ArgumentValue, type TextCommand } from "../commands/text";
 
 const prefixRegex = createRegExp(exactly(env.PREFIX).at.lineStart(), [
@@ -13,35 +14,36 @@ const prefixRegex = createRegExp(exactly(env.PREFIX).at.lineStart(), [
 
 export async function handleTextCommand(message: Message) {
 	const { client, content, channel } = message;
-	const lines = content
-		.split("\n")
-		.map(line => line.trim())
-		.filter(Boolean);
-	for (const line of lines) {
-		const args = line.replace(prefixRegex, "").split(" ");
-		if (args.length === 0) continue;
 
-		const trueArguments = [...args];
+	const ast = parseContent(content);
+
+	for (const commandNode of ast.value) {
+		const { name, args } = commandNode.value;
+
+		const trueArguments = [name, ...args];
 		let command: TextCommand | undefined;
 		const commandNames: string[] = [];
-		for (const argument of args) {
-			commandNames.push(argument);
-			const lowerArgument = argument.toLowerCase();
-			const subcommand = client.textCommands.find(
-				({ aliases }, name) =>
-					name === lowerArgument || aliases?.includes(lowerArgument),
-			);
-			if (!subcommand) break;
-			trueArguments.shift();
-			command = subcommand;
+		for (const arg of [name, ...args]) {
+			if (arg.type === "ident") {
+				const subcommandName = (arg as Node<"ident">).value.value;
+				commandNames.push(subcommandName);
+				const lowerArgument = subcommandName.toLowerCase();
+				const subcommand = client.textCommands.find(
+					({ aliases }, name) =>
+						name === lowerArgument || aliases?.includes(lowerArgument),
+				);
+				if (!subcommand) break;
+				trueArguments.shift();
+				command = subcommand;
+			}
 		}
 
-		const name = commandNames.join(" ");
+		const fullName = commandNames.join(" ");
 		if (command)
 			await (command.permissions?.includes("vc") &&
 			!message.member?.voice.channel
 				? message.reply(`You are not in a voice channel`)
-				: runCommand(name, command, trueArguments, message));
+				: runCommand(fullName, command, trueArguments, message));
 		else {
 			const list = [...client.textCommands.entries()]
 				.map(([name, command]) => ({ name, ...command }))
@@ -50,11 +52,11 @@ export async function handleTextCommand(message: Message) {
 				keys: ["name", "aliases"],
 				threshold: 0.2,
 			});
-			const [suggestion] = fuse.search(name, { limit: 1 });
+			const [suggestion] = fuse.search(fullName, { limit: 1 });
 			if (suggestion)
 				await channel.send(
 					`${
-						Math.random() < 0.1 ? "No" : `IDK what \`${name}\` is`
+						Math.random() < 0.1 ? "No" : `IDK what \`${fullName}\` is`
 					}. Did you mean \`${suggestion.item.name}\`${
 						suggestion.item.aliases
 							? `(${suggestion.item.aliases
@@ -67,10 +69,18 @@ export async function handleTextCommand(message: Message) {
 	}
 }
 
+export function parseContent(content: string) {
+	const lexer = new Lexer(content);
+	const tokens = lexer.lex();
+	const parser = new Parser(tokens);
+	const ast = parser.parse();
+	return ast;
+}
+
 export async function runCommand(
 	name: string,
 	command: TextCommand,
-	trueArguments: string[],
+	trueArguments: Node[],
 	message: Message,
 ) {
 	const { client, author, channelId } = message;
@@ -99,7 +109,7 @@ export async function runCommand(
 // eslint-disable-next-line complexity
 function parseArgs(
 	command: TextCommand,
-	trueArguments: string[],
+	trueArguments: Node[],
 	message: Message,
 ) {
 	const parsedArguments: Record<string, ArgumentValue | undefined> = {};
@@ -109,61 +119,67 @@ function parseArgs(
 			argument;
 		switch (argument.type) {
 			case "int": {
-				const argumentString = trueArguments.shift();
-				if (argumentString) {
-					const n = Number.parseInt(argumentString);
-					if (Number.isNaN(n))
-						throw new Error(
-							`Argument \`${name}\` must be an integer, got \`${argumentString}\``,
-						);
-					const small = n < min;
-					const big = n > max;
-					if (small || big)
-						throw new Error(
-							`Argument \`${name}\` must be ${
-								small && big
-									? `between ${min} and ${max}`
-									: small
-									  ? `no less than ${min}`
-									  : `no more than ${max}`
-							}, got \`${argumentString}\``,
-						);
-					value = n;
+				const node = trueArguments.shift();
+				if (node?.type !== "int") {
+					throw new Error(
+						`Argument \`${name}\` must be an integer, got \`${stringifyNode(
+							node,
+						)}\``,
+					);
 				}
+
+				const typedNode = node as Node<"int">;
+				const n = typedNode.value.value;
+				const small = n < min;
+				const big = n > max;
+				if (small || big)
+					throw new Error(
+						`Argument \`${name}\` must be ${
+							small && big
+								? `between ${min} and ${max}`
+								: small
+								  ? `no less than ${min}`
+								  : `no more than ${max}`
+						}, got \`${n}\``,
+					);
+				value = n;
 
 				break;
 			}
 
 			case "float": {
-				const argumentString = trueArguments.shift();
-				if (argumentString) {
-					const n = Number.parseFloat(argumentString);
-					if (Number.isNaN(n))
-						throw new Error(
-							`Argument \`${name}\` must be an float, got \`${argumentString}\``,
-						);
-					const small = n < min;
-					const big = n > max;
-					if (small || big)
-						throw new Error(
-							`Argument \`${name}\` must be ${
-								small && big
-									? `between ${min} and ${max}`
-									: small
-									  ? `no less than ${min}`
-									  : `no more than ${max}`
-							}, got \`${argumentString}\``,
-						);
-					value = n;
+				const node = trueArguments.shift();
+				if (node?.type !== "float") {
+					throw new Error(
+						`Argument \`${name}\` must be an float, got \`${stringifyNode(
+							node,
+						)}\``,
+					);
 				}
+
+				const typedNode = node as Node<"float">;
+				const n = typedNode.value.value;
+				const small = n < min;
+				const big = n > max;
+				if (small || big)
+					throw new Error(
+						`Argument \`${name}\` must be ${
+							small && big
+								? `between ${min} and ${max}`
+								: small
+								  ? `no less than ${min}`
+								  : `no more than ${max}`
+						}, got \`${n}\``,
+					);
+				value = n;
 
 				break;
 			}
 
 			case "word": {
-				const argumentString = trueArguments.shift();
-				if (argumentString) {
-					value = argumentString;
+				const node = trueArguments.shift();
+				if (node) {
+					const value = stringifyNode(node);
 					const small = value.length < min;
 					const big = value.length > max;
 					if (small || big)
@@ -183,14 +199,15 @@ function parseArgs(
 
 			case "words": {
 				const argumentStrs = [...trueArguments];
-				if (argumentStrs.length) value = argumentStrs.filter(Boolean);
+				if (argumentStrs.length)
+					value = argumentStrs.map(stringifyNode).filter(Boolean);
 				break;
 			}
 
 			case "text": {
 				const argumentStrs = [...trueArguments];
 				if (argumentStrs.length) {
-					value = argumentStrs.join(" ");
+					value = argumentStrs.map(stringifyNode).join(" ");
 					const small = value.length < min;
 					const big = value.length > max;
 					if (small || big)

@@ -3,7 +3,7 @@ import { type Node } from "./node";
 import { Range } from "./range";
 import { type Token } from "./token";
 
-export default class Parser {
+export class Parser {
 	index = -1;
 	token!: Token;
 
@@ -61,7 +61,7 @@ export default class Parser {
 		return this.token.type === "eof";
 	}
 
-	parse(): Node {
+	parse(): Node<"commands"> {
 		const commands: Node[] = [];
 
 		this.skipNewlines();
@@ -95,13 +95,9 @@ export default class Parser {
 		}
 
 		const { start } = this.token.range;
-		const name: Array<Token<"ident">> = [];
-		while (this.token.type === "ident") {
-			name.push(this.token);
-			this.advance();
-		}
 
-		if (!name.length) {
+		const name = this.atom();
+		if (name.type !== "ident") {
 			this.error("Expected command name", start);
 		}
 
