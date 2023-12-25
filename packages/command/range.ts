@@ -1,6 +1,6 @@
 export class Range {
 	constructor(
-		readonly start: number,
-		readonly end: number,
+		public start: number,
+		public end: number,
 	) {}
 }

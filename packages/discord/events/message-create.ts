@@ -3,14 +3,14 @@ import { commandExecutions } from "database/drizzle/schema";
 import { EmbedBuilder, type Message, type TextBasedChannel } from "discord.js";
 import Fuse from "fuse.js";
 import logger from "logger";
-import { caseInsensitive, createRegExp, exactly } from "magic-regexp";
-import { env } from "node:process";
-import { Lexer, Parser, stringifyNode, type Node } from "../../command";
+import {
+	CommandError,
+	Lexer,
+	Parser,
+	stringifyNode,
+	type Node,
+} from "../../command";
 import { type ArgumentValue, type TextCommand } from "../commands/text";
-
-const prefixRegex = createRegExp(exactly(env.PREFIX).at.lineStart(), [
-	caseInsensitive,
-]);
 
 export async function handleTextCommand(message: Message) {
 	const { client, content, channel } = message;
@@ -70,11 +70,19 @@ export async function handleTextCommand(message: Message) {
 }
 
 export function parseContent(content: string) {
-	const lexer = new Lexer(content);
-	const tokens = lexer.lex();
-	const parser = new Parser(tokens);
-	const ast = parser.parse();
-	return ast;
+	try {
+		const lexer = new Lexer(content);
+		const tokens = lexer.lex();
+		const parser = new Parser(tokens);
+		const ast = parser.parse();
+		return ast;
+	} catch (error) {
+		const error_ =
+			error instanceof CommandError
+				? new TypeError(error.format(content), { cause: error })
+				: error;
+		throw error_;
+	}
 }
 
 export async function runCommand(
