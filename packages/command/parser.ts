@@ -1,6 +1,5 @@
 import { CommandError } from "./error";
 import { type Node } from "./node";
-import { Range } from "./range";
 import { type Token } from "./token";
 
 export class Parser {
@@ -12,7 +11,7 @@ export class Parser {
 	}
 
 	error(message: string, start: number): never {
-		throw new CommandError(message, new Range(start, this.token.range.end));
+		throw new CommandError(message, [start, this.token.range[1]]);
 	}
 
 	expect(strs: string | string[], start: number): never {
@@ -43,7 +42,7 @@ export class Parser {
 		this.token = this.tokens[++this.index] || {
 			type: "eof",
 			value: undefined,
-			range: new Range(this.index, this.index + 1),
+			range: [this.index, this.index + 1],
 		};
 	}
 
@@ -94,7 +93,7 @@ export class Parser {
 			this.advance();
 		}
 
-		const { start } = this.token.range;
+		const start = this.token.range[0];
 
 		const name = this.atom();
 		if (name.type !== "ident") {
@@ -141,7 +140,7 @@ export class Parser {
 			default: {
 				this.error(
 					"Expected number, string, boolean, or identifier",
-					token.range.start,
+					token.range[0],
 				);
 			}
 		}

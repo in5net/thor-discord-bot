@@ -1,3 +1,4 @@
+import { type Range } from "./range";
 import { type Token } from "./token";
 
 export interface NodeMap {
@@ -43,6 +44,42 @@ export function stringifyNode(node: Node) {
 
 		case "eof": {
 			return "<eof>";
+		}
+	}
+}
+
+export function getNodeRange(node: Node): Range {
+	switch (node.type) {
+		case "int":
+		case "float":
+		case "str":
+		case "bool":
+		case "ident": {
+			const typedNode = node as Node<
+				"int" | "float" | "str" | "bool" | "ident"
+			>;
+			return typedNode.value.range;
+		}
+
+		case "command": {
+			const typedNode = node as Node<"command">;
+			return [
+				typedNode.value.name.value.range[0],
+				getNodeRange(typedNode.value.args.at(-1) || typedNode.value.name)[1],
+			];
+		}
+
+		case "commands": {
+			const typedNode = node as Node<"commands">;
+			const first = typedNode.value.at(0);
+			const last = typedNode.value.at(-1);
+			if (!first) return [0, 0];
+			if (!last) return getNodeRange(first);
+			return [getNodeRange(first)[0], getNodeRange(last)[1]];
+		}
+
+		case "eof": {
+			return [0, 0];
 		}
 	}
 }

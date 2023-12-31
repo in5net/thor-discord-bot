@@ -1,4 +1,4 @@
-import { Range } from "./range";
+import { type Range } from "./range";
 
 export class CommandError extends Error {
 	constructor(
@@ -11,17 +11,16 @@ export class CommandError extends Error {
 	format(source: string) {
 		const {
 			message,
-			range: { start, end },
+			range: [start, end],
 		} = this;
 		const lines = source.split("\n");
 		let lineStartIndex = 0;
 		const relevantLines: string[] = [];
-		const lineRange = new Range(0, 0);
+		let lineRange: Range = [0, 0];
 		for (const line of lines) {
 			if (start >= lineStartIndex) {
 				relevantLines.push(line);
-				lineRange.start = start - lineStartIndex;
-				lineRange.end = end - lineStartIndex;
+				lineRange = [start - lineStartIndex, end - lineStartIndex];
 			}
 
 			lineStartIndex += line.length;
@@ -29,7 +28,7 @@ export class CommandError extends Error {
 		}
 
 		return `${relevantLines.join("\n")}
-${" ".repeat(lineRange.start)}${"^".repeat(lineRange.end - lineRange.start)}
+${" ".repeat(lineRange[0])}${"^".repeat(lineRange[1] - lineRange[0])}
 ${message}`;
 	}
 }

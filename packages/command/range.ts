@@ -1,6 +1,1 @@
-export class Range {
-	constructor(
-		public start: number,
-		public end: number,
-	) {}
-}
+export type Range = [start: number, end: number];

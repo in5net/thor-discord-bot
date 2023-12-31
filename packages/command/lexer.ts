@@ -1,5 +1,4 @@
 import { CommandError } from "./error";
-import { Range } from "./range";
 import { type Str, type Token } from "./token";
 
 const WHITESPACE = /[ \t\r]/;
@@ -22,7 +21,7 @@ export class Lexer {
 	}
 
 	error(message: string, start: number): never {
-		throw new CommandError(message, new Range(start, this.index));
+		throw new CommandError(message, [start, this.index]);
 	}
 
 	lex(): Token[] {
@@ -31,7 +30,6 @@ export class Lexer {
 		while (token.type !== "eof") {
 			tokens.push(token);
 			token = this.nextToken();
-			console.log(token);
 		}
 
 		tokens.push(token);
@@ -57,7 +55,7 @@ export class Lexer {
 				return {
 					type: "newline",
 					value: undefined,
-					range: new Range(start, this.index),
+					range: [start, this.index],
 				};
 			}
 
@@ -70,7 +68,7 @@ export class Lexer {
 				return {
 					type: "minus",
 					value: undefined,
-					range: new Range(start, this.index),
+					range: [start, this.index],
 				};
 			}
 
@@ -78,7 +76,7 @@ export class Lexer {
 				return {
 					type: "eof",
 					value: undefined,
-					range: new Range(start, this.index),
+					range: [start, this.index],
 				};
 			}
 
@@ -108,7 +106,7 @@ export class Lexer {
 		return {
 			type: decimals ? "float" : "int",
 			value: decimals ? Number.parseFloat(str) : Number.parseInt(str),
-			range: new Range(start, this.index),
+			range: [start, this.index],
 		};
 	}
 
@@ -130,7 +128,7 @@ export class Lexer {
 				fragments.push({
 					type: "str",
 					value: str,
-					range: new Range(fragmentStart, this.index),
+					range: [fragmentStart, this.index],
 				});
 				str = "";
 				this.advance();
@@ -159,7 +157,7 @@ export class Lexer {
 			fragments.push({
 				type: "str",
 				value: str,
-				range: new Range(fragmentStart, this.index),
+				range: [fragmentStart, this.index],
 			});
 
 		if (this.char !== '"')
@@ -171,7 +169,7 @@ export class Lexer {
 		return {
 			type: "str",
 			value: fragments,
-			range: new Range(start, this.index),
+			range: [start, this.index],
 		};
 	}
 
@@ -191,8 +189,8 @@ export class Lexer {
 			return {
 				type: "bool",
 				value: str === "true",
-				range: new Range(start, end),
+				range: [start, end],
 			};
-		return { type: "ident", value: str, range: new Range(start, end) };
+		return { type: "ident", value: str, range: [start, end] };
 	}
 }

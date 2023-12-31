@@ -7,10 +7,12 @@ import {
 	CommandError,
 	Lexer,
 	Parser,
+	getNodeRange,
 	stringifyNode,
 	type Node,
 } from "../../command";
 import { type ArgumentValue, type TextCommand } from "../commands/text";
+import { getCommandUsage } from "../help";
 
 export async function handleTextCommand(message: Message) {
 	const { client, content, channel } = message;
@@ -69,10 +71,18 @@ export async function handleTextCommand(message: Message) {
 			}
 		}
 	} catch (error) {
-		await sendError(message.channel, error);
+		await sendError(
+			message.channel,
+			error instanceof CommandError
+				? new TypeError(`\`\`\`${error.format(content)}\`\`\``, {
+						cause: error,
+				  })
+				: error,
+		);
 	}
 }
 
+/** @throws {CommandError} */
 export function parseContent(content: string) {
 	try {
 		const lexer = new Lexer(content);
@@ -82,13 +92,11 @@ export function parseContent(content: string) {
 		return ast;
 	} catch (error) {
 		console.error(error);
-		const error_ =
-			error instanceof CommandError
-				? new TypeError(`\`\`\`${error.format(content)}\`\`\``, {
-						cause: error,
-				  })
-				: error;
-		throw error_;
+		throw error instanceof CommandError
+			? new TypeError(`\`\`\`${error.format(content)}\`\`\``, {
+					cause: error,
+			  })
+			: error;
 	}
 }
 
@@ -99,30 +107,27 @@ export async function runCommand(
 	message: Message,
 ) {
 	const { client, author, channelId } = message;
-	try {
-		const parsedArguments = parseArgs(command, trueArguments, message);
+	const parsedArguments = parseArgs(name, command, trueArguments, message);
 
-		const result = await command.exec({
-			message,
-			args: parsedArguments as Record<string, ArgumentValue>,
-			client,
-		});
-		if (typeof result === "string") await message.channel.send(result);
-		await db.insert(commandExecutions).values({
-			name,
-			type: "text",
-			userId: BigInt(author.id),
-			messageId: BigInt(message.id),
-			channelId: BigInt(channelId),
-			guildId: message.guildId ? BigInt(message.guildId) : undefined,
-		});
-	} catch (error) {
-		await sendError(message.channel, error);
-	}
+	const result = await command.exec({
+		message,
+		args: parsedArguments as Record<string, ArgumentValue>,
+		client,
+	});
+	if (typeof result === "string") await message.channel.send(result);
+	await db.insert(commandExecutions).values({
+		name,
+		type: "text",
+		userId: BigInt(author.id),
+		messageId: BigInt(message.id),
+		channelId: BigInt(channelId),
+		guildId: message.guildId ? BigInt(message.guildId) : undefined,
+	});
 }
 
 // eslint-disable-next-line complexity
 function parseArgs(
+	commandName: string,
 	command: TextCommand,
 	trueArguments: Node[],
 	message: Message,
@@ -135,11 +140,12 @@ function parseArgs(
 		switch (argument.type) {
 			case "int": {
 				const node = trueArguments.shift();
+				if (!node) break;
+
 				if (node?.type !== "int") {
-					throw new Error(
-						`Argument \`${name}\` must be an integer, got \`${stringifyNode(
-							node,
-						)}\``,
+					throw new CommandError(
+						`Argument \`${name}\` must be an integer`,
+						getNodeRange(node),
 					);
 				}
 
@@ -148,14 +154,15 @@ function parseArgs(
 				const small = n < min;
 				const big = n > max;
 				if (small || big)
-					throw new Error(
+					throw new CommandError(
 						`Argument \`${name}\` must be ${
 							small && big
 								? `between ${min} and ${max}`
 								: small
 								  ? `no less than ${min}`
 								  : `no more than ${max}`
-						}, got \`${n}\``,
+						}`,
+						getNodeRange(node),
 					);
 				value = n;
 
@@ -164,11 +171,12 @@ function parseArgs(
 
 			case "float": {
 				const node = trueArguments.shift();
+				if (!node) break;
+
 				if (node?.type !== "float") {
-					throw new Error(
-						`Argument \`${name}\` must be an float, got \`${stringifyNode(
-							node,
-						)}\``,
+					throw new CommandError(
+						`Argument \`${name}\` must be an float`,
+						getNodeRange(node),
 					);
 				}
 
@@ -177,14 +185,15 @@ function parseArgs(
 				const small = n < min;
 				const big = n > max;
 				if (small || big)
-					throw new Error(
+					throw new CommandError(
 						`Argument \`${name}\` must be ${
 							small && big
 								? `between ${min} and ${max}`
 								: small
 								  ? `no less than ${min}`
 								  : `no more than ${max}`
-						}, got \`${n}\``,
+						}`,
+						getNodeRange(node),
 					);
 				value = n;
 
@@ -198,7 +207,7 @@ function parseArgs(
 					const small = value.length < min;
 					const big = value.length > max;
 					if (small || big)
-						throw new Error(
+						throw new CommandError(
 							`Argument \`${name}\` must be ${
 								small && big
 									? `between ${min} and ${max}`
@@ -206,6 +215,7 @@ function parseArgs(
 									  ? `no less than ${min}`
 									  : `no more than ${max}`
 							} characters long`,
+							getNodeRange(node),
 						);
 				}
 
@@ -225,8 +235,10 @@ function parseArgs(
 					value = argumentStrs.map(stringifyNode).join(" ");
 					const small = value.length < min;
 					const big = value.length > max;
-					if (small || big)
-						throw new Error(
+
+					if (small || big) {
+						const first = argumentStrs[0];
+						throw new CommandError(
 							`Argument \`${name}\` must be ${
 								small && big
 									? `between ${min} and ${max}`
@@ -234,7 +246,14 @@ function parseArgs(
 									  ? `no less than ${min}`
 									  : `no more than ${max}`
 							} characters long`,
+							first
+								? [
+										getNodeRange(first)[0],
+										getNodeRange(argumentStrs.at(-1) || first)[1],
+								  ]
+								: [0, 0],
 						);
+					}
 				}
 
 				break;
@@ -263,7 +282,9 @@ function parseArgs(
 		if (value === undefined && argument.default !== undefined)
 			value = argument.default;
 		if (!argument.optional && value === undefined)
-			throw new Error(`Argument \`${name}\` is required`);
+			throw new Error(`Argument \`${name}\` is required
+
+Usage: \`${getCommandUsage(commandName, command)}\``);
 		parsedArguments[name] = value;
 	}
 
@@ -271,7 +292,6 @@ function parseArgs(
 }
 
 async function sendError(channel: TextBasedChannel, error: unknown) {
-	logger.error(error);
 	try {
 		await channel.send({
 			embeds: [

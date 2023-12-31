@@ -90,3 +90,16 @@ function getSubcommands(
 		),
 	);
 }
+
+export function getCommandUsage(name: string, command: TextCommand) {
+	return `${env.PREFIX}${[name, ...(command.aliases || [])].join(
+		"/",
+	)} ${Object.entries(command.args)
+		.map(
+			([name, { type, optional, default: default_ }]) =>
+				`<${name}${optional ? "?" : ""}: ${argumentType2Name[type]}${
+					default_ === undefined ? "" : ` = ${default_}`
+				}>`,
+		)
+		.join(" ")}`;
+}
