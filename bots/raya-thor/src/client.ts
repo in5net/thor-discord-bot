@@ -1,3 +1,4 @@
+import { noop } from "@in5net/std/fn";
 import {
 	ActivityType,
 	Client,
@@ -90,7 +91,7 @@ const webhook = new WebhookClient({ url: process.env.WEBHOOK_URL });
 
 if (env.NODE_ENV === "production")
 	process.on("SIGINT", async () => {
-		await webhook.send(`🚫 ${NAME} is offline`);
+		await webhook.send(`🚫 ${NAME} is offline`).catch(noop);
 		process.exit(0);
 	});
 
