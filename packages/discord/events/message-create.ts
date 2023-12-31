@@ -15,57 +15,61 @@ import { type ArgumentValue, type TextCommand } from "../commands/text";
 export async function handleTextCommand(message: Message) {
 	const { client, content, channel } = message;
 
-	const ast = parseContent(content);
+	try {
+		const ast = parseContent(content);
 
-	for (const commandNode of ast.value) {
-		const { name, args } = commandNode.value;
+		for (const commandNode of ast.value) {
+			const { name, args } = commandNode.value;
 
-		const trueArguments = [name, ...args];
-		let command: TextCommand | undefined;
-		const commandNames: string[] = [];
-		for (const arg of [name, ...args]) {
-			if (arg.type === "ident") {
-				const subcommandName = (arg as Node<"ident">).value.value;
-				commandNames.push(subcommandName);
-				const lowerArgument = subcommandName.toLowerCase();
-				const subcommand = client.textCommands.find(
-					({ aliases }, name) =>
-						name === lowerArgument || aliases?.includes(lowerArgument),
-				);
-				if (!subcommand) break;
-				trueArguments.shift();
-				command = subcommand;
+			const trueArguments = [name, ...args];
+			let command: TextCommand | undefined;
+			const commandNames: string[] = [];
+			for (const arg of [name, ...args]) {
+				if (arg.type === "ident") {
+					const subcommandName = (arg as Node<"ident">).value.value;
+					commandNames.push(subcommandName);
+					const lowerArgument = subcommandName.toLowerCase();
+					const subcommand = client.textCommands.find(
+						({ aliases }, name) =>
+							name === lowerArgument || aliases?.includes(lowerArgument),
+					);
+					if (!subcommand) break;
+					trueArguments.shift();
+					command = subcommand;
+				}
+			}
+
+			const fullName = commandNames.join(" ");
+			if (command)
+				await (command.permissions?.includes("vc") &&
+				!message.member?.voice.channel
+					? message.reply(`You are not in a voice channel`)
+					: runCommand(fullName, command, trueArguments, message));
+			else {
+				const list = [...client.textCommands.entries()]
+					.map(([name, command]) => ({ name, ...command }))
+					.sort((a, b) => a.name.localeCompare(b.name));
+				const fuse = new Fuse(list, {
+					keys: ["name", "aliases"],
+					threshold: 0.2,
+				});
+				const [suggestion] = fuse.search(fullName, { limit: 1 });
+				if (suggestion)
+					await channel.send(
+						`${
+							Math.random() < 0.1 ? "No" : `IDK what \`${fullName}\` is`
+						}. Did you mean \`${suggestion.item.name}\`${
+							suggestion.item.aliases
+								? `(${suggestion.item.aliases
+										.map(alias => `\`${alias}\``)
+										.join(", ")})`
+								: ""
+						}?`,
+					);
 			}
 		}
-
-		const fullName = commandNames.join(" ");
-		if (command)
-			await (command.permissions?.includes("vc") &&
-			!message.member?.voice.channel
-				? message.reply(`You are not in a voice channel`)
-				: runCommand(fullName, command, trueArguments, message));
-		else {
-			const list = [...client.textCommands.entries()]
-				.map(([name, command]) => ({ name, ...command }))
-				.sort((a, b) => a.name.localeCompare(b.name));
-			const fuse = new Fuse(list, {
-				keys: ["name", "aliases"],
-				threshold: 0.2,
-			});
-			const [suggestion] = fuse.search(fullName, { limit: 1 });
-			if (suggestion)
-				await channel.send(
-					`${
-						Math.random() < 0.1 ? "No" : `IDK what \`${fullName}\` is`
-					}. Did you mean \`${suggestion.item.name}\`${
-						suggestion.item.aliases
-							? `(${suggestion.item.aliases
-									.map(alias => `\`${alias}\``)
-									.join(", ")})`
-							: ""
-					}?`,
-				);
-		}
+	} catch (error) {
+		await sendError(message.channel, error);
 	}
 }
 
@@ -77,9 +81,12 @@ export function parseContent(content: string) {
 		const ast = parser.parse();
 		return ast;
 	} catch (error) {
+		console.error(error);
 		const error_ =
 			error instanceof CommandError
-				? new TypeError(error.format(content), { cause: error })
+				? new TypeError(`\`\`\`${error.format(content)}\`\`\``, {
+						cause: error,
+				  })
 				: error;
 		throw error_;
 	}
