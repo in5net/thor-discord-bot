@@ -24,3 +24,10 @@ model Context {
   question String
   answer   String
 }
+
+model StackItem {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  value String
+}
