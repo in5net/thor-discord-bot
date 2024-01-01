@@ -4,7 +4,7 @@ import command from "discord/commands/text";
 import { readFileSync } from "node:fs";
 
 const words = readFileSync(
-	new URL("../../../assets/wordle.txt", import.meta.url),
+	new URL("../../../../assets/wordle.txt", import.meta.url),
 	"utf8",
 ).split("\n");
 

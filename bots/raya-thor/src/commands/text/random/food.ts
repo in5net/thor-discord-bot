@@ -4,7 +4,7 @@ import { env } from "node:process";
 
 export default command(
 	{
-		desc: "Get a random gif from yyyyyyy.info",
+		desc: "Get a random gif of rotating food",
 		args: {},
 	},
 	async ({ message }) => {

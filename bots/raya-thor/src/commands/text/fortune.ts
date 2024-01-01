@@ -1,9 +1,10 @@
 import command from "discord/commands/text";
 import got from "got";
+import { z } from "zod";
 
-interface Data {
-	fortune: string;
-}
+const dataSchema = z.object({
+	fortune: z.string(),
+});
 
 export default command(
 	{
@@ -11,7 +12,8 @@ export default command(
 		args: {},
 	},
 	async () => {
-		const data = await got("http://yerkee.com/api/fortune").json<Data>();
-		return data.fortune;
+		const data = await got("http://yerkee.com/api/fortune").json();
+		const { fortune } = dataSchema.parse(data);
+		return fortune;
 	},
 );

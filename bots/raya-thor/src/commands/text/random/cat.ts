@@ -1,14 +1,16 @@
 import { EmbedBuilder } from "discord.js";
 import command from "discord/commands/text";
 import got from "got";
+import { z } from "zod";
 
-type Data = Array<{
-	breeds: string[];
-	id: string;
-	url: string;
-	width: number;
-	height: number;
-}>;
+const dataSchema = z.array(
+	z.object({
+		id: z.string(),
+		url: z.string(),
+		width: z.number(),
+		height: z.number(),
+	}),
+);
 
 export default command(
 	{
@@ -16,9 +18,8 @@ export default command(
 		args: {},
 	},
 	async ({ message }) => {
-		const [cat] = await got(
-			"https://api.thecatapi.com/v1/images/search",
-		).json<Data>();
+		const data = await got("https://api.thecatapi.com/v1/images/search").json();
+		const [cat] = dataSchema.parse(data);
 		if (!cat) throw new Error("No cat found");
 
 		const embed = new EmbedBuilder()

@@ -2,13 +2,14 @@ import { cache } from "$services/prisma";
 import command from "discord/commands/text";
 import got from "got";
 import {
-    anyOf,
-    caseInsensitive,
-    char,
-    createRegExp,
-    global,
+	anyOf,
+	caseInsensitive,
+	char,
+	createRegExp,
+	global,
 } from "magic-regexp";
 import { readFile } from "node:fs/promises";
+import { z } from "zod";
 
 export default command(
 	{
@@ -89,6 +90,9 @@ const extraPromptsRegex = createRegExp(
 	[caseInsensitive, global],
 );
 
+const dataSchema = z.object({
+	results: z.tuple([z.object({ text: z.string() })]),
+});
 async function answer(
 	prompt: string,
 	previous: Array<{ question: string; answer: string }>,
@@ -127,6 +131,9 @@ Raya: `,
 				skip_special_tokens: true,
 			},
 		})
-		.json<{ results: [{ text: string }] }>();
-	return data.results[0].text.replace(extraPromptsRegex, "").trim();
+		.json();
+	return dataSchema
+		.parse(data)
+		.results[0].text.replace(extraPromptsRegex, "")
+		.trim();
 }

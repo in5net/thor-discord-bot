@@ -2,54 +2,33 @@ import { incCount } from "$services/users";
 import { ChannelType, EmbedBuilder, type ColorResolvable } from "discord.js";
 import command from "discord/commands/slash";
 import got from "got";
+import { z } from "zod";
 
-interface TagModel {
-	/** Tag Id */
-	tag_id: number;
-	/** Name */
-	name: string;
-	/** Description */
-	description: string;
-	/**
-	 * Is Nsfw
-	 * @default false
-	 */
-	is_nsfw?: boolean;
-}
-
-interface Data {
-	images: Array<{
-		/** Signature */
-		signature: string;
-		/** Extension */
-		extension: string;
-		/** Image Id */
-		image_id: number;
-		/** Favourites */
-		favourites: number;
-		/** Dominant Color */
-		dominant_color: string;
-		/** Source */
-		source?: string;
-		/** Uploaded At */
-		uploaded_at: string;
-		/**
-		 * Is Nsfw
-		 * @default false
-		 */
-		is_nsfw?: boolean;
-		/** Width */
-		width: number;
-		/** Height */
-		height: number;
-		/** Url */
-		url: string;
-		/** Preview Url */
-		preview_url: string;
-		/** Tags */
-		tags: TagModel[];
-	}>;
-}
+const tagSchema = z.object({
+	tag_id: z.number(),
+	name: z.string(),
+	description: z.string(),
+	is_nsfw: z.boolean().default(false),
+});
+const dataSchema = z.object({
+	images: z.array(
+		z.object({
+			signature: z.string(),
+			extension: z.string(),
+			image_id: z.number(),
+			favourites: z.number(),
+			dominant_color: z.string(),
+			source: z.string().optional(),
+			uploaded_at: z.string(),
+			is_nsfw: z.boolean().default(false),
+			width: z.number(),
+			height: z.number(),
+			url: z.string(),
+			preview_url: z.string(),
+			tags: z.array(tagSchema),
+		}),
+	),
+});
 
 export default command(
 	{
@@ -85,8 +64,8 @@ export default command(
 				gif: option === "gif",
 				is_nsfw: option === "nsfw" ? "true" : "false",
 			},
-		}).json<Data>();
-		const image = data.images[0];
+		}).json();
+		const [image] = dataSchema.parse(data).images;
 		if (!image) throw new Error("No waifu found");
 
 		const embed = new EmbedBuilder()

@@ -2,6 +2,7 @@ import { incCount } from "$services/users";
 import { EmbedBuilder } from "discord.js";
 import command from "discord/commands/text";
 import got from "got";
+import { z } from "zod";
 
 export default command(
 	{
@@ -15,10 +16,12 @@ export default command(
 	},
 );
 
+const dataSchema = z.object({
+	url: z.string(),
+});
 export async function getCatgirlEmbed() {
-	const { url } = await got("https://api.waifu.pics/sfw/neko").json<{
-		url: string;
-	}>();
+	const data = await got("https://api.waifu.pics/sfw/neko").json();
+	const { url } = dataSchema.parse(data);
 
 	return new EmbedBuilder()
 		.setTitle("Catgirl")

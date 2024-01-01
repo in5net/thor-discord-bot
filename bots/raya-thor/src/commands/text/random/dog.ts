@@ -1,14 +1,16 @@
 import { EmbedBuilder } from "discord.js";
 import command from "discord/commands/text";
 import got from "got";
+import { z } from "zod";
 
-type Data = Array<{
-	breeds: string[];
-	id: string;
-	url: string;
-	width: number;
-	height: number;
-}>;
+const dataSchema = z.array(
+	z.object({
+		id: z.string(),
+		url: z.string(),
+		width: z.number(),
+		height: z.number(),
+	}),
+);
 
 export default command(
 	{
@@ -16,9 +18,8 @@ export default command(
 		args: {},
 	},
 	async ({ message }) => {
-		const [dog] = await got(
-			"https://api.thedogapi.com/v1/images/search",
-		).json<Data>();
+		const data = await got("https://api.thedogapi.com/v1/images/search").json();
+		const [dog] = dataSchema.parse(data);
 		if (!dog) throw new Error("No dog found");
 
 		const embed = new EmbedBuilder()

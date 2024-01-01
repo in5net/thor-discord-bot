@@ -1,5 +1,5 @@
 import command from "discord/commands/text";
-import { getRandomFile, sendFile } from "../slash/file/shared";
+import { getRandomFile, sendFile } from "../../slash/file/shared";
 
 export default command(
 	{

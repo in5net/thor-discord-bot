@@ -6,7 +6,7 @@ import ms from "ms";
 import { readFile } from "node:fs/promises";
 import { env } from "node:process";
 
-const gpt3DescPath = new URL("../../../gpt3-desc.txt", import.meta.url);
+const gpt3DescPath = new URL("../../../../gpt3-desc.txt", import.meta.url);
 const desc = ttlCache(async () => readFile(gpt3DescPath, "utf8"), ms("10 min"));
 
 export default command(

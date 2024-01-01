@@ -20,7 +20,7 @@ import {
 	whitespace,
 } from "magic-regexp";
 import { env } from "node:process";
-import { handleWordleMessage } from "../commands/text/wordle";
+import { handleWordleMessage } from "../commands/text/games/wordle";
 import randomResponses, {
 	randomResponsesRef as randomResponsesReference,
 	words,

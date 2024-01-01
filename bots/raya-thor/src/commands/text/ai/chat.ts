@@ -9,10 +9,13 @@ import ms from "ms";
 import { readFile } from "node:fs/promises";
 
 const chatGPTSystemPath = new URL(
-	"../../../chatgpt-system.txt",
+	"../../../../chatgpt-system.txt",
 	import.meta.url,
 );
-const chatGPTDescPath = new URL("../../../chatgpt-desc.txt", import.meta.url);
+const chatGPTDescPath = new URL(
+	"../../../../chatgpt-desc.txt",
+	import.meta.url,
+);
 const system = ttlCache(
 	async () => readFile(chatGPTSystemPath, "utf8"),
 	ms("10 min"),

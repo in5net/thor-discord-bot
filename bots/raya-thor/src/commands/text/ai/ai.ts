@@ -3,7 +3,7 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 import { DynamicStructuredTool } from "langchain/tools";
 import { Calculator } from "langchain/tools/calculator";
 import { z } from "zod";
-import musicCommand from "./music/command";
+import musicCommand from "../music/command";
 
 export default musicCommand(
 	{
