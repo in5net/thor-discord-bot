@@ -284,7 +284,12 @@ function parseArgs(
 		if (!argument.optional && value === undefined)
 			throw new Error(`Argument \`${name}\` is required
 
-Usage: \`${getCommandUsage(commandName, command)}\``);
+Usage: \`${getCommandUsage(commandName, command)}\`${
+				command.examples
+					? `
+Examples: \`\`\`${command.examples.join("\n")}\`\`\``
+					: ""
+			}`);
 		parsedArguments[name] = value;
 	}
 

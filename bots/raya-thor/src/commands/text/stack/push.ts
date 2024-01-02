@@ -4,6 +4,7 @@ import command from "discord/commands/text";
 export default command(
 	{
 		desc: "Add an item to the stack",
+		examples: ["push hi there", "push secret message"],
 		args: {
 			value: {
 				type: "text",

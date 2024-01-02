@@ -7,6 +7,7 @@ export default command(
 	{
 		aliases: ["g", "gg", "abc", "goog"],
 		desc: "Google Search",
+		examples: ["google how to make string cheese"],
 		args: {
 			query: {
 				type: "text",
