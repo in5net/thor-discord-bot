@@ -14,7 +14,8 @@ export default command(
 				min: 3,
 				max: 9,
 			},
-		} as const,
+		},
+		examples: ["#ff0000", "ff0000", "f00", "#ff05"],
 	},
 	async ({ message, args: { code } }) => {
 		const { createCanvas } = await import("@napi-rs/canvas");

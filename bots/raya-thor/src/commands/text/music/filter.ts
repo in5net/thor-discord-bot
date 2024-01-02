@@ -13,6 +13,7 @@ export default musicCommand(
 				optional: true,
 			},
 		},
+		examples: ["nightcore", ""],
 		permissions: ["vc"],
 	},
 	async ({ message, args: { filters }, voice }) => {

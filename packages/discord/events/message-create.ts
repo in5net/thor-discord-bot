@@ -3,6 +3,7 @@ import { commandExecutions } from "database/drizzle/schema";
 import { EmbedBuilder, type Message, type TextBasedChannel } from "discord.js";
 import Fuse from "fuse.js";
 import logger from "logger";
+import { env } from "node:process";
 import {
 	CommandError,
 	Lexer,
@@ -173,14 +174,14 @@ function parseArgs(
 				const node = trueArguments.shift();
 				if (!node) break;
 
-				if (node?.type !== "float") {
+				if (node?.type !== "int" && node?.type !== "float") {
 					throw new CommandError(
-						`Argument \`${name}\` must be an float`,
+						`Argument \`${name}\` must be an number`,
 						getNodeRange(node),
 					);
 				}
 
-				const typedNode = node as Node<"float">;
+				const typedNode = node as Node<"int" | "float">;
 				const n = typedNode.value.value;
 				const small = n < min;
 				const big = n > max;
@@ -287,7 +288,9 @@ function parseArgs(
 Usage: \`${getCommandUsage(commandName, command)}\`${
 				command.examples
 					? `
-Examples: \`\`\`${command.examples.join("\n")}\`\`\``
+Examples: \`\`\`${command.examples
+							.map(args => `${env.PREFIX}${commandName} ${args}`)
+							.join("\n")}\`\`\``
 					: ""
 			}`);
 		parsedArguments[name] = value;

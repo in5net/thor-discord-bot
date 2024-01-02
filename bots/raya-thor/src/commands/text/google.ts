@@ -7,13 +7,13 @@ export default command(
 	{
 		aliases: ["g", "gg", "abc", "goog"],
 		desc: "Google Search",
-		examples: ["google how to make string cheese"],
 		args: {
 			query: {
 				type: "text",
 				desc: "What to search for",
 			},
 		},
+		examples: ["google how to make string cheese"],
 	},
 	async ({ message, args: { query } }) => {
 		const result = await api.cse.list({

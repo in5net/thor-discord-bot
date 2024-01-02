@@ -13,6 +13,7 @@ export default command(
 				desc: "The message to convert",
 			},
 		},
+		examples: ["can you believe it"],
 	},
 	async ({ args: { message } }) => {
 		const converted = message

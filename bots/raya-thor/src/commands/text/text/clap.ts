@@ -9,6 +9,7 @@ export default command(
 				desc: "The text to clapify",
 			},
 		},
+		examples: ["there is just no way"],
 	},
 	({ args: { text } }) => text.split(" ").join(" 👏 "),
 );

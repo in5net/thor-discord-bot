@@ -10,6 +10,7 @@ export default command(
 				desc: "What to hash",
 			},
 		},
+		examples: ["shat"],
 	},
 	({ args: { input } }) => createHash("sha256").update(input).digest("hex"),
 );

@@ -36,6 +36,7 @@ export default command(
 				max: 256,
 			},
 		},
+		examples: ["hi", "what is the meaning of life?"],
 	},
 	async ({ message, args: { prompt } }) => {
 		const channelId = BigInt(message.channelId);

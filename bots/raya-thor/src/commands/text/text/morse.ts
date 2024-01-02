@@ -55,6 +55,7 @@ export default command(
 				desc: "The message to encode",
 			},
 		},
+		examples: ["googas"],
 	},
 	async ({ args: { message } }) => {
 		const morse = message

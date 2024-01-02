@@ -10,6 +10,7 @@ export default command(
 				desc: "The message to owoify",
 			},
 		},
+		examples: ["I love lean!!"],
 	},
 	({ args: { message } }) => owofire(message),
 );

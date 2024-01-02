@@ -12,6 +12,7 @@ export default command(
 				desc: "The amount of money you have to spend on RTX 4090s",
 			},
 		},
+		examples: ["10000", "3141"],
 	},
 	async ({ message, args: { price } }) => {
 		const count = price / RTX_4090_PRICE;

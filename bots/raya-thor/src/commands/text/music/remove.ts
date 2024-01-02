@@ -15,6 +15,7 @@ export default musicCommand(
 			},
 		},
 		permissions: ["vc"],
+		examples: ["1 3", "last 1", "1-3"],
 	},
 	async ({ message, args: { ns }, voice }) => {
 		const { queue } = voice;

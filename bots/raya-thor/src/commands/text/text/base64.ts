@@ -9,6 +9,7 @@ export default command(
 				desc: "What to encode",
 			},
 		},
+		examples: ["hello world"],
 	},
 	({ args: { input } }) => btoa(input),
 );

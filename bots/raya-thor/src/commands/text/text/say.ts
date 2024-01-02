@@ -9,6 +9,7 @@ export default command(
 				desc: "The message to send",
 			},
 		},
+		examples: ["wassup"],
 	},
 	async ({ message, args: { msg } }) => {
 		await message.delete();

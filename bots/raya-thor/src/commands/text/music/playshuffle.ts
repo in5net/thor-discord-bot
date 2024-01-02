@@ -13,6 +13,7 @@ export default musicCommand(
 			},
 		},
 		permissions: ["vc"],
+		examples: ["https://youtu.be/dQw4w9WgXcQ terraria ost"],
 	},
 	async ({ message, args: { queries }, voice }) =>
 		voice.add(message, queries, true),

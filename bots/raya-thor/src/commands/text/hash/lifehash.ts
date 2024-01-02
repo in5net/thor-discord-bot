@@ -17,6 +17,7 @@ export default command(
 				desc: "The message to hash and convert to a lifehash",
 			},
 		},
+		examples: ["conway"],
 	},
 	async ({ message: { channel }, args: { message } }) => {
 		const { createCanvas } = await import("@napi-rs/canvas");

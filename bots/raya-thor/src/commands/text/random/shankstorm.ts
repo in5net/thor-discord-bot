@@ -12,6 +12,7 @@ export default command(
 				default: 100,
 			},
 		},
+		examples: ["", "50"],
 	},
 	async ({ message: { channel }, args: { length } }) => {
 		const text = Array.from<number>({ length })

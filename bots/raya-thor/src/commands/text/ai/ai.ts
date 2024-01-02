@@ -16,6 +16,7 @@ export default musicCommand(
 				max: 256,
 			},
 		},
+		examples: ["play fishing music"],
 	},
 	async ({ message, voice, args: { prompt } }) => {
 		const { channel, author } = message;

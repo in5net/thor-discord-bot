@@ -64,8 +64,8 @@ export interface TextCommandParams<T extends Arguments> {
 	aliases?: string[];
 	desc: string;
 	optionalPrefix?: boolean;
-	examples?: string[];
 	args: T;
+	examples?: string[];
 	permissions?: Permission[];
 }
 

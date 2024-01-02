@@ -34,6 +34,7 @@ export default command(
 				optional: true,
 			},
 		},
+		examples: ["does lean lean taste as good as people say?"],
 	},
 	async ({ message }) => message.reply(choice(answers) || ""),
 );

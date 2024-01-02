@@ -14,6 +14,7 @@ export default command(
 				optional: true,
 			},
 		},
+		examples: ["", "we are number one"],
 	},
 	async ({ message, args: { song_name } }) => {
 		const { guildId } = message;

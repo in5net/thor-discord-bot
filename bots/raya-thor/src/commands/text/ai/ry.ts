@@ -20,6 +20,7 @@ export default command(
 				max: 512,
 			},
 		},
+		examples: ["do you love lean?", "what's 77 + 33?"],
 	},
 	async ({ message, args: { prompt } }) => {
 		const channelId = BigInt(message.channelId);

@@ -12,6 +12,7 @@ export default musicCommand(
 			},
 		},
 		permissions: ["vc"],
+		examples: ["1:30"],
 	},
 	async ({ message, args: { time }, voice }) => {
 		const seconds = str2Seconds(time);

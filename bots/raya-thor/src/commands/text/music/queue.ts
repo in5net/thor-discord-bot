@@ -12,6 +12,7 @@ export default musicCommand(
 				optional: true,
 			},
 		},
+		examples: ["", "5"],
 	},
 	async ({ message, args: { n }, voice }) => {
 		const { channel } = message;

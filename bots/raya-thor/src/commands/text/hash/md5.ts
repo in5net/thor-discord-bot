@@ -10,6 +10,7 @@ export default command(
 				desc: "What to hash",
 			},
 		},
+		examples: ["mdeez5"],
 	},
 	({ args: { input } }) => createHash("md5").update(input).digest("hex"),
 );

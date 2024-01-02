@@ -87,6 +87,7 @@ export default command(
 				default: 100,
 			},
 		},
+		examples: ["", "50"],
 	},
 	({ args: { length } }) =>
 		Array.from({ length })
