@@ -27,6 +27,6 @@ export default command(
 		const count = await cache.stackItem.count();
 		return `Item popped! New length: ${count}
 Pushed at: ${time(item.createdAt)}
-Value: ${item.id}`;
+Value: ${item.value}`;
 	},
 );
