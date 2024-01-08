@@ -1,4 +1,3 @@
-import { noop } from "@in5net/std/fn";
 import {
 	ActivityType,
 	Client,
@@ -13,7 +12,7 @@ import { type TextCommand } from "discord/commands/text";
 import { loadDiscordEvents } from "discord/loaders/events";
 import ms from "ms";
 import { scheduleJob } from "node-schedule";
-import process, { env } from "node:process";
+import process from "node:process";
 import { messageCommands, slashCommands, textCommands } from "./commands";
 
 const { NAME, DISCORD_TOKEN } = process.env;
@@ -88,12 +87,6 @@ client.messageCommands = messageCommands;
 await client.login(DISCORD_TOKEN);
 
 const webhook = new WebhookClient({ url: process.env.WEBHOOK_URL });
-
-if (env.NODE_ENV === "production")
-	process.on("SIGINT", async () => {
-		await webhook.send(`🚫 ${NAME} is offline`).catch(noop);
-		process.exit(0);
-	});
 
 const tz = "America/New_York";
 scheduleJob(

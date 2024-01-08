@@ -147,6 +147,9 @@ importers:
       cheerio:
         specifier: 1.0.0-rc.12
         version: 1.0.0-rc.12
+      chess.js:
+        specifier: 1.0.0-beta.7
+        version: 1.0.0-beta.7
       database:
         specifier: workspace:*
         version: link:../../packages/database
@@ -2954,6 +2957,10 @@ packages:
       htmlparser2: 8.0.2
       parse5: 7.1.2
       parse5-htmlparser2-tree-adapter: 7.0.0
+    dev: false
+
+  /chess.js@1.0.0-beta.7:
+    resolution: {integrity: sha512-2qG/f3M9Lil/hBey2uoJy9zhNr1BWIXZngRUJFt7j1QqS5Y5Ywq8Rd3l7ZBCbyJjhsLhxTcVhv6xy7BfjC19Dw==}
     dev: false
 
   /chokidar@3.5.3:

@@ -31,3 +31,11 @@ model StackItem {
 
   value String
 }
+
+model ChessGame {
+  userId    BigInt   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  fen String
+}

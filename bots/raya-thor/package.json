@@ -19,6 +19,7 @@
     "ai": "^2.2.27",
     "chalk-template": "^1.1.0",
     "cheerio": "1.0.0-rc.12",
+    "chess.js": "1.0.0-beta.7",
     "database": "workspace:*",
     "decode-gif": "^1.0.1",
     "discord": "workspace:*",

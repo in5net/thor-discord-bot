@@ -27,16 +27,20 @@ export async function handleTextCommand(message: Message) {
 			const trueArguments = [name, ...args];
 			let command: TextCommand | undefined;
 			const commandNames: string[] = [];
+			let commandName = "";
 			for (const arg of [name, ...args]) {
 				if (arg.type === "ident") {
 					const subcommandName = (arg as Node<"ident">).value.value;
 					commandNames.push(subcommandName);
 					const lowerArgument = subcommandName.toLowerCase();
 					const subcommand = client.textCommands.find(
+						// eslint-disable-next-line @typescript-eslint/no-loop-func
 						({ aliases }, name) =>
-							name === lowerArgument || aliases?.includes(lowerArgument),
+							name.startsWith(commandName) &&
+							(name === lowerArgument || aliases?.includes(lowerArgument)),
 					);
 					if (!subcommand) break;
+					commandName = `${commandName} ${subcommandName}`.trimStart();
 					trueArguments.shift();
 					command = subcommand;
 				}
@@ -204,7 +208,7 @@ function parseArgs(
 			case "word": {
 				const node = trueArguments.shift();
 				if (node) {
-					const value = stringifyNode(node);
+					value = stringifyNode(node);
 					const small = value.length < min;
 					const big = value.length > max;
 					if (small || big)
