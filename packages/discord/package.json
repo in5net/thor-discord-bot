@@ -6,9 +6,9 @@
     "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u"
   },
   "dependencies": {
-    "@in5net/std": "0.15.0",
+    "@in5net/std": "0.16.0",
     "database": "workspace:*",
-    "discord-api-types": "0.37.65",
+    "discord-api-types": "0.37.67",
     "discord.js": "14.14.1",
     "fast-glob": "^3.3.2",
     "fuse.js": "^7.0.0",
@@ -16,6 +16,6 @@
     "magic-regexp": "^0.7.0"
   },
   "devDependencies": {
-    "@types/node": "20.10.3"
+    "@types/node": "20.11.5"
   }
 }

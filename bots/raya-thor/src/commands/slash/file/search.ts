@@ -1,5 +1,5 @@
-import { eq, icontains, neon } from "database/drizzle";
-import { attachments } from "database/drizzle/neon";
+import { discordDb, eq, icontains } from "database/drizzle";
+import { attachments } from "database/drizzle/discord";
 import command from "discord/commands/slash";
 import { sendFile } from "./shared";
 
@@ -11,7 +11,7 @@ export default command(
 				type: "string",
 				desc: "The file name to search for",
 				async autocomplete(search) {
-					const results = await neon.query.attachments.findMany({
+					const results = await discordDb.query.attachments.findMany({
 						columns: {
 							id: true,
 							filename: true,
@@ -28,7 +28,7 @@ export default command(
 		},
 	},
 	async (i, { file }) => {
-		const fileData = await neon.query.attachments.findFirst({
+		const fileData = await discordDb.query.attachments.findFirst({
 			where: eq(attachments.id, BigInt(file)),
 		});
 		if (!fileData) return i.reply("No file found");

@@ -11,17 +11,15 @@
     "db:push": "drizzle-kit push:mysql"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^0.6.0",
     "@paralleldrive/cuid2": "^2.2.2",
-    "@planetscale/database": "^1.11.0",
-    "@prisma/client": "5.6.0",
-    "drizzle-orm": "^0.29.1",
-    "prisma": "5.6.0",
-    "ws": "^8.14.2",
+    "@planetscale/database": "^1.14.0",
+    "@prisma/client": "5.8.1",
+    "drizzle-orm": "^0.29.3",
+    "postgres": "^3.4.3",
+    "prisma": "5.8.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/ws": "^8.5.10",
-    "drizzle-kit": "^0.20.6"
+    "drizzle-kit": "^0.20.13"
   }
 }

@@ -9,10 +9,10 @@
   },
   "dependencies": {
     "cloud-pine": "^2.0.0",
-    "pino": "^8.16.2"
+    "pino": "^8.17.2"
   },
   "devDependencies": {
-    "@types/node": "20.10.3",
-    "pino-pretty": "^10.2.3"
+    "@types/node": "20.11.5",
+    "pino-pretty": "^10.3.1"
   }
 }

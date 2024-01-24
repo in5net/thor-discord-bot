@@ -1,16 +1,13 @@
 import "./env";
 
-import { Pool, neonConfig } from "@neondatabase/serverless";
 import { connect } from "@planetscale/database";
 import { ilike, like, type AnyColumn } from "drizzle-orm";
-import { drizzle as neonDrizzle } from "drizzle-orm/neon-serverless";
 import { drizzle } from "drizzle-orm/planetscale-serverless";
+import { drizzle as pgDrizzle } from "drizzle-orm/postgres-js";
 import { env } from "node:process";
-import ws from "ws";
-import * as neonSchema from "./drizzle/neon";
+import postgres from "postgres";
+import * as discordSchema from "./drizzle/discord";
 import * as schema from "./drizzle/schema";
-
-neonConfig.webSocketConstructor = ws;
 
 const conn = connect({
 	host: env.DATABASE_HOST,
@@ -20,8 +17,11 @@ const conn = connect({
 const db = drizzle(conn, { schema, logger: true });
 export default db;
 
-const pool = new Pool({ connectionString: env.NEON_DATABASE_URL });
-export const neon = neonDrizzle(pool, { schema: neonSchema, logger: true });
+const pgClient = postgres(env.PG_DATABASE_URL || "");
+export const discordDb = pgDrizzle(pgClient, {
+	schema: discordSchema,
+	logger: true,
+});
 
 export * from "drizzle-orm";
 
