@@ -8,11 +8,11 @@
     "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u"
   },
   "dependencies": {
-    "cloud-pine": "^2.0.0",
-    "pino": "^8.17.2"
+    "cloud-pine": "^2.0.1",
+    "pino": "^8.18.0"
   },
   "devDependencies": {
-    "@types/node": "20.11.5",
+    "@types/node": "20.11.17",
     "pino-pretty": "^10.3.1"
   }
 }
