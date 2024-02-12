@@ -1,4 +1,4 @@
-import woof from "$services/woof";
+import woof from "$lib/woof";
 import { type SongType } from "$src/music/song";
 import { quantify } from "@in5net/std/string";
 import logger from "logger";

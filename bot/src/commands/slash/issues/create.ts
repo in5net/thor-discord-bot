@@ -1,5 +1,5 @@
-import { createEmbed } from "$services/embed";
-import prisma from "$services/prisma";
+import { createEmbed } from "$lib/embed";
+import prisma from "$lib/prisma";
 import { objectKeys } from "@in5net/std/object";
 import { IssueType } from "database";
 import command from "discord/commands/slash";

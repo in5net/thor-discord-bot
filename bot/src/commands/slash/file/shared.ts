@@ -1,4 +1,4 @@
-import { createEmbed } from "$services/embed";
+import { createEmbed } from "$lib/embed";
 import { and, discordDb, eq, inArray, not, sql } from "database/drizzle";
 import { attachments, messages } from "database/drizzle/discord";
 import {

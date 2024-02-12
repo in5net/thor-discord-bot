@@ -1,4 +1,4 @@
-import ImageSearch from "$services/customsearch";
+import ImageSearch from "$lib/customsearch";
 import {
 	ActionRowBuilder,
 	ButtonBuilder,

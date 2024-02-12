@@ -1,5 +1,5 @@
-import { emojiRegex } from "$services/emoji";
-import { incCount } from "$services/users";
+import { emojiRegex } from "$lib/emoji";
+import { incCount } from "$lib/users";
 import { choice, randomInt, shuffle } from "@in5net/std/random";
 import { sum } from "@in5net/std/stats";
 import { userMention, type Message } from "discord.js";

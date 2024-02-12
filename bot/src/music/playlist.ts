@@ -1,4 +1,4 @@
-import prisma from "$services/prisma";
+import prisma from "$lib/prisma";
 import { type Prisma } from "database";
 import db, { and, eq } from "database/drizzle";
 import { playlists } from "database/drizzle/schema";

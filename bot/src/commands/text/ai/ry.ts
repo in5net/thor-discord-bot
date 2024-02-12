@@ -1,5 +1,5 @@
-import { filter, openai } from "$services/openai";
-import { cache } from "$services/prisma";
+import { filter, openai } from "$lib/openai";
+import { cache } from "$lib/prisma";
 import { ttlCache } from "@in5net/std/fn";
 import command from "discord/commands/text";
 import ms from "ms";

@@ -1,4 +1,4 @@
-import youtube from "$services/youtube";
+import youtube from "$lib/youtube";
 import { createAudioResource, StreamType } from "@discordjs/voice";
 import { memo } from "@in5net/std/fn";
 import chalk from "chalk-template";

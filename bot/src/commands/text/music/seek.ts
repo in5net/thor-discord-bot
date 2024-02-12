@@ -1,4 +1,4 @@
-import { str2Seconds } from "$services/time";
+import { str2Seconds } from "$lib/time";
 import play from "play-dl";
 import musicCommand from "./command";
 

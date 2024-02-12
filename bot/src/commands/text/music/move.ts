@@ -1,4 +1,4 @@
-import woof from "$services/woof";
+import woof from "$lib/woof";
 import musicCommand from "./command";
 
 export default musicCommand(

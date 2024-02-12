@@ -1,5 +1,5 @@
-import { replicate } from "$services/ai/replicate";
-import { getBits, subtractBits } from "$services/ai/shared";
+import { replicate } from "$lib/ai/replicate";
+import { getBits, subtractBits } from "$lib/ai/shared";
 import db, { eq } from "database/drizzle";
 import { users } from "database/drizzle/schema";
 import command from "discord/commands/slash";

@@ -1,4 +1,4 @@
-import { cache } from "$services/prisma";
+import { cache } from "$lib/prisma";
 import { time } from "discord.js";
 import command from "discord/commands/text";
 

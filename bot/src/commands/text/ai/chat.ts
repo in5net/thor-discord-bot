@@ -1,5 +1,5 @@
-import { filter, openai } from "$services/openai";
-import { cache } from "$services/prisma";
+import { filter, openai } from "$lib/openai";
+import { cache } from "$lib/prisma";
 import { throttle } from "@in5net/std/async";
 import { ttlCache } from "@in5net/std/fn";
 import { OpenAIStream as openAIStream } from "ai";

@@ -1,4 +1,4 @@
-import { sec2Str } from "$services/time";
+import { sec2Str } from "$lib/time";
 import * as playlist from "$src/music/playlist";
 import db, { and, contains, eq } from "database/drizzle";
 import { playlists } from "database/drizzle/schema";

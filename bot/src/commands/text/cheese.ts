@@ -1,4 +1,4 @@
-import { incCount } from "$services/users";
+import { incCount } from "$lib/users";
 import command from "discord/commands/text";
 import { env } from "node:process";
 

@@ -1,7 +1,7 @@
-import { firestore } from "$services/firebase";
+import { firestore } from "$lib/firebase";
 import {
-	type DocumentReference,
 	type CollectionReference,
+	type DocumentReference,
 	type Timestamp,
 } from "firebase-admin/firestore";
 import trkl from "trkl";

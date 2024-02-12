@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import { createEmbed } from "$services/embed";
-import { sec2Str } from "$services/time";
+import { createEmbed } from "$lib/embed";
+import { sec2Str } from "$lib/time";
 import { remove } from "@in5net/std/array";
 import { shuffle } from "@in5net/std/random";
 import {

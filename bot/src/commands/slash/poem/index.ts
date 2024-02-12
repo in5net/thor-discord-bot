@@ -1,4 +1,4 @@
-import { parse } from "$services/rcpt";
+import { parse } from "$lib/rcpt";
 import { choice, randomInt } from "@in5net/std/random";
 import { capitalize } from "@in5net/std/string";
 import command from "discord/commands/slash";

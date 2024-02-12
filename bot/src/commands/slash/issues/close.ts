@@ -1,4 +1,4 @@
-import { createEmbed } from "$services/embed";
+import { createEmbed } from "$lib/embed";
 import db, { and, contains, eq, isNull } from "database/drizzle";
 import { issues } from "database/drizzle/schema";
 import command from "discord/commands/slash";

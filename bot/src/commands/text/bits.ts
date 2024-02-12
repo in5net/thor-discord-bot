@@ -1,4 +1,4 @@
-import { getBits, MAX_BITS } from "$services/ai/shared";
+import { getBits, MAX_BITS } from "$lib/ai/shared";
 import db, { eq } from "database/drizzle";
 import { users } from "database/drizzle/schema";
 import command from "discord/commands/text";

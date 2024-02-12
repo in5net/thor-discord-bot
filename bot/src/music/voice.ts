@@ -1,4 +1,4 @@
-import { getLyrics } from "$services/genius";
+import { getLyrics } from "$lib/genius";
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { shuffle } from "@in5net/std/random";
 import { type Awaitable } from "@in5net/std/types";

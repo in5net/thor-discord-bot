@@ -1,5 +1,5 @@
-import { getBits, subtractBits } from "$services/ai/shared";
-import { openai } from "$services/openai";
+import { getBits, subtractBits } from "$lib/ai/shared";
+import { openai } from "$lib/openai";
 import db, { eq } from "database/drizzle";
 import { users } from "database/drizzle/schema";
 import command from "discord/commands/slash";

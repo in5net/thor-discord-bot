@@ -1,4 +1,4 @@
-import { getUser } from "$services/users";
+import { getUser } from "$lib/users";
 import { EmbedBuilder } from "discord.js";
 import command from "discord/commands/slash";
 

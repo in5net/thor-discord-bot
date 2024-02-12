@@ -1,4 +1,4 @@
-import { strTo16x16 } from "$services/hash";
+import { strTo16x16 } from "$lib/hash";
 import { AttachmentBuilder } from "discord.js";
 import command from "discord/commands/text";
 

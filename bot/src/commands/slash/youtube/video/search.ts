@@ -1,4 +1,4 @@
-import youtube from "$services/youtube";
+import youtube from "$lib/youtube";
 import { type APIEmbedField } from "discord.js";
 import command from "discord/commands/slash";
 import logger from "logger";

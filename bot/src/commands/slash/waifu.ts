@@ -1,4 +1,4 @@
-import { incCount } from "$services/users";
+import { incCount } from "$lib/users";
 import { ChannelType, EmbedBuilder, type ColorResolvable } from "discord.js";
 import command from "discord/commands/slash";
 import got from "got";

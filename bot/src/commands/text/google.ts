@@ -1,4 +1,4 @@
-import { api } from "$services/customsearch";
+import { api } from "$lib/customsearch";
 import { EmbedBuilder, hyperlink } from "discord.js";
 import command from "discord/commands/text";
 import { env } from "node:process";

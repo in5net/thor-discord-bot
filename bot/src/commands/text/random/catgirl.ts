@@ -1,4 +1,4 @@
-import { incCount } from "$services/users";
+import { incCount } from "$lib/users";
 import { EmbedBuilder } from "discord.js";
 import command from "discord/commands/text";
 import got from "got";

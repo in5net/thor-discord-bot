@@ -1,4 +1,4 @@
-import { createEmbed } from "$services/embed";
+import { createEmbed } from "$lib/embed";
 import db, { contains, eq } from "database/drizzle";
 import { issues } from "database/drizzle/schema";
 import { time } from "discord.js";

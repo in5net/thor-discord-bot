@@ -1,4 +1,4 @@
-import { cache } from "$services/prisma";
+import { cache } from "$lib/prisma";
 import { choice } from "@in5net/std/random";
 import command from "discord/commands/text";
 

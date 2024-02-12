@@ -1,4 +1,4 @@
-import { getText } from "$services/y7";
+import { getText } from "$lib/y7";
 import { choice } from "@in5net/std/random";
 import {
 	ActionRowBuilder,
