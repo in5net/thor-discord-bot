@@ -5,10 +5,8 @@
     "commit": "./commit.sh",
     "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u; pnpm run -r --sequential update",
     "lint": "xo",
-    "dev:raya": "turbo run dev --filter raya-thor",
-    "start:raya": "turbo run start --filter raya-thor",
-    "dev:jay": "turbo run dev --filter jay",
-    "start:jay": "turbo run start --filter jay",
+    "dev": "turbo run dev --filter raya-thor",
+    "start": "turbo run start --filter raya-thor",
     "deploy": "turbo run deploy"
   },
   "devDependencies": {
