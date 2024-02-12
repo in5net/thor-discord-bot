@@ -20,7 +20,7 @@ export default event(
 					guildId,
 					setTimeout(async () => {
 						const voice = voices.get(guildId);
-						await voice?.stop();
+						voice?.stop();
 						timeouts.delete(guildId);
 					}, FIVE_MINUTES),
 				);

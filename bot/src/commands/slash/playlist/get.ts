@@ -3,11 +3,11 @@ import * as playlist from "$src/music/playlist";
 import db, { and, contains, eq } from "database/drizzle";
 import { playlists } from "database/drizzle/schema";
 import {
-    ActionRowBuilder,
-    ButtonBuilder,
-    ButtonStyle,
-    ComponentType,
-    EmbedBuilder,
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	ComponentType,
+	EmbedBuilder,
 } from "discord.js";
 import command from "discord/commands/slash";
 import ms from "ms";

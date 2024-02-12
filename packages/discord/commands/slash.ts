@@ -50,8 +50,8 @@ export type OptionValue<T extends Option = Option> =
 	T["default"] extends CommandOptionType[Type]
 		? ValueFromOption<T>
 		: T["optional"] extends true
-		? ValueFromOption<T> | undefined
-		: ValueFromOption<T>;
+		  ? ValueFromOption<T> | undefined
+		  : ValueFromOption<T>;
 
 type Handler<T extends Options = Options> = (
 	i: ChatInputCommandInteraction,

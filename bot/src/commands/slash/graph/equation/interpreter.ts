@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-confusing-void-expression */
-/* eslint-disable no-new-wrappers */
 /* eslint-disable @typescript-eslint/ban-types */
 import type Node from "./node";
 import {

@@ -1,4 +1,3 @@
-/* eslint-disable no-new-wrappers */
 /* eslint-disable @typescript-eslint/ban-types */
 import { type BinaryOp } from "../token";
 import Function from "./function";
@@ -20,75 +19,75 @@ export default class Number extends Value {
 		});
 	}
 
-	"+"(other?: Value) {
+	override "+"(other?: Value) {
 		if (other instanceof Number) return new Number(this.value + other.value);
 		if (other instanceof Function) return this.operatorFunc(other, "+");
 		return this;
 	}
 
-	"-"(other?: Value) {
+	override "-"(other?: Value) {
 		if (other instanceof Number) return new Number(this.value - other.value);
 		if (other instanceof Function) return this.operatorFunc(other, "-");
 		return new Number(-this.value);
 	}
 
-	"*"(other: Value) {
+	override "*"(other: Value) {
 		if (other instanceof Number) return new Number(this.value * other.value);
 		if (other instanceof Function) return this.operatorFunc(other, "*");
 		return this;
 	}
 
-	"×"(other: Value) {
+	override "×"(other: Value) {
 		return this["*"](other);
 	}
 
-	"/"(other: Value) {
+	override "/"(other: Value) {
 		if (other instanceof Number) return new Number(this.value / other.value);
 		if (other instanceof Function) return this.operatorFunc(other, "/");
 		return this;
 	}
 
-	"%"(other: Value) {
+	override "%"(other: Value) {
 		if (other instanceof Number) return new Number(this.value % other.value);
 		if (other instanceof Function) return this.operatorFunc(other, "%");
 		return this;
 	}
 
-	"^"(other: Value) {
+	override "^"(other: Value) {
 		if (other instanceof Number) return new Number(this.value ** other.value);
 		if (other instanceof Function) return this.operatorFunc(other, "^");
 		return this;
 	}
 
-	"√"() {
+	override "√"() {
 		return new Number(Math.sqrt(this.value));
 	}
 
-	"∛"() {
+	override "∛"() {
 		return new Number(Math.cbrt(this.value));
 	}
 
-	"∜"() {
+	override "∜"() {
 		return new Number(Math.sqrt(Math.sqrt(this.value)));
 	}
 
-	"!"() {
+	override "!"() {
 		return new Number(factorial(this.value));
 	}
 
-	"°"() {
+	override "°"() {
 		return new Number(this.value * (Math.PI / 180));
 	}
 
-	"||"() {
+	override "||"() {
 		return new Number(Math.abs(this.value));
 	}
 
-	"⌊⌋"() {
+	override "⌊⌋"() {
 		return new Number(Math.floor(this.value));
 	}
 
-	"⌈⌉"() {
+	override "⌈⌉"() {
 		return new Number(Math.ceil(this.value));
 	}
 }
