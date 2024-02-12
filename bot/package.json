@@ -1,5 +1,5 @@
 {
-  "name": "raya-thor",
+  "name": "bot",
   "version": "0.0.0",
   "type": "module",
   "main": "./src/main.ts",
