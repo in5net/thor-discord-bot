@@ -74,7 +74,11 @@ export default event(
 				)
 			)
 				await handleTextCommand(message);
-			else await handleRandomResponse(message);
+			else if (
+				"name" in channel &&
+				["general", "thor"].some(name => channel.name.includes(name))
+			)
+				await handleRandomResponse(message);
 		}
 	},
 );
