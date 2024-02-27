@@ -47,6 +47,7 @@
     "play-dl": "1.9.7",
     "replicate": "^0.27.1",
     "storage": "workspace:*",
+    "syllable": "^5.0.1",
     "tiny-typed-emitter": "^2.1.0",
     "trkl": "^2.0.1",
     "tsconfig": "workspace:*",
@@ -66,4 +67,3 @@
     "typescript": "5.3.3"
   }
 }
-

@@ -25,6 +25,7 @@ import randomResponses, {
 	randomResponsesRef as randomResponsesReference,
 	words,
 } from "../responses";
+import { syllable } from 'syllable';
 
 const prefix = env.PREFIX;
 const prefixRegex = createRegExp(exactly(prefix).at.lineStart(), [
@@ -80,10 +81,10 @@ export default event(
 			)
 				await handleRandomResponse(message);
 
-            const words = content.replaceAll("\n", " ").split(" ").filter(Boolean);
+            const words = content.replaceAll("\n", " ").split(" ").filter(Boolean).slice(0, 5 + 7 + 5);
             const syllables = words.map(word => ({
                 word,
-                syllables: syllabify(word),
+                syllables: syllable(word),
             }));
 
             let line1: string[] = [];
@@ -119,11 +120,6 @@ ${line3.join(" ")}
 		}
 	},
 );
-
-const syllableRegex = /[^aeiouy]*[aeiouy]+(?:[^aeiouy]*$|[^aeiouy](?=[^aeiouy]))?/gi;
-function syllabify(word: string) {
-    return word.match(syllableRegex)?.length || 0;
-}
 
 async function handleRandomResponse(message: Message) {
 	const { cleanContent, author, channel, member } = message;
