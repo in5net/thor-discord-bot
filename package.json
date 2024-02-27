@@ -7,6 +7,7 @@
     "lint": "xo",
     "dev": "turbo run dev",
     "start": "turbo run start",
+    "debug": "turbo run debug",
     "deploy": "turbo run deploy"
   },
   "devDependencies": {
@@ -17,3 +18,4 @@
     "xo": "^0.57.0"
   }
 }
+

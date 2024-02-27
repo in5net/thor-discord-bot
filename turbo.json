@@ -38,6 +38,13 @@
         "^db:generate"
       ]
     },
+    "debug": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": [
+        "^db:generate"
+      ]
+    },
     "deploy": {
       "inputs": [
         "src/commands/slash/**",
@@ -46,3 +53,4 @@
     }
   }
 }
+

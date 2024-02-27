@@ -74,14 +74,56 @@ export default event(
 				)
 			)
 				await handleTextCommand(message);
-			else if (
+			if (
 				"name" in channel &&
-				["general", "thor"].some(name => channel.name.includes(name))
+				["general", "thor", "slimevr"].some(name => channel.name.includes(name))
 			)
 				await handleRandomResponse(message);
+
+            const words = content.replaceAll("\n", " ").split(" ").filter(Boolean);
+            const syllables = words.map(word => ({
+                word,
+                syllables: syllabify(word),
+            }));
+
+            let line1: string[] = [];
+            for (let i = 0; i < 5;) {
+                const word = syllables.shift();
+                if (!word || i + word.syllables > 5) return;
+                line1.push(word.word);
+                i += word.syllables;
+            }
+
+            let line2: string[] = [];
+            for (let i = 0; i < 7;) {
+                const word = syllables.shift();
+                if (!word || i + word.syllables > 7) return;
+                line2.push(word.word);
+                i += word.syllables;
+            }
+
+            let line3: string[] = [];
+            for (let i = 0; i < 5;) {
+                const word = syllables.shift();
+                if (!word || i + word.syllables > 5) return;
+                line3.push(word.word);
+                i += word.syllables;
+            }
+
+            await channel.send(`Haiku detected:
+\`\`\`
+${line1.join(" ")}
+${line2.join(" ")}
+${line3.join(" ")}
+\`\`\``)
 		}
 	},
 );
+
+const syllableRegex = /[^aeiouy]*[aeiouy]+(?:[^aeiouy]*$|[^aeiouy](?=[^aeiouy]))?/gi;
+function syllabify(word: string) {
+    return word.match(syllableRegex)?.length || 0;
+}
 
 async function handleRandomResponse(message: Message) {
 	const { cleanContent, author, channel, member } = message;

@@ -7,6 +7,7 @@
     "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u",
     "dev": "tsx watch src/main.ts",
     "start": "tsx src/main.ts",
+    "debug": "tsx --inspect-brk src/main.ts",
     "deploy": "tsx src/deploy.ts"
   },
   "dependencies": {
@@ -65,3 +66,4 @@
     "typescript": "5.3.3"
   }
 }
+
