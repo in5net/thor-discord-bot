@@ -6,7 +6,7 @@ import command from "discord/commands/slash";
 import { z } from "zod";
 
 const NAME = "Stable Video Diffusion";
-const BITS_PRICE = 8;
+const BITS_PRICE = 7;
 
 export default command(
 	{
@@ -15,10 +15,26 @@ export default command(
             input_image: {
                 type:'attachment',
                 desc: 'The image to animate'
+            },
+            frames: {
+                type:'choice',
+                desc:'Number of frames to generate',
+                choices:[
+                    14,
+                    25
+                ],
+                default:14
+            },
+            fps:{
+                type:'int',
+                desc:'Frames per second',
+                min:5,
+                max:30,
+                default:6
             }
 		},
 	},
-	async (i, { input_image }) => {
+	async (i, { input_image, frames, fps }) => {
 		if (i.user.bot) return i.reply(`Bots cannot use ${NAME}`);
 
 		const user = await db.query.users.findFirst({
@@ -41,20 +57,16 @@ export default command(
           "stability-ai/stable-video-diffusion:3f0457e4619daac51203dedb472816fd4af51f3149fa7a9e0b5ffcf1b8172438",
           {
             input: {
-              cond_aug: 0.02,
-              decoding_t: 7,
               input_image: input_image.url,
-              video_length: "14_frames_with_svd",
-              sizing_strategy: "maintain_aspect_ratio",
-              motion_bucket_id: 127,
-              frames_per_second: 6
+              video_length: frames===14?"14_frames_with_svd":"25_frames_with_svd_xt",
+              frames_per_second: fps,
             }
           }
         );
 		const url = z.string().parse(outputs);
 
 		await i.editReply({
-			content: url,
+			content: `${input_image.url} ${url}`,
 		});
 
 		return subtractBits(i.user.id, BITS_PRICE);
