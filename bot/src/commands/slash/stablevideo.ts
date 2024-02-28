@@ -43,7 +43,7 @@ export default command(
             input: {
               cond_aug: 0.02,
               decoding_t: 7,
-              input_image,
+              input_image: input_image.url,
               video_length: "14_frames_with_svd",
               sizing_strategy: "maintain_aspect_ratio",
               motion_bucket_id: 127,
