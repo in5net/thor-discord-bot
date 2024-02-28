@@ -54,8 +54,7 @@ export default command(
 		const url = z.string().parse(outputs);
 
 		await i.editReply({
-			content: `**${prompt}**
-${url}`,
+			content: url,
 		});
 
 		return subtractBits(i.user.id, BITS_PRICE);
