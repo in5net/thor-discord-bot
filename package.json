@@ -11,11 +11,12 @@
     "deploy": "turbo run deploy"
   },
   "devDependencies": {
-    "@in5net/prettier-config": "^1.1.0",
     "@in5net/xo-config": "^1.5.0",
+    "@iz7n/prettier-config": "^1.1.0",
+    "prettier": "^3.2.5",
     "turbo": "^1.12.4",
     "typescript": "5.3.3",
     "xo": "^0.57.0"
-  }
+  },
+  "prettier": "@iz7n/prettier-config"
 }
-

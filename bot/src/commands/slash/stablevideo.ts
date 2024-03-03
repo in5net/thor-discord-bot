@@ -12,26 +12,23 @@ export default command(
 	{
 		desc: `Animate an image with ${NAME} (costs ${BITS_PRICE}).`,
 		options: {
-            input_image: {
-                type:'attachment',
-                desc: 'The image to animate'
-            },
-            frames: {
-                type:'choice',
-                desc:'Number of frames to generate',
-                choices:[
-                    "14",
-                    "25"
-                ],
-                default:"14"
-            },
-            fps:{
-                type:'int',
-                desc:'Frames per second',
-                min:5,
-                max:30,
-                default:6
-            }
+			input_image: {
+				type: "attachment",
+				desc: "The image to animate",
+			},
+			frames: {
+				type: "choice",
+				desc: "Number of frames to generate",
+				choices: ["14", "25"],
+				default: "14",
+			},
+			fps: {
+				type: "int",
+				desc: "Frames per second",
+				min: 5,
+				max: 30,
+				default: 6,
+			},
 		},
 	},
 	async (i, { input_image, frames, fps }) => {
@@ -53,16 +50,17 @@ export default command(
 
 		await i.reply(`Running ${NAME}...`);
 
-        const outputs = await replicate.run(
-          "stability-ai/stable-video-diffusion:3f0457e4619daac51203dedb472816fd4af51f3149fa7a9e0b5ffcf1b8172438",
-          {
-            input: {
-              input_image: input_image.url,
-              video_length: frames==='14'?"14_frames_with_svd":"25_frames_with_svd_xt",
-              frames_per_second: fps,
-            }
-          }
-        );
+		const outputs = await replicate.run(
+			"stability-ai/stable-video-diffusion:3f0457e4619daac51203dedb472816fd4af51f3149fa7a9e0b5ffcf1b8172438",
+			{
+				input: {
+					input_image: input_image.url,
+					video_length:
+						frames === "14" ? "14_frames_with_svd" : "25_frames_with_svd_xt",
+					frames_per_second: fps,
+				},
+			},
+		);
 		const url = z.string().parse(outputs);
 
 		await i.editReply({

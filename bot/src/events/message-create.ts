@@ -25,7 +25,9 @@ import randomResponses, {
 	randomResponsesRef as randomResponsesReference,
 	words,
 } from "../responses";
-import { syllable } from 'syllable';
+import { syllable } from "syllable";
+import { pipe } from "@in5net/std/fn";
+import { pick } from "@in5net/std/iter";
 
 const prefix = env.PREFIX;
 const prefixRegex = createRegExp(exactly(prefix).at.lineStart(), [
@@ -81,42 +83,44 @@ export default event(
 			)
 				await handleRandomResponse(message);
 
-            const words = content.replaceAll("\n", " ").split(" ").filter(Boolean).slice(0, 5 + 7 + 5);
-            const syllables = words.map(word => ({
-                word,
-                syllables: syllable(word),
-            }));
+			const words = content.replaceAll("\n", " ").split(" ").filter(Boolean);
+			const syllables = words.map(word => ({
+				word,
+				syllables: syllable(word),
+			}));
+			const totalSyllables = pipe(syllables, pick("syllables"), sum);
+			if (totalSyllables !== 5 + 7 + 5) return;
 
-            let line1: string[] = [];
-            for (let i = 0; i < 5;) {
-                const word = syllables.shift();
-                if (!word || i + word.syllables > 5) return;
-                line1.push(word.word);
-                i += word.syllables;
-            }
+			let line1: string[] = [];
+			for (let i = 0; i < 5; ) {
+				const word = syllables.shift();
+				if (!word || i + word.syllables > 5) return;
+				line1.push(word.word);
+				i += word.syllables;
+			}
 
-            let line2: string[] = [];
-            for (let i = 0; i < 7;) {
-                const word = syllables.shift();
-                if (!word || i + word.syllables > 7) return;
-                line2.push(word.word);
-                i += word.syllables;
-            }
+			let line2: string[] = [];
+			for (let i = 0; i < 7; ) {
+				const word = syllables.shift();
+				if (!word || i + word.syllables > 7) return;
+				line2.push(word.word);
+				i += word.syllables;
+			}
 
-            let line3: string[] = [];
-            for (let i = 0; i < 5;) {
-                const word = syllables.shift();
-                if (!word || i + word.syllables > 5) return;
-                line3.push(word.word);
-                i += word.syllables;
-            }
+			let line3: string[] = [];
+			for (let i = 0; i < 5; ) {
+				const word = syllables.shift();
+				if (!word || i + word.syllables > 5) return;
+				line3.push(word.word);
+				i += word.syllables;
+			}
 
-            await channel.send(`Haiku detected:
+			await channel.send(`Haiku detected:
 \`\`\`
 ${line1.join(" ")}
 ${line2.join(" ")}
 ${line3.join(" ")}
-\`\`\``)
+\`\`\``);
 		}
 	},
 );
