@@ -1,23 +1,23 @@
-import { createId as cuid2 } from "@paralleldrive/cuid2";
-import { relations, sql } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import {
+	char,
 	bigint,
 	boolean,
-	char,
 	index,
-	int,
-	json,
-	mysqlEnum,
-	mysqlTable,
-	primaryKey,
+	integer,
+	jsonb,
+	pgTable,
 	text,
 	timestamp,
 	unique,
-	varchar,
-	type MySqlColumn,
-} from "drizzle-orm/mysql-core";
+	primaryKey,
+	serial,
+	pgEnum,
+	type PgColumn,
+} from "drizzle-orm/pg-core";
+import { createId as cuid2 } from "@paralleldrive/cuid2";
 
-const namedIndex = (column: MySqlColumn, ...columns: MySqlColumn[]) =>
+const namedIndex = (column: PgColumn, ...columns: PgColumn[]) =>
 	index(
 		`${column.uniqueName?.replace(`_${column.name}_unique`, "")}_${[
 			column,
@@ -27,18 +27,169 @@ const namedIndex = (column: MySqlColumn, ...columns: MySqlColumn[]) =>
 			.join("_")}_idx`,
 	).on(column, ...columns);
 
-const createdAt = timestamp("created_at")
-	.notNull()
-	.default(sql`CURRENT_TIMESTAMP()`);
-const updatedAt = timestamp("updated_at")
-	.notNull()
-	.default(sql`CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()`);
+const createdAt = timestamp("created_at").notNull().defaultNow();
+const updatedAt = timestamp("updated_at").notNull().defaultNow();
 
-export const users = mysqlTable("users", {
+export const guilds = pgTable(
+	"guilds",
+	{
+		id: bigint("id", { mode: "bigint" }).primaryKey(),
+		data: jsonb("data").notNull(),
+		deleted: boolean("deleted").notNull().default(false),
+	},
+	table => ({
+		deletedIdx: namedIndex(table.deleted),
+	}),
+);
+export const guildsRelations = relations(guilds, ({ many }) => ({
+	members: many(members),
+	channels: many(channels),
+	messages: many(messages),
+}));
+
+export const members = pgTable(
+	"members",
+	{
+		id: bigint("id", { mode: "bigint" }).primaryKey(),
+		guildId: bigint("guild_id", { mode: "bigint" })
+			.notNull()
+			.references(() => guilds.id, { onDelete: "cascade" }),
+		bot: boolean("bot").notNull().default(false),
+		removed: boolean("removed").notNull().default(false),
+		data: jsonb("data").notNull(),
+	},
+	table => ({
+		guildIdIdx: namedIndex(table.guildId),
+	}),
+);
+export const membersRelations = relations(members, ({ one }) => ({
+	guild: one(guilds, {
+		fields: [members.guildId],
+		references: [guilds.id],
+	}),
+}));
+
+export const channels = pgTable(
+	"channels",
+	{
+		id: bigint("id", { mode: "bigint" }).primaryKey(),
+		guildId: bigint("guild_id", { mode: "bigint" })
+			.notNull()
+			.references(() => guilds.id, { onDelete: "set null" }),
+		nsfw: boolean("nsfw").notNull().default(false),
+		data: jsonb("data").notNull(),
+		deleted: boolean("deleted").notNull().default(false),
+	},
+	table => ({
+		guildIdIdx: namedIndex(table.guildId),
+		deletedIdx: namedIndex(table.deleted),
+	}),
+);
+export const channelsRelations = relations(channels, ({ one, many }) => ({
+	guild: one(guilds, {
+		fields: [channels.guildId],
+		references: [guilds.id],
+	}),
+	messages: many(messages),
+}));
+
+/**
+ * @see https://discord.com/developers/docs/resources/channel#message-object
+ */
+export const messages = pgTable(
+	"messages",
+	{
+		id: bigint("id", { mode: "bigint" }).primaryKey(),
+		createdAt: timestamp("timestamp"),
+		updatedAt: timestamp("edited_timestamp"),
+		authorId: bigint("author_id", { mode: "bigint" }).notNull(),
+		channelId: bigint("channel_id", { mode: "bigint" }).notNull(),
+		guildId: bigint("guild_id", { mode: "bigint" }),
+		content: text("content").notNull(),
+		data: jsonb("data").notNull(),
+	},
+	table => ({
+		createdAtIdx: namedIndex(table.createdAt),
+		updatedAtIdx: namedIndex(table.updatedAt),
+		authorIdIdx: namedIndex(table.authorId),
+		channelIdIdx: namedIndex(table.channelId),
+		guildIdIdx: namedIndex(table.guildId),
+	}),
+);
+export const messagesRelations = relations(messages, ({ one, many }) => ({
+	channel: one(channels, {
+		fields: [messages.channelId],
+		references: [channels.id],
+	}),
+	guild: one(guilds, {
+		fields: [messages.guildId],
+		references: [guilds.id],
+	}),
+	attachments: many(attachments),
+}));
+
+/**
+ * @see https://discord.com/developers/docs/resources/channel#attachment-object
+ */
+export const attachments = pgTable(
+	"attachments",
+	{
+		id: bigint("id", { mode: "bigint" }).primaryKey(),
+		messageId: bigint("message_id", { mode: "bigint" }).references(
+			() => messages.id,
+			{ onDelete: "set null" },
+		),
+		channelId: bigint("channel_id", { mode: "bigint" }).references(
+			() => channels.id,
+			{ onDelete: "set null" },
+		),
+		guildId: bigint("guild_id", { mode: "bigint" }).references(
+			() => guilds.id,
+			{ onDelete: "set null" },
+		),
+		filename: text("filename").notNull(),
+		ext: text("extension"),
+		desc: text("description"),
+		contentType: text("content_type"),
+		size: integer("size").notNull(),
+		url: text("url").notNull(),
+		proxyUrl: text("proxy_url"),
+		width: integer("width"),
+		height: integer("height"),
+		bot: boolean("bot").notNull().default(false),
+		nsfw: boolean("nsfw").notNull().default(false),
+		data: jsonb("data").notNull(),
+	},
+	table => ({
+		messageIdIdx: namedIndex(table.messageId),
+		channelIdIdx: namedIndex(table.channelId),
+		guildIdIdx: namedIndex(table.guildId),
+		extIdx: namedIndex(table.ext),
+		botIdx: namedIndex(table.bot),
+		nsfwIdx: namedIndex(table.nsfw),
+		multiIdx: namedIndex(table.ext, table.bot, table.nsfw),
+	}),
+);
+export const attachmentsRelations = relations(attachments, ({ one }) => ({
+	channel: one(channels, {
+		fields: [attachments.channelId],
+		references: [channels.id],
+	}),
+	message: one(messages, {
+		fields: [attachments.messageId],
+		references: [messages.id],
+	}),
+	guild: one(guilds, {
+		fields: [attachments.guildId],
+		references: [guilds.id],
+	}),
+}));
+
+export const users = pgTable("users", {
 	id: char("id", { length: 18 }).primaryKey(),
 	createdAt,
 	updatedAt,
-	counts: json("counts"),
+	counts: jsonb("counts"),
 	creditAt: timestamp("credit_at"),
 	admin: boolean("admin").default(false).notNull(),
 });
@@ -47,16 +198,16 @@ export const usersRelations = relations(users, ({ many }) => ({
 	issues: many(issues),
 }));
 
-export const playlists = mysqlTable(
+export const playlists = pgTable(
 	"playlists",
 	{
-		id: varchar("id", { length: 191 }).primaryKey(),
+		id: text("id").primaryKey(),
 		createdAt,
 		updatedAt,
 		userId: char("user_id", { length: 18 })
 			.notNull()
 			.references(() => users.id, { onUpdate: "cascade", onDelete: "cascade" }),
-		name: varchar("name", { length: 100 }).notNull(),
+		name: text("name").notNull(),
 	},
 	table => ({
 		uniqueUserIdName: unique().on(table.userId, table.name),
@@ -71,28 +222,28 @@ export const playlistsRelations = relations(playlists, ({ one, many }) => ({
 	albums: many(albums),
 }));
 
-export const albums = mysqlTable("albums", {
-	id: varchar("id", { length: 191 }).primaryKey(),
+export const albums = pgTable("albums", {
+	id: text("id").primaryKey(),
 	createdAt,
 	updatedAt,
-	name: varchar("name", { length: 100 }).notNull(),
-	data: json("data").notNull(),
+	name: text("name").notNull(),
+	data: jsonb("data").notNull(),
 });
 export const albumsRelations = relations(albums, ({ many }) => ({
 	playlists: many(songs),
 	songs: many(albums),
 }));
 
-export const albumsToPlaylists = mysqlTable(
+export const albumsToPlaylists = pgTable(
 	"albums_to_playlists",
 	{
-		albumId: varchar("album_id", { length: 191 })
+		albumId: text("album_id")
 			.notNull()
 			.references(() => albums.id, {
 				onUpdate: "cascade",
 				onDelete: "cascade",
 			}),
-		playlistId: varchar("playlist_id", { length: 191 })
+		playlistId: text("playlist_id")
 			.notNull()
 			.references(() => playlists.id, {
 				onUpdate: "cascade",
@@ -117,25 +268,25 @@ export const albumsToPlaylistsRelations = relations(
 	}),
 );
 
-export const songs = mysqlTable(
+export const songs = pgTable(
 	"songs",
 	{
-		id: varchar("id", { length: 191 }).primaryKey(),
+		id: text("id").primaryKey(),
 		createdAt,
 		updatedAt,
-		playlistId: varchar("playlist_id", { length: 191 }).references(
-			() => playlists.id,
-			{ onUpdate: "cascade", onDelete: "cascade" },
-		),
-		albumId: varchar("album_id", { length: 191 }).references(() => albums.id, {
+		playlistId: text("playlist_id").references(() => playlists.id, {
+			onUpdate: "cascade",
+			onDelete: "cascade",
+		}),
+		albumId: text("album_id").references(() => albums.id, {
 			onUpdate: "cascade",
 			onDelete: "cascade",
 		}),
 		title: text("title").notNull(),
-		duration: int("duration", { unsigned: true }).notNull(),
-		data: json("data").notNull(),
-		playlistIndex: int("playlist_index", { unsigned: true }),
-		albumIndex: int("album_index", { unsigned: true }),
+		duration: integer("duration").notNull(),
+		data: jsonb("data").notNull(),
+		playlistIndex: integer("playlist_index"),
+		albumIndex: integer("album_index"),
 	},
 	table => ({
 		playlistIndex: namedIndex(table.playlistId, table.playlistIndex),
@@ -153,60 +304,62 @@ export const songsRelations = relations(songs, ({ one }) => ({
 	}),
 }));
 
-export const ratios = mysqlTable("ratios", {
-	id: varchar("id", { length: 191 }).primaryKey().$default(cuid2),
+export const ratios = pgTable("ratios", {
+	id: text("id").primaryKey().$default(cuid2),
 	createdAt,
-	content: varchar("content", { length: 191 }).notNull().unique(),
+	content: text("content").notNull().unique(),
 });
 
-export const y7Files = mysqlTable("y7_files", {
-	name: varchar("name", { length: 100 }).primaryKey(),
-	extension: varchar("extension", { length: 4 }).notNull(),
+export const y7Files = pgTable("y7_files", {
+	name: text("name").primaryKey(),
+	extension: text("extension").notNull(),
 });
 
-export const chickens = mysqlTable("chickens", {
-	name: varchar("name", { length: 100 }).primaryKey(),
+export const chickens = pgTable("chickens", {
+	name: text("name").primaryKey(),
 	sentAt: timestamp("sent_at"),
 });
 
-export const speechBubbles = mysqlTable("speech_bubbles", {
-	name: varchar("name", { length: 100 }).primaryKey(),
+export const speechBubbles = pgTable("speech_bubbles", {
+	name: text("name").primaryKey(),
 	sentAt: timestamp("sent_at"),
 });
 
-export const hopOns = mysqlTable("hop_ons", {
-	id: varchar("id", { length: 191 }).primaryKey(),
+export const hopOns = pgTable("hop_ons", {
+	id: text("id").primaryKey(),
 	sentAt: timestamp("sent_at"),
 });
 
-export const kraccBaccVideos = mysqlTable("kracc_bacc_videos", {
-	name: varchar("name", { length: 191 }).primaryKey(),
+export const kraccBaccVideos = pgTable("kracc_bacc_videos", {
+	name: text("name").primaryKey(),
 	sentAt: timestamp("sent_at"),
 });
 
-export const bossFiles = mysqlTable("boss_files", {
-	id: varchar("id", { length: 191 }).primaryKey(),
+export const bossFiles = pgTable("boss_files", {
+	id: text("id").primaryKey(),
 	url: text("url").notNull(),
 	sentAt: timestamp("sent_at"),
 });
 
-export const issues = mysqlTable(
+const issueType = pgEnum("issue_type", ["bug", "feature", "enhancement"]);
+const issueReason = pgEnum("issue_reason", [
+	"completed",
+	"wont_fix",
+	"duplicate",
+	"invalid",
+]);
+export const issues = pgTable(
 	"issues",
 	{
-		id: int("id").primaryKey().autoincrement(),
+		id: serial("id").primaryKey(),
 		createdAt,
 		updatedAt,
 		userId: char("user_id", { length: 18 }).notNull(),
-		name: varchar("name", { length: 100 }).notNull(),
-		type: mysqlEnum("type", ["bug", "feature", "enhancement"]).notNull(),
+		name: text("name").notNull(),
+		type: issueType("type").notNull(),
 		desc: text("desc").notNull(),
 		closedAt: timestamp("closed_at"),
-		reason: mysqlEnum("reason", [
-			"completed",
-			"wont_fix",
-			"duplicate",
-			"invalid",
-		]),
+		reason: issueReason("reason"),
 	},
 	table => ({
 		userIndex: namedIndex(table.userId),
@@ -219,29 +372,29 @@ export const issuesRelations = relations(issues, ({ one }) => ({
 	}),
 }));
 
-export const rotatingFood = mysqlTable("rotating_food", {
-	name: varchar("name", { length: 100 }).primaryKey(),
+export const rotatingFood = pgTable("rotating_food", {
+	name: text("name").primaryKey(),
 });
 
-export const audioFilters = mysqlTable("audio_filters", {
-	name: varchar("name", { length: 100 }).primaryKey(),
-	value: varchar("value", { length: 191 }).notNull(),
+export const audioFilters = pgTable("audio_filters", {
+	name: text("name").primaryKey(),
+	value: text("value").notNull(),
 });
 
-export const commandExecutions = mysqlTable(
+const commandType = pgEnum("command_type", ["text", "slash", "message"]);
+export const commandExecutions = pgTable(
 	"command_executions",
 	{
-		id: varchar("id", { length: 191 }).primaryKey().$default(cuid2),
+		id: text("id").primaryKey().$default(cuid2),
 		createdAt,
-		name: varchar("name", { length: 191 }).notNull(),
-		type: mysqlEnum("type", ["text", "slash", "message"]).notNull(),
-		userId: bigint("user_id", { mode: "bigint", unsigned: true }).notNull(),
-		messageId: bigint("message_id", { mode: "bigint", unsigned: true }),
+		name: text("name").notNull(),
+		type: commandType("type").notNull(),
+		userId: bigint("user_id", { mode: "bigint" }).notNull(),
+		messageId: bigint("message_id", { mode: "bigint" }),
 		channelId: bigint("channel_id", {
 			mode: "bigint",
-			unsigned: true,
 		}).notNull(),
-		guildId: bigint("guild_id", { mode: "bigint", unsigned: true }),
+		guildId: bigint("guild_id", { mode: "bigint" }),
 	},
 	table => ({
 		createdAtIndex: namedIndex(table.createdAt),

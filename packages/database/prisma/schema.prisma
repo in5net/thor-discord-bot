@@ -4,13 +4,12 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String   @id @db.Char(18)
+  id        String   @id
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp
 
@@ -25,14 +24,14 @@ model User {
 }
 
 model Playlist {
-  id        String   @id @default(cuid())
+  id        String   @id
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @map("user_id") @db.Char(18)
+  userId String @map("user_id")
 
-  name String @db.VarChar(100)
+  name String
 
   songs  Song[]
   albums Album[]
@@ -42,13 +41,13 @@ model Playlist {
 }
 
 model Album {
-  id        String   @id @default(cuid())
+  id        String   @id
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp
 
   playlists Playlist[]
 
-  name String @db.VarChar(100)
+  name String
   data Json
 
   songs Song[]
@@ -57,7 +56,7 @@ model Album {
 }
 
 model Song {
-  id        String   @id @default(cuid())
+  id        String   @id
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp
 
@@ -66,7 +65,7 @@ model Song {
   album      Album?    @relation(fields: [albumId], references: [id], onDelete: Cascade)
   albumId    String?
 
-  title         String @db.Text
+  title         String
   duration      Int
   data          Json
   playlistIndex Int?   @map("playlist_index")
@@ -78,7 +77,7 @@ model Song {
 }
 
 model Ratio {
-  id        String   @id @default(cuid())
+  id        String   @id
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
 
   content String @unique
@@ -87,15 +86,15 @@ model Ratio {
 }
 
 model Y7File {
-  name String @id @db.VarChar(100)
+  name String @id
 
-  extension String @db.VarChar(4)
+  extension String
 
   @@map("y7_files")
 }
 
 model Chicken {
-  name String @id @db.VarChar(100)
+  name String @id
 
   sentAt DateTime? @map("sent_at") @db.Timestamp
 
@@ -103,7 +102,7 @@ model Chicken {
 }
 
 model SpeechBubble {
-  name String @id @db.VarChar(100)
+  name String @id
 
   sentAt DateTime? @map("sent_at") @db.Timestamp
 
@@ -127,9 +126,9 @@ model KraccBacc {
 }
 
 model BossFile {
-  id String @id @default(cuid())
+  id String @id
 
-  url    String    @db.Text
+  url    String
   sentAt DateTime? @map("sent_at") @db.Timestamp
 
   @@map("boss_files")
@@ -143,9 +142,9 @@ model Issue {
   user   User   @relation(fields: [userId], references: [id])
   userId String @map("user_id") @db.Char(18)
 
-  name     String       @db.VarChar(100)
+  name     String
   type     IssueType
-  desc     String       @db.Text
+  desc     String
   closedAt DateTime?    @map("closed_at") @db.Timestamp
   reason   IssueReason?
 
@@ -167,20 +166,20 @@ enum IssueReason {
 }
 
 model RotatingFood {
-  name String @id @db.VarChar(100)
+  name String @id
 
   @@map("rotating_food")
 }
 
 model AudioFilter {
-  name  String @id @db.VarChar(100)
+  name  String @id
   value String
 
   @@map("audio_filters")
 }
 
 model CommandExecution {
-  id        String   @id @default(cuid())
+  id        String   @id
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
 
   name String

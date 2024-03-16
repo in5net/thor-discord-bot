@@ -9,10 +9,6 @@ declare global {
 }
 
 const EnvironmentVariables = z.object({
-	DATABASE_URL: z.string(),
-	DATABASE_HOST: z.string(),
-	DATABASE_USERNAME: z.string(),
-	DATABASE_PASSWORD: z.string(),
 	PG_DATABASE_URL: z.string(),
 });
 
