@@ -1,6 +1,6 @@
 import { createEmbed } from "$lib/embed";
-import { and, discordDb, eq, inArray, not, sql } from "database/drizzle";
-import { attachments, messages } from "database/drizzle/discord";
+import db, { and, eq, inArray, not, sql } from "database/drizzle";
+import { attachments, messages } from "database/drizzle/schema";
 import {
 	hyperlink,
 	messageLink,
@@ -20,13 +20,13 @@ export const extensions: Record<Type, string[]> = {
 
 export async function getRandomFile(type?: Type) {
 	const start = performance.now();
-	const [file] = await discordDb
+	const [file] = await db
 		.select({
 			attachment: attachments,
 		})
 		.from(attachments)
 		.innerJoin(
-			discordDb
+			db
 				.select({ id: attachments.id })
 				.from(attachments)
 				.where(
@@ -52,7 +52,7 @@ export async function sendFile(
 	{ messageId, url, proxyUrl, ext }: (typeof attachments)["$inferSelect"],
 ) {
 	if (!messageId) return;
-	const message = await discordDb.query.messages.findFirst({
+	const message = await db.query.messages.findFirst({
 		columns: {
 			createdAt: true,
 			guildId: true,
