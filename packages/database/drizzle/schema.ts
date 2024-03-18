@@ -106,7 +106,6 @@ export const messages = pgTable(
 		channelId: bigint("channel_id", { mode: "bigint" }).notNull(),
 		guildId: bigint("guild_id", { mode: "bigint" }),
 		content: text("content").notNull(),
-		data: jsonb("data").notNull(),
 	},
 	table => ({
 		createdAtIdx: namedIndex(table.createdAt),
@@ -158,7 +157,6 @@ export const attachments = pgTable(
 		height: integer("height"),
 		bot: boolean("bot").notNull().default(false),
 		nsfw: boolean("nsfw").notNull().default(false),
-		data: jsonb("data").notNull(),
 	},
 	table => ({
 		messageIdIdx: namedIndex(table.messageId),
