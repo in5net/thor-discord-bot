@@ -1,3 +1,5 @@
+/* eslint-disable ts/no-use-before-define */
+import { createId as cuid2 } from "@paralleldrive/cuid2";
 import { relations } from "drizzle-orm";
 import {
 	char,
@@ -15,7 +17,6 @@ import {
 	pgEnum,
 	type PgColumn,
 } from "drizzle-orm/pg-core";
-import { createId as cuid2 } from "@paralleldrive/cuid2";
 
 const namedIndex = (column: PgColumn, ...columns: PgColumn[]) =>
 	index(
@@ -34,7 +35,6 @@ export const guilds = pgTable(
 	"guilds",
 	{
 		id: bigint("id", { mode: "bigint" }).primaryKey(),
-		data: jsonb("data").notNull(),
 		deleted: boolean("deleted").notNull().default(false),
 	},
 	table => ({
@@ -56,7 +56,6 @@ export const members = pgTable(
 			.references(() => guilds.id, { onDelete: "cascade" }),
 		bot: boolean("bot").notNull().default(false),
 		removed: boolean("removed").notNull().default(false),
-		data: jsonb("data").notNull(),
 	},
 	table => ({
 		guildIdIdx: namedIndex(table.guildId),
@@ -77,7 +76,6 @@ export const channels = pgTable(
 			.notNull()
 			.references(() => guilds.id, { onDelete: "set null" }),
 		nsfw: boolean("nsfw").notNull().default(false),
-		data: jsonb("data").notNull(),
 		deleted: boolean("deleted").notNull().default(false),
 	},
 	table => ({
@@ -108,8 +106,6 @@ export const messages = pgTable(
 		content: text("content").notNull(),
 	},
 	table => ({
-		createdAtIdx: namedIndex(table.createdAt),
-		updatedAtIdx: namedIndex(table.updatedAt),
 		authorIdIdx: namedIndex(table.authorId),
 		channelIdIdx: namedIndex(table.channelId),
 		guildIdIdx: namedIndex(table.guildId),
@@ -148,13 +144,7 @@ export const attachments = pgTable(
 		),
 		filename: text("filename").notNull(),
 		ext: text("extension"),
-		desc: text("description"),
 		contentType: text("content_type"),
-		size: integer("size").notNull(),
-		url: text("url").notNull(),
-		proxyUrl: text("proxy_url"),
-		width: integer("width"),
-		height: integer("height"),
 		bot: boolean("bot").notNull().default(false),
 		nsfw: boolean("nsfw").notNull().default(false),
 	},
@@ -339,8 +329,12 @@ export const bossFiles = pgTable("boss_files", {
 	sentAt: timestamp("sent_at"),
 });
 
-const issueType = pgEnum("issue_type", ["bug", "feature", "enhancement"]);
-const issueReason = pgEnum("issue_reason", [
+export const issueType = pgEnum("issue_type", [
+	"bug",
+	"feature",
+	"enhancement",
+]);
+export const issueReason = pgEnum("issue_reason", [
 	"completed",
 	"wont_fix",
 	"duplicate",
@@ -379,7 +373,7 @@ export const audioFilters = pgTable("audio_filters", {
 	value: text("value").notNull(),
 });
 
-const commandType = pgEnum("command_type", ["text", "slash", "message"]);
+export const commandType = pgEnum("command_type", ["text", "slash", "message"]);
 export const commandExecutions = pgTable(
 	"command_executions",
 	{

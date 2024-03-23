@@ -7,8 +7,7 @@
   "scripts": {
     "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u",
     "db:generate": "prisma generate && prisma db push --schema prisma/cache.prisma",
-    "drizzle:introspect": "drizzle-kit introspect:mysql",
-    "db:push": "drizzle-kit push:mysql"
+    "db:push": "drizzle-kit push:postgres"
   },
   "dependencies": {
     "@paralleldrive/cuid2": "^2.2.2",
