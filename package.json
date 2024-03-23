@@ -15,8 +15,7 @@
     "@iz7n/prettier-config": "^1.2.0",
     "prettier": "^3.2.5",
     "turbo": "^1.12.5",
-    "typescript": "5.4.2",
-    "xo": "^0.58.0"
+    "typescript": "5.4.2"
   },
   "prettier": "@iz7n/prettier-config"
 }
