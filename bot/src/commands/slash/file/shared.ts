@@ -49,7 +49,7 @@ export async function sendFile(
 	replyable: {
 		reply(options: MessagePayload | BaseMessageOptions): Promise<any>;
 	},
-	{ messageId, url, proxyUrl, ext }: (typeof attachments)["$inferSelect"],
+	{ id, messageId, filename, ext }: (typeof attachments)["$inferSelect"],
 ) {
 	if (!messageId) return;
 	const message = await db.query.messages.findFirst({
@@ -80,9 +80,10 @@ export async function sendFile(
 			},
 		)
 		.setTimestamp(createdAt);
+	const url = `https://cdn.discordapp.com/attachments/${guildId}/${id}/${filename}`;
 	const extension = ext || "";
 	if (extensions.image.includes(extension)) {
-		embed.setImage(proxyUrl);
+		embed.setImage(url);
 		return replyable.reply({
 			embeds: [embed],
 		});
@@ -90,6 +91,6 @@ export async function sendFile(
 
 	return replyable.reply({
 		embeds: [embed],
-		files: [proxyUrl || url],
+		files: [url],
 	});
 }
