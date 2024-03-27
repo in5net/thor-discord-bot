@@ -47,7 +47,7 @@ export async function getRandomFile(type?: Type) {
 
 export async function sendFile(
 	replyable: {
-		reply(options: MessagePayload | BaseMessageOptions): Promise<any>;
+		reply(options: string | MessagePayload | BaseMessageOptions): Promise<any>;
 	},
 	{ id, messageId, filename, ext }: (typeof attachments)["$inferSelect"],
 ) {
@@ -80,7 +80,7 @@ export async function sendFile(
 			},
 		)
 		.setTimestamp(createdAt);
-	const url = `https://cdn.discordapp.com/attachments/${guildId}/${id}/${filename}`;
+	const url = `https://cdn.discordapp.com/attachments/${channelId}/${id}/${filename}`;
 	const extension = ext || "";
 	if (extensions.image.includes(extension)) {
 		embed.setImage(url);
@@ -89,8 +89,5 @@ export async function sendFile(
 		});
 	}
 
-	return replyable.reply({
-		embeds: [embed],
-		files: [url],
-	});
+	return replyable.reply(url);
 }
