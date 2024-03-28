@@ -216,7 +216,8 @@ async function handleOneWordStory(message: Message) {
 		orderBy: desc(oneWordStory.createdAt),
 	});
 	if (!latestStory) {
-		const reply = await message.reply(
+		await message.delete();
+		const reply = await message.channel.send(
 			`No active story found. Please start a new story with \`/ows\``,
 		);
 		setTimeout(() => reply.delete(), 5000);
