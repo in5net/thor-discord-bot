@@ -226,11 +226,16 @@ async function handleOneWordStory(message: Message) {
 
 	const latestEntry = await db.query.oneWordStoryEntry.findFirst({
 		columns: {
+			userId: true,
 			word: true,
 		},
 		where: eq(oneWordStoryEntry.story, latestStory.id),
 		orderBy: desc(oneWordStoryEntry.createdAt),
 	});
+	if (latestEntry?.userId.toString() === author.id) {
+		await message.delete();
+		return;
+	}
 
 	await db.insert(oneWordStoryEntry).values({
 		userId: BigInt(author.id),
