@@ -4,12 +4,9 @@ import { env } from "node:process";
 export default defineConfig({
 	schema: "./drizzle/schema.ts",
 	out: "./drizzle",
-	driver: "mysql2",
+	driver: "pg",
 	dbCredentials: {
-		uri: env.DATABASE_URL.replace(
-			"sslaccept=strict",
-			'ssl={"rejectUnauthorized":true}',
-		),
+		connectionString: env.DATABASE_URL,
 	},
 	verbose: true,
 	strict: true,
