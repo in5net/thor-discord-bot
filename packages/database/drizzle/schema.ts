@@ -398,3 +398,42 @@ export const commandExecutions = pgTable(
 		channelIdIndex: namedIndex(table.channelId),
 	}),
 );
+
+export const oneWordStory = pgTable("one_word_story", {
+	id: serial("id").primaryKey(),
+	createdAt,
+	updatedAt,
+	guildId: bigint("guild_id", { mode: "bigint" }).notNull(),
+	active: boolean("active").notNull().default(true),
+});
+export const oneWordStoryRelations = relations(
+	oneWordStory,
+	({ one, many }) => ({
+		entries: many(oneWordStoryEntry),
+		guild: one(guilds, {
+			fields: [oneWordStory.guildId],
+			references: [guilds.id],
+		}),
+	}),
+);
+
+export const oneWordStoryEntry = pgTable("one_word_story_entry", {
+	id: serial("id").primaryKey(),
+	createdAt,
+	userId: bigint("user_id", { mode: "bigint" }).notNull(),
+	story: integer("story").notNull(),
+	word: text("word").notNull(),
+});
+export const oneWordStoryEntryRelations = relations(
+	oneWordStoryEntry,
+	({ one }) => ({
+		user: one(users, {
+			fields: [oneWordStoryEntry.userId],
+			references: [users.id],
+		}),
+		story: one(oneWordStory, {
+			fields: [oneWordStoryEntry.story],
+			references: [oneWordStory.id],
+		}),
+	}),
+);

@@ -34,7 +34,7 @@ export async function handleTextCommand(message: Message) {
 					commandNames.push(subcommandName);
 					const lowerArgument = subcommandName.toLowerCase();
 					const subcommand = client.textCommands.find(
-						// eslint-disable-next-line @typescript-eslint/no-loop-func
+						// eslint-disable-next-line ts/no-loop-func
 						({ aliases }, name) =>
 							name.startsWith(commandName) &&
 							(name === lowerArgument || aliases?.includes(lowerArgument)),

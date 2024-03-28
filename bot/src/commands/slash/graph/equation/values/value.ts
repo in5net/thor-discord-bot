@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable ts/no-empty-function */
 import type Scope from "../scope";
 import { type BinaryOp, type GroupingOp, type UnaryOp } from "../token";
 

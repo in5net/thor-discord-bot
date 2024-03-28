@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable ts/ban-types */
 import { type BinaryOp } from "../token";
 import Function from "./function";
 import Value from "./value";

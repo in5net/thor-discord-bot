@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable ts/no-floating-promises */
 import { createEmbed } from "$lib/embed";
 import { sec2Str } from "$lib/time";
 import { remove } from "@in5net/std/array";

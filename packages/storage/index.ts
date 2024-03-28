@@ -9,7 +9,7 @@ const storage = new Storage({ credentials });
 export default storage;
 
 declare global {
-	// eslint-disable-next-line @typescript-eslint/no-namespace
+	// eslint-disable-next-line ts/no-namespace
 	namespace NodeJS {
 		interface ProcessEnv extends z.infer<typeof EnvironmentVariables> {}
 	}

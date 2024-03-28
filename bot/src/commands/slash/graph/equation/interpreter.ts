@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-confusing-void-expression */
-/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable ts/no-confusing-void-expression */
+/* eslint-disable ts/ban-types */
 import type Node from "./node";
 import {
 	type BinaryOpNode,
@@ -32,7 +32,7 @@ export default class Interpreter implements ExecuteIndex {
 
 	visit(node: Node, scope: Scope): Value {
 		const methodName = `visit${node.constructor.name}`;
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// eslint-disable-next-line ts/ban-ts-comment
 		// @ts-expect-error
 		const method = this[methodName] as VisitFunc;
 		return method.call(this, node, scope);

@@ -26,7 +26,7 @@ async function handleSlash(i: ChatInputCommandInteraction) {
 			i,
 			Object.fromEntries(
 				Object.entries(options).map(([name, { type, default: d }]) => {
-					// eslint-disable-next-line @typescript-eslint/ban-types
+					// eslint-disable-next-line ts/ban-types
 					let value: OptionValue | null = null;
 					switch (type) {
 						case "string": {

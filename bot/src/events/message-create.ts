@@ -25,9 +25,10 @@ import randomResponses, {
 	randomResponsesRef as randomResponsesReference,
 	words,
 } from "../responses";
-import { syllable } from "syllable";
 import { pipe } from "@in5net/std/fn";
 import { pick } from "@in5net/std/iter";
+import db, { and, desc, eq } from "database/drizzle";
+import { oneWordStory, oneWordStoryEntry } from "database/drizzle/schema";
 
 const prefix = env.PREFIX;
 const prefixRegex = createRegExp(exactly(prefix).at.lineStart(), [
@@ -66,9 +67,9 @@ export default event(
 			if (emojiRegex.test(first) && second === "+" && emojiRegex.test(third)) {
 				const { default: emojiMix } = await import("emoji-mixer");
 				const url = emojiMix(first, third);
-				await (url
-					? message.reply(url)
-					: message.reply("no emoji mix found ):"));
+				await (url ?
+					message.reply(url)
+				:	message.reply("no emoji mix found ):"));
 			} else if (
 				prefixRegex.test(content) ||
 				client.textCommands.some(
@@ -77,50 +78,20 @@ export default event(
 				)
 			)
 				await handleTextCommand(message);
-			if (
-				"name" in channel &&
-				["general", "thor", "slimevr"].some(name => channel.name.includes(name))
-			)
-				await handleRandomResponse(message);
 
-			const words = content.replaceAll("\n", " ").split(" ").filter(Boolean);
-			const syllables = words.map(word => ({
-				word,
-				syllables: syllable(word),
-			}));
-			const totalSyllables = pipe(syllables, pick("syllables"), sum);
-			if (totalSyllables !== 5 + 7 + 5) return;
+			if ("name" in channel) {
+				if (
+					["general", "thor", "slimevr"].some(name =>
+						channel.name.includes(name),
+					)
+				)
+					await handleRandomResponse(message);
 
-			let line1: string[] = [];
-			for (let i = 0; i < 5; ) {
-				const word = syllables.shift();
-				if (!word || i + word.syllables > 5) return;
-				line1.push(word.word);
-				i += word.syllables;
+				if (channel.name === "one-word-story")
+					await handleOneWordStory(message);
 			}
 
-			let line2: string[] = [];
-			for (let i = 0; i < 7; ) {
-				const word = syllables.shift();
-				if (!word || i + word.syllables > 7) return;
-				line2.push(word.word);
-				i += word.syllables;
-			}
-
-			let line3: string[] = [];
-			for (let i = 0; i < 5; ) {
-				const word = syllables.shift();
-				if (!word || i + word.syllables > 5) return;
-				line3.push(word.word);
-				i += word.syllables;
-			}
-
-			await channel.send(`Haiku detected:
-\`\`\`
-${line1.join(" ")}
-${line2.join(" ")}
-${line3.join(" ")}
-\`\`\``);
+			await handleHaiku(message);
 		}
 	},
 );
@@ -148,12 +119,14 @@ async function handleRandomResponse(message: Message) {
 		} of randomResponses()) {
 			const includedWords = words.filter(word => !word.startsWith("-"));
 			const excludedWords = words.filter(word => word.startsWith("-"));
-			const included = includedWords.length
-				? includedWords.some(word => lowercase.includes(word))
-				: true;
-			const excluded = excludedWords.length
-				? excludedWords.some(word => lowercase.includes(word))
-				: true;
+			const included =
+				includedWords.length ?
+					includedWords.some(word => lowercase.includes(word))
+				:	true;
+			const excluded =
+				excludedWords.length ?
+					excludedWords.some(word => lowercase.includes(word))
+				:	true;
 			const now = Date.now();
 			if (
 				included &&
@@ -177,10 +150,9 @@ async function handleRandomResponse(message: Message) {
 						return member?.displayName || author.username;
 					const props = variable.split(".");
 					const $words = words();
-					console.log({ match, variable, props, $words });
 					let value: any = $words.themes;
 					for (const prop of props) {
-						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+						// eslint-disable-next-line ts/no-unsafe-assignment
 						value = value[prop];
 					}
 
@@ -224,4 +196,101 @@ async function handleDiceMessage(message: Message) {
 			await channel.send(msg);
 		}
 	}
+}
+
+async function handleOneWordStory(message: Message) {
+	const { content, guildId, author } = message;
+	if (!guildId) return;
+
+	const [word, word2] = content.trim().split(" ");
+	if (!word || word2 || word.length > 32) {
+		await message.delete();
+		return;
+	}
+
+	const latestStory = await db.query.oneWordStory.findFirst({
+		columns: {
+			id: true,
+		},
+		where: and(eq(oneWordStory.guildId, BigInt(guildId)), oneWordStory.active),
+		orderBy: desc(oneWordStory.createdAt),
+	});
+	if (!latestStory) {
+		const reply = await message.reply(
+			`No active story found. Please start a new story with \`/ows\``,
+		);
+		setTimeout(() => reply.delete(), 5000);
+		return;
+	}
+
+	const latestEntry = await db.query.oneWordStoryEntry.findFirst({
+		columns: {
+			word: true,
+		},
+		where: eq(oneWordStoryEntry.story, latestStory.id),
+		orderBy: desc(oneWordStoryEntry.createdAt),
+	});
+
+	await db.insert(oneWordStoryEntry).values({
+		userId: BigInt(author.id),
+		story: latestStory.id,
+		word,
+	});
+
+	if (
+		latestEntry?.word.toLowerCase() === "the" &&
+		word.toLowerCase() === "end."
+	) {
+		await db
+			.update(oneWordStory)
+			.set({
+				active: false,
+			})
+			.where(eq(oneWordStory.id, latestStory.id));
+		await message.reply("The story has ended.");
+	}
+}
+
+async function handleHaiku(message: Message) {
+	const { content, channel } = message;
+
+	const words = content.replaceAll("\n", " ").split(" ").filter(Boolean);
+	const { syllable } = await import("syllable");
+	const syllables = words.map(word => ({
+		word,
+		syllables: syllable(word),
+	}));
+	const totalSyllables = pipe(syllables, pick("syllables"), sum);
+	if (totalSyllables !== 5 + 7 + 5) return;
+
+	let line1: string[] = [];
+	for (let i = 0; i < 5; ) {
+		const word = syllables.shift();
+		if (!word || i + word.syllables > 5) return;
+		line1.push(word.word);
+		i += word.syllables;
+	}
+
+	let line2: string[] = [];
+	for (let i = 0; i < 7; ) {
+		const word = syllables.shift();
+		if (!word || i + word.syllables > 7) return;
+		line2.push(word.word);
+		i += word.syllables;
+	}
+
+	let line3: string[] = [];
+	for (let i = 0; i < 5; ) {
+		const word = syllables.shift();
+		if (!word || i + word.syllables > 5) return;
+		line3.push(word.word);
+		i += word.syllables;
+	}
+
+	await channel.send(`Haiku detected:
+\`\`\`
+${line1.join(" ")}
+${line2.join(" ")}
+${line3.join(" ")}
+\`\`\``);
 }

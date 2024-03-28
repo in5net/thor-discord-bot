@@ -53,7 +53,7 @@ export async function deploy(
 			}
 
 			// @ts-expect-error TypeScript doesn't know enough
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+			// eslint-disable-next-line ts/no-unsafe-call
 			groupData.options?.push({
 				type: ApplicationCommandOptionType.Subcommand,
 				...build(subName, command),
