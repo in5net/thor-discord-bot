@@ -29,7 +29,10 @@ const namedIndex = (column: PgColumn, ...columns: PgColumn[]) =>
 	).on(column, ...columns);
 
 const createdAt = timestamp("created_at").notNull().defaultNow();
-const updatedAt = timestamp("updated_at").notNull().defaultNow();
+const updatedAt = timestamp("updated_at")
+	.notNull()
+	.defaultNow()
+	.$onUpdateFn(() => new Date());
 
 export const guilds = pgTable(
 	"guilds",
