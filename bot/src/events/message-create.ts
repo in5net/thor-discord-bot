@@ -253,7 +253,9 @@ async function handleOneWordStory(message: Message) {
 				active: false,
 			})
 			.where(eq(oneWordStory.id, latestStory.id));
-		await message.reply("The story has ended.");
+		await message.reply(
+			`The story has ended! ${userMention(env.OWNER_ID)} will post the whole story soon.`,
+		);
 	}
 }
 

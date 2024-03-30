@@ -116,6 +116,7 @@ export default class Queue extends Array<SongType> {
 
 	remove(index: number) {
 		const [song] = this.splice(index, 1);
+		if (index < this.currentIndex) this.currentIndex--;
 		this.changeEmitter.emit("change");
 		return song;
 	}
