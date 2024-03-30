@@ -1,7 +1,7 @@
 import prisma from "$lib/prisma";
 import { type Prisma } from "database";
 import db, { and, eq } from "database/drizzle";
-import { playlists } from "database/drizzle/schema";
+import { playlists, songs } from "database/drizzle/schema";
 import logger from "logger";
 import {
 	SoundCloudSong,

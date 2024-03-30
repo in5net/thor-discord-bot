@@ -1,5 +1,6 @@
 import db, { eq } from "database/drizzle";
 import { users } from "database/drizzle/schema";
+import ms from "ms";
 
 export const MAX_BITS = 32;
 export const NEW_BITS = 24;
@@ -25,17 +26,18 @@ async function getCreditAt(uid: string) {
 	return creditAt;
 }
 
+const hour = ms("1h");
 export async function getBits(uid: string) {
 	const creditAt = await getCreditAt(uid);
 	const diff = Date.now() - creditAt.getTime();
-	const hours = Math.floor(diff / (1000 * 60 * 60));
+	const hours = Math.floor(diff / hour);
 	return hours;
 }
 
 export async function subtractBits(uid: string, price: number) {
 	const creditAt = await getCreditAt(uid);
 	const diff = Date.now() - creditAt.getTime();
-	const hours = Math.floor(diff / (1000 * 60 * 60));
+	const hours = Math.floor(diff / hour);
 	if (hours < price) return false;
 
 	creditAt.setHours(creditAt.getHours() + price);
@@ -45,7 +47,8 @@ export async function subtractBits(uid: string, price: number) {
 			id: uid,
 			creditAt,
 		})
-		.onDuplicateKeyUpdate({
+		.onConflictDoUpdate({
+			target: users.id,
 			set: {
 				creditAt,
 			},

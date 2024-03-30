@@ -1,9 +1,10 @@
 import voices from "$src/music/voice-manager";
 import event from "discord/event";
+import ms from "ms";
 import { env } from "node:process";
 
 const timeouts = new Map<string, NodeJS.Timeout>();
-const FIVE_MINUTES = 1000 * 60 * 5;
+const FIVE_MINUTES = ms("5m");
 
 export default event(
 	{ name: "voiceStateUpdate" },

@@ -1,13 +1,6 @@
 import { Awaitable } from "@in5net/std/types";
 import { getPlayDl } from "./play";
 import {
-	SongType,
-	SoundCloudSong,
-	SpotifySong,
-	URLSong,
-	YouTubeSong,
-} from "./song";
-import {
 	anyOf,
 	caseInsensitive,
 	charIn,
@@ -43,13 +36,11 @@ export const URL_REGEX = createRegExp(
 	[caseInsensitive],
 );
 
-export async function generatePlanFromQuery(message: Message, query?: string) {
+export async function generatePlanFromQuery(
+	{ attachments }: Message,
+	query?: string,
+) {
 	const start = performance.now();
-	const { author, member, attachments } = message;
-	const requester = {
-		uid: author.id,
-		name: member?.nickname || author.username,
-	};
 
 	const queries = query ? splitQueries(query) : [];
 	queries.unshift(...Array.from(attachments.values()).map(a => a.url));
@@ -60,82 +51,43 @@ export async function generatePlanFromQuery(message: Message, query?: string) {
 	const matchers: Array<{
 		name: string;
 		check(query: string): Awaitable<boolean>;
-		getSongs(query: string): Promise<SongType[]>;
 	}> = [
 		{
 			name: "load YouTube playlist",
 			check: query => play.yt_validate(query) === "playlist",
-			async getSongs(query) {
-				const id = play.extractID(query);
-				const { songs } = await YouTubeSong.fromPlaylistId(id, requester);
-				return songs;
-			},
 		},
 		{
 			name: "load YouTube video",
 			check: query => play.yt_validate(query) === "video",
-			async getSongs(query) {
-				const song = await YouTubeSong.fromURL(query, requester);
-				return [song];
-			},
 		},
 		{
 			name: "load YouTube videos from channel",
 			check: query => YOUTUBE_CHANNEL_REGEX.test(query),
-			async getSongs(query) {
-				const id = YOUTUBE_CHANNEL_REGEX.exec(query)?.[2] || "";
-				const videos = await YouTubeSong.fromChannelId(id, requester);
-				return videos;
-			},
 		},
 		{
 			name: "query YouTube from Spotify song",
 			check: query => play.sp_validate(query) === "track",
-			async getSongs(query) {
-				const song = await SpotifySong.fromURL(query, requester);
-				return [song];
-			},
 		},
 		{
 			name: "query YouTube from Spotify album/playlist",
 			check: query =>
 				["album", "playlist"].includes(play.sp_validate(query) as string),
-			async getSongs(query) {
-				const songs = await SpotifySong.fromListURL(query, requester);
-				return songs;
-			},
 		},
 		{
 			name: "load SoundCloud song",
 			check: async query => (await play.so_validate(query)) === "track",
-			async getSongs(query) {
-				const song = await SoundCloudSong.fromURL(query, requester);
-				return [song];
-			},
 		},
 		{
 			name: "load SoundCloud playlist",
 			check: async query => (await play.so_validate(query)) === "playlist",
-			async getSongs(query) {
-				const songs = await SoundCloudSong.fromListURL(query, requester);
-				return songs;
-			},
 		},
 		{
 			name: "load song from url",
 			check: query => URL_REGEX.test(query),
-			async getSongs(query) {
-				const song = URLSong.fromURL(query, requester);
-				return [song];
-			},
 		},
 		{
 			name: "query YouTube",
 			check: () => true,
-			async getSongs(query) {
-				const song = await YouTubeSong.fromSearch(query, requester);
-				return [song];
-			},
 		},
 	];
 
