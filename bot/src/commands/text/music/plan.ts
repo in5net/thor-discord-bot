@@ -1,6 +1,7 @@
-import musicCommand from "./command";
+import { generatePlanFromQuery } from "$src/music/plan";
+import command from "discord/commands/text";
 
-export default musicCommand(
+export default command(
 	{
 		desc: "See what order things are going to be loaded in before -play is used",
 		args: {
@@ -11,11 +12,10 @@ export default musicCommand(
 				optional: true,
 			},
 		},
-		permissions: ["vc"],
 		examples: ["https://youtu.be/dQw4w9WgXcQ terraria ost"],
 	},
-	async ({ message, args: { query }, voice }) => {
-		const plan = await voice.generatePlanFromQuery(message, query);
+	async ({ message, args: { query } }) => {
+		const plan = await generatePlanFromQuery(message, query);
 		return plan
 			.map(({ query, name }, i) => `${i + 1}. ${name}: ${query}`)
 			.join("\n");
