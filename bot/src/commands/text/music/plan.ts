@@ -15,9 +15,10 @@ export default command(
 		examples: ["https://youtu.be/dQw4w9WgXcQ terraria ost"],
 	},
 	async ({ message, args: { query } }) => {
-		const plan = await generatePlanFromQuery(message, query);
-		return plan
+		const { plan, time } = await generatePlanFromQuery(message, query);
+		return `${plan
 			.map(({ query, name }, i) => `${i + 1}. ${name}: ${query}`)
-			.join("\n");
+			.join("\n")}
+Plan time: ${time.toPrecision(2)}ms`;
 	},
 );

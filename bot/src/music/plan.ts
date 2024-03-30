@@ -44,6 +44,7 @@ export const URL_REGEX = createRegExp(
 );
 
 export async function generatePlanFromQuery(message: Message, query?: string) {
+	const start = performance.now();
 	const { author, member, attachments } = message;
 	const requester = {
 		uid: author.id,
@@ -159,7 +160,7 @@ export async function generatePlanFromQuery(message: Message, query?: string) {
 		}
 	}
 
-	return plan;
+	return { plan, time: performance.now() - start };
 }
 
 export function splitQueries(query: string) {
