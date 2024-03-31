@@ -21,68 +21,88 @@ export async function handleTextCommand(message: Message) {
 	try {
 		const ast = parseContent(content);
 
-		for (const commandNode of ast.value) {
-			const { name, args } = commandNode.value;
+		for (const pipedCommands of ast.value) {
+			let output: string | undefined;
+			for (const commandNode of pipedCommands.value) {
+				const { name, args } = commandNode.value;
 
-			const trueArguments = [name, ...args];
-			let command: TextCommand | undefined;
-			const commandNames: string[] = [];
-			let commandName = "";
-			for (const arg of [name, ...args]) {
-				if (arg.type === "ident") {
-					const subcommandName = (arg as Node<"ident">).value.value;
-					commandNames.push(subcommandName);
-					const lowerArgument = subcommandName.toLowerCase();
-					const subcommand = client.textCommands.find(
-						// eslint-disable-next-line ts/no-loop-func
-						({ aliases }, name) =>
-							name.startsWith(commandName) &&
-							(name === lowerArgument || aliases?.includes(lowerArgument)),
-					);
-					if (!subcommand) break;
-					commandName = `${commandName} ${subcommandName}`.trimStart();
-					trueArguments.shift();
-					command = subcommand;
+				const trueArguments: Node[] = [name];
+				if (output !== undefined)
+					trueArguments.push({
+						type: "str",
+						value: { type: "str", value: output, range: [0, 0] },
+					});
+				trueArguments.push(...args);
+				let command: TextCommand | undefined;
+				const commandNames: string[] = [];
+				let commandName = "";
+				for (const arg of [name, ...args]) {
+					if (arg.type === "ident") {
+						const subcommandName = (arg as Node<"ident">).value.value;
+						commandNames.push(subcommandName);
+						const lowerArgument = subcommandName.toLowerCase();
+						const subcommand = client.textCommands.find(
+							// eslint-disable-next-line ts/no-loop-func
+							({ aliases }, name) =>
+								name.startsWith(commandName) &&
+								(name === lowerArgument || aliases?.includes(lowerArgument)),
+						);
+						if (!subcommand) break;
+						commandName = `${commandName} ${subcommandName}`.trimStart();
+						trueArguments.shift();
+						command = subcommand;
+					}
 				}
-			}
 
-			const fullName = commandNames.join(" ");
-			if (command)
-				await (command.permissions?.includes("vc") &&
-				!message.member?.voice.channel
-					? message.reply(`You are not in a voice channel`)
-					: runCommand(fullName, command, trueArguments, message));
-			else {
-				const list = [...client.textCommands.entries()]
-					.map(([name, command]) => ({ name, ...command }))
-					.sort((a, b) => a.name.localeCompare(b.name));
-				const fuse = new Fuse(list, {
-					keys: ["name", "aliases"],
-					threshold: 0.2,
-				});
-				const [suggestion] = fuse.search(fullName, { limit: 1 });
-				if (suggestion)
-					await channel.send(
-						`${
-							Math.random() < 0.1 ? "No" : `IDK what \`${fullName}\` is`
-						}. Did you mean \`${suggestion.item.name}\`${
-							suggestion.item.aliases
-								? `(${suggestion.item.aliases
+				const fullName = commandNames.join(" ");
+				if (command) {
+					if (
+						command.permissions?.includes("vc") &&
+						!message.member?.voice.channel
+					) {
+						await message.reply(`You are not in a voice channel`);
+					} else {
+						const result = await runCommand(
+							fullName,
+							command,
+							trueArguments,
+							message,
+						);
+						output = typeof result === "string" ? result : undefined;
+					}
+				} else {
+					const list = [...client.textCommands.entries()]
+						.map(([name, command]) => ({ name, ...command }))
+						.sort((a, b) => a.name.localeCompare(b.name));
+					const fuse = new Fuse(list, {
+						keys: ["name", "aliases"],
+						threshold: 0.2,
+					});
+					const [suggestion] = fuse.search(fullName, { limit: 1 });
+					if (suggestion)
+						await channel.send(
+							`${
+								Math.random() < 0.1 ? "No" : `IDK what \`${fullName}\` is`
+							}. Did you mean \`${suggestion.item.name}\`${
+								suggestion.item.aliases ?
+									`(${suggestion.item.aliases
 										.map(alias => `\`${alias}\``)
 										.join(", ")})`
-								: ""
-						}?`,
-					);
+								:	""
+							}?`,
+						);
+				}
 			}
+			if (typeof output === "string") await message.channel.send(output);
 		}
 	} catch (error) {
 		await sendError(
 			message.channel,
-			error instanceof CommandError
-				? new TypeError(`\`\`\`${error.format(content)}\`\`\``, {
-						cause: error,
-				  })
-				: error,
+			error instanceof CommandError ?
+				new TypeError(`\`\`\`${error.format(content)}\`\`\``, {
+					cause: error,
+				})
+			:	error,
 		);
 	}
 }
@@ -97,11 +117,11 @@ export function parseContent(content: string) {
 		return ast;
 	} catch (error) {
 		console.error(error);
-		throw error instanceof CommandError
-			? new TypeError(`\`\`\`${error.format(content)}\`\`\``, {
+		throw error instanceof CommandError ?
+				new TypeError(`\`\`\`${error.format(content)}\`\`\``, {
 					cause: error,
-			  })
-			: error;
+				})
+			:	error;
 	}
 }
 
@@ -119,7 +139,6 @@ export async function runCommand(
 		args: parsedArguments as Record<string, ArgumentValue>,
 		client,
 	});
-	if (typeof result === "string") await message.channel.send(result);
 	await db.insert(commandExecutions).values({
 		name,
 		type: "text",
@@ -128,6 +147,7 @@ export async function runCommand(
 		channelId: BigInt(channelId),
 		guildId: message.guildId ? BigInt(message.guildId) : undefined,
 	});
+	return result;
 }
 
 // eslint-disable-next-line complexity
@@ -161,11 +181,9 @@ function parseArgs(
 				if (small || big)
 					throw new CommandError(
 						`Argument \`${name}\` must be ${
-							small && big
-								? `between ${min} and ${max}`
-								: small
-								  ? `no less than ${min}`
-								  : `no more than ${max}`
+							small && big ? `between ${min} and ${max}`
+							: small ? `no less than ${min}`
+							: `no more than ${max}`
 						}`,
 						getNodeRange(node),
 					);
@@ -192,11 +210,9 @@ function parseArgs(
 				if (small || big)
 					throw new CommandError(
 						`Argument \`${name}\` must be ${
-							small && big
-								? `between ${min} and ${max}`
-								: small
-								  ? `no less than ${min}`
-								  : `no more than ${max}`
+							small && big ? `between ${min} and ${max}`
+							: small ? `no less than ${min}`
+							: `no more than ${max}`
 						}`,
 						getNodeRange(node),
 					);
@@ -214,11 +230,9 @@ function parseArgs(
 					if (small || big)
 						throw new CommandError(
 							`Argument \`${name}\` must be ${
-								small && big
-									? `between ${min} and ${max}`
-									: small
-									  ? `no less than ${min}`
-									  : `no more than ${max}`
+								small && big ? `between ${min} and ${max}`
+								: small ? `no less than ${min}`
+								: `no more than ${max}`
 							} characters long`,
 							getNodeRange(node),
 						);
@@ -245,18 +259,16 @@ function parseArgs(
 						const first = argumentStrs[0];
 						throw new CommandError(
 							`Argument \`${name}\` must be ${
-								small && big
-									? `between ${min} and ${max}`
-									: small
-									  ? `no less than ${min}`
-									  : `no more than ${max}`
+								small && big ? `between ${min} and ${max}`
+								: small ? `no less than ${min}`
+								: `no more than ${max}`
 							} characters long`,
-							first
-								? [
-										getNodeRange(first)[0],
-										getNodeRange(argumentStrs.at(-1) || first)[1],
-								  ]
-								: [0, 0],
+							first ?
+								[
+									getNodeRange(first)[0],
+									getNodeRange(argumentStrs.at(-1) || first)[1],
+								]
+							:	[0, 0],
 						);
 					}
 				}
@@ -290,12 +302,12 @@ function parseArgs(
 			throw new Error(`Argument \`${name}\` is required
 
 Usage: \`${getCommandUsage(commandName, command)}\`${
-				command.examples
-					? `
+				command.examples ?
+					`
 Examples: \`\`\`${command.examples
-							.map(args => `${env.PREFIX}${commandName} ${args}`)
-							.join("\n")}\`\`\``
-					: ""
+						.map(args => `${env.PREFIX}${commandName} ${args}`)
+						.join("\n")}\`\`\``
+				:	""
 			}`);
 		parsedArguments[name] = value;
 	}

@@ -61,11 +61,11 @@ export class Parser {
 	}
 
 	parse(): Node<"commands"> {
-		const commands: Node[] = [];
+		const commands: Node<"pipedCommands">[] = [];
 
 		this.skipNewlines();
 
-		commands.push(this.command());
+		commands.push(this.pipeline());
 
 		let moreStatements = true;
 
@@ -76,7 +76,7 @@ export class Parser {
 
 			if (!moreStatements) break;
 
-			const statement = this.command();
+			const statement = this.pipeline();
 			if (!statement) {
 				moreStatements = false;
 				continue;
@@ -86,6 +86,17 @@ export class Parser {
 		}
 
 		return { type: "commands", value: commands };
+	}
+
+	pipeline(): Node<"pipedCommands"> {
+		const commands = [this.command()];
+
+		while (this.token.type === "pipe") {
+			this.advance();
+			commands.push(this.command());
+		}
+
+		return { type: "pipedCommands", value: commands };
 	}
 
 	command(): Node<"command"> {
@@ -101,7 +112,7 @@ export class Parser {
 		}
 
 		const args: Node[] = [];
-		while (!this.eof()) {
+		while (!this.eof() && this.token.type !== "pipe") {
 			const arg = this.atom();
 			args.push(arg);
 		}
@@ -109,32 +120,32 @@ export class Parser {
 		return { type: "command", value: { name, args } };
 	}
 
-	atom(): Node {
+	atom() {
 		const { token } = this;
 		switch (token.type) {
 			case "int": {
 				this.advance();
-				return { type: "int", value: token };
+				return { type: "int", value: token } as Node<"int">;
 			}
 
 			case "float": {
 				this.advance();
-				return { type: "float", value: token };
+				return { type: "float", value: token } as Node<"float">;
 			}
 
 			case "str": {
 				this.advance();
-				return { type: "str", value: token };
+				return { type: "str", value: token } as Node<"str">;
 			}
 
 			case "bool": {
 				this.advance();
-				return { type: "bool", value: token };
+				return { type: "bool", value: token } as Node<"bool">;
 			}
 
 			case "ident": {
 				this.advance();
-				return { type: "ident", value: token };
+				return { type: "ident", value: token } as Node<"ident">;
 			}
 
 			default: {

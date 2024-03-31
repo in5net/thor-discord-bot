@@ -8,8 +8,8 @@ export default command(
 		desc: "Cheese cat",
 		args: {},
 	},
-	async ({ message: { channel, author } }) => {
-		await channel.send(`https://${env.FILES_DOMAIN}/discord/cheesecat.png`);
+	async ({ message: { author } }) => {
 		await incCount(author.id, "cheese");
+		return `https://${env.FILES_DOMAIN}/discord/cheesecat.png`;
 	},
 );

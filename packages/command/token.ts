@@ -9,6 +9,7 @@ export interface TokenMap {
 	bool: boolean;
 	ident: string;
 	minus?: never;
+	pipe?: never;
 	newline?: never;
 	eof?: never;
 }

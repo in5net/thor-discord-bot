@@ -5,9 +5,9 @@ const WHITESPACE = /[ \t\r]/;
 const DIGITS = /\d/;
 const ESCAPE_CHARS: Record<string, string | undefined> = {
 	"\\": "\\",
-	n: "\n",
-	r: "\r",
-	t: "\t",
+	"n": "\n",
+	"r": "\r",
+	"t": "\t",
 };
 
 const EOF = "\0";
@@ -67,6 +67,15 @@ export class Lexer {
 				this.advance();
 				return {
 					type: "minus",
+					value: undefined,
+					range: [start, this.index],
+				};
+			}
+
+			case "|": {
+				this.advance();
+				return {
+					type: "pipe",
 					value: undefined,
 					range: [start, this.index],
 				};

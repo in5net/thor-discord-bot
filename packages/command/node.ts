@@ -11,7 +11,8 @@ export interface NodeMap {
 		name: Node<"ident">;
 		args: Node[];
 	};
-	commands: Array<Node<"command">>;
+	pipedCommands: Array<Node<"command">>;
+	commands: Array<Node<"pipedCommands">>;
 	eof?: never;
 }
 
@@ -20,7 +21,7 @@ export interface Node<T extends keyof NodeMap = keyof NodeMap> {
 	value: NodeMap[T];
 }
 
-export function stringifyNode(node: Node) {
+export function stringifyNode(node: Node): string {
 	switch (node.type) {
 		case "int":
 		case "float":
@@ -36,6 +37,11 @@ export function stringifyNode(node: Node) {
 		case "command": {
 			const typedNode = node as Node<"command">;
 			return `<command ${typedNode.value.name.value.value}>`;
+		}
+
+		case "pipedCommands": {
+			const typedNode = node as Node<"pipedCommands">;
+			return typedNode.value.map(stringifyNode).join(" | ");
 		}
 
 		case "commands": {
@@ -67,6 +73,15 @@ export function getNodeRange(node: Node): Range {
 				typedNode.value.name.value.range[0],
 				getNodeRange(typedNode.value.args.at(-1) || typedNode.value.name)[1],
 			];
+		}
+
+		case "pipedCommands": {
+			const typedNode = node as Node<"pipedCommands">;
+			const first = typedNode.value.at(0);
+			const last = typedNode.value.at(-1);
+			if (!first) return [0, 0];
+			if (!last) return getNodeRange(first);
+			return [getNodeRange(first)[0], getNodeRange(last)[1]];
 		}
 
 		case "commands": {
