@@ -156,6 +156,8 @@ enum IssueType {
   Bug         @map("bug")
   Feature     @map("feature")
   Enhancement @map("enhancement")
+
+  @@map("issue_type")
 }
 
 enum IssueReason {
@@ -163,6 +165,8 @@ enum IssueReason {
   WontFix   @map("wont_fix")
   Duplicate @map("duplicate")
   Invalid   @map("invalid")
+
+  @@map("issue_reason")
 }
 
 model RotatingFood {
@@ -197,4 +201,6 @@ enum CommandType {
   Text    @map("text")
   Slash   @map("slash")
   Message @map("message")
+
+  @@map("command_type")
 }
