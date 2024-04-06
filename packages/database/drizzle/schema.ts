@@ -437,3 +437,21 @@ export const oneWordStoryEntryRelations = relations(
 		}),
 	}),
 );
+
+export const youtubeSearches = pgTable(
+	"youtube_searches",
+	{
+		id: serial("id").primaryKey(),
+		guildId: bigint("guild_id", { mode: "bigint" }).notNull(),
+		channelId: bigint("channel_id", { mode: "bigint" }).notNull(),
+		messageId: bigint("message_id", { mode: "bigint" }).notNull(),
+		ids: text("ids").notNull(),
+	},
+	table => ({
+		guildIdChannelIdMessageIdIdx: namedIndex(
+			table.guildId,
+			table.channelId,
+			table.messageId,
+		),
+	}),
+);

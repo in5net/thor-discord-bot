@@ -219,7 +219,6 @@ export default class Voice extends TypedEmitter<{
 		const { queue, channel } = this;
 
 		const songs = await this.getSongsFromQuery(message, query);
-		console.log(songs);
 		queue.push(...(shuff ? shuffle(songs) : songs));
 
 		if (songs.length)
