@@ -16,6 +16,8 @@ const videosSchema = z.array(
 	}),
 );
 
+const numberEmojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"];
+
 export default command(
 	{
 		desc: "Search for songs on YouTube and play them by reacting",
@@ -46,13 +48,17 @@ export default command(
 			.setFooter({
 				text: "React with the number of the song you want to play",
 			});
-		const { id } = await message.channel.send({ embeds: [embed] });
+		const embedMessage = await message.channel.send({ embeds: [embed] });
 
 		await db.insert(youtubeSearches).values({
 			guildId: BigInt(guildId),
 			channelId: BigInt(channelId),
-			messageId: BigInt(id),
+			messageId: BigInt(embedMessage.id),
 			ids: videos.map(v => v.id).join(","),
 		});
+
+		for (const emoji of numberEmojis) {
+			await embedMessage.react(emoji);
+		}
 	},
 );
