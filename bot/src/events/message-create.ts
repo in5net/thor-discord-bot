@@ -29,9 +29,10 @@ import { pipe } from "@in5net/std/fn";
 import { pick } from "@in5net/std/iter";
 import db, { and, desc, eq } from "database/drizzle";
 import { oneWordStory, oneWordStoryEntry } from "database/drizzle/schema";
+import * as deepl from "deepl-node";
 
 const prefix = env.PREFIX;
-const prefixRegex = createRegExp(exactly(prefix).at.lineStart(), [
+const prefixRegex = createRegExp(exactly(prefix).times(1).at.lineStart(), [
 	caseInsensitive,
 ]);
 const whitespaceRegex = createRegExp(whitespace, [global]);
@@ -43,10 +44,12 @@ const responseVariableRegex = createRegExp(
 	[global],
 );
 
+const translator = new deepl.Translator(env.DEEPL_API_KEY);
+
 export default event(
 	{ name: "messageCreate" },
 	async ({ client, args: [message] }) => {
-		const { content, channel, author } = message;
+		const { content, channel, author, reference } = message;
 		if (author.bot || !("send" in channel)) return;
 		const lowercase = content.toLowerCase();
 		const noWhitespace = lowercase.replaceAll(whitespaceRegex, "");
@@ -89,6 +92,20 @@ export default event(
 
 				if (channel.name === "one-word-story")
 					await handleOneWordStory(message);
+			}
+
+			if (reference?.messageId && ["translate", "tl"].includes(lowercase)) {
+				const referencedMessage = await channel.messages.fetch(
+					reference.messageId,
+				);
+				const foreignContent = referencedMessage.cleanContent;
+				const result = await translator.translateText(
+					foreignContent,
+					null,
+					"en-US",
+				);
+				await channel.send(`${result.detectedSourceLang}: ${foreignContent}
+en: ${result.text}`);
 			}
 
 			await handleHaiku(message);

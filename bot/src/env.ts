@@ -34,6 +34,7 @@ const EnvironmentVariables = z.object({
 
 	REPLICATE_TOKEN: z.string(),
 	OPENAI_API_KEY: z.string(),
+	DEEPL_API_KEY: z.string(),
 });
 
 const result = EnvironmentVariables.safeParse(env);
