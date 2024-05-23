@@ -95,7 +95,7 @@ export default command(
 			const filledBars = Math.floor(progress * bars);
 			const barString = "=".repeat(filledBars) + " ".repeat(bars - filledBars);
 			editPromise = i.editReply(
-				`Rendering cube: [${barString}] ${frame.toString().padStart(2, " ")}/${frames.toString().padStart(2, " ")} ${Math.round(
+				`Rendering cube: \`[${barString}]\` ${frame.toString().padStart(2, " ")}/${frames.toString().padStart(2, " ")} ${Math.round(
 					progress * 100,
 				)
 					.toString()
