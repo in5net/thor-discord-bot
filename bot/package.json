@@ -4,7 +4,6 @@
   "type": "module",
   "main": "./src/main.ts",
   "scripts": {
-    "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u",
     "dev": "tsx watch src/main.ts",
     "start": "tsx src/main.ts",
     "debug": "tsx --inspect-brk src/main.ts",

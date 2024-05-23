@@ -1,21 +1,20 @@
 {
-  "name": "discord-bots",
-  "private": true,
-  "scripts": {
-    "commit": "./commit.sh",
-    "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u; pnpm run -r --sequential update",
-    "lint": "xo",
-    "dev": "turbo run dev",
-    "start": "turbo run start",
-    "debug": "turbo run debug",
-    "deploy": "turbo run deploy"
-  },
-  "devDependencies": {
-    "@iz7n/eslint-config": "^0.8.0",
-    "@iz7n/prettier-config": "^1.2.0",
-    "prettier": "^3.2.5",
-    "turbo": "^1.13.3",
-    "typescript": "5.4.5"
-  },
-  "prettier": "@iz7n/prettier-config"
+	"name": "thor-discord-bot",
+	"private": true,
+	"scripts": {
+		"lint": "eslint",
+		"dev": "turbo run dev",
+		"start": "turbo run start",
+		"debug": "turbo run debug",
+		"deploy": "turbo run deploy"
+	},
+	"devDependencies": {
+		"@iz7n/eslint-config": "^0.8.1",
+		"@iz7n/prettier-config": "^1.2.0",
+		"eslint": "^9.3.0",
+		"prettier": "^3.2.5",
+		"turbo": "^1.13.3",
+		"typescript": "5.4.5"
+	},
+	"prettier": "@iz7n/prettier-config"
 }

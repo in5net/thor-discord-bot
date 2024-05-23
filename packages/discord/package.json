@@ -1,21 +1,18 @@
 {
-  "name": "discord",
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u"
-  },
-  "dependencies": {
-    "@in5net/std": "0.16.0",
-    "database": "workspace:*",
-    "discord-api-types": "0.37.81",
-    "discord.js": "14.14.1",
-    "fast-glob": "^3.3.2",
-    "fuse.js": "^7.0.0",
-    "logger": "workspace:*",
-    "magic-regexp": "^0.8.0"
-  },
-  "devDependencies": {
-    "@types/node": "20.12.7"
-  }
+	"name": "discord",
+	"version": "0.0.0",
+	"type": "module",
+	"dependencies": {
+		"@in5net/std": "0.16.0",
+		"database": "workspace:*",
+		"discord-api-types": "0.37.81",
+		"discord.js": "14.14.1",
+		"fast-glob": "^3.3.2",
+		"fuse.js": "^7.0.0",
+		"logger": "workspace:*",
+		"magic-regexp": "^0.8.0"
+	},
+	"devDependencies": {
+		"@types/node": "20.12.7"
+	}
 }

@@ -1,18 +1,15 @@
 {
-  "name": "logger",
-  "version": "0.0.0",
-  "type": "module",
-  "main": "./index.ts",
-  "types": "./index.ts",
-  "scripts": {
-    "update": "NPM_CHECK_INSTALLER=pnpm npm-check -u"
-  },
-  "dependencies": {
-    "cloud-pine": "^2.0.1",
-    "pino": "^8.21.0"
-  },
-  "devDependencies": {
-    "@types/node": "20.12.7",
-    "pino-pretty": "^11.0.0"
-  }
+	"name": "logger",
+	"version": "0.0.0",
+	"type": "module",
+	"main": "./index.ts",
+	"types": "./index.ts",
+	"dependencies": {
+		"cloud-pine": "^2.0.1",
+		"pino": "^8.21.0"
+	},
+	"devDependencies": {
+		"@types/node": "20.12.7",
+		"pino-pretty": "^11.0.0"
+	}
 }
