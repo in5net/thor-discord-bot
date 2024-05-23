@@ -30,7 +30,7 @@ export default command(
 				desc: "The speed of the cube (rotations per second)",
 				min: 0.25,
 				max: 4,
-				default: 0.5,
+				default: 1,
 			},
 			gif: {
 				type: "bool",
