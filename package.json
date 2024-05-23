@@ -1,6 +1,6 @@
 {
 	"name": "thor-discord-bot",
-	"private": true,
+	"type": "module",
 	"scripts": {
 		"lint": "eslint",
 		"dev": "turbo run dev",

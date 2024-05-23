@@ -14,6 +14,7 @@ import { join } from "node:path";
 import { PNG } from "pngjs";
 import GIF from "./gif";
 import Texture from "./texture";
+import { Awaitable } from "@in5net/std/types";
 
 interface GLShader {
 	shader: WebGLShader;
@@ -592,7 +593,7 @@ export default class GL {
 			fps?: number;
 			noRepeat?: boolean;
 			quality?: number;
-			render?: (t: number) => void;
+			render?: (t: number) => Awaitable<void>;
 		} = {},
 	): Promise<ReadStream> {
 		const { width, height } = this;
@@ -611,7 +612,7 @@ export default class GL {
 		encoder.setFrameRate(fps);
 
 		for (let i = 0; i < frames; i++) {
-			render?.(i / fps);
+			await render?.(i / fps);
 			this.bindTextures(i);
 			this.render();
 
@@ -637,7 +638,7 @@ export default class GL {
 			render,
 		}: {
 			fps?: number;
-			render?: (t: number) => void;
+			render?: (t: number) => Awaitable<void>;
 		} = {},
 	): Promise<ReadStream> {
 		const { width, height } = this;
@@ -650,7 +651,7 @@ export default class GL {
 		await mkdir(temporaryDir);
 
 		for (let i = 0; i < frames; i++) {
-			render?.(i / fps);
+			await render?.(i / fps);
 			this.bindTextures(i);
 			this.render();
 

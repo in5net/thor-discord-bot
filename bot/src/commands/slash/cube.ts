@@ -1,5 +1,6 @@
 import GL from "$lib/gl";
-import { AttachmentBuilder } from "discord.js";
+import { sleep } from "@in5net/std/async";
+import { AttachmentBuilder, Message } from "discord.js";
 import command from "discord/commands/slash";
 import { mat4 } from "gl-matrix";
 import { nanoid } from "nanoid";
@@ -70,7 +71,7 @@ export default command(
 
 		let angle = 0;
 
-		function render() {
+		async function render() {
 			gl.background(0, 0, 0, 1);
 
 			mat4.identity(modelViewMatrix);
@@ -79,30 +80,52 @@ export default command(
 			mat4.rotateY(modelViewMatrix, modelViewMatrix, angle);
 			mat4.rotateZ(modelViewMatrix, modelViewMatrix, angle);
 			gl.uniform("modelViewMatrix", "mat4", modelViewMatrix);
+			frame++;
+			await sleep();
+		}
+
+		const renderStart = performance.now();
+		const frames = fps / speed;
+		let frame = 0;
+		const bars = 20;
+		let editPromise: Promise<Message<boolean>> | undefined;
+		const progressHandle = setInterval(updateProgress, 1500);
+		function updateProgress() {
+			const progress = frame / frames;
+			const filledBars = Math.floor(progress * bars);
+			const barString = "=".repeat(filledBars) + " ".repeat(bars - filledBars);
+			editPromise = i.editReply(
+				`Rendering cube: [${barString}] ${frame.toString().padStart(2, " ")}/${frames.toString().padStart(2, " ")} ${Math.round(
+					progress * 100,
+				)
+					.toString()
+					.padStart(3, " ")}%`,
+			);
 		}
 
 		const stream =
 			gif ?
-				await gl.gifStream(fps / speed, {
+				await gl.gifStream(frames, {
 					fps,
 					render(t) {
 						angle = Math.PI * 2 * t * speed;
-						render();
+						return render();
 					},
 				})
 			:	await gl.mp4Stream(
-					fps / speed,
+					frames,
 					new URL("../../../assets/cube/cube.ogg", import.meta.url).pathname,
 					{
 						fps,
 						render(t) {
 							angle = Math.PI * 2 * t * speed;
-							render();
+							return render();
 						},
 					},
 				);
-
-		await i.editReply("Uploading cube...");
+		const streamStart = performance.now();
+		clearInterval(progressHandle);
+		await editPromise;
 
 		const extension = gif ? "gif" : "mp4";
 		const path = `cubes/${nanoid()}.${extension}`;
@@ -118,8 +141,11 @@ export default command(
 		uploadStream.once("close", async () => {
 			const fileURL = `https://${env.FILES_DOMAIN}/${path}`;
 			console.log(`Uploaded ${fileURL}`);
+			const end = performance.now();
 
 			return i.editReply({
+				content: `Render time: ${Math.round(streamStart - renderStart)}ms
+Upload time: ${Math.round(end - streamStart)}ms`,
 				files: [new AttachmentBuilder(fileURL, { name: `cube.${extension}` })],
 			});
 		});
