@@ -4,7 +4,7 @@
 	"scripts": {
 		"lint": "eslint",
 		"dev": "turbo run dev",
-		"start": "turbo run start",
+		"start": "turbo run start --log-prefix none",
 		"debug": "turbo run debug",
 		"deploy": "turbo run deploy"
 	},
