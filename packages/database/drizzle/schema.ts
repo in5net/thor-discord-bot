@@ -336,7 +336,7 @@ export const issues = sqliteTable(
 		closedAt: timestamp("closed_at"),
 		reason: text("reason", {
 			enum: ["completed", "wont_fix", "duplicate", "invalid"],
-		}).notNull(),
+		}),
 	},
 	table => ({
 		userIndex: namedIndex(table.userId),
