@@ -1,7 +1,5 @@
 import { createEmbed } from "$lib/embed";
 import prisma from "$lib/prisma";
-import { objectKeys } from "@in5net/std/object";
-import { IssueType } from "database";
 import command from "discord/commands/slash";
 
 export default command(
@@ -15,7 +13,7 @@ export default command(
 			type: {
 				type: "choice",
 				desc: "Type of issue",
-				choices: objectKeys(IssueType),
+				choices: ["Bug", "Feature", "Enhancement"],
 			},
 			desc: {
 				type: "string",
@@ -32,10 +30,10 @@ export default command(
 				user: {
 					connectOrCreate: {
 						create: {
-							id: i.user.id,
+							id: BigInt(i.user.id),
 						},
 						where: {
-							id: i.user.id,
+							id: BigInt(i.user.id),
 						},
 					},
 				},
@@ -50,7 +48,9 @@ export default command(
 			.addFields({
 				name: "Type",
 				value: `${
-					type === "Bug" ? "🐛" : type === "Feature" ? "✨" : "🔧"
+					type === "Bug" ? "🐛"
+					: type === "Feature" ? "✨"
+					: "🔧"
 				} ${type}`,
 			});
 		return i.reply({

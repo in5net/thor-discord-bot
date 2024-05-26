@@ -1,4 +1,16 @@
 import { getLyrics } from "$lib/genius";
+import { URL_REGEX, YOUTUBE_CHANNEL_REGEX, splitQueries } from "./plan";
+import { getPlayDl } from "./play";
+import Queue from "./queue";
+import {
+	SoundCloudSong,
+	SpotifySong,
+	URLSong,
+	YouTubeSong,
+	type Requester,
+	type SongType,
+} from "./song";
+import Stream from "./stream";
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { shuffle } from "@in5net/std/random";
 import { type Awaitable } from "@in5net/std/types";
@@ -11,19 +23,6 @@ import {
 } from "discord.js";
 import logger from "logger";
 import { TypedEmitter } from "tiny-typed-emitter";
-import { getPlayDl } from "./play";
-import * as playlist from "./playlist";
-import Queue from "./queue";
-import {
-	SoundCloudSong,
-	SpotifySong,
-	URLSong,
-	YouTubeSong,
-	type Requester,
-	type SongType,
-} from "./song";
-import Stream from "./stream";
-import { URL_REGEX, YOUTUBE_CHANNEL_REGEX, splitQueries } from "./plan";
 
 export default class Voice extends TypedEmitter<{
 	stop: () => void;
@@ -32,6 +31,7 @@ export default class Voice extends TypedEmitter<{
 		.on("idle", async () => {
 			try {
 				if (this.queue.hasNext()) {
+					// eslint-disable-next-line unicorn/require-array-join-separator
 					this.stream.join();
 					await this.play();
 				} else this.stream.stop();
@@ -92,8 +92,8 @@ export default class Voice extends TypedEmitter<{
 
 		const matchers: Array<{
 			name: string;
-			check(query: string): Awaitable<boolean>;
-			getSongs(query: string): Promise<SongType[]>;
+			check: (query: string) => Awaitable<boolean>;
+			getSongs: (query: string) => Promise<SongType[]>;
 		}> = [
 			{
 				name: "YouTube playlist url",
@@ -305,23 +305,5 @@ export default class Voice extends TypedEmitter<{
 
 	async setFilters(filters?: string[]) {
 		return this.stream.setFilters(filters);
-	}
-
-	async playlistSave(message: Message, name: string, query?: string) {
-		const { queue } = this;
-		const { author, channel } = message;
-		const songs = query ? await this.getSongsFromQuery(message, query) : queue;
-		await playlist.save(author.id, name, songs);
-		if (channel.type !== ChannelType.GuildStageVoice)
-			await channel.send(`Saved playlist ${name}`);
-	}
-
-	async playlistAdd(message: Message, name: string, query?: string) {
-		const { queue } = this;
-		const { author, channel } = message;
-		const songs = query ? await this.getSongsFromQuery(message, query) : queue;
-		await playlist.add(author.id, name, songs);
-		if (channel.type !== ChannelType.GuildStageVoice)
-			await channel.send(`Added to playlist ${name}`);
 	}
 }

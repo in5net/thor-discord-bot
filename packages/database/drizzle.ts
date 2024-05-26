@@ -1,16 +1,12 @@
-import "./env";
-
-import { ilike, like, type AnyColumn } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/postgres-js";
-import { env } from "node:process";
-import postgres from "postgres";
 import * as schema from "./drizzle/schema";
+import "./env";
+import Database from "better-sqlite3";
+import { ilike, like, type AnyColumn } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import { env } from "node:process";
 
-const pgClient = postgres(env.DATABASE_URL);
-const db = drizzle(pgClient, {
-	schema,
-	logger: true,
-});
+const sqlite = new Database(env.DATABASE_URL);
+const db = drizzle(sqlite, { schema });
 export default db;
 
 export * from "drizzle-orm";

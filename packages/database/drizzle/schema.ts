@@ -2,23 +2,17 @@
 import { createId as cuid2 } from "@paralleldrive/cuid2";
 import { relations } from "drizzle-orm";
 import {
-	char,
-	bigint,
-	boolean,
 	index,
 	integer,
-	jsonb,
-	pgTable,
+	sqliteTable,
 	text,
-	timestamp,
 	unique,
 	primaryKey,
-	serial,
-	pgEnum,
-	type PgColumn,
-} from "drizzle-orm/pg-core";
+	numeric,
+	type SQLiteColumn,
+} from "drizzle-orm/sqlite-core";
 
-const namedIndex = (column: PgColumn, ...columns: PgColumn[]) =>
+const namedIndex = (column: SQLiteColumn, ...columns: SQLiteColumn[]) =>
 	index(
 		`${column.uniqueName?.replace(`_${column.name}_unique`, "")}_${[
 			column,
@@ -28,16 +22,16 @@ const namedIndex = (column: PgColumn, ...columns: PgColumn[]) =>
 			.join("_")}_idx`,
 	).on(column, ...columns);
 
-const createdAt = timestamp("created_at").notNull().defaultNow();
-const updatedAt = timestamp("updated_at")
-	.notNull()
-	.defaultNow()
-	.$onUpdateFn(() => new Date());
+const boolean = (name: string) => integer(name, { mode: "boolean" });
+const timestamp = (name: string) => integer(name, { mode: "timestamp" });
 
-export const guilds = pgTable(
+const createdAt = timestamp("created_at").notNull();
+const updatedAt = timestamp("updated_at").notNull();
+
+export const guilds = sqliteTable(
 	"guilds",
 	{
-		id: bigint("id", { mode: "bigint" }).primaryKey(),
+		id: numeric("id").primaryKey(),
 		deleted: boolean("deleted").notNull().default(false),
 	},
 	table => ({
@@ -50,11 +44,11 @@ export const guildsRelations = relations(guilds, ({ many }) => ({
 	messages: many(messages),
 }));
 
-export const members = pgTable(
+export const members = sqliteTable(
 	"members",
 	{
-		id: bigint("id", { mode: "bigint" }).primaryKey(),
-		guildId: bigint("guild_id", { mode: "bigint" })
+		id: numeric("id").primaryKey(),
+		guildId: numeric("guild_id")
 			.notNull()
 			.references(() => guilds.id, { onDelete: "cascade" }),
 		bot: boolean("bot").notNull().default(false),
@@ -71,11 +65,11 @@ export const membersRelations = relations(members, ({ one }) => ({
 	}),
 }));
 
-export const channels = pgTable(
+export const channels = sqliteTable(
 	"channels",
 	{
-		id: bigint("id", { mode: "bigint" }).primaryKey(),
-		guildId: bigint("guild_id", { mode: "bigint" })
+		id: numeric("id").primaryKey(),
+		guildId: numeric("guild_id")
 			.notNull()
 			.references(() => guilds.id, { onDelete: "set null" }),
 		nsfw: boolean("nsfw").notNull().default(false),
@@ -97,15 +91,15 @@ export const channelsRelations = relations(channels, ({ one, many }) => ({
 /**
  * @see https://discord.com/developers/docs/resources/channel#message-object
  */
-export const messages = pgTable(
+export const messages = sqliteTable(
 	"messages",
 	{
-		id: bigint("id", { mode: "bigint" }).primaryKey(),
+		id: numeric("id").primaryKey(),
 		createdAt: timestamp("timestamp"),
 		updatedAt: timestamp("edited_timestamp"),
-		authorId: bigint("author_id", { mode: "bigint" }).notNull(),
-		channelId: bigint("channel_id", { mode: "bigint" }).notNull(),
-		guildId: bigint("guild_id", { mode: "bigint" }),
+		authorId: numeric("author_id").notNull(),
+		channelId: numeric("channel_id").notNull(),
+		guildId: numeric("guild_id"),
 		content: text("content").notNull(),
 	},
 	table => ({
@@ -129,22 +123,19 @@ export const messagesRelations = relations(messages, ({ one, many }) => ({
 /**
  * @see https://discord.com/developers/docs/resources/channel#attachment-object
  */
-export const attachments = pgTable(
+export const attachments = sqliteTable(
 	"attachments",
 	{
-		id: bigint("id", { mode: "bigint" }).primaryKey(),
-		messageId: bigint("message_id", { mode: "bigint" }).references(
-			() => messages.id,
-			{ onDelete: "set null" },
-		),
-		channelId: bigint("channel_id", { mode: "bigint" }).references(
-			() => channels.id,
-			{ onDelete: "set null" },
-		),
-		guildId: bigint("guild_id", { mode: "bigint" }).references(
-			() => guilds.id,
-			{ onDelete: "set null" },
-		),
+		id: numeric("id").primaryKey(),
+		messageId: numeric("message_id").references(() => messages.id, {
+			onDelete: "set null",
+		}),
+		channelId: numeric("channel_id").references(() => channels.id, {
+			onDelete: "set null",
+		}),
+		guildId: numeric("guild_id").references(() => guilds.id, {
+			onDelete: "set null",
+		}),
 		filename: text("filename").notNull(),
 		ext: text("extension"),
 		contentType: text("content_type"),
@@ -176,11 +167,11 @@ export const attachmentsRelations = relations(attachments, ({ one }) => ({
 	}),
 }));
 
-export const users = pgTable("users", {
-	id: char("id", { length: 18 }).primaryKey(),
+export const users = sqliteTable("users", {
+	id: numeric("id").primaryKey(),
 	createdAt,
 	updatedAt,
-	counts: jsonb("counts"),
+	counts: text("counts", { mode: "json" }),
 	creditAt: timestamp("credit_at"),
 	admin: boolean("admin").default(false).notNull(),
 });
@@ -189,13 +180,13 @@ export const usersRelations = relations(users, ({ many }) => ({
 	issues: many(issues),
 }));
 
-export const playlists = pgTable(
+export const playlists = sqliteTable(
 	"playlists",
 	{
 		id: text("id").primaryKey(),
 		createdAt,
 		updatedAt,
-		userId: char("user_id", { length: 18 })
+		userId: numeric("user_id")
 			.notNull()
 			.references(() => users.id, { onUpdate: "cascade", onDelete: "cascade" }),
 		name: text("name").notNull(),
@@ -213,19 +204,19 @@ export const playlistsRelations = relations(playlists, ({ one, many }) => ({
 	albums: many(albums),
 }));
 
-export const albums = pgTable("albums", {
+export const albums = sqliteTable("albums", {
 	id: text("id").primaryKey(),
 	createdAt,
 	updatedAt,
 	name: text("name").notNull(),
-	data: jsonb("data").notNull(),
+	data: text("data", { mode: "json" }).notNull(),
 });
 export const albumsRelations = relations(albums, ({ many }) => ({
 	playlists: many(songs),
 	songs: many(albums),
 }));
 
-export const albumsToPlaylists = pgTable(
+export const albumsToPlaylists = sqliteTable(
 	"albums_to_playlists",
 	{
 		albumId: text("album_id")
@@ -259,7 +250,7 @@ export const albumsToPlaylistsRelations = relations(
 	}),
 );
 
-export const songs = pgTable(
+export const songs = sqliteTable(
 	"songs",
 	{
 		id: text("id").primaryKey(),
@@ -275,7 +266,7 @@ export const songs = pgTable(
 		}),
 		title: text("title").notNull(),
 		duration: integer("duration").notNull(),
-		data: jsonb("data").notNull(),
+		data: text("data", { mode: "json" }).notNull(),
 		playlistIndex: integer("playlist_index"),
 		albumIndex: integer("album_index"),
 	},
@@ -295,66 +286,57 @@ export const songsRelations = relations(songs, ({ one }) => ({
 	}),
 }));
 
-export const ratios = pgTable("ratios", {
+export const ratios = sqliteTable("ratios", {
 	id: text("id").primaryKey().$default(cuid2),
 	createdAt,
 	content: text("content").notNull().unique(),
 });
 
-export const y7Files = pgTable("y7_files", {
+export const y7Files = sqliteTable("y7_files", {
 	name: text("name").primaryKey(),
 	extension: text("extension").notNull(),
 });
 
-export const chickens = pgTable("chickens", {
+export const chickens = sqliteTable("chickens", {
 	name: text("name").primaryKey(),
 	sentAt: timestamp("sent_at"),
 });
 
-export const speechBubbles = pgTable("speech_bubbles", {
+export const speechBubbles = sqliteTable("speech_bubbles", {
 	name: text("name").primaryKey(),
 	sentAt: timestamp("sent_at"),
 });
 
-export const hopOns = pgTable("hop_ons", {
+export const hopOns = sqliteTable("hop_ons", {
 	id: text("id").primaryKey(),
 	sentAt: timestamp("sent_at"),
 });
 
-export const kraccBaccVideos = pgTable("kracc_bacc_videos", {
+export const kraccBaccVideos = sqliteTable("kracc_bacc_videos", {
 	name: text("name").primaryKey(),
 	sentAt: timestamp("sent_at"),
 });
 
-export const bossFiles = pgTable("boss_files", {
+export const bossFiles = sqliteTable("boss_files", {
 	id: text("id").primaryKey(),
 	url: text("url").notNull(),
 	sentAt: timestamp("sent_at"),
 });
 
-export const issueType = pgEnum("issue_type", [
-	"bug",
-	"feature",
-	"enhancement",
-]);
-export const issueReason = pgEnum("issue_reason", [
-	"completed",
-	"wont_fix",
-	"duplicate",
-	"invalid",
-]);
-export const issues = pgTable(
+export const issues = sqliteTable(
 	"issues",
 	{
-		id: serial("id").primaryKey(),
+		id: integer("id").primaryKey({ autoIncrement: true }),
 		createdAt,
 		updatedAt,
-		userId: char("user_id", { length: 18 }).notNull(),
+		userId: numeric("user_id").notNull(),
 		name: text("name").notNull(),
-		type: issueType("type").notNull(),
+		type: text("type", { enum: ["bug", "feature", "enhancement"] }).notNull(),
 		desc: text("desc").notNull(),
 		closedAt: timestamp("closed_at"),
-		reason: issueReason("reason"),
+		reason: text("reason", {
+			enum: ["completed", "wont_fix", "duplicate", "invalid"],
+		}).notNull(),
 	},
 	table => ({
 		userIndex: namedIndex(table.userId),
@@ -367,29 +349,26 @@ export const issuesRelations = relations(issues, ({ one }) => ({
 	}),
 }));
 
-export const rotatingFood = pgTable("rotating_food", {
+export const rotatingFood = sqliteTable("rotating_food", {
 	name: text("name").primaryKey(),
 });
 
-export const audioFilters = pgTable("audio_filters", {
+export const audioFilters = sqliteTable("audio_filters", {
 	name: text("name").primaryKey(),
 	value: text("value").notNull(),
 });
 
-export const commandType = pgEnum("command_type", ["text", "slash", "message"]);
-export const commandExecutions = pgTable(
+export const commandExecutions = sqliteTable(
 	"command_executions",
 	{
 		id: text("id").primaryKey().$default(cuid2),
 		createdAt,
 		name: text("name").notNull(),
-		type: commandType("type").notNull(),
-		userId: bigint("user_id", { mode: "bigint" }).notNull(),
-		messageId: bigint("message_id", { mode: "bigint" }),
-		channelId: bigint("channel_id", {
-			mode: "bigint",
-		}).notNull(),
-		guildId: bigint("guild_id", { mode: "bigint" }),
+		type: text("type", { enum: ["text", "slash", "message"] }).notNull(),
+		userId: numeric("user_id").notNull(),
+		messageId: numeric("message_id"),
+		channelId: numeric("channel_id").notNull(),
+		guildId: numeric("guild_id"),
 	},
 	table => ({
 		createdAtIndex: namedIndex(table.createdAt),
@@ -399,11 +378,11 @@ export const commandExecutions = pgTable(
 	}),
 );
 
-export const oneWordStory = pgTable("one_word_story", {
-	id: serial("id").primaryKey(),
+export const oneWordStory = sqliteTable("one_word_story", {
+	id: integer("id").primaryKey(),
 	createdAt,
 	updatedAt,
-	guildId: bigint("guild_id", { mode: "bigint" }).notNull(),
+	guildId: numeric("guild_id").notNull(),
 	active: boolean("active").notNull().default(true),
 });
 export const oneWordStoryRelations = relations(
@@ -417,10 +396,10 @@ export const oneWordStoryRelations = relations(
 	}),
 );
 
-export const oneWordStoryEntry = pgTable("one_word_story_entry", {
-	id: serial("id").primaryKey(),
+export const oneWordStoryEntry = sqliteTable("one_word_story_entry", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
 	createdAt,
-	userId: bigint("user_id", { mode: "bigint" }).notNull(),
+	userId: numeric("user_id").notNull(),
 	story: integer("story").notNull(),
 	word: text("word").notNull(),
 });
@@ -438,13 +417,13 @@ export const oneWordStoryEntryRelations = relations(
 	}),
 );
 
-export const youtubeSearches = pgTable(
+export const youtubeSearches = sqliteTable(
 	"youtube_searches",
 	{
-		id: serial("id").primaryKey(),
-		guildId: bigint("guild_id", { mode: "bigint" }).notNull(),
-		channelId: bigint("channel_id", { mode: "bigint" }).notNull(),
-		messageId: bigint("message_id", { mode: "bigint" }).notNull(),
+		id: integer("id").primaryKey({ autoIncrement: true }),
+		guildId: numeric("guild_id").notNull(),
+		channelId: numeric("channel_id").notNull(),
+		messageId: numeric("message_id").notNull(),
 		ids: text("ids").notNull(),
 	},
 	table => ({
