@@ -6,7 +6,7 @@
 	"types": "./index.ts",
 	"scripts": {
 		"db:generate": "prisma generate && prisma db push --schema prisma/cache.prisma",
-		"db:push": "drizzle-kit push:pg"
+		"db:push": "drizzle-kit push"
 	},
 	"dependencies": {
 		"@paralleldrive/cuid2": "^2.2.2",
