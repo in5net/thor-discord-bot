@@ -1,6 +1,6 @@
 /* eslint-disable ts/no-use-before-define */
 import { createId as cuid2 } from "@paralleldrive/cuid2";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
 	index,
 	integer,
@@ -25,8 +25,12 @@ const namedIndex = (column: SQLiteColumn, ...columns: SQLiteColumn[]) =>
 const boolean = (name: string) => integer(name, { mode: "boolean" });
 const timestamp = (name: string) => integer(name, { mode: "timestamp" });
 
-const createdAt = timestamp("created_at").notNull();
-const updatedAt = timestamp("updated_at").notNull();
+const createdAt = timestamp("created_at")
+	.notNull()
+	.default(sql`(CURRENT_TIMESTAMP)`);
+const updatedAt = timestamp("updated_at")
+	.notNull()
+	.default(sql`(CURRENT_TIMESTAMP)`);
 
 export const guilds = sqliteTable(
 	"guilds",

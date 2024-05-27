@@ -47,7 +47,7 @@ export async function getRandomFile(type?: Type) {
 
 export async function sendFile(
 	replyable: {
-		reply(options: string | MessagePayload | BaseMessageOptions): Promise<any>;
+		reply: (options: string | MessagePayload | BaseMessageOptions) => Promise<any>;
 	},
 	{ id, messageId, filename, ext }: (typeof attachments)["$inferSelect"],
 ) {
