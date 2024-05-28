@@ -1,7 +1,7 @@
+import { sendFile } from "./shared";
 import db, { eq, icontains } from "database/drizzle";
 import { attachments } from "database/drizzle/schema";
 import command from "discord/commands/slash";
-import { sendFile } from "./shared";
 
 export default command(
 	{
@@ -29,7 +29,7 @@ export default command(
 	},
 	async (i, { file }) => {
 		const fileData = await db.query.attachments.findFirst({
-			where: eq(attachments.id, BigInt(file)),
+			where: eq(attachments.id, file),
 		});
 		if (!fileData) return i.reply("No file found");
 		return sendFile(i, fileData);

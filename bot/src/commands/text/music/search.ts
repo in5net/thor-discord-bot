@@ -51,9 +51,9 @@ export default command(
 		const embedMessage = await message.channel.send({ embeds: [embed] });
 
 		await db.insert(youtubeSearches).values({
-			guildId: BigInt(guildId),
-			channelId: BigInt(channelId),
-			messageId: BigInt(embedMessage.id),
+			guildId,
+			channelId,
+			messageId: embedMessage.id,
 			ids: videos.map(v => v.id).join(","),
 		});
 

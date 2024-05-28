@@ -21,9 +21,9 @@ export default event(
 						ids: true,
 					},
 					where: and(
-						eq(youtubeSearches.guildId, BigInt(guild.id)),
-						eq(youtubeSearches.channelId, BigInt(channelId)),
-						eq(youtubeSearches.messageId, BigInt(message.id)),
+						eq(youtubeSearches.guildId, guild.id),
+						eq(youtubeSearches.channelId, channelId),
+						eq(youtubeSearches.messageId, message.id),
 					),
 				});
 				if (search) {

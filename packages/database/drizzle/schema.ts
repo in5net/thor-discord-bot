@@ -6,9 +6,6 @@ import {
 	integer,
 	sqliteTable,
 	text,
-	unique,
-	primaryKey,
-	numeric,
 	type SQLiteColumn,
 } from "drizzle-orm/sqlite-core";
 
@@ -35,7 +32,7 @@ const updatedAt = timestamp("updated_at")
 export const guilds = sqliteTable(
 	"guilds",
 	{
-		id: numeric("id").primaryKey(),
+		id: text("id").primaryKey(),
 		deleted: boolean("deleted").notNull().default(false),
 	},
 	table => ({
@@ -51,8 +48,8 @@ export const guildsRelations = relations(guilds, ({ many }) => ({
 export const members = sqliteTable(
 	"members",
 	{
-		id: numeric("id").primaryKey(),
-		guildId: numeric("guild_id")
+		id: text("id").primaryKey(),
+		guildId: text("guild_id")
 			.notNull()
 			.references(() => guilds.id, { onDelete: "cascade" }),
 		bot: boolean("bot").notNull().default(false),
@@ -72,8 +69,8 @@ export const membersRelations = relations(members, ({ one }) => ({
 export const channels = sqliteTable(
 	"channels",
 	{
-		id: numeric("id").primaryKey(),
-		guildId: numeric("guild_id")
+		id: text("id").primaryKey(),
+		guildId: text("guild_id")
 			.notNull()
 			.references(() => guilds.id, { onDelete: "set null" }),
 		nsfw: boolean("nsfw").notNull().default(false),
@@ -98,12 +95,12 @@ export const channelsRelations = relations(channels, ({ one, many }) => ({
 export const messages = sqliteTable(
 	"messages",
 	{
-		id: numeric("id").primaryKey(),
+		id: text("id").primaryKey(),
 		createdAt: timestamp("timestamp"),
 		updatedAt: timestamp("edited_timestamp"),
-		authorId: numeric("author_id").notNull(),
-		channelId: numeric("channel_id").notNull(),
-		guildId: numeric("guild_id"),
+		authorId: text("author_id").notNull(),
+		channelId: text("channel_id").notNull(),
+		guildId: text("guild_id"),
 		content: text("content").notNull(),
 	},
 	table => ({
@@ -130,14 +127,14 @@ export const messagesRelations = relations(messages, ({ one, many }) => ({
 export const attachments = sqliteTable(
 	"attachments",
 	{
-		id: numeric("id").primaryKey(),
-		messageId: numeric("message_id").references(() => messages.id, {
+		id: text("id").primaryKey(),
+		messageId: text("message_id").references(() => messages.id, {
 			onDelete: "set null",
 		}),
-		channelId: numeric("channel_id").references(() => channels.id, {
+		channelId: text("channel_id").references(() => channels.id, {
 			onDelete: "set null",
 		}),
-		guildId: numeric("guild_id").references(() => guilds.id, {
+		guildId: text("guild_id").references(() => guilds.id, {
 			onDelete: "set null",
 		}),
 		filename: text("filename").notNull(),
@@ -172,7 +169,7 @@ export const attachmentsRelations = relations(attachments, ({ one }) => ({
 }));
 
 export const users = sqliteTable("users", {
-	id: numeric("id").primaryKey(),
+	id: text("id").primaryKey(),
 	createdAt,
 	updatedAt,
 	counts: text("counts", { mode: "json" }),
@@ -180,114 +177,7 @@ export const users = sqliteTable("users", {
 	admin: boolean("admin").default(false).notNull(),
 });
 export const usersRelations = relations(users, ({ many }) => ({
-	playlists: many(playlists),
 	issues: many(issues),
-}));
-
-export const playlists = sqliteTable(
-	"playlists",
-	{
-		id: text("id").primaryKey(),
-		createdAt,
-		updatedAt,
-		userId: numeric("user_id")
-			.notNull()
-			.references(() => users.id, { onUpdate: "cascade", onDelete: "cascade" }),
-		name: text("name").notNull(),
-	},
-	table => ({
-		uniqueUserIdName: unique().on(table.userId, table.name),
-	}),
-);
-export const playlistsRelations = relations(playlists, ({ one, many }) => ({
-	author: one(users, {
-		fields: [playlists.userId],
-		references: [users.id],
-	}),
-	songs: many(songs),
-	albums: many(albums),
-}));
-
-export const albums = sqliteTable("albums", {
-	id: text("id").primaryKey(),
-	createdAt,
-	updatedAt,
-	name: text("name").notNull(),
-	data: text("data", { mode: "json" }).notNull(),
-});
-export const albumsRelations = relations(albums, ({ many }) => ({
-	playlists: many(songs),
-	songs: many(albums),
-}));
-
-export const albumsToPlaylists = sqliteTable(
-	"albums_to_playlists",
-	{
-		albumId: text("album_id")
-			.notNull()
-			.references(() => albums.id, {
-				onUpdate: "cascade",
-				onDelete: "cascade",
-			}),
-		playlistId: text("playlist_id")
-			.notNull()
-			.references(() => playlists.id, {
-				onUpdate: "cascade",
-				onDelete: "cascade",
-			}),
-	},
-	table => ({
-		pk: primaryKey({ columns: [table.albumId, table.playlistId] }),
-	}),
-);
-export const albumsToPlaylistsRelations = relations(
-	albumsToPlaylists,
-	({ one }) => ({
-		album: one(albums, {
-			fields: [albumsToPlaylists.albumId],
-			references: [albums.id],
-		}),
-		playlist: one(playlists, {
-			fields: [albumsToPlaylists.playlistId],
-			references: [playlists.id],
-		}),
-	}),
-);
-
-export const songs = sqliteTable(
-	"songs",
-	{
-		id: text("id").primaryKey(),
-		createdAt,
-		updatedAt,
-		playlistId: text("playlist_id").references(() => playlists.id, {
-			onUpdate: "cascade",
-			onDelete: "cascade",
-		}),
-		albumId: text("album_id").references(() => albums.id, {
-			onUpdate: "cascade",
-			onDelete: "cascade",
-		}),
-		title: text("title").notNull(),
-		duration: integer("duration").notNull(),
-		data: text("data", { mode: "json" }).notNull(),
-		playlistIndex: integer("playlist_index"),
-		albumIndex: integer("album_index"),
-	},
-	table => ({
-		playlistIndex: namedIndex(table.playlistId, table.playlistIndex),
-		albumIndex: namedIndex(table.albumId, table.albumIndex),
-	}),
-);
-export const songsRelations = relations(songs, ({ one }) => ({
-	playlist: one(playlists, {
-		fields: [songs.playlistId],
-		references: [playlists.id],
-	}),
-	album: one(albums, {
-		fields: [songs.albumId],
-		references: [albums.id],
-	}),
 }));
 
 export const ratios = sqliteTable("ratios", {
@@ -333,7 +223,7 @@ export const issues = sqliteTable(
 		id: integer("id").primaryKey({ autoIncrement: true }),
 		createdAt,
 		updatedAt,
-		userId: numeric("user_id").notNull(),
+		userId: text("user_id").notNull(),
 		name: text("name").notNull(),
 		type: text("type", { enum: ["bug", "feature", "enhancement"] }).notNull(),
 		desc: text("desc").notNull(),
@@ -369,10 +259,10 @@ export const commandExecutions = sqliteTable(
 		createdAt,
 		name: text("name").notNull(),
 		type: text("type", { enum: ["text", "slash", "message"] }).notNull(),
-		userId: numeric("user_id").notNull(),
-		messageId: numeric("message_id"),
-		channelId: numeric("channel_id").notNull(),
-		guildId: numeric("guild_id"),
+		userId: text("user_id").notNull(),
+		messageId: text("message_id"),
+		channelId: text("channel_id").notNull(),
+		guildId: text("guild_id"),
 	},
 	table => ({
 		createdAtIndex: namedIndex(table.createdAt),
@@ -386,7 +276,7 @@ export const oneWordStory = sqliteTable("one_word_story", {
 	id: integer("id").primaryKey(),
 	createdAt,
 	updatedAt,
-	guildId: numeric("guild_id").notNull(),
+	guildId: text("guild_id").notNull(),
 	active: boolean("active").notNull().default(true),
 });
 export const oneWordStoryRelations = relations(
@@ -403,7 +293,7 @@ export const oneWordStoryRelations = relations(
 export const oneWordStoryEntry = sqliteTable("one_word_story_entry", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
 	createdAt,
-	userId: numeric("user_id").notNull(),
+	userId: text("user_id").notNull(),
 	story: integer("story").notNull(),
 	word: text("word").notNull(),
 });
@@ -425,9 +315,9 @@ export const youtubeSearches = sqliteTable(
 	"youtube_searches",
 	{
 		id: integer("id").primaryKey({ autoIncrement: true }),
-		guildId: numeric("guild_id").notNull(),
-		channelId: numeric("channel_id").notNull(),
-		messageId: numeric("message_id").notNull(),
+		guildId: text("guild_id").notNull(),
+		channelId: text("channel_id").notNull(),
+		messageId: text("message_id").notNull(),
 		ids: text("ids").notNull(),
 	},
 	table => ({

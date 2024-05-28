@@ -1,3 +1,5 @@
+import { type OptionValue } from "../commands/slash";
+import event from "../event";
 import db from "database/drizzle";
 import { commandExecutions } from "database/drizzle/schema";
 import {
@@ -7,8 +9,6 @@ import {
 	type MessageContextMenuCommandInteraction,
 } from "discord.js";
 import logger from "logger";
-import { type OptionValue } from "../commands/slash";
-import event from "../event";
 
 export default event({ name: "interactionCreate" }, async ({ args: [i] }) => {
 	if (i.isChatInputCommand()) await handleSlash(i);
@@ -26,7 +26,7 @@ async function handleSlash(i: ChatInputCommandInteraction) {
 			i,
 			Object.fromEntries(
 				Object.entries(options).map(([name, { type, default: d }]) => {
-					// eslint-disable-next-line ts/ban-types
+					 
 					let value: OptionValue | null = null;
 					switch (type) {
 						case "string": {
@@ -77,9 +77,9 @@ async function handleSlash(i: ChatInputCommandInteraction) {
 		await db.insert(commandExecutions).values({
 			name,
 			type: "slash",
-			userId: BigInt(i.user.id),
-			channelId: BigInt(i.channelId),
-			guildId: i.guildId ? BigInt(i.guildId) : undefined,
+			userId: i.user.id,
+			channelId: i.channelId,
+			guildId: i.guildId,
 		});
 	} catch (error) {
 		const msg = `Error while running command '${name}':`;
@@ -115,15 +115,15 @@ async function handleAutocomplete(i: AutocompleteInteraction) {
 	return i
 		.respond(
 			// eslint-disable-next-line unicorn/no-instanceof-array
-			options instanceof Array
-				? options.map(o => ({
-						name: o.toString(),
-						value: o,
-				  }))
-				: Object.entries(options).map(([name, value]) => ({
-						name,
-						value,
-				  })),
+			options instanceof Array ?
+				options.map(o => ({
+					name: o.toString(),
+					value: o,
+				}))
+			:	Object.entries(options).map(([name, value]) => ({
+					name,
+					value,
+				})),
 		)
 		.catch(logger.error);
 }

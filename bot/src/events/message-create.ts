@@ -229,7 +229,7 @@ async function handleOneWordStory(message: Message) {
 		columns: {
 			id: true,
 		},
-		where: and(eq(oneWordStory.guildId, BigInt(guildId)), oneWordStory.active),
+		where: and(eq(oneWordStory.guildId, guildId), oneWordStory.active),
 		orderBy: desc(oneWordStory.createdAt),
 	});
 	if (!latestStory) {
@@ -255,7 +255,7 @@ async function handleOneWordStory(message: Message) {
 	}
 
 	await db.insert(oneWordStoryEntry).values({
-		userId: BigInt(author.id),
+		userId: author.id,
 		story: latestStory.id,
 		word,
 	});

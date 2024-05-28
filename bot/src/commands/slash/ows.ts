@@ -8,9 +8,10 @@ export default command(
 		options: {},
 	},
 	async i => {
-		if (!i.guildId) return;
+		const { guildId } = i;
+		if (!guildId) return;
 		await db.insert(oneWordStory).values({
-			guildId: BigInt(i.guildId),
+			guildId,
 		});
 		await i.reply(
 			'One word story started! Send a word to continue the story. Each person can only send one word at a time, and not twice in a row. The story will end when "the end." is written.',
