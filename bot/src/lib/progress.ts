@@ -11,13 +11,13 @@ export function renderProgressBar(options: ProgressBarOptions) {
 	const percent = Math.floor((current / total) * 100);
 	const progress = renderProgress(options);
 	const totalStr = total.toString();
-	return `[${progress}] ${current.toString().padStart(totalStr.length)}/${totalStr} ${percent.toString().padStart(3)}%`;
+	return `(${progress}) ${current.toString().padStart(totalStr.length)}/${totalStr} ${percent.toString().padStart(3)}%`;
 }
 
 export function renderProgress({
 	current,
 	total,
-	columns = 20,
+	columns = 10,
 	complete = "·*○",
 	incomplete = " ",
 }: ProgressBarOptions) {

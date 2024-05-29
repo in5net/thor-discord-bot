@@ -82,7 +82,7 @@ export default command(
 			mat4.rotateZ(modelViewMatrix, modelViewMatrix, angle);
 			gl.uniform("modelViewMatrix", "mat4", modelViewMatrix);
 			frame++;
-			await sleep(100);
+			await sleep();
 		}
 
 		const renderStart = performance.now();
