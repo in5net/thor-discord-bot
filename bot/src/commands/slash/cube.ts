@@ -1,4 +1,5 @@
 import GL from "$lib/gl";
+import { renderProgressBar } from "$src/lib/progress";
 import { sleep } from "@in5net/std/async";
 import { AttachmentBuilder, Message } from "discord.js";
 import command from "discord/commands/slash";
@@ -87,19 +88,14 @@ export default command(
 		const renderStart = performance.now();
 		const frames = fps / speed;
 		let frame = 0;
-		const bars = 20;
 		let editPromise: Promise<Message<boolean>> | undefined;
 		const progressHandle = setInterval(updateProgress, 1500);
 		function updateProgress() {
-			const progress = frame / frames;
-			const filledBars = Math.floor(progress * bars);
-			const barString = "=".repeat(filledBars) + " ".repeat(bars - filledBars);
 			editPromise = i.editReply(
-				`Rendering cube: \`[${barString}]\` ${frame.toString().padStart(2, " ")}/${frames.toString().padStart(2, " ")} ${Math.round(
-					progress * 100,
-				)
-					.toString()
-					.padStart(3, " ")}%`,
+				`Rendering cube: ${renderProgressBar({
+					current: frame,
+					total: frames,
+				})}`,
 			);
 		}
 
