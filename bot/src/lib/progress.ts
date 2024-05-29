@@ -22,15 +22,17 @@ export function renderProgress({
 	incomplete = " ",
 }: ProgressBarOptions) {
 	const progress = current / total;
-	const fullyFilledChar = complete.at(-1) || "=";
 	const parts = complete.length * columns;
 	const filledCount = Math.floor(progress * columns);
-	const partialParts = parts - filledCount;
+	const filledParts = Math.floor(progress * parts);
+	const partialParts = filledParts - filledCount * complete.length;
+
+	const fullyFilledChar = complete.at(-1) || "=";
 	let str = fullyFilledChar.repeat(filledCount);
 	if (partialParts > 0) {
-		const partialChar = complete[partialParts - 1];
+		const partialChar = complete[partialParts - 1] || incomplete;
 		str += partialChar;
 	}
-	str += incomplete.repeat(columns - str.length);
+	str += incomplete.repeat(Math.max(columns - str.length, 0));
 	return str;
 }

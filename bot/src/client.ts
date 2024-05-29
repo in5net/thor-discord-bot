@@ -1,3 +1,4 @@
+import { messageCommands, slashCommands, textCommands } from "./commands";
 import {
 	ActivityType,
 	Client,
@@ -11,9 +12,8 @@ import { type SlashCommand } from "discord/commands/slash";
 import { type TextCommand } from "discord/commands/text";
 import { loadDiscordEvents } from "discord/loaders/events";
 import ms from "ms";
-import { scheduleJob } from "node-schedule";
 import process from "node:process";
-import { messageCommands, slashCommands, textCommands } from "./commands";
+import { scheduleJob } from "node-schedule";
 
 const { NAME, DISCORD_TOKEN } = process.env;
 console.log(`⏳ ${NAME} is starting...`);

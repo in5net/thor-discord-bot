@@ -82,7 +82,7 @@ export default command(
 			mat4.rotateZ(modelViewMatrix, modelViewMatrix, angle);
 			gl.uniform("modelViewMatrix", "mat4", modelViewMatrix);
 			frame++;
-			await sleep();
+			await sleep(100);
 		}
 
 		const renderStart = performance.now();
@@ -92,10 +92,10 @@ export default command(
 		const progressHandle = setInterval(updateProgress, 1500);
 		function updateProgress() {
 			editPromise = i.editReply(
-				`Rendering cube: ${renderProgressBar({
+				`Rendering cube: \`${renderProgressBar({
 					current: frame,
 					total: frames,
-				})}`,
+				})}\``,
 			);
 		}
 
