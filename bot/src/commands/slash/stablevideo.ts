@@ -19,8 +19,8 @@ export default command(
 			frames: {
 				type: "choice",
 				desc: "Number of frames to generate",
-				choices: [14, 25],
-				default: 14,
+				choices: ["14", "25"],
+				default: "14",
 			},
 			fps: {
 				type: "int",
@@ -56,7 +56,7 @@ export default command(
 				input: {
 					input_image: input_image.url,
 					video_length:
-						frames === 14 ? "14_frames_with_svd" : "25_frames_with_svd_xt",
+						frames === "14" ? "14_frames_with_svd" : "25_frames_with_svd_xt",
 					frames_per_second: fps,
 				},
 			},

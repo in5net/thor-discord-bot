@@ -1,5 +1,5 @@
 import GL from "$lib/gl";
-import { renderProgressBar } from "$src/lib/progress";
+import { renderProgressBar } from "$lib/progress";
 import { sleep } from "@in5net/std/async";
 import { AttachmentBuilder, Message } from "discord.js";
 import command from "discord/commands/slash";

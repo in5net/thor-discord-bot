@@ -9,7 +9,7 @@ import {
 	type User,
 } from "discord.js";
 
-type Choice = number | string | ApplicationCommandOptionChoiceData;
+type Choice = string | ApplicationCommandOptionChoiceData;
 
 export interface CommandOptionType {
 	string: string;

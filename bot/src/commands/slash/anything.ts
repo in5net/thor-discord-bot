@@ -24,12 +24,13 @@ export default command(
 			num_outputs: {
 				type: "choice",
 				desc: "Number of images to generate",
-				choices: [1, 4],
-				default: 1,
+				choices: ["1", "4"],
+				default: "1",
 			},
 		},
 	},
-	async (i, { prompt, negative_prompt, num_outputs: n }) => {
+	async (i, { prompt, negative_prompt, num_outputs }) => {
+		const n = Number.parseInt(num_outputs);
 		const BITS_PRICE = BITS_PER_IMAGE * n;
 		if (i.user.bot) return i.reply(`Bots cannot use ${NAME}`);
 
