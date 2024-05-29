@@ -18,15 +18,15 @@ export default command(
 							name: true,
 						},
 						where: and(
-							i.user.id === env.OWNER_ID
-								? undefined
-								: eq(issues.userId, i.user.id),
+							i.user.id === env.OWNER_ID ?
+								undefined
+							:	eq(issues.userId, i.user.id),
 							contains(issues.name, search),
 						),
 						orderBy: issues.name,
 						limit: 5,
 					});
-					return Object.fromEntries(results.map(({ id, name }) => [name, id]));
+					return results.map(({ id, name }) => ({ name, value: id }));
 				},
 			},
 			type: {

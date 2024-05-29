@@ -1,3 +1,5 @@
+import { pipe } from "@in5net/std/fn";
+import { collect, pick } from "@in5net/std/iter";
 import db, { and, contains, ne } from "database/drizzle";
 import { y7Files } from "database/drizzle/schema";
 import command from "discord/commands/slash";
@@ -22,7 +24,7 @@ export default command(
 						orderBy: y7Files.name,
 						limit: 5,
 					});
-					return results.map(({ name }) => name);
+					return pipe(results, pick("name"), collect);
 				},
 			},
 		},

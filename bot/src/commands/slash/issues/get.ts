@@ -21,7 +21,7 @@ export default command(
 						orderBy: issues.name,
 						limit: 5,
 					});
-					return Object.fromEntries(results.map(({ id, name }) => [name, id]));
+					return results.map(({ id, name }) => ({ name, value: id }));
 				},
 			},
 		},
@@ -47,7 +47,9 @@ export default command(
 				{
 					name: "Type",
 					value: `${
-						type === "Bug" ? "🐛" : type === "Feature" ? "✨" : "🔧"
+						type === "Bug" ? "🐛"
+						: type === "Feature" ? "✨"
+						: "🔧"
 					} ${type}`,
 				},
 				{

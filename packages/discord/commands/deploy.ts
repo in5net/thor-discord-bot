@@ -1,3 +1,10 @@
+import { type MessageCommand } from "./message";
+import { type CommandOptionType, type SlashCommand } from "./slash";
+import {
+	type ApplicationCommandOptionChoiceData,
+	REST,
+	type Collection,
+} from "discord.js";
 import {
 	ApplicationCommandOptionType,
 	ApplicationCommandType,
@@ -8,9 +15,6 @@ import {
 	type RESTPostAPIContextMenuApplicationCommandsJSONBody,
 	type RESTPutAPIApplicationCommandsJSONBody,
 } from "discord-api-types/v10";
-import { REST, type Collection } from "discord.js";
-import { type MessageCommand } from "./message";
-import { type CommandOptionType, type SlashCommand } from "./slash";
 
 export async function deploy(
 	{
@@ -53,7 +57,7 @@ export async function deploy(
 			}
 
 			// @ts-expect-error TypeScript doesn't know enough
-			// eslint-disable-next-line ts/no-unsafe-call
+
 			groupData.options?.push({
 				type: ApplicationCommandOptionType.Subcommand,
 				...build(subName, command),
@@ -124,10 +128,7 @@ function build(
 					min_length?: number;
 					max_length?: number;
 					required: boolean;
-					choices?: Array<{
-						name: string;
-						value: number | string;
-					}>;
+					choices?: ApplicationCommandOptionChoiceData[];
 					autocomplete: boolean;
 				} = {
 					name,
@@ -136,20 +137,6 @@ function build(
 					min_value: min,
 					max_value: max,
 					required: !optional && d === undefined,
-					choices:
-						type === "choice"
-							? // eslint-disable-next-line unicorn/no-instanceof-array
-							  choices instanceof Array
-								? choices.map(choice => ({
-										name: `${choice}`,
-										value: choice,
-								  }))
-								: Object.entries(choices || {}).map(([name, description]) => ({
-										name,
-										description,
-										value: name,
-								  }))
-							: undefined,
 					autocomplete: !!autocomplete,
 				};
 				if (type === "int" || type === "float") {
@@ -158,6 +145,20 @@ function build(
 				} else if (type === "string") {
 					data.min_length = min;
 					data.max_length = max;
+				} else if (type === "choice" && choices) {
+					data.choices =
+						Array.isArray(choices) ?
+							choices.map(choice => {
+								if (typeof choice === "object") return choice;
+								return {
+									name: choice.toString(),
+									value: choice,
+								};
+							})
+						:	Object.entries(choices).map(([value, name]) => ({
+								name,
+								value,
+							}));
 				}
 
 				return data;

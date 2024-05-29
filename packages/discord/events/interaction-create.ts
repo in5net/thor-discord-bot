@@ -26,7 +26,6 @@ async function handleSlash(i: ChatInputCommandInteraction) {
 			i,
 			Object.fromEntries(
 				Object.entries(options).map(([name, { type, default: d }]) => {
-					 
 					let value: OptionValue | null = null;
 					switch (type) {
 						case "string": {
@@ -111,19 +110,23 @@ async function handleAutocomplete(i: AutocompleteInteraction) {
 	const handleAutocomplete = command.options[option.name]?.autocomplete;
 	if (!handleAutocomplete) return;
 
-	const options = await handleAutocomplete(option.value, i);
+	const rawChoices = await handleAutocomplete(option.value, i);
+	const choices =
+		Array.isArray(rawChoices) ?
+			rawChoices.map(choice => {
+				if (typeof choice === "object") return choice;
+				return {
+					name: choice.toString(),
+					value: choice,
+				};
+			})
+		:	Object.entries(rawChoices).map(([value, name]) => ({
+				name,
+				value,
+			}));
 	return i
 		.respond(
-			// eslint-disable-next-line unicorn/no-instanceof-array
-			options instanceof Array ?
-				options.map(o => ({
-					name: o.toString(),
-					value: o,
-				}))
-			:	Object.entries(options).map(([name, value]) => ({
-					name,
-					value,
-				})),
+			choices.map(({ name, value }) => ({ name: name.slice(0, 100), value })),
 		)
 		.catch(logger.error);
 }

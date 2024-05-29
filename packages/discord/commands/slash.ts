@@ -1,4 +1,5 @@
 import {
+	type ApplicationCommandOptionChoiceData,
 	type APIInteractionDataResolvedChannel,
 	type Attachment,
 	type AutocompleteInteraction,
@@ -8,7 +9,7 @@ import {
 	type User,
 } from "discord.js";
 
-type Choice = number | string;
+type Choice = number | string | ApplicationCommandOptionChoiceData;
 
 export interface CommandOptionType {
 	string: string;
@@ -22,10 +23,13 @@ export interface CommandOptionType {
 }
 type Type = keyof CommandOptionType;
 
-type Choices = readonly Choice[] | Record<string, Choice>;
-type ValueFromChoices<T extends Choices> = T extends readonly Choice[]
-	? T[number]
-	: T[keyof T];
+type Choices = readonly Choice[] | Record<string, string>;
+type ValueFromChoices<T extends Choices> =
+	T extends readonly Choice[] ?
+		T[number] extends { value: infer V } ?
+			V
+		:	T[number]
+	:	keyof T;
 
 export type AutocompleteHandler = (
 	option: string,
@@ -43,15 +47,13 @@ interface Option<T extends Type = Type, C extends Choices = Choices> {
 }
 type Options = Record<string, Option>;
 
-type ValueFromOption<T extends Option> = T["choices"] extends Choices
-	? ValueFromChoices<T["choices"]>
-	: CommandOptionType[T["type"]];
+type ValueFromOption<T extends Option> =
+	T["choices"] extends Choices ? ValueFromChoices<T["choices"]>
+	:	CommandOptionType[T["type"]];
 export type OptionValue<T extends Option = Option> =
-	T["default"] extends CommandOptionType[Type]
-		? ValueFromOption<T>
-		: T["optional"] extends true
-		  ? ValueFromOption<T> | undefined
-		  : ValueFromOption<T>;
+	T["default"] extends CommandOptionType[Type] ? ValueFromOption<T>
+	: T["optional"] extends true ? ValueFromOption<T> | undefined
+	: ValueFromOption<T>;
 
 type Handler<T extends Options = Options> = (
 	i: ChatInputCommandInteraction,
@@ -74,7 +76,7 @@ export interface SlashCommand<T extends Options = Options>
 
 export const slashCommandSymbol = Symbol("slash command");
 
-const command = <T extends Options>(
+const command = <const T extends Options>(
 	options: CommandOptions<T>,
 	handler: Handler<T>,
 ): SlashCommand<T> => ({ ...options, handler, symbol: slashCommandSymbol });

@@ -21,7 +21,7 @@ export default command(
 						orderBy: issues.name,
 						limit: 5,
 					});
-					return Object.fromEntries(results.map(({ id, name }) => [name, id]));
+					return results.map(({ id, name }) => ({ name, value: id }));
 				},
 			},
 			reason: {

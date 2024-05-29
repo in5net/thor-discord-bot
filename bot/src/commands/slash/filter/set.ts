@@ -1,4 +1,6 @@
 import { getVoice } from "$src/music/voice-manager";
+import { pipe } from "@in5net/std/fn";
+import { collect, pick } from "@in5net/std/iter";
 import db, { contains, eq } from "database/drizzle";
 import { audioFilters } from "database/drizzle/schema";
 import command from "discord/commands/slash";
@@ -19,7 +21,7 @@ export default command(
 						orderBy: audioFilters.name,
 						limit: 5,
 					});
-					return results.map(({ name }) => name);
+					return pipe(results, pick("name"), collect);
 				},
 			},
 		},

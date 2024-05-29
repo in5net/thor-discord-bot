@@ -1,5 +1,5 @@
 import { sendFile } from "./shared";
-import db, { eq, icontains } from "database/drizzle";
+import db, { eq, contains } from "database/drizzle";
 import { attachments } from "database/drizzle/schema";
 import command from "discord/commands/slash";
 
@@ -16,13 +16,14 @@ export default command(
 							id: true,
 							filename: true,
 						},
-						where: icontains(attachments.filename, search),
+						where: contains(attachments.filename, search),
 						orderBy: attachments.filename,
 						limit: 5,
 					});
-					return Object.fromEntries(
-						results.map(({ id, filename }) => [id.toString(), filename]),
-					);
+					return results.map(({ id, filename }) => ({
+						name: filename,
+						value: id,
+					}));
 				},
 			},
 		},
