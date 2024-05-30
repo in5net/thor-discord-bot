@@ -1,8 +1,14 @@
 import youtube from "$lib/youtube";
+import { getPlayDl } from "./play";
 import { createAudioResource, StreamType } from "@discordjs/voice";
 import { memo } from "@in5net/std/fn";
 import chalk from "chalk-template";
-import { EmbedBuilder, type Awaitable } from "discord.js";
+import {
+	EmbedBuilder,
+	hideLinkEmbed,
+	hyperlink,
+	type Awaitable,
+} from "discord.js";
 import got from "got";
 import logger from "logger";
 import { createRegExp, digit, oneOrMore } from "magic-regexp";
@@ -15,7 +21,6 @@ import {
 	type SpotifyTrack,
 } from "play-dl";
 import { z } from "zod";
-import { getPlayDl } from "./play";
 
 interface SongJSON {
 	title: string;
@@ -43,6 +48,7 @@ abstract class Song implements SongJSON {
 	requester: Requester;
 	start = 0;
 
+	abstract url: string;
 	abstract iconURL: string;
 
 	constructor({
@@ -59,11 +65,9 @@ abstract class Song implements SongJSON {
 		this.requester = requester;
 	}
 
-	abstract log(): void;
-
-	abstract toString(): string;
-
-	abstract toJSON(): SongJSON;
+	getMarkdown() {
+		return hyperlink(this.title, hideLinkEmbed(this.url));
+	}
 
 	getEmbed() {
 		const { title, requester, iconURL } = this;
@@ -72,10 +76,6 @@ abstract class Song implements SongJSON {
 			iconURL,
 		});
 	}
-
-	abstract getStream(
-		options: StreamOptions,
-	): Awaitable<{ stream: Readable; type?: StreamType }>;
 
 	async getResource({ seek, filters }: { seek?: number; filters?: string[] }) {
 		const { stream, type = StreamType.Opus } = await this.getStream({
@@ -88,6 +88,16 @@ abstract class Song implements SongJSON {
 		});
 		return resource;
 	}
+
+	abstract log(): void;
+
+	abstract toString(): string;
+
+	abstract toJSON(): SongJSON;
+
+	abstract getStream(
+		options: StreamOptions,
+	): Awaitable<{ stream: Readable; type?: StreamType }>;
 }
 
 async function ytStream(url: string, { seek, filter }: StreamOptions) {
@@ -237,9 +247,9 @@ ${title} (${url})
 		const MAX_DESCRIPTION_LENGTH = 256;
 		if (description)
 			embed.setDescription(
-				description.length > MAX_DESCRIPTION_LENGTH
-					? `${description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
-					: description,
+				description.length > MAX_DESCRIPTION_LENGTH ?
+					`${description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
+				:	description,
 			);
 		return embed;
 	}
@@ -261,12 +271,13 @@ ${title} (${url})
 				description,
 				duration,
 				thumbnail: thumbnail[0]?.url,
-				channel: channel
-					? {
+				channel:
+					channel ?
+						{
 							id: channel.id,
 							title: channel.name,
-					  }
-					: undefined,
+						}
+					:	undefined,
 				requester,
 			});
 		} catch (error) {
@@ -491,10 +502,10 @@ export class SpotifySong extends Song {
 ${title} (${url})
 * {red you{white tube}} url: ${youtubeURL}
 * artist: ${artist?.name} (${artistURL})${
-			album
-				? `
+			album ?
+				`
 * album: ${album.name} (${albumURL})`
-				: ""
+			:	""
 		}`);
 	}
 

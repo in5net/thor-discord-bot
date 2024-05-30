@@ -1,4 +1,5 @@
 import { getLyrics } from "$lib/genius";
+import { sec2Str } from "$src/lib/time";
 import { URL_REGEX, YOUTUBE_CHANNEL_REGEX, splitQueries } from "./plan";
 import { getPlayDl } from "./play";
 import Queue from "./queue";
@@ -12,10 +13,14 @@ import {
 } from "./song";
 import Stream from "./stream";
 import { AudioPlayerStatus } from "@discordjs/voice";
+import { pipe } from "@in5net/std/fn";
+import { collect, map, take } from "@in5net/std/iter";
 import { shuffle } from "@in5net/std/random";
+import { quantify } from "@in5net/std/string";
 import { type Awaitable } from "@in5net/std/types";
 import {
 	ChannelType,
+	MessagePayload,
 	type Attachment,
 	type Message,
 	type MessageCreateOptions,
@@ -52,19 +57,11 @@ export default class Voice extends TypedEmitter<{
 		});
 
 	channel?: TextChannel;
-	private message?: Message;
-
 	queue = new Queue(this);
+	private message?: Message;
 
 	constructor(readonly guildId: string) {
 		super();
-	}
-
-	async send(message: string | MessageCreateOptions) {
-		[this.message] = await Promise.all([
-			this.channel?.send(message),
-			this.message?.delete().catch(() => null),
-		]);
 	}
 
 	setChannels(message: Message): void {
@@ -73,6 +70,12 @@ export default class Voice extends TypedEmitter<{
 		const voiceChannel = member?.voice.channel;
 		if (voiceChannel?.type === ChannelType.GuildVoice)
 			this.stream.channel = voiceChannel;
+	}
+
+	async send(message: string | MessagePayload | MessageCreateOptions) {
+		this.message?.delete().catch(() => null);
+		if (this.channel) this.message = await this.channel?.send(message);
+		else logger.error("voice tried to send a message before a channel was set");
 	}
 
 	async getSongsFromQuery(message: Message, query?: string) {
@@ -209,25 +212,31 @@ export default class Voice extends TypedEmitter<{
 			this.queue.push(song);
 			song.log();
 			if (this.stream.player.state.status === AudioPlayerStatus.Playing)
-				await this.send(`⏏️ Added ${song.title} to queue`);
+				await this.send(`⏏️ Added ${song.getMarkdown()} to queue`);
 		}
 	}
 
 	async add(message: Message, query?: string, shuff = false) {
 		this.setChannels(message);
-
 		const { queue, channel } = this;
 
 		const songs = await this.getSongsFromQuery(message, query);
 		queue.push(...(shuff ? shuffle(songs) : songs));
 
-		if (songs.length)
+		if (songs.length) {
+			const pageSize = 10;
 			await channel?.send(
-				`⏏️ Added${shuff ? " & shuffled" : ""} ${songs
-					.map(song => song.title)
-					.slice(0, 10)
-					.join(", ")}${songs.length > 10 ? ", ..." : ""} to queue`,
+				`⏏️ Added${shuff ? " & shuffled" : ""} ${quantify("song", songs.length)} to the queue:
+${pipe(
+	songs,
+	map(song => `- [${sec2Str(song.duration)}] ${song.getMarkdown()}`),
+	take(pageSize),
+	collect,
+).join(
+	"\n",
+)}${songs.length > pageSize ? `(${songs.length - pageSize} more)` : ""}`,
 			);
+		}
 
 		await this.play();
 	}
@@ -235,7 +244,10 @@ export default class Voice extends TypedEmitter<{
 	async seek(seconds: number) {
 		const { stream } = this;
 		const { resource, filters } = stream;
-		if (!resource) return;
+		if (!resource) {
+			this.send("🚫 There is currently no song playing");
+			return;
+		}
 
 		stream.resource = await resource.metadata.getResource({
 			seek: seconds,
@@ -250,8 +262,12 @@ export default class Voice extends TypedEmitter<{
 	}
 
 	async move(from: number, to: number) {
+		const song1 = this.queue.at(from);
+		const song2 = this.queue.at(to);
 		this.queue.move(from, to);
-		return this.send(`➡️ Moved #${from + 1} to #${to + 1}`);
+		await this.send(
+			`➡️ Moved song #${from + 1} ${song1?.getMarkdown() || ""} -> #${to + 1} ${song2?.getMarkdown() || ""}`,
+		);
 	}
 
 	stop() {
@@ -268,7 +284,7 @@ export default class Voice extends TypedEmitter<{
 
 		const song = this.queue.next();
 		if (!song) {
-			await this.send("📭 Queue is empty");
+			await this.send("📭 The queue is empty");
 			this.stop();
 			return;
 		}
@@ -277,7 +293,7 @@ export default class Voice extends TypedEmitter<{
 		stream.play(resource);
 
 		try {
-			const embed = song.getEmbed().setTitle(`▶️ Playing: ${song.title}`);
+			const embed = song.getEmbed().setTitle(`▶️ Now Playing: ${song.title}`);
 			await this.send({
 				embeds: [embed],
 			});

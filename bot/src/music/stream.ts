@@ -1,3 +1,6 @@
+/* eslint-disable unicorn/require-array-join-separator */
+import { sec2Str } from "$src/lib/time";
+import { YouTubeSong, type SongType } from "./song";
 import {
 	AudioPlayerStatus,
 	VoiceConnectionStatus,
@@ -9,7 +12,6 @@ import {
 import { type VoiceChannel } from "discord.js";
 import logger from "logger";
 import { TypedEmitter } from "tiny-typed-emitter";
-import { YouTubeSong, type SongType } from "./song";
 
 export default class Stream extends TypedEmitter<{
 	idle: () => void;
@@ -25,24 +27,13 @@ export default class Stream extends TypedEmitter<{
 	resource?: AudioResource<SongType>;
 	filters: string[] = [];
 
-	stop() {
-		const { player, connection } = this;
-		if (
-			connection &&
-			connection.state.status !== VoiceConnectionStatus.Destroyed
-		)
-			connection.destroy();
-		player.stop();
-		this.connection = undefined;
-		this.emit("stop");
-	}
-
 	join() {
 		const { player, channel, connection } = this;
 		if (!channel) return;
 
+		logger.info("joining voice channel");
 		logger.info(
-			`From: voice connection status ${connection?.state.status || "gone"}`,
+			`voice connection status was ${connection?.state.status || "gone"}`,
 		);
 
 		switch (connection?.state.status) {
@@ -68,7 +59,7 @@ export default class Stream extends TypedEmitter<{
 		}
 
 		logger.info(
-			`To: voice connection status ${this.connection?.state.status || "gone"}`,
+			`voice connection status now is ${this.connection?.state.status || "gone"}`,
 		);
 	}
 
@@ -82,29 +73,63 @@ export default class Stream extends TypedEmitter<{
 
 	async setFilters(filters?: string[]) {
 		const { resource } = this;
-		if (!resource) return;
-		let { start } = resource.metadata;
-		if (resource.metadata instanceof YouTubeSong)
-			start += resource.metadata.time || 0;
-
-		let scale = 1;
-		for (const values of this.filters) {
-			const atempo = /atempo=(\d+\.?\d+)/.exec(values)?.[1];
-			if (atempo) scale *= Number.parseFloat(atempo);
-			const asetrate = /asetrate=(\d+\.?\d+)/.exec(values)?.[1];
-			if (asetrate) scale *= Number.parseFloat(asetrate);
+		if (!resource) {
+			logger.debug("no resource to apply filters to");
+			return;
 		}
 
-		this.filters = filters || [];
+		const { metadata } = resource;
+		let { start } = metadata;
+		if (metadata instanceof YouTubeSong) start += metadata.time || 0;
 
-		const seek =
-			(start || 0) + ((this.resource?.playbackDuration || 0) * scale) / 1000;
-		logger.debug("start:", start, "scale:", scale, "seek:", seek);
+		let speed = 1;
+		for (const values of this.filters) {
+			const atempo = /atempo=(\d+\.?\d+)/.exec(values)?.[1];
+			if (atempo) speed *= Number.parseFloat(atempo);
+			const asetrate = /asetrate=(\d+\.?\d+)/.exec(values)?.[1];
+			if (asetrate) speed *= Number.parseFloat(asetrate);
+		}
+		logger.debug(`current audio speed: ${speed.toFixed(2)}`);
+
+		this.filters = filters || [];
+		logger.debug(`set audio filters to ${this.filters || "NONE"}`);
+
+		const playtime = resource.playbackDuration / 1000;
+		logger.debug(
+			`current audio start: ${sec2Str(start)}, playtime: ${sec2Str(playtime)}`,
+		);
+		const seek = start + playtime * speed;
+		logger.debug(`seeking to ${sec2Str(seek)}`);
 		this.resource = await resource.metadata.getResource({
 			seek,
 			filters,
 		});
 		this.resource.metadata.start = seek;
 		this.play();
+	}
+
+	stop() {
+		const { player } = this;
+		logger.debug(
+			`the player ${player.stop() ? "will" : "won't"} come to a stop`,
+		);
+		if (player.state.status === AudioPlayerStatus.Idle) {
+			this.destroy();
+			this.emit("stop");
+		} else {
+			player.once(AudioPlayerStatus.Idle, () => {
+				this.destroy();
+				this.emit("stop");
+			});
+		}
+	}
+
+	private destroy() {
+		const { connection } = this;
+		if (connection) {
+			if (connection.state.status !== VoiceConnectionStatus.Destroyed)
+				connection.destroy();
+			this.connection = undefined;
+		}
 	}
 }
