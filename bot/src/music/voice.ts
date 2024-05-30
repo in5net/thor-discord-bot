@@ -232,9 +232,12 @@ ${pipe(
 	map(song => `- [${sec2Str(song.duration)}] ${song.getMarkdown()}`),
 	take(pageSize),
 	collect,
-).join(
-	"\n",
-)}${songs.length > pageSize ? `(${songs.length - pageSize} more)` : ""}`,
+).join("\n")}${
+					songs.length > pageSize ?
+						`
+(${songs.length - pageSize} more)`
+					:	""
+				}`,
 			);
 		}
 
