@@ -11,8 +11,8 @@
 	"devDependencies": {
 		"@iz7n/eslint-config": "^0.8.1",
 		"@iz7n/prettier-config": "^1.2.0",
-		"eslint": "^9.3.0",
-		"prettier": "^3.2.5",
+		"eslint": "^9.4.0",
+		"prettier": "^3.3.0",
 		"turbo": "^1.13.3",
 		"typescript": "5.4.5"
 	},
