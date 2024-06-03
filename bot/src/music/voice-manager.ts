@@ -1,5 +1,5 @@
-import { Collection, type Snowflake } from "discord.js";
 import Voice from "./voice";
+import { Collection, type Snowflake } from "discord.js";
 
 const voices = new Collection<Snowflake, Voice>();
 export default voices;

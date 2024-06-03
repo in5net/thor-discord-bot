@@ -3,6 +3,7 @@ import { sec2Str } from "$src/lib/time";
 import { YouTubeSong, type SongType } from "./song";
 import {
 	AudioPlayerStatus,
+	NoSubscriberBehavior,
 	VoiceConnectionStatus,
 	createAudioPlayer,
 	joinVoiceChannel,
@@ -18,7 +19,12 @@ export default class Stream extends TypedEmitter<{
 	stop: () => void;
 	error: (error: Error) => void;
 }> {
-	player = createAudioPlayer()
+	player = createAudioPlayer({
+		behaviors: {
+			noSubscriber: NoSubscriberBehavior.Pause,
+		},
+		debug: true,
+	})
 		.on(AudioPlayerStatus.Idle, () => this.emit("idle"))
 		.on("error", error => this.emit("error", error));
 
@@ -109,27 +115,16 @@ export default class Stream extends TypedEmitter<{
 	}
 
 	stop() {
-		const { player } = this;
+		const { player, connection } = this;
+		if (
+			connection &&
+			connection.state.status !== VoiceConnectionStatus.Destroyed
+		)
+			connection.destroy();
 		logger.debug(
 			`the player ${player.stop() ? "will" : "won't"} come to a stop`,
 		);
-		if (player.state.status === AudioPlayerStatus.Idle) {
-			this.destroy();
-			this.emit("stop");
-		} else {
-			player.once(AudioPlayerStatus.Idle, () => {
-				this.destroy();
-				this.emit("stop");
-			});
-		}
-	}
-
-	private destroy() {
-		const { connection } = this;
-		if (connection) {
-			if (connection.state.status !== VoiceConnectionStatus.Destroyed)
-				connection.destroy();
-			this.connection = undefined;
-		}
+		this.connection = undefined;
+		this.emit("stop");
 	}
 }

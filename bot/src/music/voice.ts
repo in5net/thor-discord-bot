@@ -39,7 +39,9 @@ export default class Voice extends TypedEmitter<{
 					// eslint-disable-next-line unicorn/require-array-join-separator
 					this.stream.join();
 					await this.play();
-				} else this.stream.stop();
+				} else {
+					this.stream.stop();
+				}
 			} catch (error) {
 				logger.error("⚠️ Player error:", error);
 				await this.send("⚠️ Error");
@@ -48,8 +50,8 @@ export default class Voice extends TypedEmitter<{
 		})
 		.on("error", async error => {
 			logger.error("⚠️ Player error:", error);
+			await this.send("⚠️ Error");
 			try {
-				await this.send("⚠️ Error");
 				await this.next();
 			} catch (error) {
 				logger.error("⚠️ Error:", error);
@@ -74,7 +76,9 @@ export default class Voice extends TypedEmitter<{
 
 	async send(message: string | MessagePayload | MessageCreateOptions) {
 		this.message?.delete().catch(() => null);
-		if (this.channel) this.message = await this.channel?.send(message);
+		if (this.channel)
+			// eslint-disable-next-line unicorn/no-useless-undefined
+			this.message = await this.channel?.send(message).catch(() => undefined);
 		else logger.error("voice tried to send a message before a channel was set");
 	}
 
