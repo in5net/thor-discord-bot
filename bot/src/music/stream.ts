@@ -6,6 +6,7 @@ import {
 	NoSubscriberBehavior,
 	VoiceConnectionStatus,
 	createAudioPlayer,
+	entersState,
 	joinVoiceChannel,
 	type AudioResource,
 	type VoiceConnection,
@@ -21,7 +22,7 @@ export default class Stream extends TypedEmitter<{
 }> {
 	player = createAudioPlayer({
 		behaviors: {
-			noSubscriber: NoSubscriberBehavior.Pause,
+			noSubscriber: NoSubscriberBehavior.Play,
 		},
 		debug: true,
 	})
@@ -33,7 +34,7 @@ export default class Stream extends TypedEmitter<{
 	resource?: AudioResource<SongType>;
 	filters: string[] = [];
 
-	join() {
+	async join() {
 		const { player, channel, connection } = this;
 		if (!channel) return;
 
@@ -61,6 +62,7 @@ export default class Stream extends TypedEmitter<{
 						this.join();
 					})
 					.subscribe(player);
+				await entersState(this.connection, VoiceConnectionStatus.Ready, 30_000);
 			}
 		}
 
@@ -69,11 +71,11 @@ export default class Stream extends TypedEmitter<{
 		);
 	}
 
-	play(resource = this.resource) {
+	async play(resource = this.resource) {
 		if (!resource) return;
 		this.resource = resource;
 
-		this.join();
+		await this.join();
 		this.player.play(resource);
 	}
 
@@ -111,7 +113,7 @@ export default class Stream extends TypedEmitter<{
 			filters,
 		});
 		this.resource.metadata.start = seek;
-		this.play();
+		await this.play();
 	}
 
 	stop() {

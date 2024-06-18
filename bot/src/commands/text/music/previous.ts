@@ -15,7 +15,7 @@ export default musicCommand(
 			return voice.send("There's no previous song");
 
 		const resource = await song.getResource(stream);
-		voice.stream.play(resource);
+		await voice.stream.play(resource);
 		await voice.send(`⏪ Previous: ${song.title}`);
 	},
 );

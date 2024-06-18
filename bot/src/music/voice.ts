@@ -260,7 +260,7 @@ ${pipe(
 			seek: seconds,
 			filters,
 		});
-		this.stream.play();
+		await this.stream.play();
 	}
 
 	async next() {
@@ -297,7 +297,7 @@ ${pipe(
 		}
 
 		const resource = await song.getResource(stream);
-		stream.play(resource);
+		await stream.play(resource);
 
 		try {
 			const embed = song.getEmbed().setTitle(`▶️ Now Playing: ${song.title}`);

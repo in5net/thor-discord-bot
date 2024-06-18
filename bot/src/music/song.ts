@@ -394,12 +394,9 @@ ${title} (${url})
 	}
 
 	async getStream({ seek, filter }: StreamOptions) {
-		if (filter)
-			return {
-				stream: await ytStream(this.url, { seek: seek ?? this.time, filter }),
-			};
-		const play = await getPlayDl();
-		return play.stream(this.url, { seek: seek ?? this.time });
+		return {
+			stream: await ytStream(this.url, { seek: seek ?? this.time, filter }),
+		};
 	}
 }
 
