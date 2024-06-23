@@ -10,6 +10,7 @@ declare global {
 
 const EnvironmentVariables = z.object({
 	DATABASE_URL: z.string(),
+	PLAYGROUND_DATABASE_URL: z.string(),
 });
 
 EnvironmentVariables.parse(env);
