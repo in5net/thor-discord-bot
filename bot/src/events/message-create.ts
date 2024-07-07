@@ -5,7 +5,6 @@ import { sum } from "@in5net/std/stats";
 import { userMention, type Message } from "discord.js";
 import event from "discord/event";
 import { handleTextCommand } from "discord/events/message-create";
-import { Timestamp } from "firebase-admin/firestore";
 import {
 	anyOf,
 	caseInsensitive,
@@ -21,15 +20,16 @@ import {
 } from "magic-regexp";
 import { env } from "node:process";
 import { handleWordleMessage } from "../commands/text/games/wordle";
-import randomResponses, {
-	randomResponsesRef as randomResponsesReference,
-	words,
-} from "../responses";
 import { pipe } from "@in5net/std/fn";
 import { pick } from "@in5net/std/iter";
 import db, { and, desc, eq } from "database/drizzle";
-import { oneWordStory, oneWordStoryEntry } from "database/drizzle/schema";
+import {
+	oneWordStory,
+	oneWordStoryEntry,
+	randomResponses,
+} from "database/drizzle/schema";
 import * as deepl from "deepl-node";
+import { getRandomResponses, getThemes } from "$src/responses";
 
 const prefix = env.PREFIX;
 const prefixRegex = createRegExp(exactly(prefix).times(1).at.lineStart(), [
@@ -133,7 +133,7 @@ async function handleRandomResponse(message: Message) {
 			chance = 1,
 			cooldown = 0,
 			sentAt,
-		} of randomResponses()) {
+		} of await getRandomResponses()) {
 			const includedWords = words.filter(word => !word.startsWith("-"));
 			const excludedWords = words.filter(word => word.startsWith("-"));
 			const included =
@@ -149,12 +149,13 @@ async function handleRandomResponse(message: Message) {
 				included &&
 				excluded &&
 				Math.random() < chance &&
-				(!sentAt || now - sentAt.toMillis() > cooldown)
+				(!sentAt || now - sentAt.getTime() > cooldown)
 			) {
 				msgs.push(choice(responses) || "");
-				await randomResponsesReference.doc(id).update({
-					sentAt: Timestamp.now(),
-				});
+				await db
+					.update(randomResponses)
+					.set({ sentAt: new Date() })
+					.where(eq(randomResponses.id, id));
 			}
 		}
 
@@ -166,8 +167,7 @@ async function handleRandomResponse(message: Message) {
 					if (variable === "name")
 						return member?.displayName || author.username;
 					const props = variable.split(".");
-					const $words = words();
-					let value: any = $words.themes;
+					let value: any = getThemes();
 					for (const prop of props) {
 						// eslint-disable-next-line ts/no-unsafe-assignment
 						value = value[prop];

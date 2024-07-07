@@ -4,6 +4,7 @@ import { relations, sql } from "drizzle-orm";
 import {
 	index,
 	integer,
+	real,
 	sqliteTable,
 	text,
 	type SQLiteColumn,
@@ -328,3 +329,19 @@ export const youtubeSearches = sqliteTable(
 		),
 	}),
 );
+
+export const randomResponses = sqliteTable("random_responses", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	words: text("words").notNull(),
+	responses: text("responses").notNull(),
+	chance: real("chance").notNull().default(1),
+	cooldown: integer("cooldown").notNull().default(0),
+	sentAt: timestamp("sent_at"),
+});
+
+export const themes = sqliteTable("themes", {
+	name: text("name").primaryKey(),
+	words: text("words", { mode: "json" })
+		.notNull()
+		.$type<Record<string, string[]>>(),
+});

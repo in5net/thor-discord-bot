@@ -1,40 +1,17 @@
-import { firestore } from "$lib/firebase";
-import {
-	type CollectionReference,
-	type DocumentReference,
-	type Timestamp,
-} from "firebase-admin/firestore";
-import trkl from "trkl";
+import { map } from "@in5net/std/iter";
+import { objectFromEntries } from "@in5net/std/object";
+import db from "database/drizzle";
 
-interface RandomResponse {
-	words: string[];
-	responses: string[];
-	chance?: number;
-	cooldown?: number;
-	sentAt?: Timestamp;
+export async function getRandomResponses() {
+	const randomResponses = await db.query.randomResponses.findMany();
+	return randomResponses.map(({ words, responses, ...data }) => ({
+		...data,
+		words: words.split("|"),
+		responses: responses.split("|"),
+	}));
 }
 
-export const randomResponsesRef = firestore.collection(
-	"random-responses",
-) as CollectionReference<RandomResponse>;
-
-const randomResponses = trkl<Array<RandomResponse & { id: string }>>([]);
-export default randomResponses;
-
-randomResponsesRef.onSnapshot(({ docs }) => {
-	randomResponses(
-		docs.map(document => ({ ...document.data(), id: document.id })),
-	);
-});
-
-interface Words {
-	themes: Record<string, Record<string, string[]>>;
+export async function getThemes() {
+	const themes = await db.query.themes.findMany();
+	return objectFromEntries(map(themes, ({ name, words }) => [name, words]));
 }
-
-const wordsRef = firestore.doc("config/words") as DocumentReference<Words>;
-
-export const words = trkl<Words>({ themes: {} });
-
-wordsRef.onSnapshot(snap => {
-	words(snap.data() || { themes: {} });
-});
