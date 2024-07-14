@@ -2,7 +2,7 @@ import { emojiRegex } from "$lib/emoji";
 import { incCount } from "$lib/users";
 import { choice, randomInt, shuffle } from "@in5net/std/random";
 import { sum } from "@in5net/std/stats";
-import { userMention, type Message } from "discord.js";
+import { quote, userMention, type Message } from "discord.js";
 import event from "discord/event";
 import { handleTextCommand } from "discord/events/message-create";
 import {
@@ -43,6 +43,9 @@ const responseVariableRegex = createRegExp(
 	"}",
 	[global],
 );
+
+const japaneseRegex =
+	/[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf]/;
 
 const translator = new deepl.Translator(env.DEEPL_API_KEY);
 
@@ -104,8 +107,12 @@ export default event(
 					null,
 					"en-US",
 				);
-				await channel.send(`${result.detectedSourceLang}: ${foreignContent}
-en: ${result.text}`);
+				await channel.send(quote(result.text));
+			}
+
+			if (author.id === env.OWNER_ID && japaneseRegex.test(content)) {
+				const result = await translator.translateText(content, "ja", "en-US");
+				await channel.send(quote(result.text));
 			}
 
 			await handleHaiku(message);
