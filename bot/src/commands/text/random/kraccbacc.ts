@@ -17,7 +17,7 @@ export default command(
 			},
 			where: (table, { or }) =>
 				or(lt(table.sentAt, date), isNotNull(table.sentAt)),
-			orderBy: sql`rand()`,
+			orderBy: sql`random()`,
 		});
 		if (!video) return message.reply("No video found!");
 		await db

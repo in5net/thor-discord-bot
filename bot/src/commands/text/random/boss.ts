@@ -11,7 +11,7 @@ export default command(
 			columns: {
 				url: true,
 			},
-			orderBy: sql`rand()`,
+			orderBy: sql`random()`,
 		});
 		if (!boss) return message.reply("No boss found");
 		return message.reply(boss.url);

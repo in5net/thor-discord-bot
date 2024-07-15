@@ -30,7 +30,7 @@ export default command(
 				},
 				where: (table, { or }) =>
 					or(lt(table.sentAt, date), isNotNull(table.sentAt)),
-				orderBy: sql`rand()`,
+				orderBy: sql`random()`,
 			});
 			if (!chicken) return i.editReply("No chicken found!");
 			await db

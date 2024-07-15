@@ -12,7 +12,7 @@ export default command(
 			columns: {
 				name: true,
 			},
-			orderBy: sql`rand()`,
+			orderBy: sql`random()`,
 		});
 		if (!food) return message.reply("No food found");
 

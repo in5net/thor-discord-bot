@@ -17,7 +17,7 @@ export default command(
 			columns: {
 				content: true,
 			},
-			orderBy: sql`rand()`,
+			orderBy: sql`random()`,
 			limit: NUM_RATIOS,
 		});
 		const texts = shuffle(ratios.map(({ content }) => content));

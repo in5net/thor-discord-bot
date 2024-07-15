@@ -15,7 +15,7 @@ export default command(
 			},
 			where: (table, { and, eq }) =>
 				and(ne(table.name, NSFW_FILE_NAME), eq(table.extension, "gif")),
-			orderBy: sql`rand()`,
+			orderBy: sql`random()`,
 		});
 		if (!gif) return i.reply("No image found");
 

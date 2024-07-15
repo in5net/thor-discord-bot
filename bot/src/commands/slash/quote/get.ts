@@ -14,7 +14,7 @@ export default command(
 			columns: {
 				name: true,
 			},
-			orderBy: sql`rand()`,
+			orderBy: sql`random()`,
 		});
 		await i.channel?.send(
 			`https://${env.FILES_DOMAIN}/speech-bubbles/${bubble?.name}`,

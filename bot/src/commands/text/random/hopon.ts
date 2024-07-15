@@ -11,7 +11,7 @@ export default command(
 			columns: {
 				id: true,
 			},
-			orderBy: sql`rand()`,
+			orderBy: sql`random()`,
 		});
 		return `https://tenor.com/view/${hopOn?.id}`;
 	},

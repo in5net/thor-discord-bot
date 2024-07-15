@@ -13,7 +13,7 @@ export default command(
 				name: true,
 			},
 			where: table => ne(table.extension, "gif"),
-			orderBy: sql`rand()`,
+			orderBy: sql`random()`,
 		});
 		if (!image) return i.reply("No image found");
 
