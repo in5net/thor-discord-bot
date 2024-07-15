@@ -5,7 +5,7 @@
 	"dependencies": {
 		"@in5net/std": "0.16.0",
 		"database": "workspace:*",
-		"discord-api-types": "0.37.89",
+		"discord-api-types": "0.37.92",
 		"discord.js": "14.15.3",
 		"fast-glob": "^3.3.2",
 		"fuse.js": "^7.0.0",
@@ -13,6 +13,6 @@
 		"magic-regexp": "^0.8.0"
 	},
 	"devDependencies": {
-		"@types/node": "20.14.2"
+		"@types/node": "20.14.10"
 	}
 }
