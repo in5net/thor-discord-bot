@@ -107,14 +107,6 @@ scheduleJob(
 );
 scheduleJob(
 	{
-		hour: 7 + 12,
-		minute: 0,
-		tz,
-	},
-	async () => webhook.send("alarm time ●_●"),
-);
-scheduleJob(
-	{
 		minute: 0,
 		tz,
 	},
