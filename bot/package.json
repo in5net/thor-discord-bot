@@ -16,7 +16,7 @@
     "@googleapis/customsearch": "3.0.0",
     "@in5net/std": "^0.16.0",
     "@napi-rs/canvas": "0.1.53",
-    "ai": "^3.2.22",
+    "ai": "^3.2.32",
     "chalk-template": "^1.1.0",
     "cheerio": "1.0.0-rc.12",
     "chess.js": "1.0.0-beta.8",
@@ -68,7 +68,7 @@
     "@types/gif-encoder": "^0.7.4",
     "@types/gl": "^6.0.5",
     "@types/ms": "^0.7.34",
-    "@types/node": "20.14.10",
+    "@types/node": "20.14.11",
     "@types/node-schedule": "^2.1.7",
     "@types/pngjs": "^6.0.5",
     "typescript": "5.5.3"

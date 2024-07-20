@@ -48,8 +48,8 @@ importers:
         specifier: 0.1.53
         version: 0.1.53
       ai:
-        specifier: ^3.2.22
-        version: 3.2.22(openai@4.52.7(encoding@0.1.13))(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.17)(vue@3.4.27(typescript@5.5.3))(zod@3.23.8)
+        specifier: ^3.2.32
+        version: 3.2.32(openai@4.52.7(encoding@0.1.13))(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.17)(vue@3.4.27(typescript@5.5.3))(zod@3.23.8)
       chalk-template:
         specifier: ^1.1.0
         version: 1.1.0
@@ -199,8 +199,8 @@ importers:
         specifier: ^0.7.34
         version: 0.7.34
       '@types/node':
-        specifier: 20.14.10
-        version: 20.14.10
+        specifier: 20.14.11
+        version: 20.14.11
       '@types/node-schedule':
         specifier: ^2.1.7
         version: 2.1.7
@@ -219,17 +219,17 @@ importers:
         specifier: ^2.2.2
         version: 2.2.2
       '@prisma/client':
-        specifier: 5.16.2
-        version: 5.16.2(prisma@5.16.2)
+        specifier: 5.17.0
+        version: 5.17.0(prisma@5.17.0)
       better-sqlite3:
         specifier: ^11.1.2
         version: 11.1.2
       drizzle-orm:
         specifier: ^0.32.0
-        version: 0.32.0(@opentelemetry/api@1.9.0)(@prisma/client@5.16.2(prisma@5.16.2))(better-sqlite3@11.1.2)(prisma@5.16.2)(react@18.3.1)
+        version: 0.32.0(@opentelemetry/api@1.9.0)(@prisma/client@5.17.0(prisma@5.17.0))(better-sqlite3@11.1.2)(prisma@5.17.0)(react@18.3.1)
       prisma:
-        specifier: 5.16.2
-        version: 5.16.2
+        specifier: 5.17.0
+        version: 5.17.0
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -266,18 +266,18 @@ importers:
         version: 0.8.0
     devDependencies:
       '@types/node':
-        specifier: 20.14.10
-        version: 20.14.10
+        specifier: 20.14.11
+        version: 20.14.11
 
   packages/logger:
     dependencies:
       pino:
-        specifier: ^9.2.0
-        version: 9.2.0
+        specifier: ^9.3.1
+        version: 9.3.1
     devDependencies:
       '@types/node':
-        specifier: 20.14.10
-        version: 20.14.10
+        specifier: 20.14.11
+        version: 20.14.11
       pino-pretty:
         specifier: ^11.2.1
         version: 11.2.1
@@ -285,15 +285,15 @@ importers:
   packages/storage:
     dependencies:
       '@google-cloud/storage':
-        specifier: 7.11.3
-        version: 7.11.3(encoding@0.1.13)
+        specifier: 7.12.0
+        version: 7.12.0(encoding@0.1.13)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
       '@types/node':
-        specifier: 20.14.10
-        version: 20.14.10
+        specifier: 20.14.11
+        version: 20.14.11
 
   packages/tsconfig: {}
 
@@ -325,8 +325,8 @@ packages:
     resolution: {integrity: sha512-oOwPQD8i2Ynpn22cur4sk26FW3mSy6t6/X/K1Ay2yGBKYiSpRyLfObhOrZEGsXDx+3euKy4nEZ193R36NM+tpQ==}
     engines: {node: '>=18'}
 
-  '@ai-sdk/react@0.0.20':
-    resolution: {integrity: sha512-L/PFqvT+rZd/aYZekEWXuVW3zooJEZAf2O5wL5JeKi71slBEuKZGGZP/7GzyX+8Uhl3JOg4wOdJTO/dogWzbAQ==}
+  '@ai-sdk/react@0.0.25':
+    resolution: {integrity: sha512-79jFOpFRJs0vn9vOTlq0+jSFW8ztTJEXfUYTk+EwCymuGaSdbQQEKEMIDuRpaeOicNjVXZzbkKlQl9bv2l1R/w==}
     engines: {node: '>=18'}
     peerDependencies:
       react: ^18 || ^19
@@ -337,8 +337,8 @@ packages:
       zod:
         optional: true
 
-  '@ai-sdk/solid@0.0.14':
-    resolution: {integrity: sha512-9esGkm7/jocNELfGstrd3TYgWycXLP0OG6LXGGaEXd7v75eEp067avoLgQuPdWmzjnJD2U7N8u4wXa0lLd0WQQ==}
+  '@ai-sdk/solid@0.0.18':
+    resolution: {integrity: sha512-XHPegleEdbTnb+B1dKsYB8E2oauHr3WP4W4VJ/8xYe7gaJK6Tl88Z8dcIo4szSYgAjJGzOsm0Air3vExTEtO6A==}
     engines: {node: '>=18'}
     peerDependencies:
       solid-js: ^1.7.7
@@ -346,8 +346,8 @@ packages:
       solid-js:
         optional: true
 
-  '@ai-sdk/svelte@0.0.15':
-    resolution: {integrity: sha512-k4WwNgAddrQhumC6ogjZ/MPEk9kn3xEcD4CLX4CURX7y+641ktDIcZr5KeS+4o9U/jTrjSbYBJVr5HjoWm+Ixg==}
+  '@ai-sdk/svelte@0.0.19':
+    resolution: {integrity: sha512-eRBNXUshfwzYm3iaPCIZeV+XHZ0Hkrgj+V0Jy3bGvVzDX0cAs0EAxGPqYFArLFhuEBqiTQrW3QYL540GWYPl6g==}
     engines: {node: '>=18'}
     peerDependencies:
       svelte: ^3.0.0 || ^4.0.0
@@ -355,8 +355,8 @@ packages:
       svelte:
         optional: true
 
-  '@ai-sdk/ui-utils@0.0.12':
-    resolution: {integrity: sha512-ivveEuneZPOUKqcIqZRCr2NUD+LJC8mYfL7jJRWaCr+JZqdYZ+5uR/nc8GKCly2TcC9/qoF3zxQuZEn0c5805g==}
+  '@ai-sdk/ui-utils@0.0.16':
+    resolution: {integrity: sha512-DWPj2gPtY+MfEwxPeUZ/pLlKzfvL2u0p2fZLCYDJhJJgFWkvjvKUejRYH9M5uj8zTkZlwi92Gy+vZ20jto5zwQ==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.0.0
@@ -364,8 +364,8 @@ packages:
       zod:
         optional: true
 
-  '@ai-sdk/vue@0.0.15':
-    resolution: {integrity: sha512-e8JBjZWV7MYdGcgiZCNp2qso/HdqJ2hSRD54oEELfiHgVf2y3FLnnRnc4M1MwyvX6WaVYvAd6+pdDgwVjU7h1Q==}
+  '@ai-sdk/vue@0.0.20':
+    resolution: {integrity: sha512-yI1fIy2hjDy2vCTVcs4vatJ/Pn7UDFUynE6RLOH+K1FRwGEOYLmGO7s3Z59YHe4ZJuPQqWZEjG3dYSGyUJUJYg==}
     engines: {node: '>=18'}
     peerDependencies:
       vue: ^3.3.4
@@ -963,6 +963,10 @@ packages:
     resolution: {integrity: sha512-dFAR/IRENn+ZTTwBbMgoBGSrPrqNKoCEIjG7Wmq2+IpmyyjDk5BLip9HG9TUdMVRRP6xOQFrkEr7zIY1ZsoTSQ==}
     engines: {node: '>=14'}
 
+  '@google-cloud/storage@7.12.0':
+    resolution: {integrity: sha512-122Ui67bhnf8MkRnxQAC5lf7wPGkPP5hL3+J5s9HHDw2J9RpaMmnV8iahn+RUn9BH70W6uRe6nMZLXiRaJM/3g==}
+    engines: {node: '>=14'}
+
   '@googleapis/customsearch@3.0.0':
     resolution: {integrity: sha512-ZokxmeQGpyw6HpfYuYiJHzYb1UKjeQHpw4p7nDn1P0pWbtV3f0l8ywJ+Ny2DKKzVzFyfhsZWMZe6gOfuUvJy4A==}
     engines: {node: '>=12.0.0'}
@@ -1124,8 +1128,8 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@prisma/client@5.16.2':
-    resolution: {integrity: sha512-+1lmkhR9gHWcTC5oghm2ZKpWljyWdzfazCVlLKUWXVmwHSf52g81aZ8qb6Km5Bs025yBi7puLp3qSLEvktoUtw==}
+  '@prisma/client@5.17.0':
+    resolution: {integrity: sha512-N2tnyKayT0Zf7mHjwEyE8iG7FwTmXDHFZ1GnNhQp0pJUObsuel4ZZ1XwfuAYkq5mRIiC/Kot0kt0tGCfLJ70Jw==}
     engines: {node: '>=16.13'}
     peerDependencies:
       prisma: '*'
@@ -1133,20 +1137,20 @@ packages:
       prisma:
         optional: true
 
-  '@prisma/debug@5.16.2':
-    resolution: {integrity: sha512-ItzB4nR4O8eLzuJiuP3WwUJfoIvewMHqpGCad+64gvThcKEVOtaUza9AEJo2DPqAOa/AWkFyK54oM4WwHeew+A==}
+  '@prisma/debug@5.17.0':
+    resolution: {integrity: sha512-l7+AteR3P8FXiYyo496zkuoiJ5r9jLQEdUuxIxNCN1ud8rdbH3GTxm+f+dCyaSv9l9WY+29L9czaVRXz9mULfg==}
 
-  '@prisma/engines-version@5.16.0-24.34ace0eb2704183d2c05b60b52fba5c43c13f303':
-    resolution: {integrity: sha512-HkT2WbfmFZ9WUPyuJHhkiADxazHg8Y4gByrTSVeb3OikP6tjQ7txtSUGu9OBOBH0C13dPKN2qqH12xKtHu/Hiw==}
+  '@prisma/engines-version@5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053':
+    resolution: {integrity: sha512-tUuxZZysZDcrk5oaNOdrBnnkoTtmNQPkzINFDjz7eG6vcs9AVDmA/F6K5Plsb2aQc/l5M2EnFqn3htng9FA4hg==}
 
-  '@prisma/engines@5.16.2':
-    resolution: {integrity: sha512-qUxwMtrwoG3byd4PbX6T7EjHJ8AUhzTuwniOGkh/hIznBfcE2QQnGakyEq4VnwNuttMqvh/GgPFapHQ3lCuRHg==}
+  '@prisma/engines@5.17.0':
+    resolution: {integrity: sha512-+r+Nf+JP210Jur+/X8SIPLtz+uW9YA4QO5IXA+KcSOBe/shT47bCcRMTYCbOESw3FFYFTwe7vU6KTWHKPiwvtg==}
 
-  '@prisma/fetch-engine@5.16.2':
-    resolution: {integrity: sha512-sq51lfHKfH2jjYSjBtMjP+AznFqOJzXpqmq6B9auWrlTJrMgZ7lPyhWUW7VU7LsQU48/TJ+DZeIz8s9bMYvcHg==}
+  '@prisma/fetch-engine@5.17.0':
+    resolution: {integrity: sha512-ESxiOaHuC488ilLPnrv/tM2KrPhQB5TRris/IeIV4ZvUuKeaicCl4Xj/JCQeG9IlxqOgf1cCg5h5vAzlewN91Q==}
 
-  '@prisma/get-platform@5.16.2':
-    resolution: {integrity: sha512-cXiHPgNLNyj22vLouPVNegklpRL/iX2jxTeap5GRO3DmCoVyIHmJAV1CgUMUJhHlcol9yYy7EHvsnXTDJ/PKEA==}
+  '@prisma/get-platform@5.17.0':
+    resolution: {integrity: sha512-UlDgbRozCP1rfJ5Tlkf3Cnftb6srGrEQ4Nm3og+1Se2gWmCZ0hmPIi+tQikGDUVLlvOWx3Gyi9LzgRP+HTXV9w==}
 
   '@protobufjs/aspromise@1.1.2':
     resolution: {integrity: sha512-j+gKExEuLmKwvz3OgROXtrJ2UG2x8Ch2YZUxahh+s1F2HZ+wAceUNLkvy6zKCPVRkU++ZWQrdxsUeQXmcg4uoQ==}
@@ -1271,8 +1275,8 @@ packages:
   '@types/node@18.19.33':
     resolution: {integrity: sha512-NR9+KrpSajr2qBVp/Yt5TU/rp+b5Mayi3+OlMlcg2cVCfRmcG5PWZ7S4+MG9PZ5gWBoc9Pd0BKSRViuBCRPu0A==}
 
-  '@types/node@20.14.10':
-    resolution: {integrity: sha512-MdiXf+nDuMvY0gJKxyfZ7/6UFsETO7mGKF54MVD/ekJS6HdFtpZFBgrh6Pseu64XTb2MLyFPlbW6hj8HYRQNOQ==}
+  '@types/node@20.14.11':
+    resolution: {integrity: sha512-kprQpL8MMeszbz6ojB5/tU8PLN4kesnN8Gjzw349rDlNgsSzg90lAVj3llK99Dh7JON+t9AuscPPFW6mPbTnSA==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -1472,8 +1476,8 @@ packages:
     resolution: {integrity: sha512-4I7Td01quW/RpocfNayFdFVk1qSuoh0E7JrbRJ16nH01HhKFQ88INq9Sd+nd72zqRySlr9BmDA8xlEJ6vJMrYA==}
     engines: {node: '>=8'}
 
-  ai@3.2.22:
-    resolution: {integrity: sha512-2u2YT6cf/bTRexUtSiSDco/3/z/xlQ9iiW3y2aH05RwDlj9Q6rpALsTdjRNcglI+OBPaXUEORB/bD1dRwxob6Q==}
+  ai@3.2.32:
+    resolution: {integrity: sha512-1TmEY6jkgouP/OYLdt4rBZAUg6mFSfwLPUEwk0D7pLKy3tYB3OYz/XvZ5X8NShG3wNTv7pMzE8znM0vg5RIdoA==}
     engines: {node: '>=18'}
     peerDependencies:
       openai: ^4.42.0
@@ -1701,6 +1705,9 @@ packages:
   clean-stack@2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
     engines: {node: '>=6'}
+
+  client-only@0.0.1:
+    resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
 
   cliui@8.0.1:
     resolution: {integrity: sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ==}
@@ -3317,8 +3324,8 @@ packages:
   pino-std-serializers@7.0.0:
     resolution: {integrity: sha512-e906FRY0+tV27iq4juKzSYPbUj2do2X2JX4EzSca1631EB2QJQUqGbDuERal7LCtOpxl6x3+nvo9NPZcmjkiFA==}
 
-  pino@9.2.0:
-    resolution: {integrity: sha512-g3/hpwfujK5a4oVbaefoJxezLzsDgLcNJeITvC6yrfwYeT9la+edCK42j5QpEQSQCZgTKapXvnQIdgZwvRaZug==}
+  pino@9.3.1:
+    resolution: {integrity: sha512-afSfrq/hUiW/MFmQcLEwV9Zh8Ry6MrMTOyBU53o/fc0gEl+1OZ/Fks/xQCM2nOC0C/OfDtQMnT2d8c3kpcfSzA==}
     hasBin: true
 
   pkg-types@1.1.1:
@@ -3380,8 +3387,8 @@ packages:
       opusscript:
         optional: true
 
-  prisma@5.16.2:
-    resolution: {integrity: sha512-rFV/xoBR2hBGGlu4LPLQd4U8WVA+tSAmYyFWGPRVfj+xg7N4kiZV4lSk38htSpF+/IuHKzlrbh4SFk8Z18cI8A==}
+  prisma@5.17.0:
+    resolution: {integrity: sha512-m4UWkN5lBE6yevqeOxEvmepnL5cNPEjzMw2IqDB59AcEV6w7D8vGljDLd1gPFH+W6gUxw9x7/RmN5dCS/WTPxA==}
     engines: {node: '>=16.13'}
     hasBin: true
 
@@ -3763,8 +3770,8 @@ packages:
     resolution: {integrity: sha512-N7m1YnoXtRf5wya5Gyx3TWuTddI4nAyayyIWFojiWV5IayDYNV5i2mRp/7qNGol4DtxEYxljmrbgp1HM6hUbmQ==}
     engines: {node: '>=16'}
 
-  swr@2.2.0:
-    resolution: {integrity: sha512-AjqHOv2lAhkuUdIiBu9xbuettzAzWXmCEcLONNKJRba87WAefz8Ca9d6ds/SzrPc235n1IxWYdhJ2zF3MNUaoQ==}
+  swr@2.2.5:
+    resolution: {integrity: sha512-QtxqyclFeAsxEUeZIYmsaQ0UjimSq1RZ9Un7I68/0ClKK/U3LoyQunwkQfJZr2fc22DfIXLNDc2wFyTEikCUpg==}
     peerDependencies:
       react: ^16.11.0 || ^17.0.0 || ^18.0.0
 
@@ -4145,44 +4152,44 @@ snapshots:
     dependencies:
       json-schema: 0.4.0
 
-  '@ai-sdk/react@0.0.20(react@18.3.1)(zod@3.23.8)':
+  '@ai-sdk/react@0.0.25(react@18.3.1)(zod@3.23.8)':
     dependencies:
       '@ai-sdk/provider-utils': 1.0.2(zod@3.23.8)
-      '@ai-sdk/ui-utils': 0.0.12(zod@3.23.8)
-      swr: 2.2.0(react@18.3.1)
+      '@ai-sdk/ui-utils': 0.0.16(zod@3.23.8)
+      swr: 2.2.5(react@18.3.1)
     optionalDependencies:
       react: 18.3.1
       zod: 3.23.8
 
-  '@ai-sdk/solid@0.0.14(solid-js@1.8.17)(zod@3.23.8)':
+  '@ai-sdk/solid@0.0.18(solid-js@1.8.17)(zod@3.23.8)':
     dependencies:
-      '@ai-sdk/ui-utils': 0.0.12(zod@3.23.8)
+      '@ai-sdk/ui-utils': 0.0.16(zod@3.23.8)
     optionalDependencies:
       solid-js: 1.8.17
     transitivePeerDependencies:
       - zod
 
-  '@ai-sdk/svelte@0.0.15(svelte@4.2.17)(zod@3.23.8)':
+  '@ai-sdk/svelte@0.0.19(svelte@4.2.17)(zod@3.23.8)':
     dependencies:
       '@ai-sdk/provider-utils': 1.0.2(zod@3.23.8)
-      '@ai-sdk/ui-utils': 0.0.12(zod@3.23.8)
+      '@ai-sdk/ui-utils': 0.0.16(zod@3.23.8)
       sswr: 2.1.0(svelte@4.2.17)
     optionalDependencies:
       svelte: 4.2.17
     transitivePeerDependencies:
       - zod
 
-  '@ai-sdk/ui-utils@0.0.12(zod@3.23.8)':
+  '@ai-sdk/ui-utils@0.0.16(zod@3.23.8)':
     dependencies:
       '@ai-sdk/provider-utils': 1.0.2(zod@3.23.8)
       secure-json-parse: 2.7.0
     optionalDependencies:
       zod: 3.23.8
 
-  '@ai-sdk/vue@0.0.15(vue@3.4.27(typescript@5.5.3))(zod@3.23.8)':
+  '@ai-sdk/vue@0.0.20(vue@3.4.27(typescript@5.5.3))(zod@3.23.8)':
     dependencies:
       '@ai-sdk/provider-utils': 0.0.14(zod@3.23.8)
-      '@ai-sdk/ui-utils': 0.0.12(zod@3.23.8)
+      '@ai-sdk/ui-utils': 0.0.16(zod@3.23.8)
       swrv: 1.0.4(vue@3.4.27(typescript@5.5.3))
     optionalDependencies:
       vue: 3.4.27(typescript@5.5.3)
@@ -4683,6 +4690,28 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - supports-color
+    optional: true
+
+  '@google-cloud/storage@7.12.0(encoding@0.1.13)':
+    dependencies:
+      '@google-cloud/paginator': 5.0.2
+      '@google-cloud/projectify': 4.0.0
+      '@google-cloud/promisify': 4.0.0
+      abort-controller: 3.0.0
+      async-retry: 1.3.3
+      duplexify: 4.1.3
+      fast-xml-parser: 4.4.0
+      gaxios: 6.6.0(encoding@0.1.13)
+      google-auth-library: 9.11.0(encoding@0.1.13)
+      html-entities: 2.5.2
+      mime: 3.0.0
+      p-limit: 3.1.0
+      retry-request: 7.0.2(encoding@0.1.13)
+      teeny-request: 9.0.0(encoding@0.1.13)
+      uuid: 8.3.2
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
 
   '@googleapis/customsearch@3.0.0(encoding@0.1.13)':
     dependencies:
@@ -4861,30 +4890,30 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@prisma/client@5.16.2(prisma@5.16.2)':
+  '@prisma/client@5.17.0(prisma@5.17.0)':
     optionalDependencies:
-      prisma: 5.16.2
+      prisma: 5.17.0
 
-  '@prisma/debug@5.16.2': {}
+  '@prisma/debug@5.17.0': {}
 
-  '@prisma/engines-version@5.16.0-24.34ace0eb2704183d2c05b60b52fba5c43c13f303': {}
+  '@prisma/engines-version@5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053': {}
 
-  '@prisma/engines@5.16.2':
+  '@prisma/engines@5.17.0':
     dependencies:
-      '@prisma/debug': 5.16.2
-      '@prisma/engines-version': 5.16.0-24.34ace0eb2704183d2c05b60b52fba5c43c13f303
-      '@prisma/fetch-engine': 5.16.2
-      '@prisma/get-platform': 5.16.2
+      '@prisma/debug': 5.17.0
+      '@prisma/engines-version': 5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053
+      '@prisma/fetch-engine': 5.17.0
+      '@prisma/get-platform': 5.17.0
 
-  '@prisma/fetch-engine@5.16.2':
+  '@prisma/fetch-engine@5.17.0':
     dependencies:
-      '@prisma/debug': 5.16.2
-      '@prisma/engines-version': 5.16.0-24.34ace0eb2704183d2c05b60b52fba5c43c13f303
-      '@prisma/get-platform': 5.16.2
+      '@prisma/debug': 5.17.0
+      '@prisma/engines-version': 5.17.0-31.393aa359c9ad4a4bb28630fb5613f9c281cde053
+      '@prisma/get-platform': 5.17.0
 
-  '@prisma/get-platform@5.16.2':
+  '@prisma/get-platform@5.17.0':
     dependencies:
-      '@prisma/debug': 5.16.2
+      '@prisma/debug': 5.17.0
 
   '@protobufjs/aspromise@1.1.2':
     optional: true
@@ -4943,13 +4972,13 @@ snapshots:
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
 
   '@types/caseless@0.12.5': {}
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
 
   '@types/diff-match-patch@1.0.36': {}
 
@@ -4962,7 +4991,7 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.3':
     dependencies:
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
       '@types/qs': 6.9.15
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -4976,11 +5005,11 @@ snapshots:
 
   '@types/fluent-ffmpeg@2.1.24':
     dependencies:
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
 
   '@types/gif-encoder@0.7.4':
     dependencies:
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
 
   '@types/gl@6.0.5': {}
 
@@ -4992,7 +5021,7 @@ snapshots:
 
   '@types/jsonwebtoken@9.0.6':
     dependencies:
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
 
   '@types/long@4.0.2':
     optional: true
@@ -5003,18 +5032,18 @@ snapshots:
 
   '@types/node-fetch@2.6.11':
     dependencies:
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
       form-data: 4.0.0
 
   '@types/node-schedule@2.1.7':
     dependencies:
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
 
   '@types/node@18.19.33':
     dependencies:
       undici-types: 5.26.5
 
-  '@types/node@20.14.10':
+  '@types/node@20.14.11':
     dependencies:
       undici-types: 5.26.5
 
@@ -5024,7 +5053,7 @@ snapshots:
 
   '@types/pngjs@6.0.5':
     dependencies:
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
 
   '@types/qs@6.9.15': {}
 
@@ -5033,7 +5062,7 @@ snapshots:
   '@types/request@2.48.12':
     dependencies:
       '@types/caseless': 0.12.5
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
       '@types/tough-cookie': 4.0.5
       form-data: 2.5.1
 
@@ -5042,19 +5071,19 @@ snapshots:
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
 
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
       '@types/send': 0.17.4
 
   '@types/tough-cookie@4.0.5': {}
 
   '@types/ws@8.5.10':
     dependencies:
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
 
   '@typescript-eslint/eslint-plugin@7.7.1(@typescript-eslint/parser@7.7.1(eslint@9.7.0)(typescript@5.5.3))(eslint@9.7.0)(typescript@5.5.3)':
     dependencies:
@@ -5278,15 +5307,15 @@ snapshots:
       clean-stack: 2.2.0
       indent-string: 4.0.0
 
-  ai@3.2.22(openai@4.52.7(encoding@0.1.13))(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.17)(vue@3.4.27(typescript@5.5.3))(zod@3.23.8):
+  ai@3.2.32(openai@4.52.7(encoding@0.1.13))(react@18.3.1)(solid-js@1.8.17)(svelte@4.2.17)(vue@3.4.27(typescript@5.5.3))(zod@3.23.8):
     dependencies:
       '@ai-sdk/provider': 0.0.12
       '@ai-sdk/provider-utils': 1.0.2(zod@3.23.8)
-      '@ai-sdk/react': 0.0.20(react@18.3.1)(zod@3.23.8)
-      '@ai-sdk/solid': 0.0.14(solid-js@1.8.17)(zod@3.23.8)
-      '@ai-sdk/svelte': 0.0.15(svelte@4.2.17)(zod@3.23.8)
-      '@ai-sdk/ui-utils': 0.0.12(zod@3.23.8)
-      '@ai-sdk/vue': 0.0.15(vue@3.4.27(typescript@5.5.3))(zod@3.23.8)
+      '@ai-sdk/react': 0.0.25(react@18.3.1)(zod@3.23.8)
+      '@ai-sdk/solid': 0.0.18(solid-js@1.8.17)(zod@3.23.8)
+      '@ai-sdk/svelte': 0.0.19(svelte@4.2.17)(zod@3.23.8)
+      '@ai-sdk/ui-utils': 0.0.16(zod@3.23.8)
+      '@ai-sdk/vue': 0.0.20(vue@3.4.27(typescript@5.5.3))(zod@3.23.8)
       '@opentelemetry/api': 1.9.0
       eventsource-parser: 1.1.2
       json-schema: 0.4.0
@@ -5544,6 +5573,8 @@ snapshots:
 
   clean-stack@2.2.0: {}
 
+  client-only@0.0.1: {}
+
   cliui@8.0.1:
     dependencies:
       string-width: 4.2.3
@@ -5656,7 +5687,7 @@ snapshots:
 
   deepl-node@1.13.0:
     dependencies:
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
       axios: 1.7.2
       form-data: 3.0.1
       loglevel: 1.9.1
@@ -5750,12 +5781,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.32.0(@opentelemetry/api@1.9.0)(@prisma/client@5.16.2(prisma@5.16.2))(better-sqlite3@11.1.2)(prisma@5.16.2)(react@18.3.1):
+  drizzle-orm@0.32.0(@opentelemetry/api@1.9.0)(@prisma/client@5.17.0(prisma@5.17.0))(better-sqlite3@11.1.2)(prisma@5.17.0)(react@18.3.1):
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
-      '@prisma/client': 5.16.2(prisma@5.16.2)
+      '@prisma/client': 5.17.0(prisma@5.17.0)
       better-sqlite3: 11.1.2
-      prisma: 5.16.2
+      prisma: 5.17.0
       react: 18.3.1
 
   duplexify@3.7.1:
@@ -6230,7 +6261,7 @@ snapshots:
       '@fastify/busboy': 2.1.1
       '@firebase/database-compat': 1.0.5
       '@firebase/database-types': 1.0.3
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
       farmhash-modern: 1.1.0
       jsonwebtoken: 9.0.2
       jwks-rsa: 3.1.0
@@ -7328,7 +7359,7 @@ snapshots:
 
   pino-std-serializers@7.0.0: {}
 
-  pino@9.2.0:
+  pino@9.3.1:
     dependencies:
       atomic-sleep: 1.0.0
       fast-redact: 3.5.0
@@ -7392,9 +7423,9 @@ snapshots:
     optionalDependencies:
       '@discordjs/opus': 0.9.0(encoding@0.1.13)
 
-  prisma@5.16.2:
+  prisma@5.17.0:
     dependencies:
-      '@prisma/engines': 5.16.2
+      '@prisma/engines': 5.17.0
 
   proc-log@3.0.0: {}
 
@@ -7428,7 +7459,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 20.14.10
+      '@types/node': 20.14.11
       long: 5.2.3
     optional: true
 
@@ -7794,8 +7825,9 @@ snapshots:
       magic-string: 0.30.10
       periscopic: 3.1.0
 
-  swr@2.2.0(react@18.3.1):
+  swr@2.2.5(react@18.3.1):
     dependencies:
+      client-only: 0.0.1
       react: 18.3.1
       use-sync-external-store: 1.2.2(react@18.3.1)
 
