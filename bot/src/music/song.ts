@@ -1,18 +1,19 @@
 import youtube from "$lib/youtube";
 import { getPlayDl } from "./play";
-import { createAudioResource, StreamType } from "@discordjs/voice";
+import {
+	AudioResource,
+	createAudioResource,
+	StreamType,
+} from "@discordjs/voice";
 import { memo } from "@in5net/std/fn";
 import chalk from "chalk-template";
-import {
-	EmbedBuilder,
-	hideLinkEmbed,
-	hyperlink,
-	type Awaitable,
-} from "discord.js";
+import { EmbedBuilder, hideLinkEmbed, hyperlink } from "discord.js";
 import got from "got";
 import logger from "logger";
 import { createRegExp, digit, oneOrMore } from "magic-regexp";
-import { type Readable } from "node:stream";
+import { spawn } from "node:child_process";
+import { existsSync, mkdirSync } from "node:fs";
+import { join } from "node:path";
 import {
 	type SoundCloudPlaylist,
 	type SoundCloudTrack,
@@ -77,37 +78,48 @@ abstract class Song implements SongJSON {
 		});
 	}
 
-	async getResource({ seek, filters }: { seek?: number; filters?: string[] }) {
-		const { stream, type = StreamType.Opus } = await this.getStream({
-			seek,
-			filter: filters?.join(","),
-		});
-		const resource = createAudioResource(stream, {
-			inputType: type,
-			metadata: this,
-		});
-		return resource;
-	}
+	abstract getResource({
+		seek,
+		filters,
+	}: {
+		seek?: number;
+		filters?: string[];
+	}): Promise<AudioResource<Song>>;
 
 	abstract log(): void;
 
 	abstract toString(): string;
 
 	abstract toJSON(): SongJSON;
-
-	abstract getStream(
-		options: StreamOptions,
-	): Awaitable<{ stream: Readable; type?: StreamType }>;
 }
 
-async function ytStream(url: string, { seek, filter }: StreamOptions) {
-	const { default: ytdl } = await import("discord-ytdl-core");
-	return ytdl(url, {
-		filter: "audioonly",
-		opusEncoded: true,
-		seek,
-		encoderArgs: filter ? ["-af", filter] : undefined,
-	});
+const youtubeCachePath = new URL("../../../youtube-cache", import.meta.url)
+	.pathname;
+if (!existsSync(youtubeCachePath)) mkdirSync(youtubeCachePath);
+
+async function getYoutubeFile(id: string, { seek, filter }: StreamOptions) {
+	const filePath = join(youtubeCachePath, `${id}.opus`);
+
+	if (!existsSync(filePath)) {
+		const process = spawn(
+			"yt-dlp",
+			[
+				"-x",
+				"--audio-format",
+				"opus",
+				"-o",
+				"%(id)s",
+				`https://youtube.com/watch?v=${id}`,
+			],
+			{ cwd: youtubeCachePath },
+		);
+		await new Promise((resolve, reject) => {
+			process.on("exit", resolve);
+			process.on("error", reject);
+		});
+	}
+
+	return filePath;
 }
 
 interface Channel {
@@ -393,10 +405,16 @@ ${title} (${url})
 		return songs;
 	}
 
-	async getStream({ seek, filter }: StreamOptions) {
-		return {
-			stream: await ytStream(this.url, { seek: seek ?? this.time, filter }),
-		};
+	async getResource({ seek, filters }: { seek?: number; filters?: string[] }) {
+		const filePath = await getYoutubeFile(this.id, {
+			seek,
+			filter: filters?.join(","),
+		});
+		const resource = createAudioResource(filePath, {
+			inputType: StreamType.Opus,
+			metadata: this,
+		});
+		return resource;
 	}
 }
 
@@ -608,8 +626,16 @@ ${title} (${url})
 		);
 	}
 
-	async getStream(options: StreamOptions) {
-		return { stream: await ytStream(this.youtubeURL, options) };
+	async getResource({ seek, filters }: { seek?: number; filters?: string[] }) {
+		const filePath = await getYoutubeFile(this.ytId, {
+			seek,
+			filter: filters?.join(","),
+		});
+		const resource = createAudioResource(filePath, {
+			inputType: StreamType.Opus,
+			metadata: this,
+		});
+		return resource;
 	}
 }
 
@@ -766,17 +792,20 @@ ${title} (${url})
 		);
 	}
 
-	async getStream({ seek, filter }: StreamOptions) {
+	async getResource({ seek, filters }: { seek?: number; filters?: string[] }) {
 		const play = await playSC();
 		const { stream } = await play.stream(this.url);
 		const { default: ytdl } = await import("discord-ytdl-core");
-		return {
-			stream: ytdl.arbitraryStream(stream, {
-				opusEncoded: true,
-				seek,
-				encoderArgs: filter ? ["-af", filter] : undefined,
-			}),
-		};
+
+		const ytdlStream = ytdl.arbitraryStream(stream, {
+			opusEncoded: true,
+			seek,
+			encoderArgs: filters?.length ? ["-af", filters.join(",")] : undefined,
+		});
+		const resource = createAudioResource(ytdlStream, {
+			metadata: this,
+		});
+		return resource;
 	}
 }
 
@@ -823,16 +852,19 @@ ${title} (${url})`);
 		return new URLSong(url, requester);
 	}
 
-	async getStream({ seek, filter }: StreamOptions) {
+	async getResource({ seek, filters }: { seek?: number; filters?: string[] }) {
 		const stream = got.stream(this.url);
 		const { default: ytdl } = await import("discord-ytdl-core");
-		return {
-			stream: ytdl.arbitraryStream(stream, {
-				opusEncoded: true,
-				seek,
-				encoderArgs: filter ? ["-af", filter] : undefined,
-			}),
-		};
+
+		const ytdlStream = ytdl.arbitraryStream(stream, {
+			opusEncoded: true,
+			seek,
+			encoderArgs: filters?.length ? ["-af", filters.join(",")] : undefined,
+		});
+		const resource = createAudioResource(ytdlStream, {
+			metadata: this,
+		});
+		return resource;
 	}
 }
 
