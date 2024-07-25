@@ -1,6 +1,6 @@
 /* eslint-disable ts/no-floating-promises */
 import { createEmbed } from "$lib/embed";
-import { sec2Str } from "$lib/time";
+import { formatTime } from "$lib/time";
 import { remove } from "@in5net/std/array";
 import { shuffle } from "@in5net/std/random";
 import {
@@ -146,12 +146,12 @@ export default class Queue extends Array<SongType> {
 				if (i === this.currentIndex && seconds)
 					embed.addFields({
 						name: `▶️ ${i + 1}. ${title}`,
-						value: `${sec2Str(seconds)}/${sec2Str(duration)}`,
+						value: `${formatTime(seconds)}/${formatTime(duration)}`,
 					});
 				else
 					embed.addFields({
 						name: `${i + 1}. ${title}`,
-						value: `${sec2Str(duration)}`,
+						value: `${formatTime(duration)}`,
 					});
 			}
 		};

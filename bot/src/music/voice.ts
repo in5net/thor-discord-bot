@@ -1,5 +1,5 @@
 import { getLyrics } from "$lib/genius";
-import { sec2Str } from "$src/lib/time";
+import { formatTime } from "$src/lib/time";
 import { URL_REGEX, YOUTUBE_CHANNEL_REGEX, splitQueries } from "./plan";
 import { getPlayDl } from "./play";
 import Queue from "./queue";
@@ -233,7 +233,7 @@ export default class Voice extends TypedEmitter<{
 				`⏏️ Added${shuff ? " & shuffled" : ""} ${quantify("song", songs.length)} to the queue:
 ${pipe(
 	songs,
-	map(song => `- [${sec2Str(song.duration)}] ${song.getMarkdown()}`),
+	map(song => `- [${formatTime(song.duration)}] ${song.getMarkdown()}`),
 	take(pageSize),
 	collect,
 ).join("\n")}${

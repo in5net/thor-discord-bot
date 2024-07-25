@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/require-array-join-separator */
-import { sec2Str } from "$src/lib/time";
+import { formatTime } from "$src/lib/time";
 import { YouTubeSong, type SongType } from "./song";
 import {
 	AudioPlayerStatus,
@@ -104,10 +104,10 @@ export default class Stream extends TypedEmitter<{
 
 		const playtime = resource.playbackDuration / 1000;
 		logger.debug(
-			`current audio start: ${sec2Str(start)}, playtime: ${sec2Str(playtime)}`,
+			`current audio start: ${formatTime(start)}, playtime: ${formatTime(playtime)}`,
 		);
 		const seek = start + playtime * speed;
-		logger.debug(`seeking to ${sec2Str(seek)}`);
+		logger.debug(`seeking to ${formatTime(seek)}`);
 		this.resource = await resource.metadata.getResource({
 			seek,
 			filters,

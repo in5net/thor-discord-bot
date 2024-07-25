@@ -1,4 +1,4 @@
-import { sec2Str } from "$src/lib/time";
+import { formatTime } from "$src/lib/time";
 import youtube from "$src/lib/youtube";
 import db from "database/drizzle";
 import { youtubeSearches } from "database/drizzle/schema";
@@ -42,7 +42,7 @@ export default command(
 			.setFields(
 				videos.map((video, i) => ({
 					name: `${i + 1}. ${video.title}`,
-					value: `Duration: ${sec2Str(video.duration.seconds)}`,
+					value: `Duration: ${formatTime(video.duration.seconds)}`,
 				})),
 			)
 			.setFooter({

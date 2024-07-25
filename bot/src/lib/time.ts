@@ -1,4 +1,4 @@
-export function sec2Str(sec: number): string {
+export function formatTime(sec: number): string {
 	if (Number.isNaN(sec)) return "unknown";
 	const hours = Math.floor(sec / 3600);
 	const minutes = Math.floor((sec % 3600) / 60);
@@ -13,7 +13,7 @@ export function sec2Str(sec: number): string {
 	return `${minutes}:${secondsStr}`;
 }
 
-export function str2Seconds(str: string): number {
+export function parseTime(str: string): number {
 	const parts = str.split(":").map(x => Number.parseInt(x));
 	switch (parts.length) {
 		case 1: {

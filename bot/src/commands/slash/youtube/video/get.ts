@@ -1,8 +1,8 @@
-import { sec2Str } from "$lib/time";
+import { formatTime } from "$lib/time";
 import youtube from "$lib/youtube";
+import { createEmbedBuilder } from "../embed";
 import command from "discord/commands/slash";
 import logger from "logger";
-import { createEmbedBuilder } from "../embed";
 
 export default command(
 	{
@@ -33,7 +33,7 @@ export default command(
 				.addFields(
 					{
 						name: "Duration",
-						value: sec2Str(duration),
+						value: formatTime(duration),
 						inline: true,
 					},
 					{
@@ -55,9 +55,9 @@ export default command(
 			const maxDesc = 1024;
 			if (description)
 				embed.setDescription(
-					description.length < maxDesc
-						? description
-						: `${description.slice(0, maxDesc - 3)}...`,
+					description.length < maxDesc ?
+						description
+					:	`${description.slice(0, maxDesc - 3)}...`,
 				);
 
 			return await i.reply({
