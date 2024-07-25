@@ -1,5 +1,5 @@
 import { getPlayDl } from "../play";
-import { Requester, Song, SongJSON } from "./shared";
+import { GetResourceOptions, Requester, Song, SongJSON } from "./shared";
 import { createAudioResource } from "@discordjs/voice";
 import { memo } from "@in5net/std/fn";
 import chalk from "chalk-template";
@@ -136,14 +136,6 @@ ${title} (${url})
 		return this.fromTrack(track, requester);
 	}
 
-	//Static async fromId(
-	//	id: string,
-	//	requester: Requester,
-	//): Promise<SoundCloudSong> {
-	//	const url = SpotifySong.id2URL(id);
-	//	return this.fromURL(url, requester);
-	//}
-
 	static async fromListURL(
 		url: string,
 		requester: Requester,
@@ -159,7 +151,7 @@ ${title} (${url})
 		);
 	}
 
-	async getResource({ seek, filters }: { seek?: number; filters?: string[] }) {
+	async getResource({ seek, filters }: GetResourceOptions) {
 		const play = await playSC();
 		const { stream } = await play.stream(this.url);
 		const { default: ytdl } = await import("discord-ytdl-core");

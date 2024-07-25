@@ -6,6 +6,7 @@ import { URLJSON, URLSong } from "./url";
 import { YouTubeJSON, YouTubeSong } from "./youtube";
 
 export * from "./musescore";
+export * from "./shared";
 export * from "./soundcloud";
 export * from "./spotify";
 export * from "./url";

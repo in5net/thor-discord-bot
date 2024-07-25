@@ -1,10 +1,11 @@
 import { parseTime } from "$src/lib/time";
 import {
+	GetResourceListeners,
+	GetResourceOptions,
 	Requester,
 	Song,
 	SongJSON,
 	streamFileWithOptions,
-	StreamOptions,
 } from "./shared";
 import { createAudioResource, StreamType } from "@discordjs/voice";
 import chalk from "chalk-template";
@@ -15,14 +16,21 @@ import { existsSync, mkdirSync } from "node:fs";
 import { readdir, rename, stat } from "node:fs/promises";
 import { join } from "node:path";
 
-const musescoreCachePath = new URL("../../../cache/musescore", import.meta.url)
-	.pathname;
-async function getMusescoreFile(id: string, url: string) {
+const musescoreCachePath = new URL(
+	"../../../../cache/musescore",
+	import.meta.url,
+).pathname;
+async function getMusescoreFile(
+	id: string,
+	url: string,
+	listeners?: GetResourceListeners,
+) {
 	if (!existsSync(musescoreCachePath))
 		mkdirSync(musescoreCachePath, { recursive: true });
 	const filePath = join(musescoreCachePath, `${id}.mp3`);
 
 	if (!existsSync(filePath)) {
+		listeners?.ondownloading?.();
 		const process = spawn("bunx", ["dl-librescore", "-i", url, "-t", "mp3"], {
 			cwd: musescoreCachePath,
 		});
@@ -50,10 +58,10 @@ async function getMusescoreFile(id: string, url: string) {
 async function streamMusescoreFile(
 	id: string,
 	url: string,
-	{ seek, filters }: StreamOptions = {},
+	options?: GetResourceOptions,
 ) {
-	const filePath = await getMusescoreFile(id, url);
-	return streamFileWithOptions(filePath, { seek, filters });
+	const filePath = await getMusescoreFile(id, url, options);
+	return streamFileWithOptions(filePath, options);
 }
 
 export interface MusescoreJSON extends SongJSON {
@@ -156,11 +164,8 @@ ${title} (${url})`);
 		});
 	}
 
-	async getResource({ seek, filters }: StreamOptions) {
-		const stream = await streamMusescoreFile(this.id, this.url, {
-			seek,
-			filters,
-		});
+	async getResource(options: GetResourceOptions) {
+		const stream = await streamMusescoreFile(this.id, this.url, options);
 		const resource = createAudioResource(stream, {
 			inputType: StreamType.Opus,
 			metadata: this,

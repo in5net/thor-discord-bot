@@ -17,6 +17,12 @@ export interface StreamOptions {
 	seek?: number;
 	filters?: string[];
 }
+export interface GetResourceListeners {
+	ondownloading?: () => void;
+}
+export interface GetResourceOptions
+	extends StreamOptions,
+		GetResourceListeners {}
 
 export interface Album<T extends Song> {
 	name: string;
@@ -58,7 +64,9 @@ export abstract class Song implements SongJSON {
 		});
 	}
 
-	abstract getResource(options: StreamOptions): Promise<AudioResource<Song>>;
+	abstract getResource(
+		options: GetResourceOptions,
+	): Promise<AudioResource<Song>>;
 
 	abstract log(): void;
 

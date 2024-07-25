@@ -310,7 +310,10 @@ ${pipe(
 			return;
 		}
 
-		const resource = await song.getResource(stream);
+		const resource = await song.getResource({
+			filters: stream.filters,
+			ondownload: () => this.send(`⏬ Downloading ${song.title}...`),
+		});
 		await stream.play(resource);
 
 		try {

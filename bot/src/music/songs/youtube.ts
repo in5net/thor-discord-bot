@@ -2,11 +2,12 @@ import youtube from "$src/lib/youtube";
 import { getPlayDl } from "../play";
 import {
 	Album,
+	GetResourceListeners,
+	GetResourceOptions,
 	Requester,
 	Song,
 	SongJSON,
 	streamFileWithOptions,
-	StreamOptions,
 } from "./shared";
 import { createAudioResource, StreamType } from "@discordjs/voice";
 import chalk from "chalk-template";
@@ -17,14 +18,15 @@ import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod";
 
-const youtubeCachePath = new URL("../../../cache/youtube", import.meta.url)
+const youtubeCachePath = new URL("../../../../cache/youtube", import.meta.url)
 	.pathname;
-async function getYoutubeFile(id: string) {
+async function getYoutubeFile(id: string, listeners?: GetResourceListeners) {
 	if (!existsSync(youtubeCachePath))
 		mkdirSync(youtubeCachePath, { recursive: true });
 	const filePath = join(youtubeCachePath, `${id}.opus`);
 
 	if (!existsSync(filePath)) {
+		listeners?.ondownloading?.();
 		const process = spawn(
 			"yt-dlp",
 			[
@@ -48,10 +50,10 @@ async function getYoutubeFile(id: string) {
 
 export async function streamYoutubeFile(
 	id: string,
-	{ seek, filters }: StreamOptions = {},
+	options?: GetResourceOptions,
 ) {
 	const filePath = await getYoutubeFile(id);
-	return streamFileWithOptions(filePath, { seek, filters });
+	return streamFileWithOptions(filePath, options);
 }
 
 export interface Channel {
@@ -337,11 +339,8 @@ ${title} (${url})
 		return songs;
 	}
 
-	async getResource({ seek, filters }: StreamOptions) {
-		const stream = await streamYoutubeFile(this.id, {
-			seek,
-			filters,
-		});
+	async getResource(options: GetResourceOptions) {
+		const stream = await streamYoutubeFile(this.id, options);
 		const resource = createAudioResource(stream, {
 			inputType: StreamType.Opus,
 			metadata: this,

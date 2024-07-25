@@ -1,4 +1,4 @@
-import { Requester, Song, SongJSON } from "./shared";
+import { GetResourceOptions, Requester, Song, SongJSON } from "./shared";
 import { createAudioResource } from "@discordjs/voice";
 import chalk from "chalk-template";
 import got from "got";
@@ -47,7 +47,7 @@ ${title} (${url})`);
 		return new URLSong(url, requester);
 	}
 
-	async getResource({ seek, filters }: { seek?: number; filters?: string[] }) {
+	async getResource({ seek, filters }: GetResourceOptions) {
 		const stream = got.stream(this.url);
 		const { default: ytdl } = await import("discord-ytdl-core");
 

@@ -1,6 +1,11 @@
 import youtube from "$src/lib/youtube";
 import { getPlayDl } from "../play";
-import { Requester, Song, SongJSON, StreamOptions } from "./shared";
+import {
+	GetResourceOptions,
+	Requester,
+	Song,
+	SongJSON,
+} from "./shared";
 import { streamYoutubeFile } from "./youtube";
 import { createAudioResource, StreamType } from "@discordjs/voice";
 import chalk from "chalk-template";
@@ -216,11 +221,8 @@ ${title} (${url})
 		);
 	}
 
-	async getResource({ seek, filters }: StreamOptions) {
-		const stream = await streamYoutubeFile(this.ytId, {
-			seek,
-			filters,
-		});
+	async getResource(options: GetResourceOptions) {
+		const stream = await streamYoutubeFile(this.ytId, options);
 		const resource = createAudioResource(stream, {
 			inputType: StreamType.Opus,
 			metadata: this,
