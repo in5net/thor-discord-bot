@@ -16,7 +16,7 @@ import {
 	YouTubeSong,
 	type Requester,
 	type SongType,
-} from "./song";
+} from "./songs";
 import Stream from "./stream";
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { pipe } from "@in5net/std/fn";

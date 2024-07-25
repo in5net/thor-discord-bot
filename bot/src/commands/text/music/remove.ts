@@ -1,5 +1,5 @@
 import woof from "$lib/woof";
-import { type SongType } from "$src/music/song";
+import { type SongType } from "$src/music/songs";
 import { quantify } from "@in5net/std/string";
 import logger from "logger";
 import musicCommand from "./command";

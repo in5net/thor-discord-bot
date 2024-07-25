@@ -14,7 +14,7 @@ import {
 } from "discord.js";
 import logger from "logger";
 import { TypedEmitter } from "tiny-typed-emitter";
-import { type SongType } from "./song";
+import { type SongType } from "./songs";
 import type Voice from "./voice";
 
 const pageSize = 5;

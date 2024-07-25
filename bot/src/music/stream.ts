@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/require-array-join-separator */
 import { formatTime } from "$src/lib/time";
-import { YouTubeSong, type SongType } from "./song";
+import { YouTubeSong, type SongType } from "./songs";
 import {
 	AudioPlayerStatus,
 	NoSubscriberBehavior,

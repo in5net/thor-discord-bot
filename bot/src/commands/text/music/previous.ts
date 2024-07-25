@@ -1,4 +1,4 @@
-import { type SongType } from "$src/music/song";
+import { type SongType } from "$src/music/songs";
 import musicCommand from "./command";
 
 export default musicCommand(

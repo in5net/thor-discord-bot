@@ -1,4 +1,4 @@
-import { YouTubeSong } from "$src/music/song";
+import { YouTubeSong } from "$src/music/songs";
 import { getVoice } from "$src/music/voice-manager";
 import db, { and, eq } from "database/drizzle";
 import { youtubeSearches } from "database/drizzle/schema";
