@@ -12,7 +12,7 @@ import got from "got";
 import logger from "logger";
 import { createRegExp, digit, oneOrMore } from "magic-regexp";
 import { spawn } from "node:child_process";
-import { existsSync, mkdirSync } from "node:fs";
+import { createReadStream, existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import {
 	type SoundCloudPlaylist,
@@ -21,6 +21,7 @@ import {
 	type SpotifyPlaylist,
 	type SpotifyTrack,
 } from "play-dl";
+import prism from "prism-media";
 import { z } from "zod";
 
 interface SongJSON {
@@ -35,7 +36,7 @@ export interface Requester {
 
 interface StreamOptions {
 	seek?: number;
-	filter?: string;
+	filters?: string[];
 }
 
 export interface Album<T extends Song> {
@@ -78,13 +79,7 @@ abstract class Song implements SongJSON {
 		});
 	}
 
-	abstract getResource({
-		seek,
-		filters,
-	}: {
-		seek?: number;
-		filters?: string[];
-	}): Promise<AudioResource<Song>>;
+	abstract getResource(options: StreamOptions): Promise<AudioResource<Song>>;
 
 	abstract log(): void;
 
@@ -93,11 +88,12 @@ abstract class Song implements SongJSON {
 	abstract toJSON(): SongJSON;
 }
 
-const youtubeCachePath = new URL("../../../youtube-cache", import.meta.url)
+const youtubeCachePath = new URL("../../../cache/youtube", import.meta.url)
 	.pathname;
-if (!existsSync(youtubeCachePath)) mkdirSync(youtubeCachePath);
+if (!existsSync(youtubeCachePath))
+	mkdirSync(youtubeCachePath, { recursive: true });
 
-async function getYoutubeFile(id: string, { seek, filter }: StreamOptions) {
+async function getYoutubeFile(id: string) {
 	const filePath = join(youtubeCachePath, `${id}.opus`);
 
 	if (!existsSync(filePath)) {
@@ -120,6 +116,48 @@ async function getYoutubeFile(id: string, { seek, filter }: StreamOptions) {
 	}
 
 	return filePath;
+}
+
+function streamFileWithOptions(
+	filePath: string,
+	{ seek, filters }: StreamOptions = {},
+) {
+	const inputStream = createReadStream(filePath);
+
+	const ffmpegArgs: string[] = [
+		"-analyzeduration",
+		"0",
+		"-loglevel",
+		"0",
+		"-f",
+		"s16le",
+		"-ar",
+		"48000",
+		"-ac",
+		"2",
+	];
+	if (seek) ffmpegArgs.push("-ss", seek.toString());
+	if (filters?.length) ffmpegArgs.push("-af", filters.join(","));
+
+	const transcoder = new prism.FFmpeg({
+		args: ffmpegArgs,
+	});
+
+	const opusEncoder = new prism.opus.Encoder({
+		rate: 48_000,
+		channels: 2,
+		frameSize: 960,
+	});
+
+	return inputStream.pipe(transcoder).pipe(opusEncoder);
+}
+
+async function streamYoutubeFile(
+	id: string,
+	{ seek, filters }: StreamOptions = {},
+) {
+	const filePath = await getYoutubeFile(id);
+	return streamFileWithOptions(filePath, { seek, filters });
 }
 
 interface Channel {
@@ -405,12 +443,12 @@ ${title} (${url})
 		return songs;
 	}
 
-	async getResource({ seek, filters }: { seek?: number; filters?: string[] }) {
-		const filePath = await getYoutubeFile(this.id, {
+	async getResource({ seek, filters }: StreamOptions) {
+		const stream = await streamYoutubeFile(this.id, {
 			seek,
-			filter: filters?.join(","),
+			filters,
 		});
-		const resource = createAudioResource(filePath, {
+		const resource = createAudioResource(stream, {
 			inputType: StreamType.Opus,
 			metadata: this,
 		});
@@ -626,12 +664,12 @@ ${title} (${url})
 		);
 	}
 
-	async getResource({ seek, filters }: { seek?: number; filters?: string[] }) {
-		const filePath = await getYoutubeFile(this.ytId, {
+	async getResource({ seek, filters }: StreamOptions) {
+		const stream = await streamYoutubeFile(this.ytId, {
 			seek,
-			filter: filters?.join(","),
+			filters,
 		});
-		const resource = createAudioResource(filePath, {
+		const resource = createAudioResource(stream, {
 			inputType: StreamType.Opus,
 			metadata: this,
 		});
