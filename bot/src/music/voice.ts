@@ -1,9 +1,15 @@
 import { getLyrics } from "$lib/genius";
 import { formatTime } from "$src/lib/time";
-import { URL_REGEX, YOUTUBE_CHANNEL_REGEX, splitQueries } from "./plan";
+import {
+	URL_REGEX,
+	YOUTUBE_CHANNEL_REGEX,
+	MUSESCORE_REGEX,
+	splitQueries,
+} from "./plan";
 import { getPlayDl } from "./play";
 import Queue from "./queue";
 import {
+	MusescoreSong,
 	SoundCloudSong,
 	SpotifySong,
 	URLSong,
@@ -159,6 +165,14 @@ export default class Voice extends TypedEmitter<{
 				async getSongs(query) {
 					const songs = await SoundCloudSong.fromListURL(query, requester);
 					return songs;
+				},
+			},
+			{
+				name: "Musescore song",
+				check: async query => MUSESCORE_REGEX.test(query),
+				async getSongs(query) {
+					const song = await MusescoreSong.fromURL(query, requester);
+					return [song];
 				},
 			},
 			{

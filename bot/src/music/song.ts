@@ -1,4 +1,5 @@
 import youtube from "$lib/youtube";
+import { parseTime } from "$src/lib/time";
 import { getPlayDl } from "./play";
 import {
 	AudioResource,
@@ -11,8 +12,10 @@ import { EmbedBuilder, hideLinkEmbed, hyperlink } from "discord.js";
 import got from "got";
 import logger from "logger";
 import { createRegExp, digit, oneOrMore } from "magic-regexp";
+import { muse } from "musescore-metadata";
 import { spawn } from "node:child_process";
 import { createReadStream, existsSync, mkdirSync } from "node:fs";
+import { readdir, rename, stat } from "node:fs/promises";
 import { join } from "node:path";
 import {
 	type SoundCloudPlaylist,
@@ -88,36 +91,6 @@ abstract class Song implements SongJSON {
 	abstract toJSON(): SongJSON;
 }
 
-const youtubeCachePath = new URL("../../../cache/youtube", import.meta.url)
-	.pathname;
-if (!existsSync(youtubeCachePath))
-	mkdirSync(youtubeCachePath, { recursive: true });
-
-async function getYoutubeFile(id: string) {
-	const filePath = join(youtubeCachePath, `${id}.opus`);
-
-	if (!existsSync(filePath)) {
-		const process = spawn(
-			"yt-dlp",
-			[
-				"-x",
-				"--audio-format",
-				"opus",
-				"-o",
-				"%(id)s",
-				`https://youtube.com/watch?v=${id}`,
-			],
-			{ cwd: youtubeCachePath },
-		);
-		await new Promise((resolve, reject) => {
-			process.on("exit", resolve);
-			process.on("error", reject);
-		});
-	}
-
-	return filePath;
-}
-
 function streamFileWithOptions(
 	filePath: string,
 	{ seek, filters }: StreamOptions = {},
@@ -150,6 +123,36 @@ function streamFileWithOptions(
 	});
 
 	return inputStream.pipe(transcoder).pipe(opusEncoder);
+}
+
+const youtubeCachePath = new URL("../../../cache/youtube", import.meta.url)
+	.pathname;
+
+async function getYoutubeFile(id: string) {
+	if (!existsSync(youtubeCachePath))
+		mkdirSync(youtubeCachePath, { recursive: true });
+	const filePath = join(youtubeCachePath, `${id}.opus`);
+
+	if (!existsSync(filePath)) {
+		const process = spawn(
+			"yt-dlp",
+			[
+				"-x",
+				"--audio-format",
+				"opus",
+				"-o",
+				"%(id)s",
+				`https://youtube.com/watch?v=${id}`,
+			],
+			{ cwd: youtubeCachePath },
+		);
+		await new Promise((resolve, reject) => {
+			process.on("exit", resolve);
+			process.on("error", reject);
+		});
+	}
+
+	return filePath;
 }
 
 async function streamYoutubeFile(
@@ -847,6 +850,160 @@ ${title} (${url})
 	}
 }
 
+const musescoreCachePath = new URL("../../../cache/musescore", import.meta.url)
+	.pathname;
+async function getMusescoreFile(id: string, url: string) {
+	if (!existsSync(musescoreCachePath))
+		mkdirSync(musescoreCachePath, { recursive: true });
+	const filePath = join(musescoreCachePath, `${id}.mp3`);
+
+	if (!existsSync(filePath)) {
+		const process = spawn("bunx", ["dl-librescore", "-i", url, "-t", "mp3"], {
+			cwd: musescoreCachePath,
+		});
+		await new Promise((resolve, reject) => {
+			process.on("exit", resolve);
+			process.on("error", reject);
+		});
+
+		const fileNames = await readdir(musescoreCachePath);
+		let mostRecentFileName = "";
+		let mostRecentFileTime = 0;
+		for (const fileName of fileNames) {
+			const stats = await stat(join(musescoreCachePath, fileName));
+			if (stats.ctimeMs > mostRecentFileTime) {
+				mostRecentFileName = fileName;
+				mostRecentFileTime = stats.ctimeMs;
+			}
+		}
+		await rename(join(musescoreCachePath, mostRecentFileName), filePath);
+	}
+
+	return filePath;
+}
+
+async function streamMusescoreFile(
+	id: string,
+	url: string,
+	{ seek, filters }: StreamOptions = {},
+) {
+	const filePath = await getMusescoreFile(id, url);
+	return streamFileWithOptions(filePath, { seek, filters });
+}
+
+interface MusescoreJSON extends SongJSON {
+	type: "musescore";
+	id: string;
+	url: string;
+	description: string;
+}
+export class MusescoreSong extends Song {
+	id: string;
+	url: string;
+	description: string;
+
+	constructor({
+		id,
+		url,
+		title,
+		description,
+		duration,
+		requester,
+	}: {
+		id: string;
+		url: string;
+		title: string;
+		description: string;
+		duration: number;
+		requester: Requester;
+	}) {
+		super({ title, duration, requester });
+		this.id = id;
+		this.url = url;
+		this.description = description;
+	}
+
+	get iconURL() {
+		return "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/2560px-YouTube_full-color_icon_%282017%29.svg.png";
+	}
+
+	log() {
+		const { title, url } = this;
+		logger.debug(chalk`📺 {blue [Musescore]}
+${title} (${url})`);
+	}
+
+	toString(): string {
+		return `🎼 [Musescore] ${this.title} (${this.url})`;
+	}
+
+	toJSON(): MusescoreJSON {
+		const { id, url, title, description, duration } = this;
+		return {
+			type: "musescore",
+			id,
+			url,
+			title,
+			description,
+			duration,
+		};
+	}
+
+	static fromJSON(
+		{ id, url, title, description, duration }: MusescoreJSON,
+		requester: Requester,
+	): MusescoreSong {
+		return new MusescoreSong({
+			id,
+			url,
+			title,
+			description,
+			duration,
+			requester,
+		});
+	}
+
+	override getEmbed() {
+		const { url, description } = this;
+		const embed = super.getEmbed().setColor("Blue").setURL(url);
+		const MAX_DESCRIPTION_LENGTH = 256;
+		if (description)
+			embed.setDescription(
+				description.length > MAX_DESCRIPTION_LENGTH ?
+					`${description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
+				:	description,
+			);
+		return embed;
+	}
+
+	static async fromURL(
+		url: string,
+		requester: Requester,
+	): Promise<MusescoreSong> {
+		const metadata = await muse(url);
+		return new MusescoreSong({
+			id: metadata.id.toString(),
+			url: metadata.url,
+			title: metadata.title,
+			description: metadata.description,
+			duration: parseTime(metadata.duration),
+			requester,
+		});
+	}
+
+	async getResource({ seek, filters }: StreamOptions) {
+		const stream = await streamMusescoreFile(this.id, this.url, {
+			seek,
+			filters,
+		});
+		const resource = createAudioResource(stream, {
+			inputType: StreamType.Opus,
+			metadata: this,
+		});
+		return resource;
+	}
+}
+
 interface URLJSON extends SongJSON {
 	type: "url";
 	url: string;
@@ -906,8 +1063,18 @@ ${title} (${url})`);
 	}
 }
 
-export type SongType = YouTubeSong | SpotifySong | SoundCloudSong | URLSong;
-export type SongJSONType = YouTubeJSON | SpotifyJSON | SoundCloudJSON | URLJSON;
+export type SongType =
+	| YouTubeSong
+	| SpotifySong
+	| SoundCloudSong
+	| MusescoreSong
+	| URLSong;
+export type SongJSONType =
+	| YouTubeJSON
+	| SpotifyJSON
+	| SoundCloudJSON
+	| MusescoreJSON
+	| URLJSON;
 
 export function fromJSON(json: SongJSONType, requester: Requester): SongType {
 	switch (json.type) {
@@ -921,6 +1088,10 @@ export function fromJSON(json: SongJSONType, requester: Requester): SongType {
 
 		case "soundcloud": {
 			return SoundCloudSong.fromJSON(json, requester);
+		}
+
+		case "musescore": {
+			return MusescoreSong.fromJSON(json, requester);
 		}
 
 		case "url": {

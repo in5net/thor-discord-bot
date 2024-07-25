@@ -27,6 +27,13 @@ export const YOUTUBE_CHANNEL_REGEX = createRegExp(
 	oneOrMore(anyOf(letter.lowercase, digit, charIn("_-"))),
 );
 
+export const MUSESCORE_REGEX = createRegExp(
+	"https://musescore.com/user/",
+	oneOrMore(digit).as("userId"),
+	"/scores/",
+	oneOrMore(digit).as("scoreId"),
+);
+
 export const URL_REGEX = createRegExp(
 	anyOf(letter.lowercase, digit, charIn("-@:%._+~#=")).times.between(1, 256),
 	".",
@@ -80,6 +87,10 @@ export async function generatePlanFromQuery(
 		{
 			name: "load SoundCloud playlist",
 			check: async query => (await play.so_validate(query)) === "playlist",
+		},
+		{
+			name: "load Musescore song",
+			check: query => MUSESCORE_REGEX.test(query),
 		},
 		{
 			name: "load song from url",
