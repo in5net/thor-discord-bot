@@ -1,6 +1,7 @@
 import { AudioResource } from "@discordjs/voice";
 import { EmbedBuilder, hideLinkEmbed, hyperlink } from "discord.js";
 import { createReadStream } from "node:fs";
+import { Readable } from "node:stream";
 import prism from "prism-media";
 
 export interface SongJSON {
@@ -75,12 +76,10 @@ export abstract class Song implements SongJSON {
 	abstract toJSON(): SongJSON;
 }
 
-export function streamFileWithOptions(
-	filePath: string,
+export function streamWithOptions(
+	stream: Readable,
 	{ seek, filters }: StreamOptions = {},
 ) {
-	const inputStream = createReadStream(filePath);
-
 	const ffmpegArgs: string[] = [
 		"-analyzeduration",
 		"0",
@@ -106,5 +105,13 @@ export function streamFileWithOptions(
 		frameSize: 960,
 	});
 
-	return inputStream.pipe(transcoder).pipe(opusEncoder);
+	return stream.pipe(transcoder).pipe(opusEncoder);
+}
+
+export function streamFileWithOptions(
+	filePath: string,
+	options?: StreamOptions,
+) {
+	const inputStream = createReadStream(filePath);
+	return streamWithOptions(inputStream, options);
 }

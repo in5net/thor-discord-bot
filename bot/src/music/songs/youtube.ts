@@ -1,3 +1,4 @@
+import { ensureCacheSubDir } from "$src/lib/cache";
 import youtube from "$src/lib/youtube";
 import { getPlayDl } from "../play";
 import {
@@ -14,15 +15,12 @@ import chalk from "chalk-template";
 import logger from "logger";
 import { createRegExp, digit, oneOrMore } from "magic-regexp";
 import { spawn } from "node:child_process";
-import { existsSync, mkdirSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod";
 
-const youtubeCachePath = new URL("../../../../cache/youtube", import.meta.url)
-	.pathname;
 async function getYoutubeFile(id: string, listeners?: GetResourceListeners) {
-	if (!existsSync(youtubeCachePath))
-		mkdirSync(youtubeCachePath, { recursive: true });
+	const youtubeCachePath = await ensureCacheSubDir("youtube");
 	const filePath = join(youtubeCachePath, `${id}.opus`);
 
 	if (!existsSync(filePath)) {

@@ -1,3 +1,4 @@
+import { ensureCacheSubDir } from "$src/lib/cache";
 import { parseTime } from "$src/lib/time";
 import {
 	GetResourceListeners,
@@ -12,21 +13,16 @@ import chalk from "chalk-template";
 import logger from "logger";
 import { muse } from "musescore-metadata";
 import { spawn } from "node:child_process";
-import { existsSync, mkdirSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { readdir, rename, stat } from "node:fs/promises";
 import { join } from "node:path";
 
-const musescoreCachePath = new URL(
-	"../../../../cache/musescore",
-	import.meta.url,
-).pathname;
 async function getMusescoreFile(
 	id: string,
 	url: string,
 	listeners?: GetResourceListeners,
 ) {
-	if (!existsSync(musescoreCachePath))
-		mkdirSync(musescoreCachePath, { recursive: true });
+	const musescoreCachePath = await ensureCacheSubDir("musescore");
 	const filePath = join(musescoreCachePath, `${id}.mp3`);
 
 	if (!existsSync(filePath)) {

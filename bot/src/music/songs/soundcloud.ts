@@ -1,5 +1,11 @@
 import { getPlayDl } from "../play";
-import { GetResourceOptions, Requester, Song, SongJSON } from "./shared";
+import {
+	GetResourceOptions,
+	Requester,
+	Song,
+	SongJSON,
+	streamWithOptions,
+} from "./shared";
 import { createAudioResource } from "@discordjs/voice";
 import { memo } from "@in5net/std/fn";
 import chalk from "chalk-template";
@@ -151,17 +157,12 @@ ${title} (${url})
 		);
 	}
 
-	async getResource({ seek, filters }: GetResourceOptions) {
+	async getResource(options: GetResourceOptions) {
 		const play = await playSC();
 		const { stream } = await play.stream(this.url);
-		const { default: ytdl } = await import("discord-ytdl-core");
+		const filteredStream = streamWithOptions(stream, options);
 
-		const ytdlStream = ytdl.arbitraryStream(stream, {
-			opusEncoded: true,
-			seek,
-			encoderArgs: filters?.length ? ["-af", filters.join(",")] : undefined,
-		});
-		const resource = createAudioResource(ytdlStream, {
+		const resource = createAudioResource(filteredStream, {
 			metadata: this,
 		});
 		return resource;
