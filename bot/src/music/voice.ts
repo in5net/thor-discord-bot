@@ -260,6 +260,9 @@ ${pipe(
 		}
 
 		await this.play();
+
+		const nextSong = this.queue[this.queue.currentIndex + 1];
+		if (nextSong) nextSong.prepare();
 	}
 
 	async seek(seconds: number) {
@@ -310,9 +313,11 @@ ${pipe(
 			return;
 		}
 
+		await song.prepare({
+			ondownloading: () => this.send(`⏬ Downloading ${song.title}...`),
+		});
 		const resource = await song.getResource({
 			filters: stream.filters,
-			ondownload: () => this.send(`⏬ Downloading ${song.title}...`),
 		});
 		await stream.play(resource);
 

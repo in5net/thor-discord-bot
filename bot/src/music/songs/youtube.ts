@@ -19,7 +19,10 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { z } from "zod";
 
-async function getYoutubeFile(id: string, listeners?: GetResourceListeners) {
+export async function getYoutubeFile(
+	id: string,
+	listeners?: GetResourceListeners,
+) {
 	const youtubeCachePath = await ensureCacheSubDir("youtube");
 	const filePath = join(youtubeCachePath, `${id}.opus`);
 
@@ -335,6 +338,10 @@ ${title} (${url})
 		}
 
 		return songs;
+	}
+
+	override async _prepare(listeners?: GetResourceListeners) {
+		await getYoutubeFile(this.id, listeners);
 	}
 
 	async getResource(options: GetResourceOptions) {

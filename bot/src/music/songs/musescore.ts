@@ -160,6 +160,10 @@ ${title} (${url})`);
 		});
 	}
 
+	override async _prepare(listeners?: GetResourceListeners) {
+		await getMusescoreFile(this.id, this.url, listeners);
+	}
+
 	async getResource(options: GetResourceOptions) {
 		const stream = await streamMusescoreFile(this.id, this.url, options);
 		const resource = createAudioResource(stream, {

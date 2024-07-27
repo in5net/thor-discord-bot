@@ -1,12 +1,13 @@
 import youtube from "$src/lib/youtube";
 import { getPlayDl } from "../play";
 import {
+	GetResourceListeners,
 	GetResourceOptions,
 	Requester,
 	Song,
 	SongJSON,
 } from "./shared";
-import { streamYoutubeFile } from "./youtube";
+import { getYoutubeFile, streamYoutubeFile } from "./youtube";
 import { createAudioResource, StreamType } from "@discordjs/voice";
 import chalk from "chalk-template";
 import logger from "logger";
@@ -219,6 +220,10 @@ ${title} (${url})
 		return Promise.all(
 			tracks.map(async track => SpotifySong.fromId(track.id, requester)),
 		);
+	}
+
+	override async _prepare(listeners?: GetResourceListeners) {
+		await getYoutubeFile(this.ytId, listeners);
 	}
 
 	async getResource(options: GetResourceOptions) {

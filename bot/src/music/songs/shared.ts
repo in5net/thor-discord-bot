@@ -34,6 +34,7 @@ export abstract class Song implements SongJSON {
 	duration: number;
 	requester: Requester;
 	start = 0;
+	private preparePromise?: Promise<void>;
 
 	abstract url: string;
 	abstract iconURL: string;
@@ -62,6 +63,14 @@ export abstract class Song implements SongJSON {
 			text: `Requested by ${requester.name}`,
 			iconURL,
 		});
+	}
+
+	async _prepare(_listeners?: GetResourceListeners) {}
+
+	async prepare(listeners?: GetResourceListeners) {
+		if (this.preparePromise) return this.preparePromise;
+		// eslint-disable-next-line no-underscore-dangle
+		return (this.preparePromise = this._prepare(listeners));
 	}
 
 	abstract getResource(
