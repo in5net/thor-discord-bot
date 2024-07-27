@@ -1,7 +1,6 @@
 import { AudioResource } from "@discordjs/voice";
 import { EmbedBuilder, hideLinkEmbed, hyperlink } from "discord.js";
-import { createReadStream } from "node:fs";
-import { Readable } from "node:stream";
+import { createReadStream, ReadStream } from "node:fs";
 import prism from "prism-media";
 
 export interface SongJSON {
@@ -77,7 +76,7 @@ export abstract class Song implements SongJSON {
 }
 
 export function streamWithOptions(
-	stream: Readable,
+	stream: ReadStream,
 	{ seek, filters }: StreamOptions = {},
 ) {
 	const ffmpegArgs: string[] = [
