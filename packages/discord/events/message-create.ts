@@ -139,14 +139,17 @@ export async function runCommand(
 		args: parsedArguments as Record<string, ArgumentValue>,
 		client,
 	});
-	await db.insert(commandExecutions).values({
-		name,
-		type: "text",
-		userId: BigInt(author.id),
-		messageId: BigInt(message.id),
-		channelId: BigInt(channelId),
-		guildId: message.guildId ? BigInt(message.guildId) : undefined,
-	});
+	await db
+		.insert(commandExecutions)
+		.values({
+			name,
+			type: "text",
+			userId: BigInt(author.id),
+			messageId: BigInt(message.id),
+			channelId: BigInt(channelId),
+			guildId: message.guildId ? BigInt(message.guildId) : undefined,
+		})
+		.catch(() => null);
 	return result;
 }
 

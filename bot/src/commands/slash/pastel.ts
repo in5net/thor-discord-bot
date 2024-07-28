@@ -48,9 +48,8 @@ export default command(
 				);
 		}
 
-		await i.reply(`Running ${NAME}...`);
-
-		await i.reply(`Running ${NAME}...`);
+		await i.reply(`**${prompt}**
+Running ${NAME}...`);
 
 		const outputs = await replicate.run(
 			"elct9620/pastel-mix:ba8b1f407cd6418fa589ca73e5c623c081600ecff19f7fc3249fa536d762bb29",

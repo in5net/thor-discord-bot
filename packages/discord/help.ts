@@ -1,7 +1,7 @@
-import { EmbedBuilder, type Collection } from "discord.js";
+import command, { argumentType2Name, type TextCommand } from "./commands/text";
+import { Collection, EmbedBuilder } from "discord.js";
 import { createRegExp, exactly, word } from "magic-regexp";
 import { env } from "node:process";
-import command, { argumentType2Name, type TextCommand } from "./commands/text";
 
 export default command(
 	{
@@ -16,21 +16,30 @@ export default command(
 		},
 	},
 	async ({ message: { client, channel }, args: { command: args } }) => {
-		if (!args)
+		if (!args) {
+			const categories = new Collection<string, string[]>();
+			for (const [name, command] of client.textCommands) {
+				const category = categories.ensure(
+					command.category || "misc",
+					() => [],
+				);
+				category.push(name);
+			}
+
 			return channel.send({
 				embeds: [
 					new EmbedBuilder()
 						.setTitle(`${env.NAME} Commands`)
-						.setDescription(
-							client.textCommands
-								.map(({ aliases }, name) =>
-									[name, ...(aliases?.map(alias => alias) || [])].join("|"),
-								)
-								.join(", "),
-						)
-						.setColor(env.COLOR),
+						.setColor(env.COLOR)
+						.setFields(
+							categories.map((commandNames, category) => ({
+								name: category,
+								value: commandNames.join("・"),
+							})),
+						),
 				],
 			});
+		}
 
 		let commandManual: TextCommand | undefined;
 		let commandManuals = client.textCommands;

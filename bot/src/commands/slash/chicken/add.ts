@@ -1,5 +1,5 @@
 import db, { eq } from "database/drizzle";
-import { users } from "database/drizzle/schema";
+import { chickens, users } from "database/drizzle/schema";
 import command from "discord/commands/slash";
 import logger from "logger";
 import { env } from "node:process";
@@ -33,7 +33,12 @@ export default command(
 			}),
 		);
 		await body?.pipeTo(stream);
-		const fileURL = `https://${env.ILES_DOMAIN}/${path}`;
+
+		await db.insert(chickens).values({
+			name,
+		});
+
+		const fileURL = `https://${env.FILES_DOMAIN}/${path}`;
 		logger.info(`Uploaded ${fileURL}`);
 
 		return i.reply(`Chicken added

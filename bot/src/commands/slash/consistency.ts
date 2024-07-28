@@ -43,7 +43,8 @@ export default command(
 				);
 		}
 
-		await i.reply(`Running ${NAME}...`);
+		await i.reply(`**${prompt}**
+Running ${NAME}...`);
 
 		const outputs = await replicate.run(
 			"luosiallen/latent-consistency-model:553803fd018b3cf875a8bc774c99da9b33f36647badfd88a6eec90d61c5f62fc",

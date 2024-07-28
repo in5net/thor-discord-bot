@@ -48,7 +48,8 @@ export default command(
 				);
 		}
 
-		await i.reply(`Running ${NAME}...`);
+		await i.reply(`**${prompt}**
+Running ${NAME}...`);
 
 		const outputs = await replicate.run(
 			"stability-ai/stable-video-diffusion:3f0457e4619daac51203dedb472816fd4af51f3149fa7a9e0b5ffcf1b8172438",

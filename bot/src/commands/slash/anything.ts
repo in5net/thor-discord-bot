@@ -48,7 +48,8 @@ export default command(
 				);
 		}
 
-		await i.reply(`Running ${NAME}...`);
+		await i.reply(`**${prompt}**
+Running ${NAME}...`);
 
 		const outputs = await replicate.run(
 			"cjwbw/anything-v4.0:42a996d39a96aedc57b2e0aa8105dea39c9c89d9d266caf6bb4327a1c191b061",

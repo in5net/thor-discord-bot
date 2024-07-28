@@ -39,7 +39,7 @@ export default command(
 					sentAt: new Date(),
 				})
 				.where(eq(chickens.name, chicken.name));
-			name = chicken.name;
+			({ name } = chicken);
 		}
 
 		const url = `https://${env.FILES_DOMAIN}/chicken/${name}`;

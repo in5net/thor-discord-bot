@@ -15,7 +15,7 @@ export default command(
 			prompt: {
 				type: "string",
 				desc: "Prompt to generate",
-			}
+			},
 		},
 	},
 	async (i, { prompt }) => {
@@ -35,22 +35,23 @@ export default command(
 				);
 		}
 
-		await i.reply(`Running ${NAME}...`);
+		await i.reply(`**${prompt}**
+Running ${NAME}...`);
 
-        const outputs = await replicate.run(
-          "fofr/sticker-maker:58a7099052ed9928ee6a65559caa790bfa8909841261ef588686660189eb9dc8",
-          {
-            input: {
-              steps: 20,
-              width: 1024,
-              height: 1024,
-              prompt,
-              upscale: true,
-              upscale_steps: 10,
-              negative_prompt: ""
-            }
-          }
-        );
+		const outputs = await replicate.run(
+			"fofr/sticker-maker:58a7099052ed9928ee6a65559caa790bfa8909841261ef588686660189eb9dc8",
+			{
+				input: {
+					steps: 20,
+					width: 1024,
+					height: 1024,
+					prompt,
+					upscale: true,
+					upscale_steps: 10,
+					negative_prompt: "",
+				},
+			},
+		);
 		const urls = z.array(z.string()).parse(outputs);
 
 		await i.editReply({

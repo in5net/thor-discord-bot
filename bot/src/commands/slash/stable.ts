@@ -48,7 +48,8 @@ export default command(
 				);
 		}
 
-		await i.reply(`Running ${NAME}...`);
+		await i.reply(`**${prompt}**
+Running ${NAME}...`);
 
 		const outputs = await replicate.run(
 			"stability-ai/stable-diffusion:b3d14e1cd1f9470bbb0bb68cac48e5f483e5be309551992cc33dc30654a82bb7",

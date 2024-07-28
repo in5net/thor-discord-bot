@@ -1,9 +1,9 @@
+import { isTextCommand, type TextCommand } from "../commands/text";
+import { noTestGlob } from "./shared";
 import { pluralize } from "@in5net/std/string";
 import { Collection } from "discord.js";
 import logger from "logger";
 import { join, parse } from "node:path";
-import { isTextCommand, type TextCommand } from "../commands/text";
-import { noTestGlob } from "./shared";
 
 export async function loadTextCommands(dirPath: string) {
 	dirPath = dirPath.replaceAll("\\", "/");
@@ -14,7 +14,8 @@ export async function loadTextCommands(dirPath: string) {
 
 	for (const filePath of filePaths) {
 		const subPath = filePath.replace(dirPath, "");
-		const { dir: category, name } = parse(subPath);
+		const { dir, name } = parse(subPath);
+		const category = dir.replace("/", "");
 
 		const module = (await import(filePath)) as Record<string, unknown>;
 		if (!("default" in module)) continue;

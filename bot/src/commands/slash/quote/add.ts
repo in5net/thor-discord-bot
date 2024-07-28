@@ -1,5 +1,5 @@
 import db, { eq } from "database/drizzle";
-import { users } from "database/drizzle/schema";
+import { speechBubbles, users } from "database/drizzle/schema";
 import command from "discord/commands/slash";
 import got from "got";
 import logger from "logger";
@@ -32,6 +32,11 @@ export default command(
 			gzip: true,
 		});
 		await pipeline(request, stream);
+
+		await db.insert(speechBubbles).values({
+			name,
+		});
+
 		const fileURL = `https://${env.FILES_DOMAIN}/${path}`;
 		logger.info(`Uploaded ${fileURL}`);
 
