@@ -5,10 +5,10 @@
 	"main": "./index.ts",
 	"types": "./index.ts",
 	"dependencies": {
-		"pino": "^9.3.1"
+		"pino": "^9.3.2"
 	},
 	"devDependencies": {
 		"@types/node": "20.14.11",
-		"pino-pretty": "^11.2.1"
+		"pino-pretty": "^11.2.2"
 	}
 }
