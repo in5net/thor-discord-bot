@@ -4,14 +4,6 @@
     ".env"
   ],
   "pipeline": {
-    "db:generate": {
-      "inputs": [
-        "prisma/*.prisma"
-      ],
-      "outputs": [
-        "generated/**"
-      ]
-    },
     "db:push": {
       "cache": false
     },
@@ -53,4 +45,3 @@
     }
   }
 }
-

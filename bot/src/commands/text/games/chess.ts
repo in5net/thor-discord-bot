@@ -1,5 +1,6 @@
-import { cache } from "$lib/prisma";
 import { choice } from "@in5net/std/random";
+import db, { eq } from "database/drizzle";
+import { chessGames } from "database/drizzle/schema";
 import command from "discord/commands/text";
 
 export default command(
@@ -15,23 +16,17 @@ export default command(
 	},
 	async ({ message: { author }, args: { move } }) => {
 		if (["clear", "reset"].includes(move?.toLowerCase() || "")) {
-			await cache.chessGame.delete({
-				where: {
-					userId: BigInt(author.id),
-				},
-			});
+			await db.delete(chessGames).where(eq(chessGames.userId, author.id));
 			return "Game cleared!";
 		}
 
 		const { Chess } = await import("chess.js");
 
-		const chessGame = await cache.chessGame.findFirst({
-			select: {
+		const chessGame = await db.query.chessGames.findFirst({
+			columns: {
 				fen: true,
 			},
-			where: {
-				userId: BigInt(author.id),
-			},
+			where: eq(chessGames.userId, author.id),
 		});
 
 		const chess = new Chess(chessGame?.fen);
@@ -40,29 +35,19 @@ export default command(
 			chess.move(move);
 
 			if (chess.isGameOver()) {
-				await cache.chessGame.delete({
-					where: {
-						userId: BigInt(author.id),
-					},
-				});
+				await db.delete(chessGames).where(eq(chessGames.userId, author.id));
 			} else {
 				const moves = chess.moves();
 				const aiMove = choice(moves) || "";
 				chess.move(aiMove);
 
 				const fen = chess.fen();
-				await cache.chessGame.upsert({
-					where: {
-						userId: BigInt(author.id),
-					},
-					create: {
-						userId: BigInt(author.id),
-						fen,
-					},
-					update: {
-						fen,
-					},
-				});
+				await (chessGame ?
+					db
+						.update(chessGames)
+						.set({ fen })
+						.where(eq(chessGames.userId, author.id))
+				:	db.insert(chessGames).values({ userId: author.id, fen }));
 			}
 		}
 

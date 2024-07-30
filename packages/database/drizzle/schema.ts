@@ -88,6 +88,7 @@ export const channelsRelations = relations(channels, ({ one, many }) => ({
 		references: [guilds.id],
 	}),
 	messages: many(messages),
+	context: many(context),
 }));
 
 /**
@@ -179,6 +180,7 @@ export const users = sqliteTable("users", {
 });
 export const usersRelations = relations(users, ({ many }) => ({
 	issues: many(issues),
+	chessGames: many(chessGames),
 }));
 
 export const ratios = sqliteTable("ratios", {
@@ -345,3 +347,36 @@ export const themes = sqliteTable("themes", {
 		.notNull()
 		.$type<Record<string, string[]>>(),
 });
+
+export const context = sqliteTable("context", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	createdAt,
+	channelId: text("channel_id").notNull(),
+	question: text("question").notNull(),
+	answer: text("answer").notNull(),
+});
+export const contextRelations = relations(context, ({ one }) => ({
+	channel: one(channels, {
+		fields: [context.channelId],
+		references: [channels.id],
+	}),
+}));
+
+export const stackItems = sqliteTable("stack_items", {
+	id: integer("id").primaryKey({ autoIncrement: true }),
+	createdAt,
+	value: text("item").notNull(),
+});
+
+export const chessGames = sqliteTable("chess_games", {
+	userId: text("user_id").primaryKey(),
+	createdAt,
+	updatedAt,
+	fen: text("fen").notNull(),
+});
+export const chessGamesRelations = relations(chessGames, ({ one }) => ({
+	user: one(users, {
+		fields: [chessGames.userId],
+		references: [users.id],
+	}),
+}));

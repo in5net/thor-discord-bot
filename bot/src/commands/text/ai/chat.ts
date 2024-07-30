@@ -1,8 +1,9 @@
 import { filter, openai } from "$lib/openai";
-import { cache } from "$lib/prisma";
 import { throttle } from "@in5net/std/async";
 import { ttlCache } from "@in5net/std/fn";
 import { OpenAIStream as openAIStream } from "ai";
+import db, { and, desc, eq, gte } from "database/drizzle";
+import { channels, context } from "database/drizzle/schema";
 import { type Message } from "discord.js";
 import command from "discord/commands/text";
 import ms from "ms";
@@ -20,7 +21,7 @@ const system = ttlCache(
 	async () => readFile(chatGPTSystemPath, "utf8"),
 	ms("10 min"),
 );
-const desc = ttlCache(
+const description = ttlCache(
 	async () => readFile(chatGPTDescPath, "utf8"),
 	ms("10 min"),
 );
@@ -39,15 +40,10 @@ export default command(
 		examples: ["hi", "what is the meaning of life?"],
 	},
 	async ({ message, args: { prompt } }) => {
-		const channelId = BigInt(message.channelId);
-		const { channel, author } = message;
+		const { channelId, channel, author, guildId } = message;
 
 		if (prompt === "CLEAR") {
-			await cache.context.deleteMany({
-				where: {
-					channelId,
-				},
-			});
+			await db.delete(channels).where(eq(channels.id, channelId));
 			return message.reply("Context cleared");
 		}
 
@@ -56,21 +52,16 @@ export default command(
 
 		const minCreatedAt = new Date();
 		minCreatedAt.setMinutes(minCreatedAt.getMinutes() - 5);
-		const previous = await cache.context.findMany({
-			select: {
+		const previous = await db.query.context.findMany({
+			columns: {
 				question: true,
 				answer: true,
 			},
-			where: {
-				createdAt: {
-					gte: minCreatedAt,
-				},
-				channelId: BigInt(message.channelId),
-			},
-			orderBy: {
-				createdAt: "desc",
-			},
-			take: 10,
+			where: and(
+				gte(context.createdAt, minCreatedAt),
+				eq(context.channelId, channelId),
+			),
+			orderBy: desc(context.createdAt),
 		});
 
 		const stream = await openai.chat.completions.create({
@@ -85,7 +76,7 @@ export default command(
 				},
 				{
 					role: "assistant",
-					content: await desc(),
+					content: await description(),
 				},
 				...previous.flatMap(
 					({ question: q, answer: a }) =>
@@ -113,21 +104,23 @@ export default command(
 			},
 		});
 
-		return cache.context.create({
-			data: {
-				channel: {
-					connectOrCreate: {
-						create: {
-							id: channelId,
-						},
-						where: {
-							id: channelId,
-						},
-					},
-				},
-				question: prompt,
-				answer: reply,
+		const channelExists = await db.query.channels.findFirst({
+			columns: {
+				id: true,
 			},
+			where: eq(channels.id, channelId),
+		});
+		if (!channelExists)
+			await db.insert(channels).values({
+				id: channelId,
+				guildId: guildId || "",
+				nsfw: "nsfw" in channel ? channel.nsfw : false,
+			});
+
+		return db.insert(context).values({
+			channelId,
+			question: prompt,
+			answer: reply,
 		});
 	},
 );

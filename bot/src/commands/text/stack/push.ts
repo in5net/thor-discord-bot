@@ -1,4 +1,5 @@
-import { cache } from "$lib/prisma";
+import db, { count } from "database/drizzle";
+import { stackItems } from "database/drizzle/schema";
 import command from "discord/commands/text";
 
 export default command(
@@ -13,12 +14,10 @@ export default command(
 		examples: ["hi there", "secret message"],
 	},
 	async ({ args: { value } }) => {
-		await cache.stackItem.create({
-			data: {
-				value,
-			},
+		await db.insert(stackItems).values({
+			value,
 		});
-		const count = await cache.stackItem.count();
-		return `Item pushed! New length: ${count}`;
+		const [result] = await db.select({ count: count() }).from(stackItems);
+		return `Item pushed! New length: ${result?.count || 0}`;
 	},
 );

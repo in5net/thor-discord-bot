@@ -1,5 +1,6 @@
 import { createEmbed } from "$lib/embed";
-import prisma from "$lib/prisma";
+import db, { eq } from "database/drizzle";
+import { issues, users } from "database/drizzle/schema";
 import command from "discord/commands/slash";
 
 export default command(
@@ -13,7 +14,7 @@ export default command(
 			type: {
 				type: "choice",
 				desc: "Type of issue",
-				choices: ["Bug", "Feature", "Enhancement"],
+				choices: ["bug", "feature", "enhancement"],
 			},
 			desc: {
 				type: "string",
@@ -22,34 +23,31 @@ export default command(
 		},
 	},
 	async (i, { name, type, desc }) => {
-		const { id } = await prisma.issue.create({
-			select: {
-				id: true,
-			},
-			data: {
-				user: {
-					connectOrCreate: {
-						create: {
-							id: BigInt(i.user.id),
-						},
-						where: {
-							id: BigInt(i.user.id),
-						},
-					},
-				},
+		const userExists = !!(await db.query.users.findFirst({
+			where: eq(users.id, i.user.id),
+		}));
+		if (!userExists)
+			await db.insert(users).values({
+				id: i.user.id,
+			});
+
+		const [{ id } = { id: "" }] = await db
+			.insert(issues)
+			.values({
+				userId: i.user.id,
 				name,
 				type,
 				desc,
-			},
-		});
+			})
+			.returning({ id: issues.id });
 		const embed = createEmbed()
 			.setTitle(`#${id} ${name}`)
 			.setDescription(desc)
 			.addFields({
 				name: "Type",
 				value: `${
-					type === "Bug" ? "🐛"
-					: type === "Feature" ? "✨"
+					type === "bug" ? "🐛"
+					: type === "feature" ? "✨"
 					: "🔧"
 				} ${type}`,
 			});
