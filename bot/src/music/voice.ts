@@ -260,9 +260,6 @@ ${pipe(
 		}
 
 		await this.play();
-
-		const nextSong = this.queue[this.queue.currentIndex + 1];
-		if (nextSong) nextSong.prepare();
 	}
 
 	async seek(seconds: number) {
@@ -303,8 +300,10 @@ ${pipe(
 
 	async play(skip = false) {
 		const { stream } = this;
-		if (stream.player.state.status === AudioPlayerStatus.Playing && !skip)
+		if (stream.player.state.status === AudioPlayerStatus.Playing && !skip) {
+			this.prepareNextSong();
 			return;
+		}
 
 		const song = this.queue.next();
 		if (!song) {
@@ -320,6 +319,7 @@ ${pipe(
 			filters: stream.filters,
 		});
 		await stream.play(resource);
+		this.prepareNextSong();
 
 		try {
 			const embed = song.getEmbed().setTitle(`▶️ Now Playing: ${song.title}`);
@@ -329,6 +329,11 @@ ${pipe(
 		} catch (error) {
 			logger.error("Error creating embed:", error);
 		}
+	}
+
+	prepareNextSong() {
+		const nextSong = this.queue[this.queue.currentIndex + 1];
+		if (nextSong) nextSong.prepare();
 	}
 
 	async songQueueEmbed(n: number) {
