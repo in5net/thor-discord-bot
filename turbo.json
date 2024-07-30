@@ -18,24 +18,15 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true,
-      "dependsOn": [
-        "^db:generate"
-      ]
+      "persistent": true
     },
     "start": {
       "cache": false,
-      "persistent": true,
-      "dependsOn": [
-        "^db:generate"
-      ]
+      "persistent": true
     },
     "debug": {
       "cache": false,
-      "persistent": true,
-      "dependsOn": [
-        "^db:generate"
-      ]
+      "persistent": true
     },
     "deploy": {
       "inputs": [
