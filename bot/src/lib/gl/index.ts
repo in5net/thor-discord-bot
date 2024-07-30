@@ -674,8 +674,8 @@ export default class GL {
 				.videoCodec("libx264")
 				.outputOptions(["-pix_fmt yuv420p"])
 				.save("output.mp4")
-				.once("end", resolve)
-				.once("error", reject),
+				.on("end", resolve)
+				.on("error", reject),
 		);
 		console.log(temporaryDir);
 
@@ -688,8 +688,8 @@ export default class GL {
 					"-shortest",
 				])
 				.save("full.mp4")
-				.once("end", resolve)
-				.once("error", reject),
+				.on("end", resolve)
+				.on("error", reject),
 		);
 		const outputPath = join(temporaryDir, "full.mp4");
 		const stream = createReadStream(outputPath);

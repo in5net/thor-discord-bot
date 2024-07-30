@@ -150,8 +150,8 @@ export default command(
 				.videoCodec("libx264")
 				.outputOptions(["-pix_fmt yuv420p"])
 				.save(name)
-				.once("end", resolve)
-				.once("error", reject),
+				.on("end", resolve)
+				.on("error", reject),
 		);
 
 		const outputPath = join(temporaryDir, name);

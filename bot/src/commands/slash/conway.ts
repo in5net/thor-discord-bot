@@ -112,10 +112,9 @@ export default command(
 				.videoCodec("libx264")
 				.outputOptions(["-pix_fmt yuv420p"])
 				.save("output.mp4")
-				.once("end", resolve)
-				.once("error", reject),
+				.on("end", resolve)
+				.on("error", reject),
 		);
-		console.log(temporaryDir);
 
 		const outputPath = join(temporaryDir, "output.mp4");
 		const stream = createReadStream(outputPath);
