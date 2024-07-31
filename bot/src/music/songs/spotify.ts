@@ -1,4 +1,3 @@
-import youtube from "$src/lib/youtube";
 import { getPlayDl } from "../play";
 import {
 	GetResourceListeners,
@@ -12,6 +11,7 @@ import { createAudioResource, StreamType } from "@discordjs/voice";
 import chalk from "chalk-template";
 import logger from "logger";
 import { SpotifyAlbum, SpotifyPlaylist, SpotifyTrack } from "play-dl";
+import Innertube from "youtubei.js";
 import { z } from "zod";
 
 const SPOTIFY_SONG =
@@ -184,6 +184,7 @@ ${title} (${url})
 		} = (await play.spotify(url)) as SpotifyTrack;
 		let ytId = "";
 
+		const youtube = await Innertube.create();
 		const { videos } = await youtube.search(`${name} ${artist?.name || ""}`, {
 			type: "video",
 		});

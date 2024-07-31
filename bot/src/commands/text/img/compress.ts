@@ -9,6 +9,9 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pipeline } from "node:stream/promises";
 
+const scale = 4;
+const quality = 31;
+
 export default command(
 	{
 		desc: "Give an image a few more JPEG artifacts",
@@ -29,22 +32,32 @@ export default command(
 
 		await pipeline(got.stream(image.url), createWriteStream(filePath));
 
-		const name = "output.jpg";
 		await new Promise((resolve, reject) =>
 			ffmpeg({ cwd: temporaryDir })
 				.input(fileName)
-				.addOption("-q:v", "31")
-				.save(name)
+				.videoFilter(`scale=iw/${scale}:ih/${scale}`)
+				.save("downsampled.jpg")
 				.on("end", resolve)
 				.on("error", reject),
 		);
 
-		const outputPath = join(temporaryDir, name);
+		const outputFileName = "output.jpg";
+		await new Promise((resolve, reject) =>
+			ffmpeg({ cwd: temporaryDir })
+				.input("downsampled.jpg")
+				.videoFilter(`scale=iw*${scale}:ih*${scale}`)
+				.addOption(`-q:v ${quality}`)
+				.save(outputFileName)
+				.on("end", resolve)
+				.on("error", reject),
+		);
+
+		const outputPath = join(temporaryDir, outputFileName);
 		const stream = createReadStream(outputPath);
 		stream.once("close", async () => rm(temporaryDir, { recursive: true }));
 
 		return message.edit({
-			files: [new AttachmentBuilder(stream, { name })],
+			files: [new AttachmentBuilder(stream, { name: outputFileName })],
 		});
 	},
 );

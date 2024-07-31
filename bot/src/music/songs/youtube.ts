@@ -1,5 +1,4 @@
 import { ensureCacheSubDir } from "$src/lib/cache";
-import youtube from "$src/lib/youtube";
 import { getPlayDl } from "../play";
 import {
 	Album,
@@ -17,6 +16,7 @@ import { createRegExp, digit, oneOrMore } from "magic-regexp";
 import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
+import Innertube from "youtubei.js";
 import { z } from "zod";
 
 export async function getYoutubeFile(
@@ -203,6 +203,7 @@ ${title} (${url})
 
 	static async fromId(id: string, requester: Requester): Promise<YouTubeSong> {
 		try {
+			const youtube = await Innertube.create();
 			const {
 				basic_info: {
 					title = "Unknown",
@@ -251,6 +252,7 @@ ${title} (${url})
 		query: string,
 		requester: Requester,
 	): Promise<YouTubeSong> {
+		const youtube = await Innertube.create();
 		const { videos } = await youtube.search(query, { type: "video" });
 		const { id, title, description, duration, best_thumbnail } = z
 			.object({
@@ -279,6 +281,7 @@ ${title} (${url})
 		id: string,
 		requester: Requester,
 	): Promise<YouTubeAlbum> {
+		const youtube = await Innertube.create();
 		const {
 			info: { title = "", description },
 			videos,
@@ -312,6 +315,7 @@ ${title} (${url})
 		id: string,
 		requester: Requester,
 	): Promise<YouTubeSong[]> {
+		const youtube = await Innertube.create();
 		const channel = await youtube.getChannel(id);
 		const { videos } = await channel.getVideos();
 		const songs: YouTubeSong[] = [];

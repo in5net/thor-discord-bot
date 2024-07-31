@@ -1,8 +1,8 @@
-import youtube from "$lib/youtube";
+import { createEmbedBuilder } from "../embed";
 import { type APIEmbedField } from "discord.js";
 import command from "discord/commands/slash";
 import logger from "logger";
-import { createEmbedBuilder } from "../embed";
+import Innertube from "youtubei.js";
 
 export default command(
 	{
@@ -23,6 +23,7 @@ export default command(
 	},
 	async (i, { query, limit }) => {
 		try {
+			const youtube = await Innertube.create();
 			const search = await youtube.search(query, { type: "video" });
 			const videos = search.videos.slice(0, limit);
 

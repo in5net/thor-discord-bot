@@ -1,9 +1,9 @@
 import { formatTime } from "$src/lib/time";
-import youtube from "$src/lib/youtube";
 import db from "database/drizzle";
 import { youtubeSearches } from "database/drizzle/schema";
 import { EmbedBuilder } from "discord.js";
 import command from "discord/commands/text";
+import Innertube from "youtubei.js";
 import { z } from "zod";
 
 const videosSchema = z.array(
@@ -32,6 +32,7 @@ export default command(
 	async ({ message, args: { query } }) => {
 		const { guildId, channelId } = message;
 		if (!guildId) return;
+		const youtube = await Innertube.create();
 		const result = await youtube.search(query, { type: "video" });
 		const videos = videosSchema.parse(result.videos.slice(0, 5));
 

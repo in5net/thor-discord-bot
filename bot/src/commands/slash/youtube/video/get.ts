@@ -1,8 +1,8 @@
 import { formatTime } from "$lib/time";
-import youtube from "$lib/youtube";
 import { createEmbedBuilder } from "../embed";
 import command from "discord/commands/slash";
 import logger from "logger";
+import Innertube from "youtubei.js";
 
 export default command(
 	{
@@ -16,6 +16,7 @@ export default command(
 	},
 	async (i, { url }) => {
 		try {
+			const youtube = await Innertube.create();
 			const {
 				basic_info: {
 					title,
