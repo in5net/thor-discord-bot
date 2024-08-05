@@ -29,7 +29,8 @@ export async function handleWordleMessage({ channel, content }: Message) {
 	const guess = content.toLowerCase();
 	if (guess === word) {
 		channel2Word.delete(channel.id);
-		return channel.send(`${guess} is correct!`);
+		return channel.send(`🟩🟩🟩🟩🟩
+${guess} is correct!`);
 	}
 
 	const colors = guess
