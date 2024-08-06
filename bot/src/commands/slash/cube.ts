@@ -83,7 +83,7 @@ export default command(
 		}
 
 		const renderStart = performance.now();
-		const frames = fps / speed;
+		const frames = (fps / speed) * 2;
 		let frame = 0;
 		let editPromise: Promise<Message<boolean>> | undefined;
 		const progressHandle = setInterval(updateProgress, 1500);
@@ -98,7 +98,7 @@ export default command(
 
 		const stream =
 			gif ?
-				await gl.gifStream(frames * 2, {
+				await gl.gifStream(frames, {
 					fps,
 					render(t) {
 						angle = Math.PI * t * speed;
@@ -106,7 +106,7 @@ export default command(
 					},
 				})
 			:	await gl.mp4Stream(
-					frames * 2,
+					frames,
 					new URL("../../../assets/cube/cube.ogg", import.meta.url).pathname,
 					{
 						fps,
