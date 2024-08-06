@@ -106,7 +106,7 @@ export default command(
 					},
 				})
 			:	await gl.mp4Stream(
-					frames,
+					frames * 2,
 					new URL("../../../assets/cube/cube.ogg", import.meta.url).pathname,
 					{
 						fps,
