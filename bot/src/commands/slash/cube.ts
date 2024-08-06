@@ -98,7 +98,7 @@ export default command(
 
 		const stream =
 			gif ?
-				await gl.gifStream(frames, {
+				await gl.gifStream(frames * 2, {
 					fps,
 					render(t) {
 						angle = Math.PI * t * speed;
