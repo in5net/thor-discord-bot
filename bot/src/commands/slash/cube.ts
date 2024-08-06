@@ -8,8 +8,6 @@ import { nanoid } from "nanoid";
 import { env } from "node:process";
 import { filesBucket } from "storage";
 
-const size = 512;
-
 export default command(
 	{
 		desc: "Makes your profile or attachment spin on a cube",
@@ -23,15 +21,15 @@ export default command(
 				type: "int",
 				desc: "The frames per second to render the cube",
 				min: 1,
-				max: 120,
-				default: 60,
+				max: 60,
+				default: 12,
 			},
 			speed: {
 				type: "float",
 				desc: "The speed of the cube (rotations per second)",
 				min: 0.25,
-				max: 4,
-				default: 1,
+				max: 2,
+				default: 0.5,
 			},
 			gif: {
 				type: "bool",
@@ -43,9 +41,9 @@ export default command(
 	async (i, { image, fps, speed, gif }) => {
 		await i.deferReply();
 		const url =
-			image?.url || i.user.displayAvatarURL({ extension: "png", size: 512 });
+			image?.url || i.user.displayAvatarURL({ extension: "png", size: 64 });
 
-		const gl = new GL(size, size, true);
+		const gl = new GL(180, 180, true);
 		await gl.createProgramFromPaths(
 			new URL("../../../assets/cube/shader.vert", import.meta.url).pathname,
 			new URL("../../../assets/cube/shader.frag", import.meta.url).pathname,
@@ -76,10 +74,9 @@ export default command(
 			gl.background(0, 0, 0, 1);
 
 			mat4.identity(modelViewMatrix);
-			mat4.translate(modelViewMatrix, modelViewMatrix, [0, 0, -5]);
-			mat4.rotateX(modelViewMatrix, modelViewMatrix, angle);
+			mat4.translate(modelViewMatrix, modelViewMatrix, [0, 0, -4]);
 			mat4.rotateY(modelViewMatrix, modelViewMatrix, angle);
-			mat4.rotateZ(modelViewMatrix, modelViewMatrix, angle);
+			mat4.rotateX(modelViewMatrix, modelViewMatrix, angle);
 			gl.uniform("modelViewMatrix", "mat4", modelViewMatrix);
 			frame++;
 			await sleep();
@@ -104,7 +101,7 @@ export default command(
 				await gl.gifStream(frames, {
 					fps,
 					render(t) {
-						angle = Math.PI * 2 * t * speed;
+						angle = Math.PI * t * speed;
 						return render();
 					},
 				})
@@ -113,8 +110,9 @@ export default command(
 					new URL("../../../assets/cube/cube.ogg", import.meta.url).pathname,
 					{
 						fps,
+						lowres: true,
 						render(t) {
-							angle = Math.PI * 2 * t * speed;
+							angle = Math.PI * t * speed;
 							return render();
 						},
 					},

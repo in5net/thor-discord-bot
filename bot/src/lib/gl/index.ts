@@ -635,9 +635,11 @@ export default class GL {
 		audioPath: string,
 		{
 			fps = 24,
+			lowres = false,
 			render,
 		}: {
 			fps?: number;
+			lowres?: boolean;
 			render?: (t: number) => Awaitable<void>;
 		} = {},
 	): Promise<ReadStream> {
@@ -667,17 +669,14 @@ export default class GL {
 			await new Promise(resolve => setImmediate(resolve));
 		}
 
-		await new Promise((resolve, reject) =>
-			ffmpeg({ cwd: temporaryDir })
+		await new Promise((resolve, reject) => {
+			const cmd = ffmpeg({ cwd: temporaryDir })
 				.input("frame%04d.png")
 				.fps(fps)
-				.videoCodec("libx264")
-				.outputOptions(["-pix_fmt yuv420p"])
-				.save("output.mp4")
-				.on("end", resolve)
-				.on("error", reject),
-		);
-		console.log(temporaryDir);
+				.videoCodec("libx264");
+			if (lowres) cmd.videoFilter("scale=-1:360").videoBitrate("144k");
+			return cmd.save("output.mp4").on("end", resolve).on("error", reject);
+		});
 
 		await new Promise((resolve, reject) =>
 			ffmpeg({ cwd: temporaryDir })
