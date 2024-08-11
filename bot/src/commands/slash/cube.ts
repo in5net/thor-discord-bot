@@ -14,7 +14,7 @@ export default command(
 		options: {
 			image: {
 				type: "attachment",
-				desc: "The image to pixel sort",
+				desc: "The texture to spin on the cube",
 				optional: true,
 			},
 			fps: {
@@ -105,18 +105,16 @@ export default command(
 						return render();
 					},
 				})
-			:	await gl.mp4Stream(
-					frames,
-					new URL("../../../assets/cube/cube.ogg", import.meta.url).pathname,
-					{
-						fps,
-						lowres: true,
-						render(t) {
-							angle = Math.PI * t * speed;
-							return render();
-						},
+			:	await gl.mp4Stream(frames, {
+					fps,
+					lowres: true,
+					audioPath: new URL("../../../assets/cube/cube.ogg", import.meta.url)
+						.pathname,
+					render(t) {
+						angle = Math.PI * t * speed;
+						return render();
 					},
-				);
+				});
 		const streamStart = performance.now();
 		clearInterval(progressHandle);
 		await editPromise;

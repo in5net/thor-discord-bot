@@ -15,6 +15,7 @@ import { PNG } from "pngjs";
 import GIF from "./gif";
 import Texture from "./texture";
 import { Awaitable } from "@in5net/std/types";
+import { sleep } from "@in5net/std/async";
 
 interface GLShader {
 	shader: WebGLShader;
@@ -619,7 +620,7 @@ export default class GL {
 			encoder.addFrame(this.buffer());
 			writeStream.write(encoder.read());
 
-			await new Promise(resolve => setImmediate(resolve));
+			await sleep();
 		}
 
 		encoder.finish();
@@ -632,14 +633,15 @@ export default class GL {
 
 	async mp4Stream(
 		frames: number,
-		audioPath: string,
 		{
 			fps = 24,
 			lowres = false,
+			audioPath,
 			render,
 		}: {
 			fps?: number;
 			lowres?: boolean;
+			audioPath?: string;
 			render?: (t: number) => Awaitable<void>;
 		} = {},
 	): Promise<ReadStream> {
@@ -666,7 +668,7 @@ export default class GL {
 			);
 			await writeFile(path, canvas.toBuffer("image/png"));
 
-			await new Promise(resolve => setImmediate(resolve));
+			await sleep();
 		}
 
 		await new Promise((resolve, reject) => {
@@ -683,7 +685,7 @@ export default class GL {
 				.addOptions([
 					"-stream_loop -1",
 					"-i output.mp4",
-					`-i ${audioPath}`,
+					...(audioPath ? [`-i ${audioPath}`] : []),
 					"-shortest",
 				])
 				.save("full.mp4")
