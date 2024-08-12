@@ -296,6 +296,12 @@ function parseArgs(
 						height: size,
 					};
 				}
+				break;
+			}
+
+			case "video": {
+				const file = message.attachments.first();
+				if (file) value = file.url;
 			}
 		}
 

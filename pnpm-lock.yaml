@@ -182,6 +182,9 @@ importers:
       zod:
         specifier: ^3.23.8
         version: 3.23.8
+      zx:
+        specifier: ^8.1.4
+        version: 8.1.4
     devDependencies:
       '@total-typescript/ts-reset':
         specifier: ^0.5.1
@@ -223,7 +226,7 @@ importers:
         version: 11.1.2
       drizzle-orm:
         specifier: ^0.32.1
-        version: 0.32.1(@opentelemetry/api@1.9.0)(better-sqlite3@11.1.2)
+        version: 0.32.1(@opentelemetry/api@1.9.0)(better-sqlite3@11.1.2)(react@18.3.1)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -1195,6 +1198,9 @@ packages:
   '@types/fluent-ffmpeg@2.1.25':
     resolution: {integrity: sha512-a9/Jtv/RVaCG4lUwWIcuClWE5eXJFoFS/oHOecOv/RS8n+lQdJzcJVmDlxA8Xbk4B82YpO88Dijcoljb6sYTcA==}
 
+  '@types/fs-extra@11.0.4':
+    resolution: {integrity: sha512-yTbItCNreRooED33qjunPthRcSjERP1r4MqCZc7wv0u2sUkzTFp45tgUfS5+r7FrZPdmCCNflLhVSP/o+SemsQ==}
+
   '@types/gif-encoder@0.7.4':
     resolution: {integrity: sha512-tke9j2sFpRpX2C1JLAxZpTMAzVILlWkkhuSGCbxWuyBvXYtA+og7KpxL5ag+4dbDYJxZ2zVmBH0taxwihgz0ZQ==}
 
@@ -1209,6 +1215,9 @@ packages:
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
+
+  '@types/jsonfile@6.1.4':
+    resolution: {integrity: sha512-D5qGUYwjvnNNextdU59/+fI+spnwtTFmyQP0h+PfIOSkNfpU6AOICUOkm4i0OnSk+NyjdPJrxCDro0sJsWlRpQ==}
 
   '@types/jsonwebtoken@9.0.6':
     resolution: {integrity: sha512-/5hndP5dCjloafCXns6SZyESp3Ldq7YjH3zwzwczYnjxIT0Fqzk5ROSYVGfFyczIue7IUEj8hkvLbPoLQ18vQw==}
@@ -4036,6 +4045,11 @@ packages:
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
+  zx@8.1.4:
+    resolution: {integrity: sha512-QFDYYpnzdpRiJ3dL2102Cw26FpXpWshW4QLTGxiYfIcwdAqg084jRCkK/kuP/NOSkxOjydRwNFG81qzA5r1a6w==}
+    engines: {node: '>= 12.17.0'}
+    hasBin: true
+
 snapshots:
 
   '@ai-sdk/provider-utils@1.0.5(zod@3.23.8)':
@@ -4858,6 +4872,12 @@ snapshots:
     dependencies:
       '@types/node': 20.14.11
 
+  '@types/fs-extra@11.0.4':
+    dependencies:
+      '@types/jsonfile': 6.1.4
+      '@types/node': 20.14.11
+    optional: true
+
   '@types/gif-encoder@0.7.4':
     dependencies:
       '@types/node': 20.14.11
@@ -4869,6 +4889,11 @@ snapshots:
   '@types/http-errors@2.0.4': {}
 
   '@types/json-schema@7.0.15': {}
+
+  '@types/jsonfile@6.1.4':
+    dependencies:
+      '@types/node': 20.14.11
+    optional: true
 
   '@types/jsonwebtoken@9.0.6':
     dependencies:
@@ -5616,10 +5641,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.32.1(@opentelemetry/api@1.9.0)(better-sqlite3@11.1.2):
+  drizzle-orm@0.32.1(@opentelemetry/api@1.9.0)(better-sqlite3@11.1.2)(react@18.3.1):
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
       better-sqlite3: 11.1.2
+      react: 18.3.1
 
   duplexify@3.7.1:
     dependencies:
@@ -7948,3 +7974,8 @@ snapshots:
       zod: 3.23.8
 
   zod@3.23.8: {}
+
+  zx@8.1.4:
+    optionalDependencies:
+      '@types/fs-extra': 11.0.4
+      '@types/node': 20.14.11

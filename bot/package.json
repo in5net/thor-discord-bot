@@ -60,7 +60,8 @@
     "tsconfig": "workspace:*",
     "tsx": "^4.16.2",
     "youtubei.js": "10.2.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zx": "^8.1.4"
   },
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.5.1",

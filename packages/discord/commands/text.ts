@@ -12,6 +12,7 @@ interface ArgumentTypeMap {
 		width: number;
 		height: number;
 	};
+	video: string;
 }
 type ArgumentType = keyof ArgumentTypeMap;
 
@@ -22,6 +23,7 @@ interface DefaultTypeMap {
 	words: string[];
 	text: string;
 	image: "user";
+	video: string;
 }
 
 export const argumentType2Name: Record<ArgumentType, string> = {
@@ -31,6 +33,7 @@ export const argumentType2Name: Record<ArgumentType, string> = {
 	words: "words",
 	text: "text",
 	image: "image",
+	video: "video",
 };
 
 interface Argument<T extends ArgumentType = ArgumentType> {
@@ -45,11 +48,9 @@ interface Argument<T extends ArgumentType = ArgumentType> {
 export type Arguments = Record<string, Argument>;
 
 export type ArgumentValue<T extends Argument = Argument> =
-	T["default"] extends DefaultTypeMap[ArgumentType]
-		? ArgumentTypeMap[T["type"]]
-		: T["optional"] extends true
-		  ? ArgumentTypeMap[T["type"]] | undefined
-		  : ArgumentTypeMap[T["type"]];
+	T["default"] extends DefaultTypeMap[ArgumentType] ? ArgumentTypeMap[T["type"]]
+	: T["optional"] extends true ? ArgumentTypeMap[T["type"]] | undefined
+	: ArgumentTypeMap[T["type"]];
 
 export type Exec<T extends Arguments> = (params: {
 	message: Message;
