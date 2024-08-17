@@ -44,9 +44,6 @@ const responseVariableRegex = createRegExp(
 	[global],
 );
 
-const japaneseRegex =
-	/[\u3000-\u303f\u3040-\u309f\u30a0-\u30ff\uff00-\uff9f\u4e00-\u9faf\u3400-\u4dbf]/;
-
 const translator = new deepl.Translator(env.DEEPL_API_KEY);
 
 export default event(
@@ -110,8 +107,12 @@ export default event(
 				await channel.send(quote(result.text));
 			}
 
-			if (author.id === env.OWNER_ID && japaneseRegex.test(content)) {
-				const result = await translator.translateText(content, "ja", "en-US");
+			if (content.startsWith("tl ")) {
+				const result = await translator.translateText(
+					content.replace("tl ", ""),
+					author.id === env.OWNER_ID ? "ja" : null,
+					"en-US",
+				);
 				await channel.send(quote(result.text));
 			}
 
