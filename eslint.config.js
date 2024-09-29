@@ -1,3 +1,3 @@
-import iz7n from "@iz7n/eslint-config";
+import { in5net } from "@in5net/eslint-config";
 
-export default iz7n();
+export default in5net();
