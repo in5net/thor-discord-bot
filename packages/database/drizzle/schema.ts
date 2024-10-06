@@ -104,6 +104,7 @@ export const messages = sqliteTable(
 		channelId: text("channel_id").notNull(),
 		guildId: text("guild_id"),
 		content: text("content").notNull(),
+		deleted: boolean("deleted").notNull().default(false),
 	},
 	table => ({
 		authorIdIdx: namedIndex(table.authorId),
