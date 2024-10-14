@@ -1,5 +1,10 @@
 node_modules/
 .DS_Store
-.turbo/
 logs/
 cache/
+.data/
+*-desc.txt
+chatgpt-system.txt
+.env*
+!.env.project
+!.env.vault

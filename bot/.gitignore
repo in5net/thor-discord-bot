@@ -1,8 +1,0 @@
-.data/
-service_account.json
-*-desc.txt
-chatgpt-system.txt
-.env*
-.flaskenv*
-!.env.project
-!.env.vault
