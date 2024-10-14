@@ -10,7 +10,10 @@ import command from "$lib/discord/commands/text";
 import { mat4 } from "gl-matrix";
 import { nanoid } from "nanoid";
 import { env } from "node:process";
-import { filesBucket } from "$lib/storage";
+import path from "node:path";
+import { createWriteStream } from "node:fs";
+import { pipeline } from "node:stream/promises";
+import got from "got";
 
 const fps = 24;
 
@@ -169,26 +172,18 @@ export default command(
     await editPromise;
 
     const extension = "gif";
-    const path = `edits/${nanoid()}.${extension}`;
-    const uploadStream = filesBucket.file(path).createWriteStream({
-      gzip: true,
-      metadata: {
-        metadata: {
-          uid: message.author.id,
-        },
-      },
-    });
-    stream.pipe(uploadStream);
-    uploadStream.once("close", async () => {
-      const fileURL = `https://${env.FILES_DOMAIN}/${path}`;
-      console.log(`Uploaded ${fileURL}`);
-      const end = performance.now();
+    const subPath = `edits/${nanoid()}.${extension}`;
+    const filePath = path.join(env.FILES_PATH, subPath);
+    await pipeline(stream, createWriteStream(filePath));
 
-      return reply.edit({
-        content: `Render time: ${Math.round(streamStart - renderStart)}ms
+    const fileURL = `https://${env.FILES_DOMAIN}/${subPath}`;
+    console.log(`Uploaded ${fileURL}`);
+    const end = performance.now();
+
+    return reply.edit({
+      content: `Render time: ${Math.round(streamStart - renderStart)}ms
 Upload time: ${Math.round(end - streamStart)}ms`,
-        files: [new AttachmentBuilder(fileURL, { name: `cube.${extension}` })],
-      });
+      files: [new AttachmentBuilder(fileURL, { name: `cube.${extension}` })],
     });
   },
 );

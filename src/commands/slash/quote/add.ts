@@ -2,8 +2,9 @@ import db, { eq } from "$lib/database/drizzle";
 import { speechBubbles, users } from "$lib/database/drizzle/schema";
 import command from "$lib/discord/commands/slash";
 import logger from "$lib/logger";
-import { filesBucket } from "$lib/storage";
 import got from "got";
+import { createWriteStream } from "node:fs";
+import path from "node:path";
 import { env } from "node:process";
 import { pipeline } from "node:stream/promises";
 
@@ -29,17 +30,15 @@ export default command(
     }
 
     const request = got.stream(proxyURL);
-    const path = `speech-bubbles/${name}`;
-    const stream = filesBucket.file(path).createWriteStream({
-      gzip: true,
-    });
-    await pipeline(request, stream);
+    const subPath = `speech-bubbles/${name}`;
+    const filePath = path.join(env.FILES_PATH, subPath);
+    await pipeline(request, createWriteStream(filePath));
 
     await db.insert(speechBubbles).values({
       name,
     });
 
-    const fileURL = `https://${env.FILES_DOMAIN}/${path}`;
+    const fileURL = `https://${env.FILES_DOMAIN}/${subPath}`;
     logger.info(`Uploaded ${fileURL}`);
 
     return i.reply(`Quote added

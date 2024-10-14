@@ -1,10 +1,11 @@
+import command from "$lib/discord/commands/slash";
 import GL from "$lib/gl";
 import { randomInt } from "@in5net/std/random";
-import command from "$lib/discord/commands/slash";
 import { nanoid } from "nanoid";
 import { type Buffer } from "node:buffer";
+import { writeFile } from "node:fs/promises";
+import path from "node:path";
 import { env } from "node:process";
-import { filesBucket } from "$lib/storage";
 
 const MAX_IMAGE_SIZE = 2048;
 
@@ -42,8 +43,9 @@ export default command(
       if (
         (image.width || 0) > MAX_IMAGE_SIZE ||
         (image.height || 0) > MAX_IMAGE_SIZE
-      )
+      ) {
         return i.reply("Image is too large");
+      }
     } else {
       const size = 512;
       url = user.displayAvatarURL({ extension: "png", size });
@@ -60,7 +62,9 @@ export default command(
     while (!coords.length) {
       for (let x = 0; x < shapeSize; x++) {
         for (let y = 0; y < shapeSize; y++) {
-          if (Math.random() < 0.5) coords.push([x, y]);
+          if (Math.random() < 0.5) {
+            coords.push([x, y]);
+          }
         }
       }
     }
@@ -75,26 +79,11 @@ export default command(
     });
     await i.editReply("Uploading fractal...");
 
-    const path = `fractals/${nanoid()}.png`;
-    const stream = filesBucket.file(path).createWriteStream({
-      gzip: true,
-      metadata: {
-        metadata: {
-          uid: i.user.id,
-          source: url,
-        },
-      },
-    });
-    stream.end(buffer);
-    const fileURL = await new Promise<string>((resolve, reject) =>
-      stream
-        .on("finish", () => {
-          resolve(`https://${env.FILES_DOMAIN}/${path}`);
-        })
-        .on("error", reject),
-    );
+    const subPath = `fractals/${nanoid()}.png`;
+    const filePath = path.join(env.FILES_PATH, subPath);
+    await writeFile(filePath, buffer);
 
-    return i.editReply(fileURL);
+    return i.editReply(`https://${env.FILES_DOMAIN}/${subPath}`);
   },
 );
 

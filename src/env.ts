@@ -1,5 +1,5 @@
-import "dotenv/config";
 import logger from "$lib/logger";
+import "dotenv/config";
 import { env } from "node:process";
 import { z } from "zod";
 
@@ -13,6 +13,9 @@ declare global {
 }
 
 const EnvironmentVariables = z.object({
+  FILES_PATH: z.string(),
+  FILES_DOMAIN: z.string(),
+
   NODE_ENV: z.enum(["development", "production"]),
   NAME: z.string(),
   PREFIX: z.string(),
@@ -26,7 +29,6 @@ const EnvironmentVariables = z.object({
 
   WEBHOOK_URL: z.string(),
 
-  GCP_PROJECT_ID: z.string(),
   GOOGLE_APIS_KEY: z.string(),
   CUSTOM_SEARCH_ID: z.string(),
 
@@ -38,5 +40,8 @@ const EnvironmentVariables = z.object({
 });
 
 const result = EnvironmentVariables.safeParse(env);
-if (result.success) logger.debug("✅ Environment variables verified");
-else throw new Error(`❌ Environment variables not verified: ${result.error}`);
+if (result.success) {
+  logger.debug("✅ Environment variables verified");
+} else {
+  throw new Error(`❌ Environment variables not verified: ${result.error}`);
+}
