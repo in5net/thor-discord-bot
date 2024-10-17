@@ -257,7 +257,7 @@ export const audioFilters = sqliteTable("audio_filters", {
 });
 
 export const commandExecutions = sqliteTable(
-  "$lib/command_executions",
+  "command_executions",
   {
     id: text("id").primaryKey().$default(cuid2),
     createdAt,
