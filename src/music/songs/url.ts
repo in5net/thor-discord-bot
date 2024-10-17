@@ -1,14 +1,46 @@
+import { ensureCacheSubDir } from "$lib/cache";
+import logger from "$lib/logger";
 import {
+  GetResourceListeners,
   GetResourceOptions,
   Requester,
   Song,
   SongJSON,
-  streamWithOptions,
+  streamFileWithOptions,
 } from "./shared";
-import { createAudioResource } from "@discordjs/voice";
+import { createAudioResource, StreamType } from "@discordjs/voice";
 import chalk from "chalk-template";
-import got from "got";
-import logger from "$lib/logger";
+import { spawn } from "node:child_process";
+import { createHash } from "node:crypto";
+import { existsSync } from "node:fs";
+import path from "node:path";
+
+export async function getFile(url: string, listeners?: GetResourceListeners) {
+  const youtubeCachePath = await ensureCacheSubDir("songs");
+  const id = createHash("sha256").update(url).digest("base64url");
+  const fileName = `${id}.opus`;
+  const filePath = path.join(youtubeCachePath, fileName);
+
+  if (!existsSync(filePath)) {
+    listeners?.ondownloading?.();
+    const process = spawn(
+      "yt-dlp",
+      ["-x", "--audio-format", "opus", "-o", fileName, url],
+      { cwd: youtubeCachePath },
+    );
+    await new Promise((resolve, reject) => {
+      process.on("exit", resolve);
+      process.on("error", reject);
+    });
+  }
+
+  return filePath;
+}
+
+export async function streamFile(url: string, options?: GetResourceOptions) {
+  const filePath = await getFile(url);
+  return streamFileWithOptions(filePath, options);
+}
 
 export interface URLJSON extends SongJSON {
   type: "url";
@@ -53,11 +85,14 @@ ${title} (${url})`);
     return new URLSong(url, requester);
   }
 
-  async getResource(options: GetResourceOptions) {
-    const stream = got.stream(this.url);
-    const filteredStream = streamWithOptions(stream, options);
+  override async _prepare(listeners?: GetResourceListeners) {
+    await getFile(this.url, listeners);
+  }
 
-    const resource = createAudioResource(filteredStream, {
+  async getResource(options: GetResourceOptions) {
+    const stream = await streamFile(this.url, options);
+    const resource = createAudioResource(stream, {
+      inputType: StreamType.Opus,
       metadata: this,
     });
     return resource;

@@ -81,14 +81,6 @@ export async function generatePlanFromQuery(
         ["album", "playlist"].includes(play.sp_validate(query) as string),
     },
     {
-      name: "load SoundCloud song",
-      check: async query => (await play.so_validate(query)) === "track",
-    },
-    {
-      name: "load SoundCloud playlist",
-      check: async query => (await play.so_validate(query)) === "playlist",
-    },
-    {
       name: "load Musescore song",
       check: query => MUSESCORE_REGEX.test(query),
     },

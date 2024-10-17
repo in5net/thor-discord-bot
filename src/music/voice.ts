@@ -1,4 +1,5 @@
 import { getLyrics } from "$lib/genius";
+import logger from "$lib/logger";
 import { formatTime } from "$src/lib/time";
 import {
   URL_REGEX,
@@ -10,7 +11,6 @@ import { getPlayDl } from "./play";
 import Queue from "./queue";
 import {
   MusescoreSong,
-  SoundCloudSong,
   SpotifySong,
   URLSong,
   YouTubeSong,
@@ -32,7 +32,6 @@ import {
   type MessageCreateOptions,
   type TextChannel,
 } from "discord.js";
-import logger from "$lib/logger";
 import { TypedEmitter } from "tiny-typed-emitter";
 
 export default class Voice extends TypedEmitter<{
@@ -74,18 +73,23 @@ export default class Voice extends TypedEmitter<{
 
   setChannels(message: Message): void {
     const { channel, member } = message;
-    if (channel.type === ChannelType.GuildText) this.channel = channel;
+    if (channel.type === ChannelType.GuildText) {
+      this.channel = channel;
+    }
     const voiceChannel = member?.voice.channel;
-    if (voiceChannel?.type === ChannelType.GuildVoice)
+    if (voiceChannel?.type === ChannelType.GuildVoice) {
       this.stream.channel = voiceChannel;
+    }
   }
 
   async send(message: string | MessagePayload | MessageCreateOptions) {
     this.message?.delete().catch(() => null);
-    if (this.channel)
+    if (this.channel) {
       // eslint-disable-next-line unicorn/no-useless-undefined
       this.message = await this.channel?.send(message).catch(() => undefined);
-    else logger.error("voice tried to send a message before a channel was set");
+    } else {
+      logger.error("voice tried to send a message before a channel was set");
+    }
   }
 
   async getSongsFromQuery(message: Message, query?: string) {
@@ -152,22 +156,6 @@ export default class Voice extends TypedEmitter<{
         },
       },
       {
-        name: "SoundCloud song url",
-        check: async query => (await play.so_validate(query)) === "track",
-        async getSongs(query) {
-          const song = await SoundCloudSong.fromURL(query, requester);
-          return [song];
-        },
-      },
-      {
-        name: "SoundCloud playlist url",
-        check: async query => (await play.so_validate(query)) === "playlist",
-        async getSongs(query) {
-          const songs = await SoundCloudSong.fromListURL(query, requester);
-          return songs;
-        },
-      },
-      {
         name: "Musescore song",
         check: async query => MUSESCORE_REGEX.test(query),
         async getSongs(query) {
@@ -229,8 +217,9 @@ export default class Voice extends TypedEmitter<{
 
       this.queue.push(song);
       song.log();
-      if (this.stream.player.state.status === AudioPlayerStatus.Playing)
+      if (this.stream.player.state.status === AudioPlayerStatus.Playing) {
         await this.send(`⏏️ Added ${song.getMarkdown()} to queue`);
+      }
     }
   }
 
@@ -333,7 +322,9 @@ ${pipe(
 
   prepareNextSong() {
     const nextSong = this.queue[this.queue.currentIndex + 1];
-    if (nextSong) nextSong.prepare();
+    if (nextSong) {
+      nextSong.prepare();
+    }
   }
 
   async songQueueEmbed(n: number) {
@@ -341,12 +332,15 @@ ${pipe(
   }
 
   async getLyrics(query?: string) {
-    if (query) return getLyrics(query);
+    if (query) {
+      return getLyrics(query);
+    }
     const { current } = this.queue;
     if (current) {
       const { title } = current;
-      if (current instanceof SpotifySong)
+      if (current instanceof SpotifySong) {
         return getLyrics(`${title} ${current.artist?.name}`);
+      }
       return getLyrics(title);
     }
 
