@@ -4,9 +4,7 @@ import { relations, sql } from "drizzle-orm";
 import {
   index,
   integer,
-  real,
   sqliteTable,
-  text,
   type SQLiteColumn,
 } from "drizzle-orm/sqlite-core";
 
@@ -32,12 +30,12 @@ const updatedAt = timestamp("updated_at")
 
 export const guilds = sqliteTable(
   "guilds",
-  {
-    id: text("id").primaryKey(),
+  t => ({
+    id: t.text().primaryKey(),
     deleted: boolean("deleted").notNull().default(false),
-  },
-  table => ({
-    deletedIdx: namedIndex(table.deleted),
+  }),
+  t => ({
+    deletedIdx: namedIndex(t.deleted),
   }),
 );
 export const guildsRelations = relations(guilds, ({ many }) => ({
@@ -48,16 +46,17 @@ export const guildsRelations = relations(guilds, ({ many }) => ({
 
 export const members = sqliteTable(
   "members",
-  {
-    id: text("id").primaryKey(),
-    guildId: text("guild_id")
+  t => ({
+    id: t.text().primaryKey(),
+    guildId: t
+      .text()
       .notNull()
       .references(() => guilds.id, { onDelete: "cascade" }),
     bot: boolean("bot").notNull().default(false),
     removed: boolean("removed").notNull().default(false),
-  },
-  table => ({
-    guildIdIdx: namedIndex(table.guildId),
+  }),
+  t => ({
+    guildIdIdx: namedIndex(t.guildId),
   }),
 );
 export const membersRelations = relations(members, ({ one }) => ({
@@ -69,17 +68,18 @@ export const membersRelations = relations(members, ({ one }) => ({
 
 export const channels = sqliteTable(
   "channels",
-  {
-    id: text("id").primaryKey(),
-    guildId: text("guild_id")
+  t => ({
+    id: t.text().primaryKey(),
+    guildId: t
+      .text()
       .notNull()
       .references(() => guilds.id, { onDelete: "set null" }),
     nsfw: boolean("nsfw").notNull().default(false),
     deleted: boolean("deleted").notNull().default(false),
-  },
-  table => ({
-    guildIdIdx: namedIndex(table.guildId),
-    deletedIdx: namedIndex(table.deleted),
+  }),
+  t => ({
+    guildIdIdx: namedIndex(t.guildId),
+    deletedIdx: namedIndex(t.deleted),
   }),
 );
 export const channelsRelations = relations(channels, ({ one, many }) => ({
@@ -96,20 +96,20 @@ export const channelsRelations = relations(channels, ({ one, many }) => ({
  */
 export const messages = sqliteTable(
   "messages",
-  {
-    id: text("id").primaryKey(),
+  t => ({
+    id: t.text().primaryKey(),
     createdAt: timestamp("timestamp"),
     updatedAt: timestamp("edited_timestamp"),
-    authorId: text("author_id").notNull(),
-    channelId: text("channel_id").notNull(),
-    guildId: text("guild_id"),
-    content: text("content").notNull(),
+    authorId: t.text().notNull(),
+    channelId: t.text().notNull(),
+    guildId: t.text(),
+    content: t.text().notNull(),
     deleted: boolean("deleted").notNull().default(false),
-  },
-  table => ({
-    authorIdIdx: namedIndex(table.authorId),
-    channelIdIdx: namedIndex(table.channelId),
-    guildIdIdx: namedIndex(table.guildId),
+  }),
+  t => ({
+    authorIdIdx: namedIndex(t.authorId),
+    channelIdIdx: namedIndex(t.channelId),
+    guildIdIdx: namedIndex(t.guildId),
   }),
 );
 export const messagesRelations = relations(messages, ({ one, many }) => ({
@@ -129,31 +129,31 @@ export const messagesRelations = relations(messages, ({ one, many }) => ({
  */
 export const attachments = sqliteTable(
   "attachments",
-  {
-    id: text("id").primaryKey(),
-    messageId: text("message_id").references(() => messages.id, {
+  t => ({
+    id: t.text().primaryKey(),
+    messageId: t.text().references(() => messages.id, {
       onDelete: "set null",
     }),
-    channelId: text("channel_id").references(() => channels.id, {
+    channelId: t.text().references(() => channels.id, {
       onDelete: "set null",
     }),
-    guildId: text("guild_id").references(() => guilds.id, {
+    guildId: t.text().references(() => guilds.id, {
       onDelete: "set null",
     }),
-    filename: text("filename").notNull(),
-    ext: text("extension"),
-    contentType: text("content_type"),
+    filename: t.text().notNull(),
+    ext: t.text(),
+    contentType: t.text(),
     bot: boolean("bot").notNull().default(false),
     nsfw: boolean("nsfw").notNull().default(false),
-  },
-  table => ({
-    messageIdIdx: namedIndex(table.messageId),
-    channelIdIdx: namedIndex(table.channelId),
-    guildIdIdx: namedIndex(table.guildId),
-    extIdx: namedIndex(table.ext),
-    botIdx: namedIndex(table.bot),
-    nsfwIdx: namedIndex(table.nsfw),
-    multiIdx: namedIndex(table.ext, table.bot, table.nsfw),
+  }),
+  t => ({
+    messageIdIdx: namedIndex(t.messageId),
+    channelIdIdx: namedIndex(t.channelId),
+    guildIdIdx: namedIndex(t.guildId),
+    extIdx: namedIndex(t.ext),
+    botIdx: namedIndex(t.bot),
+    nsfwIdx: namedIndex(t.nsfw),
+    multiIdx: namedIndex(t.ext, t.bot, t.nsfw),
   }),
 );
 export const attachmentsRelations = relations(attachments, ({ one }) => ({
@@ -171,73 +171,73 @@ export const attachmentsRelations = relations(attachments, ({ one }) => ({
   }),
 }));
 
-export const users = sqliteTable("users", {
-  id: text("id").primaryKey(),
+export const users = sqliteTable("users", t => ({
+  id: t.text().primaryKey(),
   createdAt,
   updatedAt,
-  counts: text("counts", { mode: "json" }),
+  counts: t.text({ mode: "json" }),
   creditAt: timestamp("credit_at"),
   admin: boolean("admin").default(false).notNull(),
-});
+}));
 export const usersRelations = relations(users, ({ many }) => ({
   issues: many(issues),
   chessGames: many(chessGames),
 }));
 
-export const ratios = sqliteTable("ratios", {
-  id: text("id").primaryKey().$default(cuid2),
+export const ratios = sqliteTable("ratios", t => ({
+  id: t.text().primaryKey().$default(cuid2),
   createdAt,
-  content: text("content").notNull().unique(),
-});
+  content: t.text().notNull().unique(),
+}));
 
-export const y7Files = sqliteTable("y7_files", {
-  name: text("name").primaryKey(),
-  extension: text("extension").notNull(),
-});
+export const y7Files = sqliteTable("y7_files", t => ({
+  name: t.text().primaryKey(),
+  extension: t.text().notNull(),
+}));
 
-export const chickens = sqliteTable("chickens", {
-  name: text("name").primaryKey(),
+export const chickens = sqliteTable("chickens", t => ({
+  name: t.text().primaryKey(),
   sentAt: timestamp("sent_at"),
-});
+}));
 
-export const speechBubbles = sqliteTable("speech_bubbles", {
-  name: text("name").primaryKey(),
+export const speechBubbles = sqliteTable("speech_bubbles", t => ({
+  name: t.text().primaryKey(),
   sentAt: timestamp("sent_at"),
-});
+}));
 
-export const hopOns = sqliteTable("hop_ons", {
-  id: text("id").primaryKey(),
+export const hopOns = sqliteTable("hop_ons", t => ({
+  id: t.text().primaryKey(),
   sentAt: timestamp("sent_at"),
-});
+}));
 
-export const kraccBaccVideos = sqliteTable("kracc_bacc_videos", {
-  name: text("name").primaryKey(),
+export const kraccBaccVideos = sqliteTable("kracc_bacc_videos", t => ({
+  name: t.text().primaryKey(),
   sentAt: timestamp("sent_at"),
-});
+}));
 
-export const bossFiles = sqliteTable("boss_files", {
-  id: text("id").primaryKey(),
-  url: text("url").notNull(),
+export const bossFiles = sqliteTable("boss_files", t => ({
+  id: t.text().primaryKey(),
+  url: t.text().notNull(),
   sentAt: timestamp("sent_at"),
-});
+}));
 
 export const issues = sqliteTable(
   "issues",
-  {
-    id: integer("id").primaryKey({ autoIncrement: true }),
+  t => ({
+    id: t.integer().primaryKey({ autoIncrement: true }),
     createdAt,
     updatedAt,
-    userId: text("user_id").notNull(),
-    name: text("name").notNull(),
-    type: text("type", { enum: ["bug", "feature", "enhancement"] }).notNull(),
-    desc: text("desc").notNull(),
+    userId: t.text().notNull(),
+    name: t.text().notNull(),
+    type: t.text("type", { enum: ["bug", "feature", "enhancement"] }).notNull(),
+    desc: t.text().notNull(),
     closedAt: timestamp("closed_at"),
-    reason: text("reason", {
+    reason: t.text({
       enum: ["completed", "wont_fix", "duplicate", "invalid"],
     }),
-  },
-  table => ({
-    userIndex: namedIndex(table.userId),
+  }),
+  t => ({
+    userIndex: namedIndex(t.userId),
   }),
 );
 export const issuesRelations = relations(issues, ({ one }) => ({
@@ -247,42 +247,42 @@ export const issuesRelations = relations(issues, ({ one }) => ({
   }),
 }));
 
-export const rotatingFood = sqliteTable("rotating_food", {
-  name: text("name").primaryKey(),
-});
+export const rotatingFood = sqliteTable("rotating_food", t => ({
+  name: t.text().primaryKey(),
+}));
 
-export const audioFilters = sqliteTable("audio_filters", {
-  name: text("name").primaryKey(),
-  value: text("value").notNull(),
-});
+export const audioFilters = sqliteTable("audio_filters", t => ({
+  name: t.text().primaryKey(),
+  value: t.text().notNull(),
+}));
 
 export const commandExecutions = sqliteTable(
   "command_executions",
-  {
-    id: text("id").primaryKey().$default(cuid2),
+  t => ({
+    id: t.text().primaryKey().$default(cuid2),
     createdAt,
-    name: text("name").notNull(),
-    type: text("type", { enum: ["text", "slash", "message"] }).notNull(),
-    userId: text("user_id").notNull(),
-    messageId: text("message_id"),
-    channelId: text("channel_id").notNull(),
-    guildId: text("guild_id"),
-  },
-  table => ({
-    createdAtIndex: namedIndex(table.createdAt),
-    nameIndex: namedIndex(table.name),
-    messageIdIndex: namedIndex(table.messageId),
-    channelIdIndex: namedIndex(table.channelId),
+    name: t.text().notNull(),
+    type: t.text({ enum: ["text", "slash", "message"] }).notNull(),
+    userId: t.text().notNull(),
+    messageId: t.text(),
+    channelId: t.text().notNull(),
+    guildId: t.text(),
+  }),
+  t => ({
+    createdAtIndex: namedIndex(t.createdAt),
+    nameIndex: namedIndex(t.name),
+    messageIdIndex: namedIndex(t.messageId),
+    channelIdIndex: namedIndex(t.channelId),
   }),
 );
 
-export const oneWordStory = sqliteTable("one_word_story", {
-  id: integer("id").primaryKey(),
+export const oneWordStory = sqliteTable("one_word_story", t => ({
+  id: t.integer("id").primaryKey(),
   createdAt,
   updatedAt,
-  guildId: text("guild_id").notNull(),
+  guildId: t.text().notNull(),
   active: boolean("active").notNull().default(true),
-});
+}));
 export const oneWordStoryRelations = relations(
   oneWordStory,
   ({ one, many }) => ({
@@ -294,13 +294,13 @@ export const oneWordStoryRelations = relations(
   }),
 );
 
-export const oneWordStoryEntry = sqliteTable("one_word_story_entry", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const oneWordStoryEntry = sqliteTable("one_word_story_entry", t => ({
+  id: t.integer().primaryKey({ autoIncrement: true }),
   createdAt,
-  userId: text("user_id").notNull(),
-  story: integer("story").notNull(),
-  word: text("word").notNull(),
-});
+  userId: t.text().notNull(),
+  story: t.integer().notNull(),
+  word: t.text().notNull(),
+}));
 export const oneWordStoryEntryRelations = relations(
   oneWordStoryEntry,
   ({ one }) => ({
@@ -317,45 +317,43 @@ export const oneWordStoryEntryRelations = relations(
 
 export const youtubeSearches = sqliteTable(
   "youtube_searches",
-  {
-    id: integer("id").primaryKey({ autoIncrement: true }),
-    guildId: text("guild_id").notNull(),
-    channelId: text("channel_id").notNull(),
-    messageId: text("message_id").notNull(),
-    ids: text("ids").notNull(),
-  },
-  table => ({
+  t => ({
+    id: t.integer().primaryKey({ autoIncrement: true }),
+    guildId: t.text().notNull(),
+    channelId: t.text().notNull(),
+    messageId: t.text().notNull(),
+    ids: t.text().notNull(),
+  }),
+  t => ({
     guildIdChannelIdMessageIdIdx: namedIndex(
-      table.guildId,
-      table.channelId,
-      table.messageId,
+      t.guildId,
+      t.channelId,
+      t.messageId,
     ),
   }),
 );
 
-export const randomResponses = sqliteTable("random_responses", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  words: text("words").notNull(),
-  responses: text("responses").notNull(),
-  chance: real("chance").notNull().default(1),
-  cooldown: integer("cooldown").notNull().default(0),
+export const randomResponses = sqliteTable("random_responses", t => ({
+  id: t.integer().primaryKey({ autoIncrement: true }),
+  words: t.text().notNull(),
+  responses: t.text().notNull(),
+  chance: t.real().notNull().default(1),
+  cooldown: integer().notNull().default(0),
   sentAt: timestamp("sent_at"),
-});
+}));
 
-export const themes = sqliteTable("themes", {
-  name: text("name").primaryKey(),
-  words: text("words", { mode: "json" })
-    .notNull()
-    .$type<Record<string, string[]>>(),
-});
+export const themes = sqliteTable("themes", t => ({
+  name: t.text().primaryKey(),
+  words: t.text({ mode: "json" }).notNull().$type<Record<string, string[]>>(),
+}));
 
-export const context = sqliteTable("context", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const context = sqliteTable("context", t => ({
+  id: t.integer().primaryKey({ autoIncrement: true }),
   createdAt,
-  channelId: text("channel_id").notNull(),
-  question: text("question").notNull(),
-  answer: text("answer").notNull(),
-});
+  channelId: t.text().notNull(),
+  question: t.text().notNull(),
+  answer: t.text().notNull(),
+}));
 export const contextRelations = relations(context, ({ one }) => ({
   channel: one(channels, {
     fields: [context.channelId],
@@ -363,18 +361,18 @@ export const contextRelations = relations(context, ({ one }) => ({
   }),
 }));
 
-export const stackItems = sqliteTable("stack_items", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const stackItems = sqliteTable("stack_items", t => ({
+  id: t.integer().primaryKey({ autoIncrement: true }),
   createdAt,
-  value: text("item").notNull(),
-});
+  value: t.text().notNull(),
+}));
 
-export const chessGames = sqliteTable("chess_games", {
-  userId: text("user_id").primaryKey(),
+export const chessGames = sqliteTable("chess_games", t => ({
+  userId: t.text().primaryKey(),
   createdAt,
   updatedAt,
-  fen: text("fen").notNull(),
-});
+  fen: t.text().notNull(),
+}));
 export const chessGamesRelations = relations(chessGames, ({ one }) => ({
   user: one(users, {
     fields: [chessGames.userId],

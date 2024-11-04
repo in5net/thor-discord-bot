@@ -7,6 +7,7 @@ import { env } from "node:process";
 const db = drizzle({
   connection: env.DATABASE_URL,
   schema,
+  casing: "snake_case",
 });
 export default db;
 
