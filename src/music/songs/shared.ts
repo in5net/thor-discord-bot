@@ -1,6 +1,6 @@
-import { AudioResource } from "@discordjs/voice";
+import type { AudioResource } from "@discordjs/voice";
 import { EmbedBuilder, hideLinkEmbed, hyperlink } from "discord.js";
-import { createReadStream, ReadStream } from "node:fs";
+import { type ReadStream, createReadStream } from "node:fs";
 import prism from "prism-media";
 
 export interface SongJSON {
@@ -29,11 +29,14 @@ export interface Album<T extends Song> {
   songs: T[];
 }
 
+export type SongState = "unprepared" | "preparing" | "ready";
+
 export abstract class Song implements SongJSON {
   title: string;
   duration: number;
   requester: Requester;
   start = 0;
+  state: SongState = "unprepared";
   private preparePromise?: Promise<void>;
 
   abstract url: string;
@@ -67,10 +70,16 @@ export abstract class Song implements SongJSON {
 
   async _prepare(_listeners?: GetResourceListeners) {}
 
-  async prepare(listeners?: GetResourceListeners) {
-    if (this.preparePromise) return this.preparePromise;
+  prepare(listeners?: GetResourceListeners) {
+    if (this.preparePromise) {
+      return this.preparePromise;
+    }
     // eslint-disable-next-line no-underscore-dangle
-    return (this.preparePromise = this._prepare(listeners));
+    const preparePromise = this._prepare(listeners);
+    this.state = "preparing";
+    // eslint-disable-next-line ts/no-floating-promises
+    preparePromise.then(() => (this.state = "ready"));
+    return (this.preparePromise = preparePromise);
   }
 
   abstract getResource(
@@ -100,8 +109,12 @@ export function streamWithOptions(
     "-ac",
     "2",
   ];
-  if (seek) ffmpegArgs.push("-ss", seek.toString());
-  if (filters?.length) ffmpegArgs.push("-af", filters.join(","));
+  if (seek) {
+    ffmpegArgs.push("-ss", seek.toString());
+  }
+  if (filters?.length) {
+    ffmpegArgs.push("-af", filters.join(","));
+  }
 
   const transcoder = new prism.FFmpeg({
     args: ffmpegArgs,

@@ -1,5 +1,6 @@
-import { Awaitable } from "@in5net/std/types";
 import { getPlayDl } from "./play";
+import type { Awaitable } from "@in5net/std/types";
+import type { Message } from "discord.js";
 import {
   anyOf,
   caseInsensitive,
@@ -12,7 +13,6 @@ import {
   oneOrMore,
   wordBoundary,
 } from "magic-regexp";
-import { Message } from "discord.js";
 
 export const YOUTUBE_CHANNEL_REGEX = createRegExp(
   "http",
@@ -50,14 +50,14 @@ export async function generatePlanFromQuery(
   const start = performance.now();
 
   const queries = query ? splitQueries(query) : [];
-  queries.unshift(...Array.from(attachments.values()).map(a => a.url));
+  queries.unshift(...attachments.values().map(a => a.url));
 
   const cache: string[] = [];
   const play = await getPlayDl(true);
 
   const matchers: Array<{
     name: string;
-    check(query: string): Awaitable<boolean>;
+    check: (query: string) => Awaitable<boolean>;
   }> = [
     {
       name: "load YouTube playlist",
@@ -132,12 +132,13 @@ export function splitQueries(query: string) {
       }
 
       queries.push(word);
-    } else text += `${word} `;
+    } else {
+      text += `${word} `;
+    }
   }
 
   if (text) {
     queries.push(...text.trim().split("\n"));
-    text = "";
   }
 
   return queries;

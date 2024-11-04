@@ -1,6 +1,9 @@
 /* eslint-disable ts/no-floating-promises */
 import { createEmbed } from "$lib/embed";
+import logger from "$lib/logger";
 import { formatTime } from "$lib/time";
+import { type SongType } from "./songs";
+import type Voice from "./voice";
 import { remove } from "@in5net/std/array";
 import { shuffle } from "@in5net/std/random";
 import {
@@ -12,10 +15,7 @@ import {
   type InteractionCollector,
   type TextChannel,
 } from "discord.js";
-import logger from "$lib/logger";
 import { TypedEmitter } from "tiny-typed-emitter";
-import { type SongType } from "./songs";
-import type Voice from "./voice";
 
 const pageSize = 5;
 
@@ -38,7 +38,7 @@ export default class Queue extends Array<SongType> {
   loop = false;
   collector: InteractionCollector<ButtonInteraction<"cached">> | undefined;
   changeEmitter = new TypedEmitter<{
-    change: () => void;
+    change: () => any;
   }>();
 
   constructor(private readonly voice: Voice) {
@@ -49,17 +49,16 @@ export default class Queue extends Array<SongType> {
     return BigInt(this.voice.guildId);
   }
 
-  get left() {
-    return this.length - this.currentIndex;
-  }
-
   get current() {
     return this[this.currentIndex];
   }
 
   dequeue(song?: SongType) {
-    if (song) remove(this, song);
-    else this.shift();
+    if (song) {
+      remove(this, song);
+    } else {
+      this.shift();
+    }
     this.changeEmitter.emit("change");
   }
 
@@ -76,19 +75,25 @@ export default class Queue extends Array<SongType> {
   }
 
   hasNext() {
-    if (this.loop) return !!this.length;
+    if (this.loop) {
+      return !!this.length;
+    }
     return this.currentIndex + 1 < this.length;
   }
 
   hasPrev() {
-    if (this.loop) return !!this.length;
+    if (this.loop) {
+      return !!this.length;
+    }
     return this.currentIndex - 1 >= 0;
   }
 
   next() {
     const { loop, length, changeEmitter } = this;
     this.currentIndex++;
-    if (loop && this.currentIndex >= length) this.currentIndex = 0;
+    if (loop && this.currentIndex >= length) {
+      this.currentIndex = 0;
+    }
     changeEmitter.emit("change");
     return this.current;
   }
@@ -96,7 +101,9 @@ export default class Queue extends Array<SongType> {
   prev() {
     const { loop, length, changeEmitter } = this;
     this.currentIndex--;
-    if (loop && this.currentIndex < 0) this.currentIndex = length - 1;
+    if (loop && this.currentIndex < 0) {
+      this.currentIndex = length - 1;
+    }
     changeEmitter.emit("change");
     return this.current;
   }
@@ -108,15 +115,21 @@ export default class Queue extends Array<SongType> {
   }
 
   move(from: number, to: number) {
-    if (from === to) return;
+    if (from === to) {
+      return;
+    }
     const item = this.splice(from, 1)[0];
-    if (item) this.splice(to, 0, item);
+    if (item) {
+      this.splice(to, 0, item);
+    }
     this.changeEmitter.emit("change");
   }
 
   remove(index: number) {
     const [song] = this.splice(index, 1);
-    if (index < this.currentIndex) this.currentIndex--;
+    if (index < this.currentIndex) {
+      this.currentIndex--;
+    }
     this.changeEmitter.emit("change");
     return song;
   }
@@ -141,18 +154,21 @@ export default class Queue extends Array<SongType> {
 
       for (let i = page * pageSize; i < (page + 1) * pageSize; i++) {
         const song = this[i];
-        if (!song) break;
+        if (!song) {
+          break;
+        }
         const { title, duration = Number.NaN } = song;
-        if (i === this.currentIndex && seconds)
+        if (i === this.currentIndex && seconds) {
           embed.addFields({
             name: `▶️ ${i + 1}. ${title}`,
             value: `${formatTime(seconds)}/${formatTime(duration)}`,
           });
-        else
+        } else {
           embed.addFields({
             name: `${i + 1}. ${title}`,
             value: `${formatTime(duration)}`,
           });
+        }
       }
     };
 
@@ -179,10 +195,14 @@ export default class Queue extends Array<SongType> {
     this.collector?.stop();
     this.collector = message
       .createMessageComponentCollector({ componentType: ComponentType.Button })
+      // eslint-disable-next-line ts/no-misused-promises
       .on("collect", async i => {
         const { customId } = i;
-        if (customId === "back") page--;
-        else if (customId === "next") page++;
+        if (customId === "back") {
+          page--;
+        } else if (customId === "next") {
+          page++;
+        }
         send();
         await i.update({ files: [] }).catch();
       });
@@ -190,7 +210,9 @@ export default class Queue extends Array<SongType> {
 
   songEmbed(index: number) {
     const song = index ? this[index - 1] : this.current;
-    if (!song) return;
+    if (!song) {
+      return;
+    }
     return song.getEmbed();
   }
 }

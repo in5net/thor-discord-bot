@@ -1,21 +1,21 @@
+import logger from "$lib/logger";
 import { ensureCacheSubDir } from "$src/lib/cache";
 import { parseTime } from "$src/lib/time";
 import {
-  GetResourceListeners,
-  GetResourceOptions,
-  Requester,
+  type GetResourceListeners,
+  type GetResourceOptions,
+  type Requester,
+  type SongJSON,
   Song,
-  SongJSON,
   streamFileWithOptions,
 } from "./shared";
 import { createAudioResource, StreamType } from "@discordjs/voice";
 import chalk from "chalk-template";
-import logger from "$lib/logger";
 import { muse } from "musescore-metadata";
 import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
 import { readdir, rename, stat } from "node:fs/promises";
-import { join } from "node:path";
+import path from "node:path";
 
 async function getMusescoreFile(
   id: string,
@@ -23,7 +23,7 @@ async function getMusescoreFile(
   listeners?: GetResourceListeners,
 ) {
   const musescoreCachePath = await ensureCacheSubDir("musescore");
-  const filePath = join(musescoreCachePath, `${id}.mp3`);
+  const filePath = path.join(musescoreCachePath, `${id}.mp3`);
 
   if (!existsSync(filePath)) {
     listeners?.ondownloading?.();
@@ -39,13 +39,13 @@ async function getMusescoreFile(
     let mostRecentFileName = "";
     let mostRecentFileTime = 0;
     for (const fileName of fileNames) {
-      const stats = await stat(join(musescoreCachePath, fileName));
+      const stats = await stat(path.join(musescoreCachePath, fileName));
       if (stats.ctimeMs > mostRecentFileTime) {
         mostRecentFileName = fileName;
         mostRecentFileTime = stats.ctimeMs;
       }
     }
-    await rename(join(musescoreCachePath, mostRecentFileName), filePath);
+    await rename(path.join(musescoreCachePath, mostRecentFileName), filePath);
   }
 
   return filePath;
@@ -136,12 +136,13 @@ ${title} (${url})`);
     const { url, description } = this;
     const embed = super.getEmbed().setColor("Blue").setURL(url);
     const MAX_DESCRIPTION_LENGTH = 256;
-    if (description)
+    if (description) {
       embed.setDescription(
         description.length > MAX_DESCRIPTION_LENGTH ?
           `${description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
         : description,
       );
+    }
     return embed;
   }
 

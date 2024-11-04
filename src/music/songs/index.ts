@@ -1,8 +1,8 @@
-import { MusescoreJSON, MusescoreSong } from "./musescore";
-import { Requester } from "./shared";
-import { SpotifyJSON, SpotifySong } from "./spotify";
-import { URLJSON, URLSong } from "./url";
-import { YouTubeJSON, YouTubeSong } from "./youtube";
+import { type MusescoreJSON, MusescoreSong } from "./musescore";
+import type { Requester } from "./shared";
+import { type SpotifyJSON, SpotifySong } from "./spotify";
+import { type URLJSON, URLSong } from "./url";
+import { type YouTubeJSON, YouTubeSong } from "./youtube";
 
 export * from "./musescore";
 export * from "./shared";

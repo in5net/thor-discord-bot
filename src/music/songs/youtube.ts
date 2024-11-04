@@ -1,21 +1,21 @@
+import logger from "$lib/logger";
 import { ensureCacheSubDir } from "$src/lib/cache";
 import { getPlayDl } from "../play";
 import {
-  Album,
-  GetResourceListeners,
-  GetResourceOptions,
-  Requester,
+  type Album,
+  type GetResourceListeners,
+  type GetResourceOptions,
+  type Requester,
+  type SongJSON,
   Song,
-  SongJSON,
   streamFileWithOptions,
 } from "./shared";
 import { createAudioResource, StreamType } from "@discordjs/voice";
 import chalk from "chalk-template";
-import logger from "$lib/logger";
 import { createRegExp, digit, oneOrMore } from "magic-regexp";
 import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
-import { join } from "node:path";
+import path from "node:path";
 import Innertube from "youtubei.js";
 import { z } from "zod";
 
@@ -24,7 +24,8 @@ export async function getYoutubeFile(
   listeners?: GetResourceListeners,
 ) {
   const youtubeCachePath = await ensureCacheSubDir("youtube");
-  const filePath = join(youtubeCachePath, `${id}.opus`);
+  const fileName = `${id}.opus`;
+  const filePath = path.join(youtubeCachePath, fileName);
 
   if (!existsSync(filePath)) {
     listeners?.ondownloading?.();
@@ -35,7 +36,7 @@ export async function getYoutubeFile(
         "--audio-format",
         "opus",
         "-o",
-        "%(id)s",
+        fileName,
         `https://youtube.com/watch?v=${id}`,
       ],
       { cwd: youtubeCachePath },
@@ -184,20 +185,24 @@ ${title} (${url})
   override getEmbed() {
     const { description, thumbnail, channel, url, channelURL } = this;
     const embed = super.getEmbed().setColor("Red").setURL(url);
-    if (thumbnail) embed.setThumbnail(thumbnail);
-    if (channel)
+    if (thumbnail) {
+      embed.setThumbnail(thumbnail);
+    }
+    if (channel) {
       embed.setAuthor({
         name: channel.title,
         url: channelURL || undefined,
         iconURL: channel.thumbnail || undefined,
       });
+    }
     const MAX_DESCRIPTION_LENGTH = 256;
-    if (description)
+    if (description) {
       embed.setDescription(
         description.length > MAX_DESCRIPTION_LENGTH ?
           `${description.slice(0, MAX_DESCRIPTION_LENGTH)}...`
         : description,
       );
+    }
     return embed;
   }
 
@@ -243,8 +248,9 @@ ${title} (${url})
     const song = await this.fromId(id, requester);
     const timeRegex = createRegExp("?t=", oneOrMore(digit).as("seconds"));
     const matches = url.match(timeRegex);
-    if (matches?.groups.seconds)
+    if (matches?.groups.seconds) {
       song.time = Number.parseInt(matches.groups.seconds);
+    }
     return song;
   }
 

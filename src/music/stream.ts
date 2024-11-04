@@ -1,4 +1,5 @@
 /* eslint-disable unicorn/require-array-join-separator */
+import logger from "$lib/logger";
 import { formatTime } from "$src/lib/time";
 import { YouTubeSong, type SongType } from "./songs";
 import {
@@ -12,13 +13,12 @@ import {
   type VoiceConnection,
 } from "@discordjs/voice";
 import { type VoiceChannel } from "discord.js";
-import logger from "$lib/logger";
 import { TypedEmitter } from "tiny-typed-emitter";
 
 export default class Stream extends TypedEmitter<{
-  idle: () => void;
-  stop: () => void;
-  error: (error: Error) => void;
+  idle: () => any;
+  stop: () => any;
+  error: (error: Error) => any;
 }> {
   player = createAudioPlayer({
     behaviors: {
@@ -36,7 +36,9 @@ export default class Stream extends TypedEmitter<{
 
   async join() {
     const { player, channel, connection } = this;
-    if (!channel) return;
+    if (!channel) {
+      return;
+    }
 
     logger.info("joining voice channel");
     logger.info(
@@ -55,12 +57,12 @@ export default class Stream extends TypedEmitter<{
         this.connection = joinVoiceChannel({
           channelId: channel.id,
           guildId: channel.guildId,
+          // @ts-expect-error @discordjs/voice adapter has incorrect type
           adapterCreator: channel.guild.voiceAdapterCreator,
         });
         this.connection
-          .on(VoiceConnectionStatus.Disconnected, () => {
-            this.join();
-          })
+          // eslint-disable-next-line ts/no-misused-promises
+          .on(VoiceConnectionStatus.Disconnected, () => this.join())
           .subscribe(player);
         await entersState(this.connection, VoiceConnectionStatus.Ready, 30_000);
       }
@@ -72,7 +74,9 @@ export default class Stream extends TypedEmitter<{
   }
 
   async play(resource = this.resource) {
-    if (!resource) return;
+    if (!resource) {
+      return;
+    }
     this.resource = resource;
 
     await this.join();
@@ -88,19 +92,25 @@ export default class Stream extends TypedEmitter<{
 
     const { metadata } = resource;
     let { start } = metadata;
-    if (metadata instanceof YouTubeSong) start += metadata.time || 0;
+    if (metadata instanceof YouTubeSong) {
+      start += metadata.time || 0;
+    }
 
     let speed = 1;
     for (const values of this.filters) {
       const atempo = /atempo=(\d+\.?\d+)/.exec(values)?.[1];
-      if (atempo) speed *= Number.parseFloat(atempo);
+      if (atempo) {
+        speed *= Number.parseFloat(atempo);
+      }
       const asetrate = /asetrate=(\d+\.?\d+)/.exec(values)?.[1];
-      if (asetrate) speed *= Number.parseFloat(asetrate);
+      if (asetrate) {
+        speed *= Number.parseFloat(asetrate);
+      }
     }
     logger.debug(`current audio speed: ${speed.toFixed(2)}`);
 
     this.filters = filters || [];
-    logger.debug(`set audio filters to ${this.filters || "NONE"}`);
+    logger.debug(`set audio filters to ${this.filters.join(", ") || "NONE"}`);
 
     const playtime = resource.playbackDuration / 1000;
     logger.debug(
@@ -121,8 +131,9 @@ export default class Stream extends TypedEmitter<{
     if (
       connection &&
       connection.state.status !== VoiceConnectionStatus.Destroyed
-    )
+    ) {
       connection.destroy();
+    }
     logger.debug(
       `the player ${player.stop() ? "will" : "won't"} come to a stop`,
     );

@@ -1,11 +1,11 @@
 import { ensureCacheSubDir } from "$lib/cache";
 import logger from "$lib/logger";
 import {
-  GetResourceListeners,
-  GetResourceOptions,
-  Requester,
+  type GetResourceListeners,
+  type GetResourceOptions,
+  type Requester,
+  type SongJSON,
   Song,
-  SongJSON,
   streamFileWithOptions,
 } from "./shared";
 import { createAudioResource, StreamType } from "@discordjs/voice";

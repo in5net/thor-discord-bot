@@ -25,8 +25,8 @@ import { shuffle } from "@in5net/std/random";
 import { quantify } from "@in5net/std/string";
 import { type Awaitable } from "@in5net/std/types";
 import {
+  type MessagePayload,
   ChannelType,
-  MessagePayload,
   type Attachment,
   type Message,
   type MessageCreateOptions,
@@ -38,11 +38,12 @@ export default class Voice extends TypedEmitter<{
   stop: () => void;
 }> {
   stream = new Stream()
+    // eslint-disable-next-line ts/no-misused-promises
     .on("idle", async () => {
       try {
         if (this.queue.hasNext()) {
           // eslint-disable-next-line unicorn/require-array-join-separator
-          this.stream.join();
+          await this.stream.join();
           await this.play();
         } else {
           this.stream.stop();
@@ -53,6 +54,7 @@ export default class Voice extends TypedEmitter<{
         await this.next();
       }
     })
+    // eslint-disable-next-line ts/no-misused-promises
     .on("error", async error => {
       logger.error("⚠️ Player error:", error);
       await this.send("⚠️ Error");
@@ -110,7 +112,7 @@ export default class Voice extends TypedEmitter<{
     const matchers: Array<{
       name: string;
       check: (query: string) => Awaitable<boolean>;
-      getSongs: (query: string) => Promise<SongType[]>;
+      getSongs: (query: string) => Awaitable<SongType[]>;
     }> = [
       {
         name: "YouTube playlist url",
@@ -157,7 +159,7 @@ export default class Voice extends TypedEmitter<{
       },
       {
         name: "Musescore song",
-        check: async query => MUSESCORE_REGEX.test(query),
+        check: query => MUSESCORE_REGEX.test(query),
         async getSongs(query) {
           const song = await MusescoreSong.fromURL(query, requester);
           return [song];
@@ -166,7 +168,7 @@ export default class Voice extends TypedEmitter<{
       {
         name: "song url",
         check: query => URL_REGEX.test(query),
-        async getSongs(query) {
+        getSongs(query) {
           const song = URLSong.fromURL(query, requester);
           return [song];
         },
@@ -255,7 +257,7 @@ ${pipe(
     const { stream } = this;
     const { resource, filters } = stream;
     if (!resource) {
-      this.send("🚫 There is currently no song playing");
+      await this.send("🚫 There is currently no song playing");
       return;
     }
 
@@ -290,6 +292,7 @@ ${pipe(
   async play(skip = false) {
     const { stream } = this;
     if (stream.player.state.status === AudioPlayerStatus.Playing && !skip) {
+      // eslint-disable-next-line ts/no-floating-promises
       this.prepareNextSong();
       return;
     }
@@ -302,12 +305,14 @@ ${pipe(
     }
 
     await song.prepare({
+      // eslint-disable-next-line ts/no-misused-promises
       ondownloading: () => this.send(`⏬ Downloading ${song.title}...`),
     });
     const resource = await song.getResource({
       filters: stream.filters,
     });
     await stream.play(resource);
+    // eslint-disable-next-line ts/no-floating-promises
     this.prepareNextSong();
 
     try {
@@ -323,15 +328,15 @@ ${pipe(
   prepareNextSong() {
     const nextSong = this.queue[this.queue.currentIndex + 1];
     if (nextSong) {
-      nextSong.prepare();
+      return nextSong.prepare();
     }
   }
 
-  async songQueueEmbed(n: number) {
+  songQueueEmbed(n: number) {
     return this.queue.songEmbed(n - 1);
   }
 
-  async getLyrics(query?: string) {
+  getLyrics(query?: string) {
     if (query) {
       return getLyrics(query);
     }
@@ -347,7 +352,7 @@ ${pipe(
     return "No song playing";
   }
 
-  async setFilters(filters?: string[]) {
+  setFilters(filters?: string[]) {
     return this.stream.setFilters(filters);
   }
 }
