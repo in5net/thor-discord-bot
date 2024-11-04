@@ -189,7 +189,7 @@ async function handleRandomResponse(message: Message) {
 }
 
 const diceRegex = createRegExp(
-  digit.times.between(1, 2).groupedAs("count"),
+  digit.times.between(1, 2).groupedAs("count").at.lineStart(),
   charIn("dD"),
   digit.times.between(1, 3).groupedAs("sides"),
   maybe(

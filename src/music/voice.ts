@@ -38,7 +38,6 @@ export default class Voice extends TypedEmitter<{
   stop: () => void;
 }> {
   stream = new Stream()
-    // eslint-disable-next-line ts/no-misused-promises
     .on("idle", async () => {
       try {
         if (this.queue.hasNext()) {
@@ -54,7 +53,6 @@ export default class Voice extends TypedEmitter<{
         await this.next();
       }
     })
-    // eslint-disable-next-line ts/no-misused-promises
     .on("error", async error => {
       logger.error("⚠️ Player error:", error);
       await this.send("⚠️ Error");
