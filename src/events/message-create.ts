@@ -59,11 +59,6 @@ export default event(
       ) &&
       author.id !== client.user?.id
     ) {
-      await message.delete();
-      let msg = "salad mundus detected";
-      if (Math.random() < 0.3)
-        msg += ` gave 1 strike to ${userMention(message.author.id)}`;
-      await channel.send(msg);
       await incCount(author.id, "salad_mundus");
     } else {
       const [first = "", second = "", third = ""] = noWhitespace;
