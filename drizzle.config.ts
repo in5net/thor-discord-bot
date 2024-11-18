@@ -2,8 +2,9 @@ import { defineConfig } from "drizzle-kit";
 import { env } from "node:process";
 
 export default defineConfig({
-  schema: "./drizzle/schema.ts",
   dialect: "sqlite",
+  schema: "./src/lib/database/drizzle/schema.ts",
+  out: "./drizzle",
   dbCredentials: {
     url: env.DATABASE_URL,
   },
