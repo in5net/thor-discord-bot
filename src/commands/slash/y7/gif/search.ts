@@ -19,7 +19,7 @@ export default command(
               and(
                 eq(fileTags.name, "y7"),
                 contains(files.name, search),
-                eq(files.ext, "gif"),
+                eq(files.ext, ".gif"),
                 eq(files.nsfw, false),
               ),
             )

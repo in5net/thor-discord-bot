@@ -16,7 +16,7 @@ export default command(
       .where(
         and(
           eq(fileTags.name, "y7"),
-          eq(files.ext, "gif"),
+          eq(files.ext, ".gif"),
           eq(files.nsfw, true),
         ),
       )

@@ -1,5 +1,5 @@
 import db, { and, contains, eq, ne } from "$lib/database/drizzle";
-import { files,  fileTags } from "$lib/database/schema";
+import { files, fileTags } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
 import { pipe } from "@in5net/std/fn";
 import { collect, pick } from "@in5net/std/iter";
@@ -21,7 +21,7 @@ export default command(
               and(
                 eq(fileTags.name, "y7"),
                 contains(files.name, search),
-                ne(files.ext, "gif"),
+                ne(files.ext, ".gif"),
                 eq(files.nsfw, false),
               ),
             )
