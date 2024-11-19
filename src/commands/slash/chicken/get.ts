@@ -1,5 +1,5 @@
 import db, { eq, isNotNull, lt, sql } from "$lib/database/drizzle";
-import { chickens } from "$lib/database/drizzle/schema";
+import { chickens } from "$lib/database//schema";
 import { AttachmentBuilder } from "discord.js";
 import command from "$lib/discord/commands/slash";
 import { env } from "node:process";

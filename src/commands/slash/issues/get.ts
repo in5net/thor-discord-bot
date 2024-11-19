@@ -1,6 +1,6 @@
 import { createEmbed } from "$lib/embed";
 import db, { contains, eq } from "$lib/database/drizzle";
-import { issues } from "$lib/database/drizzle/schema";
+import { issues } from "$lib/database//schema";
 import { time } from "discord.js";
 import command from "$lib/discord/commands/slash";
 

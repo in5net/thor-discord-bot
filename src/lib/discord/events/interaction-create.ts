@@ -1,7 +1,7 @@
 import { type OptionValue } from "../commands/slash";
 import event from "../event";
 import db from "$lib/database/drizzle";
-import { commandExecutions } from "$lib/database/drizzle/schema";
+import { commandExecutions } from "$lib/database//schema";
 import {
   EmbedBuilder,
   type AutocompleteInteraction,

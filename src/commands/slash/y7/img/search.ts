@@ -1,7 +1,7 @@
 import { pipe } from "@in5net/std/fn";
 import { collect, pick } from "@in5net/std/iter";
 import db, { and, contains, ne } from "$lib/database/drizzle";
-import { y7Files } from "$lib/database/drizzle/schema";
+import { y7Files } from "$lib/database//schema";
 import command from "$lib/discord/commands/slash";
 import { env } from "node:process";
 

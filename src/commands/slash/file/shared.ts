@@ -1,5 +1,5 @@
 import db, { and, eq, inArray, not, sql } from "$lib/database/drizzle";
-import { attachments, messages } from "$lib/database/drizzle/schema";
+import { attachments, messages } from "$lib/database//schema";
 import { createEmbed } from "$lib/embed";
 import logger from "$lib/logger";
 import {

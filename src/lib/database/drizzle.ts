@@ -1,4 +1,4 @@
-import * as schema from "./drizzle/schema";
+import * as schema from ".//schema";
 import "./env";
 import { like, type AnyColumn } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/better-sqlite3";

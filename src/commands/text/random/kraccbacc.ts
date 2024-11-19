@@ -1,5 +1,5 @@
 import db, { eq, isNotNull, lt, sql } from "$lib/database/drizzle";
-import { kraccBaccVideos } from "$lib/database/drizzle/schema";
+import { kraccBaccVideos } from "$lib/database//schema";
 import command from "$lib/discord/commands/text";
 import { env } from "node:process";
 

@@ -1,5 +1,5 @@
 import db from "$lib/database/drizzle";
-import { oneWordStory } from "$lib/database/drizzle/schema";
+import { oneWordStory } from "$lib/database//schema";
 import command from "$lib/discord/commands/slash";
 
 export default command(

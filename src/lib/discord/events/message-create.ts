@@ -1,5 +1,5 @@
 import db from "$lib/database/drizzle";
-import { commandExecutions } from "$lib/database/drizzle/schema";
+import { commandExecutions } from "$lib/database//schema";
 import { EmbedBuilder, type Message, type TextBasedChannel } from "discord.js";
 import Fuse from "fuse.js";
 import logger from "$lib/logger";

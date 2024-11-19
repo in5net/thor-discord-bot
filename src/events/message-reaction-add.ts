@@ -1,7 +1,7 @@
 import { YouTubeSong } from "$src/music/songs";
 import { getVoice } from "$src/music/voice-manager";
 import db, { and, eq } from "$lib/database/drizzle";
-import { youtubeSearches } from "$lib/database/drizzle/schema";
+import { youtubeSearches } from "$lib/database//schema";
 import event from "$lib/discord/event";
 import { env } from "node:process";
 

@@ -1,6 +1,6 @@
 import { getBits, MAX_BITS } from "$lib/ai/shared";
 import db, { eq } from "$lib/database/drizzle";
-import { users } from "$lib/database/drizzle/schema";
+import { users } from "$lib/database//schema";
 import command from "$lib/discord/commands/text";
 
 export default command(

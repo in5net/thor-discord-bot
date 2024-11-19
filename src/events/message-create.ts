@@ -27,7 +27,7 @@ import {
   oneWordStory,
   oneWordStoryEntry,
   randomResponses,
-} from "$lib/database/drizzle/schema";
+} from "$lib/database//schema";
 import * as deepl from "deepl-node";
 import { getRandomResponses, getThemes } from "$src/responses";
 

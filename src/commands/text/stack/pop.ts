@@ -1,5 +1,5 @@
 import db, { desc, eq, count } from "$lib/database/drizzle";
-import { stackItems } from "$lib/database/drizzle/schema";
+import { stackItems } from "$lib/database//schema";
 import command from "$lib/discord/commands/text";
 import { time } from "discord.js";
 

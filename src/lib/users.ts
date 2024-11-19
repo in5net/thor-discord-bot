@@ -1,5 +1,5 @@
 import db, { eq } from "$lib/database/drizzle";
-import { users } from "$lib/database/drizzle/schema";
+import { users } from "$lib/database//schema";
 
 export async function getUser(id: string) {
   const user = await db.query.users.findFirst({

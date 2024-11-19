@@ -1,5 +1,5 @@
 import db, { eq } from "$lib/database/drizzle";
-import { speechBubbles, users } from "$lib/database/drizzle/schema";
+import { speechBubbles, users } from "$lib/database//schema";
 import command from "$lib/discord/commands/slash";
 import logger from "$lib/logger";
 import got from "got";

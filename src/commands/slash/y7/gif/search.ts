@@ -1,5 +1,5 @@
 import db, { and, contains, eq, ne } from "$lib/database/drizzle";
-import { y7Files } from "$lib/database/drizzle/schema";
+import { y7Files } from "$lib/database//schema";
 import command from "$lib/discord/commands/slash";
 import { env } from "node:process";
 import { NSFW_FILE_NAME } from "./shared";

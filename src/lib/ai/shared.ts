@@ -1,5 +1,5 @@
 import db, { eq } from "$lib/database/drizzle";
-import { users } from "$lib/database/drizzle/schema";
+import { users } from "$lib/database//schema";
 import ms from "ms";
 
 export const MAX_BITS = 32;
