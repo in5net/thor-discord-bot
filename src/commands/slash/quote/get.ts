@@ -10,7 +10,6 @@ export default command(
   },
   async i => {
     await i.deferReply();
-    await i.deleteReply();
     const [quote] = await db
       .select({ id: files.id, name: files.name })
       .from(files)
@@ -21,6 +20,7 @@ export default command(
     if (!quote) {
       return i.reply("No quote found");
     }
+    await i.deleteReply();
 
     await i.channel?.send(getFileUrl(quote));
   },

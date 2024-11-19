@@ -1,6 +1,7 @@
-import db, { sql } from "$lib/database/drizzle";
+import db, { eq, sql } from "$lib/database/drizzle";
+import { files, fileTags } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
-import { env } from "node:process";
+import { getFileUrl } from "$lib/files";
 
 export default command(
   {
@@ -8,19 +9,18 @@ export default command(
     args: {},
   },
   async ({ message }) => {
-    const food = await db.query.rotatingFood.findFirst({
-      columns: {
-        name: true,
-      },
-      orderBy: sql`random()`,
-    });
+    const [food] = await db
+      .select({ id: files.id, name: files.name })
+      .from(files)
+      .fullJoin(fileTags, eq(files.id, fileTags.fileId))
+      .where(eq(fileTags.name, "rotating_food"))
+      .orderBy(sql`random()`)
+      .limit(1);
     if (!food) {
       return message.reply("No food found");
     }
 
-    const url = `https://${env.FILES_DOMAIN}/rotatingfood5/${encodeURIComponent(
-      food.name,
-    )}`;
+    const url = getFileUrl(food);
     return message.reply(url);
   },
 );
