@@ -213,39 +213,8 @@ export const fileTagsRelations = relations(fileTags, ({ one }) => ({
   }),
 }));
 
-/** @deprecated */
-export const y7Files = sqliteTable("y7_files", t => ({
-  name: t.text().primaryKey(),
-  extension: t.text().notNull(),
-}));
-
-/** @deprecated */
-export const chickens = sqliteTable("chickens", t => ({
-  name: t.text().primaryKey(),
-  sentAt: timestamp("sent_at"),
-}));
-
-/** @deprecated */
-export const speechBubbles = sqliteTable("speech_bubbles", t => ({
-  name: t.text().primaryKey(),
-  sentAt: timestamp("sent_at"),
-}));
-
 export const hopOns = sqliteTable("hop_ons", t => ({
   id: t.text().primaryKey(),
-  sentAt: timestamp("sent_at"),
-}));
-
-/** @deprecated */
-export const kraccBaccVideos = sqliteTable("kracc_bacc_videos", t => ({
-  name: t.text().primaryKey(),
-  sentAt: timestamp("sent_at"),
-}));
-
-/** @deprecated */
-export const bossFiles = sqliteTable("boss_files", t => ({
-  id: t.text().primaryKey(),
-  url: t.text().notNull(),
   sentAt: timestamp("sent_at"),
 }));
 
@@ -273,10 +242,6 @@ export const issuesRelations = relations(issues, ({ one }) => ({
     fields: [issues.userId],
     references: [users.id],
   }),
-}));
-
-export const rotatingFood = sqliteTable("rotating_food", t => ({
-  name: t.text().primaryKey(),
 }));
 
 export const audioFilters = sqliteTable("audio_filters", t => ({
