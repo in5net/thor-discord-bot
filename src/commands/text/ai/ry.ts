@@ -1,5 +1,5 @@
 import db, { eq, gte, and, desc } from "$lib/database/drizzle";
-import { channels, context } from "$lib/database//schema";
+import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
 import { filter, openai } from "$lib/openai";
 import { ttlCache } from "@in5net/std/fn";

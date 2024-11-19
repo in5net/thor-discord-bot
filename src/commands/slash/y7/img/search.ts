@@ -1,8 +1,8 @@
+import db, { and, contains, eq, ne } from "$lib/database/drizzle";
+import { files,  fileTags } from "$lib/database/schema";
+import command from "$lib/discord/commands/slash";
 import { pipe } from "@in5net/std/fn";
 import { collect, pick } from "@in5net/std/iter";
-import db, { and, contains, ne } from "$lib/database/drizzle";
-import { y7Files } from "$lib/database//schema";
-import command from "$lib/discord/commands/slash";
 import { env } from "node:process";
 
 export default command(
@@ -13,17 +13,20 @@ export default command(
         type: "string",
         desc: "The file name to search for",
         async autocomplete(search) {
-          const results = await db.query.y7Files.findMany({
-            columns: {
-              name: true,
-            },
-            where: and(
-              contains(y7Files.name, search),
-              ne(y7Files.extension, "gif"),
-            ),
-            orderBy: y7Files.name,
-            limit: 5,
-          });
+          const results = await db
+            .select({ name: files.name })
+            .from(files)
+            .fullJoin(fileTags, eq(files.id, fileTags.fileId))
+            .where(
+              and(
+                eq(fileTags.name, "y7"),
+                contains(files.name, search),
+                ne(files.ext, "gif"),
+                eq(files.nsfw, false),
+              ),
+            )
+            .orderBy(files.name)
+            .limit(5);
           return pipe(results, pick("name"), collect);
         },
       },

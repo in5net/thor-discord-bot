@@ -1,5 +1,7 @@
-import db, { sql } from "$lib/database/drizzle";
+import db, { sql, eq } from "$lib/database/drizzle";
 import command from "$lib/discord/commands/text";
+import { files, fileTags } from "$lib/database/schema";
+import { getFileUrl } from "$lib/files";
 
 export default command(
   {
@@ -7,15 +9,18 @@ export default command(
     args: {},
   },
   async ({ message }) => {
-    const boss = await db.query.bossFiles.findFirst({
-      columns: {
-        url: true,
-      },
-      orderBy: sql`random()`,
-    });
-    if (!boss) {
-      return message.reply("No boss found");
+    const [file] = await db
+      .select({ id: files.id, name: files.name })
+      .from(files)
+      .fullJoin(fileTags, eq(files.id, fileTags.fileId))
+      .where(eq(fileTags.name, "boss"))
+      .orderBy(sql`random()`)
+      .limit(1);
+    if (!file) {
+      return message.reply("No boss file found");
     }
-    return message.reply(boss.url);
+
+    const url = getFileUrl(file);
+    return message.reply(url);
   },
 );

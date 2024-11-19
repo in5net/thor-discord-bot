@@ -1,5 +1,5 @@
 import db, { eq } from "$lib/database/drizzle";
-import { chessGames } from "$lib/database//schema";
+import { chessGames } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
 import { choice } from "@in5net/std/random";
 

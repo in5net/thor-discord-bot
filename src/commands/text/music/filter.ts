@@ -1,5 +1,5 @@
 import db, { inArray } from "$lib/database/drizzle";
-import { audioFilters } from "$lib/database//schema";
+import { audioFilters } from "$lib/database/schema";
 import musicCommand from "./command";
 
 export default musicCommand(

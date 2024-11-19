@@ -1,6 +1,6 @@
 import logger from "$lib/logger";
-import { ensureCacheSubDir } from "$src/lib/cache";
-import { parseTime } from "$src/lib/time";
+import { ensureCacheSubDir } from "$lib/cache";
+import { parseTime } from "$lib/time";
 import {
   type GetResourceListeners,
   type GetResourceOptions,

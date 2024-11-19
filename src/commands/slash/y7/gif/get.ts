@@ -1,7 +1,7 @@
-import db, { ne, sql } from "$lib/database/drizzle";
+import db, { eq, sql, and } from "$lib/database/drizzle";
+import { files, fileTags } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
 import { env } from "node:process";
-import { NSFW_FILE_NAME } from "./shared";
 
 export default command(
   {
@@ -9,15 +9,22 @@ export default command(
     options: {},
   },
   async i => {
-    const gif = await db.query.y7Files.findFirst({
-      columns: {
-        name: true,
-      },
-      where: (table, { and, eq }) =>
-        and(ne(table.name, NSFW_FILE_NAME), eq(table.extension, "gif")),
-      orderBy: sql`random()`,
-    });
-    if (!gif) return i.reply("No image found");
+    const [gif] = await db
+      .select({ name: files.name })
+      .from(files)
+      .fullJoin(fileTags, eq(files.id, fileTags.fileId))
+      .where(
+        and(
+          eq(fileTags.name, "y7"),
+          eq(files.ext, "gif"),
+          eq(files.nsfw, true),
+        ),
+      )
+      .orderBy(sql`random()`)
+      .limit(1);
+    if (!gif) {
+      return i.reply("No image found");
+    }
 
     const url = `https://${env.FILES_DOMAIN}/y7/images/${gif.name}`;
     return i.reply(url);

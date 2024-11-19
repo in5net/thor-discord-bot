@@ -1,6 +1,6 @@
 import { getLyrics } from "$lib/genius";
 import logger from "$lib/logger";
-import { formatTime } from "$src/lib/time";
+import { formatTime } from "$lib/time";
 import {
   URL_REGEX,
   YOUTUBE_CHANNEL_REGEX,

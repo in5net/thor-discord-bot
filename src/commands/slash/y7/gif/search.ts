@@ -1,8 +1,7 @@
-import db, { and, contains, eq, ne } from "$lib/database/drizzle";
-import { y7Files } from "$lib/database//schema";
+import db, { and, contains, eq } from "$lib/database/drizzle";
+import { files, fileTags } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
 import { env } from "node:process";
-import { NSFW_FILE_NAME } from "./shared";
 
 export default command(
   {
@@ -12,18 +11,20 @@ export default command(
         type: "string",
         desc: "The file name to search for",
         async autocomplete(search) {
-          const results = await db.query.y7Files.findMany({
-            columns: {
-              name: true,
-            },
-            where: and(
-              contains(y7Files.name, search),
-              ne(y7Files.name, NSFW_FILE_NAME),
-              eq(y7Files.extension, "gif"),
-            ),
-            orderBy: y7Files.name,
-            limit: 5,
-          });
+          const results = await db
+            .select({ name: files.name })
+            .from(files)
+            .fullJoin(fileTags, eq(files.id, fileTags.fileId))
+            .where(
+              and(
+                eq(fileTags.name, "y7"),
+                contains(files.name, search),
+                eq(files.ext, "gif"),
+                eq(files.nsfw, false),
+              ),
+            )
+            .orderBy(files.name)
+            .limit(5);
           return results.map(({ name }) => name);
         },
       },

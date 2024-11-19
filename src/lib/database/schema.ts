@@ -190,16 +190,42 @@ export const ratios = sqliteTable("ratios", t => ({
   content: t.text().notNull().unique(),
 }));
 
+export const files = sqliteTable("files", t => ({
+  id: t.text().primaryKey(),
+  name: t.text().notNull(),
+  ext: t.text().notNull(),
+  nsfw: boolean("nsfw").notNull().default(false),
+  sentAt: timestamp("sent_at"),
+}));
+export const filesRelations = relations(files, ({ many }) => ({
+  tags: many(fileTags),
+}));
+
+export const fileTags = sqliteTable("file_tags", t => ({
+  id: t.integer().primaryKey({ autoIncrement: true }),
+  fileId: t.text().notNull(),
+  name: t.text().notNull(),
+}));
+export const fileTagsRelations = relations(fileTags, ({ one }) => ({
+  file: one(files, {
+    fields: [fileTags.fileId],
+    references: [files.id],
+  }),
+}));
+
+/** @deprecated */
 export const y7Files = sqliteTable("y7_files", t => ({
   name: t.text().primaryKey(),
   extension: t.text().notNull(),
 }));
 
+/** @deprecated */
 export const chickens = sqliteTable("chickens", t => ({
   name: t.text().primaryKey(),
   sentAt: timestamp("sent_at"),
 }));
 
+/** @deprecated */
 export const speechBubbles = sqliteTable("speech_bubbles", t => ({
   name: t.text().primaryKey(),
   sentAt: timestamp("sent_at"),
@@ -210,11 +236,13 @@ export const hopOns = sqliteTable("hop_ons", t => ({
   sentAt: timestamp("sent_at"),
 }));
 
+/** @deprecated */
 export const kraccBaccVideos = sqliteTable("kracc_bacc_videos", t => ({
   name: t.text().primaryKey(),
   sentAt: timestamp("sent_at"),
 }));
 
+/** @deprecated */
 export const bossFiles = sqliteTable("boss_files", t => ({
   id: t.text().primaryKey(),
   url: t.text().notNull(),

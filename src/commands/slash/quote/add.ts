@@ -1,11 +1,10 @@
 import db, { eq } from "$lib/database/drizzle";
-import { speechBubbles, users } from "$lib/database//schema";
+import { files, fileTags, users } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
 import logger from "$lib/logger";
+import { prepareTaggedFile } from "$lib/files";
 import got from "got";
 import { createWriteStream } from "node:fs";
-import path from "node:path";
-import { env } from "node:process";
 import { pipeline } from "node:stream/promises";
 
 export default command(
@@ -29,19 +28,25 @@ export default command(
       return i.reply("You are not an admin");
     }
 
+    const { id, path, ext, url } = await prepareTaggedFile(name);
     const request = got.stream(proxyURL);
-    const subPath = `speech-bubbles/${name}`;
-    const filePath = path.join(env.FILES_PATH, subPath);
-    await pipeline(request, createWriteStream(filePath));
+    await pipeline(request, createWriteStream(path));
 
-    await db.insert(speechBubbles).values({
-      name,
+    await db.transaction(async tx => {
+      await tx.insert(files).values({
+        id,
+        name,
+        ext,
+      });
+      await tx.insert(fileTags).values({
+        fileId: id,
+        name: "quote",
+      });
     });
 
-    const fileURL = `https://${env.FILES_DOMAIN}/${subPath}`;
-    logger.info(`Uploaded ${fileURL}`);
+    logger.info(`Uploaded ${url}`);
 
     return i.reply(`Quote added
-${fileURL}`);
+${url}`);
   },
 );

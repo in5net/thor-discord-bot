@@ -1,5 +1,5 @@
 import db, { eq } from "$lib/database/drizzle";
-import { users } from "$lib/database//schema";
+import { users } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
 
 export default command(

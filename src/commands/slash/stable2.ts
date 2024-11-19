@@ -1,7 +1,7 @@
 import { replicate } from "$lib/ai/replicate";
 import { getBits, subtractBits } from "$lib/ai/shared";
 import db, { eq } from "$lib/database/drizzle";
-import { users } from "$lib/database//schema";
+import { users } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
 import { z } from "zod";
 

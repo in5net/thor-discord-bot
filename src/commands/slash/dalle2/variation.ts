@@ -1,7 +1,7 @@
 import { getBits, subtractBits } from "$lib/ai/shared";
 import { openai } from "$lib/openai";
 import db, { eq } from "$lib/database/drizzle";
-import { users } from "$lib/database//schema";
+import { users } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
 import got from "got";
 import { nanoid } from "nanoid";

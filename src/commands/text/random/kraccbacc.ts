@@ -1,7 +1,6 @@
-import db, { eq, isNotNull, lt, sql } from "$lib/database/drizzle";
-import { kraccBaccVideos } from "$lib/database//schema";
+import db, { eq, and, isNotNull, lt, sql, or } from "$lib/database/drizzle";
+import { files, fileTags } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
-import { env } from "node:process";
 
 export default command(
   {
@@ -11,27 +10,29 @@ export default command(
   async ({ message }) => {
     const date = new Date();
     date.setMinutes(date.getMinutes() - 1);
-    const video = await db.query.kraccBaccVideos.findFirst({
-      columns: {
-        name: true,
-      },
-      where: (table, { or }) =>
-        or(lt(table.sentAt, date), isNotNull(table.sentAt)),
-      orderBy: sql`random()`,
-    });
+    const [video] = await db
+      .select({ id: files.id, name: files.name })
+      .from(files)
+      .fullJoin(fileTags, eq(files.id, fileTags.fileId))
+      .where(
+        and(
+          eq(fileTags.name, "kraccbacc"),
+          or(lt(files.sentAt, date), isNotNull(files.sentAt)),
+        ),
+      )
+      .orderBy(sql`random()`)
+      .limit(1);
     if (!video) {
       return message.reply("No video found!");
     }
     await db
-      .update(kraccBaccVideos)
+      .update(files)
       .set({
         sentAt: new Date(),
       })
-      .where(eq(kraccBaccVideos.name, video.name));
+      .where(eq(files.id, video.id));
 
-    const url = `https://${env.FILES_DOMAIN}/kraccbacc/${encodeURIComponent(
-      video.name,
-    )}`;
+    const url = getFileUrl(video);
     return message.reply(url);
   },
 );

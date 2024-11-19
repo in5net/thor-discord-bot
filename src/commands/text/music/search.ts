@@ -1,7 +1,7 @@
 import db from "$lib/database/drizzle";
-import { youtubeSearches } from "$lib/database//schema";
+import { youtubeSearches } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
-import { formatTime } from "$src/lib/time";
+import { formatTime } from "$lib/time";
 import { EmbedBuilder } from "discord.js";
 import Innertube from "youtubei.js";
 import { z } from "zod";

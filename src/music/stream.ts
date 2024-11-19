@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/require-array-join-separator */
 import logger from "$lib/logger";
-import { formatTime } from "$src/lib/time";
+import { formatTime } from "$lib/time";
 import { YouTubeSong, type SongType } from "./songs";
 import {
   AudioPlayerStatus,

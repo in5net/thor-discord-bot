@@ -1,6 +1,6 @@
 import { sendFile } from "./shared";
 import db, { eq, contains } from "$lib/database/drizzle";
-import { attachments } from "$lib/database//schema";
+import { attachments } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
 
 export default command(

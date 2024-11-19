@@ -1,6 +1,7 @@
-import db, { sql } from "$lib/database/drizzle";
+import db, { and, eq, sql } from "$lib/database/drizzle";
+import { files, fileTags } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
-import { env } from "node:process";
+import { getFileUrl } from "$lib/files";
 
 export default command(
   {
@@ -10,14 +11,17 @@ export default command(
   async i => {
     await i.deferReply();
     await i.deleteReply();
-    const bubble = await db.query.speechBubbles.findFirst({
-      columns: {
-        name: true,
-      },
-      orderBy: sql`random()`,
-    });
-    await i.channel?.send(
-      `https://${env.FILES_DOMAIN}/speech-bubbles/${bubble?.name}`,
-    );
+    const [quote] = await db
+      .select({ id: files.id, name: files.name })
+      .from(files)
+      .fullJoin(fileTags, eq(files.id, fileTags.fileId))
+      .where(and(eq(fileTags.name, "quote")))
+      .orderBy(sql`random()`)
+      .limit(1);
+    if (!quote) {
+      return i.reply("No quote found");
+    }
+
+    await i.channel?.send(getFileUrl(quote));
   },
 );

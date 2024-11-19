@@ -1,5 +1,5 @@
 import logger from "$lib/logger";
-import { ensureCacheSubDir } from "$src/lib/cache";
+import { ensureCacheSubDir } from "$lib/cache";
 import { getPlayDl } from "../play";
 import {
   type Album,
