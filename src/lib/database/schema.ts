@@ -308,6 +308,18 @@ export const oneWordStoryEntryRelations = relations(
   }),
 );
 
+export const imageSearches = sqliteTable("image_searches", t => ({
+  messageId: t.text().primaryKey(),
+  query: t.text().notNull(),
+  start: t.integer().notNull(),
+}));
+export const imageSearchesRelations = relations(imageSearches, ({ one }) => ({
+  message: one(messages, {
+    fields: [imageSearches.messageId],
+    references: [messages.id],
+  }),
+}));
+
 export const youtubeSearches = sqliteTable(
   "youtube_searches",
   t => ({

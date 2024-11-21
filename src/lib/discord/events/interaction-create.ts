@@ -1,24 +1,33 @@
-import { type OptionValue } from "../commands/slash";
-import event from "../event";
 import db from "$lib/database/drizzle";
 import { commandExecutions } from "$lib/database/schema";
+import logger from "$lib/logger";
+import { type OptionValue } from "../commands/slash";
+import event from "../event";
 import {
+  type ButtonInteraction,
   EmbedBuilder,
   type AutocompleteInteraction,
   type ChatInputCommandInteraction,
   type MessageContextMenuCommandInteraction,
 } from "discord.js";
-import logger from "$lib/logger";
 
 export default event({ name: "interactionCreate" }, async ({ args: [i] }) => {
-  if (i.isChatInputCommand()) await handleSlash(i);
-  else if (i.isAutocomplete()) await handleAutocomplete(i);
-  else if (i.isMessageContextMenuCommand()) await handleMessageMenu(i);
+  if (i.isChatInputCommand()) {
+    await handleSlash(i);
+  } else if (i.isAutocomplete()) {
+    await handleAutocomplete(i);
+  } else if (i.isMessageContextMenuCommand()) {
+    await handleMessageMenu(i);
+  } else if (i.isButton()) {
+    await handleButton(i);
+  }
 });
 
 async function handleSlash(i: ChatInputCommandInteraction) {
   const command = getCommand(i);
-  if (!command) return;
+  if (!command) {
+    return;
+  }
   const { name, options, handler } = command;
 
   try {
@@ -90,31 +99,38 @@ async function handleSlash(i: ChatInputCommandInteraction) {
         .setTitle("Error")
         .setDescription(error.message)
         .setTimestamp();
-      if (i.replied)
+      if (i.replied) {
         await i
           .followUp({ embeds: [embed], ephemeral: true })
           .catch(logger.error);
-      else if (i.deferred)
+      } else if (i.deferred) {
         await i.editReply({ embeds: [embed] }).catch(logger.error);
-      else
+      } else {
         await i.reply({ embeds: [embed], ephemeral: true }).catch(logger.error);
+      }
     }
   }
 }
 
 async function handleAutocomplete(i: AutocompleteInteraction) {
   const command = getCommand(i);
-  if (!command) return;
+  if (!command) {
+    return;
+  }
 
   const option = i.options.getFocused(true);
   const handleAutocomplete = command.options[option.name]?.autocomplete;
-  if (!handleAutocomplete) return;
+  if (!handleAutocomplete) {
+    return;
+  }
 
   const rawChoices = await handleAutocomplete(option.value, i);
   const choices =
     Array.isArray(rawChoices) ?
       rawChoices.map(choice => {
-        if (typeof choice === "object") return choice;
+        if (typeof choice === "object") {
+          return choice;
+        }
         return {
           name: choice.toString(),
           value: choice,
@@ -133,7 +149,9 @@ async function handleAutocomplete(i: AutocompleteInteraction) {
 
 async function handleMessageMenu(i: MessageContextMenuCommandInteraction) {
   const command = i.client.messageCommands.get(i.commandName);
-  if (!command) return;
+  if (!command) {
+    return;
+  }
 
   const { handler } = command;
   const name = i.commandName;
@@ -155,14 +173,15 @@ async function handleMessageMenu(i: MessageContextMenuCommandInteraction) {
         .setTitle("Error")
         .setDescription(error.message)
         .setTimestamp();
-      if (i.replied)
+      if (i.replied) {
         await i
           .followUp({ embeds: [embed], ephemeral: true })
           .catch(logger.error);
-      else if (i.deferred)
+      } else if (i.deferred) {
         await i.editReply({ embeds: [embed] }).catch(logger.error);
-      else
+      } else {
         await i.reply({ embeds: [embed], ephemeral: true }).catch(logger.error);
+      }
     }
   }
 }
@@ -178,6 +197,40 @@ function getCommand(i: ChatInputCommandInteraction | AutocompleteInteraction) {
   logger.debug(name);
 
   const command = i.client.slashCommands.get(name);
-  if (!command) return;
+  if (!command) {
+    return;
+  }
   return { ...command, name };
+}
+
+async function handleButton(i: ButtonInteraction) {
+  const button = i.client.buttonHandlers.get(i.customId);
+  if (!button) {
+    return;
+  }
+  const { handler } = button;
+
+  try {
+    await handler(i);
+  } catch (error) {
+    const msg = `Error while running button '${i.customId}':`;
+    logger.error(msg, error);
+    console.error(msg, error);
+    if (error instanceof Error) {
+      const embed = new EmbedBuilder()
+        .setColor("Red")
+        .setTitle("Error")
+        .setDescription(error.message)
+        .setTimestamp();
+      if (i.replied) {
+        await i
+          .followUp({ embeds: [embed], ephemeral: true })
+          .catch(logger.error);
+      } else if (i.deferred) {
+        await i.editReply({ embeds: [embed] }).catch(logger.error);
+      } else {
+        await i.reply({ embeds: [embed], ephemeral: true }).catch(logger.error);
+      }
+    }
+  }
 }

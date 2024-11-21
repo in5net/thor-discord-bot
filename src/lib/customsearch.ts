@@ -1,4 +1,10 @@
 import { customsearch } from "@googleapis/customsearch";
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  EmbedBuilder,
+} from "discord.js";
 import { env } from "node:process";
 
 export const api = customsearch({
@@ -6,41 +12,46 @@ export const api = customsearch({
   auth: env.GOOGLE_APIS_KEY,
 });
 
-export default class ImageSearch {
-  private readonly urls: string[] = [];
-  private start = 0;
-
-  constructor(readonly query?: string) {}
-
-  async next(): Promise<string> {
-    this.start++;
-    return this.search();
+export async function searchImage(query: string, start: number) {
+  const result = await api.cse.list({
+    q: query,
+    cx: env.CUSTOM_SEARCH_ID,
+    searchType: "image",
+    imgSize: "medium",
+    num: 1,
+    start,
+  });
+  const item = result.data.items?.[0];
+  if (!item?.link) {
+    throw new Error("No results");
   }
+  return item.link;
+}
 
-  hasPrev(): boolean {
-    return this.start > 1;
-  }
+export async function buildMessage(query: string, start: number) {
+  const url = await searchImage(query, start);
 
-  async prev(): Promise<string> {
-    this.start--;
-    return this.search();
-  }
+  const embed = new EmbedBuilder()
+    .setDescription(query)
+    .setColor(env.COLOR)
+    .setImage(url);
 
-  private async search(): Promise<string> {
-    const { query, urls, start } = this;
-    const url = urls[start - 1];
-    if (url) return url;
+  const previousButton = new ButtonBuilder()
+    .setCustomId("img_prev")
+    .setEmoji("⬅️")
+    .setStyle(ButtonStyle.Primary)
+    .setDisabled(start === 1);
+  const nextButton = new ButtonBuilder()
+    .setCustomId("img_next")
+    .setEmoji("➡️")
+    .setStyle(ButtonStyle.Primary);
+  const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    previousButton,
+    nextButton,
+  );
 
-    const result = await api.cse.list({
-      q: query,
-      cx: env.CUSTOM_SEARCH_ID,
-      searchType: "image",
-      imgSize: "medium",
-      num: 1,
-      start,
-    });
-    const item = result.data.items?.[0];
-    if (!item?.link) throw new Error("No results");
-    return (urls[start - 1] = item.link);
-  }
+  return {
+    embeds: [embed],
+    components: [row],
+  };
 }

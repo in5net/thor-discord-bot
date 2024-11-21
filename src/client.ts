@@ -1,4 +1,14 @@
-import { messageCommands, slashCommands, textCommands } from "./commands";
+import type { MessageCommand } from "$lib/discord/commands/message";
+import type { SlashCommand } from "$lib/discord/commands/slash";
+import type { TextCommand } from "$lib/discord/commands/text";
+import { loadDiscordEvents } from "$lib/discord/loaders/events";
+import {
+  messageCommands,
+  slashCommands,
+  textCommands,
+  buttonHandlers,
+} from "./commands";
+import type { ButtonHandler } from "./lib/discord/commands/button";
 import {
   ActivityType,
   Client,
@@ -7,10 +17,6 @@ import {
   type ActivityOptions,
   type Collection,
 } from "discord.js";
-import { type MessageCommand } from "$lib/discord/commands/message";
-import { type SlashCommand } from "$lib/discord/commands/slash";
-import { type TextCommand } from "$lib/discord/commands/text";
-import { loadDiscordEvents } from "$lib/discord/loaders/events";
 import ms from "ms";
 import process from "node:process";
 import { scheduleJob } from "node-schedule";
@@ -25,6 +31,7 @@ declare module "discord.js" {
     aliases: Collection<string, string>;
     slashCommands: Collection<string, SlashCommand>;
     messageCommands: Collection<string, MessageCommand>;
+    buttonHandlers: Collection<string, ButtonHandler>;
   }
 }
 
@@ -83,6 +90,7 @@ await loadDiscordEvents(eventsPath, client);
 client.textCommands = textCommands;
 client.slashCommands = slashCommands;
 client.messageCommands = messageCommands;
+client.buttonHandlers = buttonHandlers;
 
 await client.login(DISCORD_TOKEN);
 
@@ -96,7 +104,9 @@ scheduleJob(
     tz,
   },
   async () => {
-    if (Math.random() > 0.33) await webhook.send("420 BLAZE IT!!! 🔥🔥🔥");
+    if (Math.random() > 0.33) {
+      await webhook.send("420 BLAZE IT!!! 🔥🔥🔥");
+    }
   },
 );
 scheduleJob(
@@ -106,7 +116,9 @@ scheduleJob(
     tz,
   },
   async () => {
-    if (Math.random() > 0.33) await webhook.send("it's high noon ☀️🤠");
+    if (Math.random() > 0.33) {
+      await webhook.send("it's high noon ☀️🤠");
+    }
   },
 );
 scheduleJob(

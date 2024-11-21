@@ -1,0 +1,1 @@
+ALTER TABLE `image_searches` RENAME COLUMN "index" TO "start";
