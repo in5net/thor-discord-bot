@@ -21,7 +21,7 @@ export default handleButton(async i => {
     );
   }
 
-  const reply = await buildMessage("cheese", search.start + 1);
+  const reply = await buildMessage(search.query, search.start + 1);
 
   await db
     .update(imageSearches)
