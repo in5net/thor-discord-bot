@@ -1,8 +1,8 @@
 import db, { and, contains, eq, ne } from "$lib/database/drizzle";
 import { files, fileTags } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
-import { pipe } from "@in5net/std/fn";
-import { collect, pick } from "@in5net/std/iter";
+import { pipe } from "@iz7n/std/fn";
+import { collect, pick } from "@iz7n/std/iter";
 import { env } from "node:process";
 
 export default command(

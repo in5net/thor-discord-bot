@@ -1,6 +1,6 @@
 import GL from "$lib/gl";
 import { renderProgressBar } from "$lib/progress";
-import { sleep } from "@in5net/std/async";
+import { sleep } from "@iz7n/std/async";
 import { AttachmentBuilder, Message } from "discord.js";
 import command from "$lib/discord/commands/slash";
 import { mat4 } from "gl-matrix";

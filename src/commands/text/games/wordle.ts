@@ -1,4 +1,4 @@
-import { choice } from "@in5net/std/random";
+import { choice } from "@iz7n/std/random";
 import { type Message, type Snowflake } from "discord.js";
 import command from "$lib/discord/commands/text";
 import { readFileSync } from "node:fs";

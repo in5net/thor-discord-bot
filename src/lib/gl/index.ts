@@ -14,8 +14,8 @@ import { join } from "node:path";
 import { PNG } from "pngjs";
 import GIF from "./gif";
 import Texture from "./texture";
-import { Awaitable } from "@in5net/std/types";
-import { sleep } from "@in5net/std/async";
+import { Awaitable } from "@iz7n/std/types";
+import { sleep } from "@iz7n/std/async";
 
 interface GLShader {
   shader: WebGLShader;

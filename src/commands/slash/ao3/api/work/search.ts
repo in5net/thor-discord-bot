@@ -1,4 +1,4 @@
-import { objectKeys } from "@in5net/std/object";
+import { objectKeys } from "@iz7n/std/object";
 import { load } from "cheerio";
 import ORIGIN from "../origin";
 import {

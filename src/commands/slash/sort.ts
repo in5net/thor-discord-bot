@@ -1,9 +1,9 @@
-import { swap } from "@in5net/std/array";
-import { sleep } from "@in5net/std/async";
-import { map } from "@in5net/std/math";
-import { objectKeys } from "@in5net/std/object";
-import { randomInt } from "@in5net/std/random";
-import { max } from "@in5net/std/stats";
+import { swap } from "@iz7n/std/array";
+import { sleep } from "@iz7n/std/async";
+import { map } from "@iz7n/std/math";
+import { objectKeys } from "@iz7n/std/object";
+import { randomInt } from "@iz7n/std/random";
+import { max } from "@iz7n/std/stats";
 import { AttachmentBuilder } from "discord.js";
 import command from "$lib/discord/commands/slash";
 import ffmpeg from "fluent-ffmpeg";

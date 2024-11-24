@@ -11,7 +11,7 @@ import {
   csch,
   sec,
   sech,
-} from "@in5net/std/math";
+} from "@iz7n/std/math";
 import Interpreter from "./interpreter";
 import Lexer from "./lexer";
 import Parser from "./parser";

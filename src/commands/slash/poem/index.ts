@@ -1,6 +1,6 @@
 import { parse } from "$lib/rcpt";
-import { choice, randomInt } from "@in5net/std/random";
-import { capitalize } from "@in5net/std/string";
+import { choice, randomInt } from "@iz7n/std/random";
+import { capitalize } from "@iz7n/std/string";
 import command from "$lib/discord/commands/slash";
 import { readdirSync } from "node:fs";
 import { readFile } from "node:fs/promises";

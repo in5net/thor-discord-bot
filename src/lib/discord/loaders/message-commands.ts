@@ -1,7 +1,7 @@
 import logger from "$lib/logger";
 import { isMessageCommand, type MessageCommand } from "../commands/message";
 import { noTestGlob } from "./shared";
-import { pluralize } from "@in5net/std/string";
+import { pluralize } from "@iz7n/std/string";
 import { Collection } from "discord.js";
 import { join, parse } from "node:path";
 

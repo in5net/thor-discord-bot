@@ -1,7 +1,7 @@
 import logger from "$lib/logger";
 import { isSlashCommand, type SlashCommand } from "../commands/slash";
 import { noTestGlob } from "./shared";
-import { pluralize } from "@in5net/std/string";
+import { pluralize } from "@iz7n/std/string";
 import { Collection } from "discord.js";
 import { join } from "node:path";
 

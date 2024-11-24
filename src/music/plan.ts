@@ -1,5 +1,5 @@
 import { getPlayDl } from "./play";
-import type { Awaitable } from "@in5net/std/types";
+import type { Awaitable } from "@iz7n/std/types";
 import type { Message } from "discord.js";
 import {
   anyOf,

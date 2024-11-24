@@ -1,6 +1,6 @@
 import { getVoice } from "$src/music/voice-manager";
-import { pipe } from "@in5net/std/fn";
-import { collect, pick } from "@in5net/std/iter";
+import { pipe } from "@iz7n/std/fn";
+import { collect, pick } from "@iz7n/std/iter";
 import db, { contains, eq } from "$lib/database/drizzle";
 import { audioFilters } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";

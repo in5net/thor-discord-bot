@@ -1,4 +1,4 @@
-import { map } from "@in5net/std/math";
+import { map } from "@iz7n/std/math";
 import { AttachmentBuilder } from "discord.js";
 import command from "$lib/discord/commands/slash";
 import runner from "./equation";

@@ -1,6 +1,6 @@
 import woof from "$lib/woof";
 import { type SongType } from "$src/music/songs";
-import { quantify } from "@in5net/std/string";
+import { quantify } from "@iz7n/std/string";
 import logger from "$lib/logger";
 import musicCommand from "./command";
 

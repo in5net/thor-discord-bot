@@ -1,4 +1,4 @@
-import { choice } from "@in5net/std/random";
+import { choice } from "@iz7n/std/random";
 import command from "$lib/discord/commands/text";
 
 const voicelines = [

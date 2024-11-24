@@ -2,7 +2,7 @@ import db, { eq, gte, and, desc } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
 import { filter, openai } from "$lib/openai";
-import { ttlCache } from "@in5net/std/fn";
+import { ttlCache } from "@iz7n/std/fn";
 import ms from "ms";
 import { readFile } from "node:fs/promises";
 import { env } from "node:process";

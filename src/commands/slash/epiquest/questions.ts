@@ -1,4 +1,4 @@
-import { random } from "@in5net/std/random";
+import { random } from "@iz7n/std/random";
 import items, { type Item } from "./items";
 import { type Response } from "./types";
 

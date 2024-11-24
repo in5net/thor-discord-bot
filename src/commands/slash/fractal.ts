@@ -1,6 +1,6 @@
 import command from "$lib/discord/commands/slash";
 import GL from "$lib/gl";
-import { randomInt } from "@in5net/std/random";
+import { randomInt } from "@iz7n/std/random";
 import { nanoid } from "nanoid";
 import { type Buffer } from "node:buffer";
 import { writeFile } from "node:fs/promises";

@@ -1,10 +1,10 @@
 import GL from "$lib/gl";
 import { renderProgressBar } from "$lib/progress";
-import { pipe } from "@in5net/std/fn";
-import { map, pick } from "@in5net/std/iter";
-import { easeOutElastic, easeOutQuart, linear } from "@in5net/std/easing";
-import * as math from "@in5net/std/math";
-import { sum } from "@in5net/std/stats";
+import { pipe } from "@iz7n/std/fn";
+import { map, pick } from "@iz7n/std/iter";
+import { easeOutElastic, easeOutQuart, linear } from "@iz7n/std/easing";
+import * as math from "@iz7n/std/math";
+import { sum } from "@iz7n/std/stats";
 import { AttachmentBuilder, Message } from "discord.js";
 import command from "$lib/discord/commands/text";
 import { mat4 } from "gl-matrix";

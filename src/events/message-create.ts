@@ -1,7 +1,7 @@
 import { emojiRegex } from "$lib/emoji";
 import { incCount } from "$lib/users";
-import { choice, randomInt, shuffle } from "@in5net/std/random";
-import { sum } from "@in5net/std/stats";
+import { choice, randomInt, shuffle } from "@iz7n/std/random";
+import { sum } from "@iz7n/std/stats";
 import { quote, userMention, type Message } from "discord.js";
 import event from "$lib/discord/event";
 import { handleTextCommand } from "$lib/discord/events/message-create";
@@ -20,8 +20,8 @@ import {
 } from "magic-regexp";
 import { env } from "node:process";
 import { handleWordleMessage } from "../commands/text/games/wordle";
-import { pipe } from "@in5net/std/fn";
-import { pick } from "@in5net/std/iter";
+import { pipe } from "@iz7n/std/fn";
+import { pick } from "@iz7n/std/iter";
 import db, { and, desc, eq } from "$lib/database/drizzle";
 import {
   oneWordStory,

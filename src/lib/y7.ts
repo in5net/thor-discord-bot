@@ -1,4 +1,4 @@
-import { choice } from "@in5net/std/random";
+import { choice } from "@iz7n/std/random";
 import { load } from "cheerio";
 
 export const FILES_ORIGIN = "https://files.yyyyyyy.info";

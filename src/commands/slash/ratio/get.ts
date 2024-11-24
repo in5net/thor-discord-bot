@@ -1,5 +1,5 @@
 import { incCount } from "$lib/users";
-import { shuffle } from "@in5net/std/random";
+import { shuffle } from "@iz7n/std/random";
 import db, { sql } from "$lib/database/drizzle";
 import command from "$lib/discord/commands/slash";
 

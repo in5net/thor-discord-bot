@@ -2,7 +2,7 @@
   "name": "thor-discord-bot",
   "type": "module",
   "packageManager": "pnpm@9.13.2",
-  "prettier": "@in5net/prettier-config",
+  "prettier": "@iz7n/prettier-config",
   "main": "./src/main.ts",
   "scripts": {
     "dev": "tsx watch src/main.ts",
@@ -22,7 +22,7 @@
     "@discordjs/rest": "2.4.0",
     "@discordjs/voice": "0.18.0",
     "@googleapis/customsearch": "3.2.0",
-    "@in5net/std": "0.16.0",
+    "@iz7n/std": "^0.1.3",
     "@napi-rs/canvas": "0.1.62",
     "@paralleldrive/cuid2": "^2.2.2",
     "ai": "^3.4.33",
@@ -71,8 +71,8 @@
     "zx": "^8.2.2"
   },
   "devDependencies": {
-    "@in5net/eslint-config": "^0.12.0",
-    "@in5net/prettier-config": "^1.3.0",
+    "@iz7n/eslint-config": "^0.12.1",
+    "@iz7n/prettier-config": "^1.4.0",
     "@total-typescript/ts-reset": "^0.6.1",
     "@types/better-sqlite3": "^7.6.11",
     "@types/fluent-ffmpeg": "^2.1.27",

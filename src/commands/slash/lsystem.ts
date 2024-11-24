@@ -1,5 +1,5 @@
-import { radians } from "@in5net/std/math";
-import { replace } from "@in5net/std/string";
+import { radians } from "@iz7n/std/math";
+import { replace } from "@iz7n/std/string";
 import { AttachmentBuilder } from "discord.js";
 import command from "$lib/discord/commands/slash";
 

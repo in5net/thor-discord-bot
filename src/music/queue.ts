@@ -4,8 +4,8 @@ import logger from "$lib/logger";
 import { formatTime } from "$lib/time";
 import { type SongType } from "./songs";
 import type Voice from "./voice";
-import { remove } from "@in5net/std/array";
-import { shuffle } from "@in5net/std/random";
+import { remove } from "@iz7n/std/array";
+import { shuffle } from "@iz7n/std/random";
 import {
   ActionRowBuilder,
   ButtonBuilder,
