@@ -8,11 +8,10 @@ import path from "node:path";
 export async function loadButtons(dirPath: string) {
   dirPath = dirPath.replaceAll("\\", "/");
   const globPattern = path.join(dirPath, "**/*.ts");
-  const filePaths = await noTestGlob(globPattern);
 
   const buttons = new Collection<string, ButtonHandler>();
 
-  for (const filePath of filePaths) {
+  for await (const filePath of noTestGlob(globPattern)) {
     const module = (await import(filePath)) as Record<string, unknown>;
     if (!("default" in module)) {
       continue;

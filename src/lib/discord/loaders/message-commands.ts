@@ -8,11 +8,10 @@ import path from "node:path";
 export async function loadMessageCommands(dirPath: string) {
   dirPath = dirPath.replaceAll("\\", "/");
   const globPattern = path.join(dirPath, "**/*.ts");
-  const filePaths = await noTestGlob(globPattern);
 
   const commands = new Collection<string, MessageCommand>();
 
-  for (const filePath of filePaths) {
+  for await (const filePath of noTestGlob(globPattern)) {
     const subPath = filePath.replace(dirPath, "");
     const { name } = path.parse(subPath);
 

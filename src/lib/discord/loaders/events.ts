@@ -8,12 +8,9 @@ import path from "node:path";
 export async function loadDiscordEvents(dirPath: string, client: Client) {
   dirPath = dirPath.replaceAll("\\", "/");
   const globPattern = path.join(dirPath, "**/*.ts");
-  const filePaths = await noTestGlob(globPattern);
-  if (!filePaths.length) {
-    return;
-  }
 
-  for (const filePath of filePaths) {
+  let count = 0;
+  for await (const filePath of noTestGlob(globPattern)) {
     const {
       default: { name, once, listener },
     } = (await import(filePath)) as { default: Event };
@@ -24,11 +21,10 @@ export async function loadDiscordEvents(dirPath: string, client: Client) {
     } else {
       client.on(name, eventListener);
     }
+    count++;
   }
 
-  logger.info(
-    `Loaded ${filePaths.length} ${pluralize("event", filePaths.length)}`,
-  );
+  logger.info(`Loaded ${count} ${pluralize("event", count)}`);
 }
 
 function createEventListener<T extends keyof ClientEvents>(

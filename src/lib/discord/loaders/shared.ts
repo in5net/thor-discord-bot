@@ -1,6 +1,6 @@
-import fg from "fast-glob";
+import { glob } from "node:fs/promises";
 
-export const noTestGlob = async (pattern: string) =>
-  fg.async(pattern, {
-    ignore: ["**/*.test.ts"],
+export const noTestGlob = (pattern: string) =>
+  glob(pattern, {
+    exclude: path => path.endsWith(".test.ts"),
   });

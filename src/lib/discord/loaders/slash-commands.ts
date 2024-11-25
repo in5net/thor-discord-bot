@@ -8,11 +8,10 @@ import path from "node:path";
 export async function loadSlashCommands(dirPath: string) {
   dirPath = dirPath.replaceAll("\\", "/");
   const globPattern = path.join(dirPath, "**/*.ts");
-  const filePaths = await noTestGlob(globPattern);
 
   const commands = new Collection<string, SlashCommand>();
 
-  for (const filePath of filePaths) {
+  for await (const filePath of noTestGlob(globPattern)) {
     const module = (await import(filePath)) as Record<string, unknown>;
     if (!("default" in module)) {
       continue;
