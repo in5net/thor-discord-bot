@@ -1,7 +1,7 @@
+import command from "$lib/discord/commands/slash";
 import { radians } from "@iz7n/std/math";
 import { replace } from "@iz7n/std/string";
 import { AttachmentBuilder } from "discord.js";
-import command from "$lib/discord/commands/slash";
 
 const size = 512;
 
@@ -45,7 +45,9 @@ export default command(
     const replacements: Record<string, string> = {};
     for (const rule of rules.replaceAll(" ", "").split(",")) {
       const [from, to] = rule.split("=");
-      if (!from || !to) return i.reply(`Invalid rule: ${rule}`);
+      if (!from || !to) {
+        return i.reply(`Invalid rule: ${rule}`);
+      }
       replacements[from] = to;
     }
 
@@ -62,8 +64,11 @@ export default command(
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, size, size);
     ctx.strokeStyle = "#fff";
-    if (center) ctx.translate(size / 2, size / 2);
-    else ctx.translate(length, length);
+    if (center) {
+      ctx.translate(size / 2, size / 2);
+    } else {
+      ctx.translate(length, length);
+    }
 
     angle = radians(angle);
 

@@ -60,8 +60,12 @@ export default class Token<
   ): this is Token<Type, NonNullable<Value>> {
     // eslint-disable-next-line ts/ban-ts-comment
     // @ts-expect-error
-    if (this.type !== type) return false;
-    if (value === undefined) return true;
+    if (this.type !== type) {
+      return false;
+    }
+    if (value === undefined) {
+      return true;
+    }
     return this.value === value;
   }
 }

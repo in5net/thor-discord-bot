@@ -25,12 +25,14 @@ export default command(
   },
   async (i, { choice }) => {
     const botChoice = choices[Math.floor(Math.random() * choices.length)] || "";
-    if (choice === botChoice)
+    if (choice === botChoice) {
       return i.reply(`I chose ${choice2Name[botChoice]} too, so it's a draw!`);
-    if (wins[choice] === botChoice)
+    }
+    if (wins[choice] === botChoice) {
       return i.reply(
         `You chose ${choice2Name[choice]} and I chose ${choice2Name[botChoice]}, you win!`,
       );
+    }
     return i.reply(
       `You chose ${choice2Name[choice]} and I chose ${choice2Name[botChoice]}, I win!`,
     );

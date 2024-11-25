@@ -1,4 +1,3 @@
-/* eslint-disable ts/ban-types */
 import { type BinaryOp } from "../token";
 import Function from "./function";
 import Value from "./value";
@@ -20,20 +19,32 @@ export default class Number extends Value {
   }
 
   override "+"(other?: Value) {
-    if (other instanceof Number) return new Number(this.value + other.value);
-    if (other instanceof Function) return this.operatorFunc(other, "+");
+    if (other instanceof Number) {
+      return new Number(this.value + other.value);
+    }
+    if (other instanceof Function) {
+      return this.operatorFunc(other, "+");
+    }
     return this;
   }
 
   override "-"(other?: Value) {
-    if (other instanceof Number) return new Number(this.value - other.value);
-    if (other instanceof Function) return this.operatorFunc(other, "-");
+    if (other instanceof Number) {
+      return new Number(this.value - other.value);
+    }
+    if (other instanceof Function) {
+      return this.operatorFunc(other, "-");
+    }
     return new Number(-this.value);
   }
 
   override "*"(other: Value) {
-    if (other instanceof Number) return new Number(this.value * other.value);
-    if (other instanceof Function) return this.operatorFunc(other, "*");
+    if (other instanceof Number) {
+      return new Number(this.value * other.value);
+    }
+    if (other instanceof Function) {
+      return this.operatorFunc(other, "*");
+    }
     return this;
   }
 
@@ -42,20 +53,32 @@ export default class Number extends Value {
   }
 
   override "/"(other: Value) {
-    if (other instanceof Number) return new Number(this.value / other.value);
-    if (other instanceof Function) return this.operatorFunc(other, "/");
+    if (other instanceof Number) {
+      return new Number(this.value / other.value);
+    }
+    if (other instanceof Function) {
+      return this.operatorFunc(other, "/");
+    }
     return this;
   }
 
   override "%"(other: Value) {
-    if (other instanceof Number) return new Number(this.value % other.value);
-    if (other instanceof Function) return this.operatorFunc(other, "%");
+    if (other instanceof Number) {
+      return new Number(this.value % other.value);
+    }
+    if (other instanceof Function) {
+      return this.operatorFunc(other, "%");
+    }
     return this;
   }
 
   override "^"(other: Value) {
-    if (other instanceof Number) return new Number(this.value ** other.value);
-    if (other instanceof Function) return this.operatorFunc(other, "^");
+    if (other instanceof Number) {
+      return new Number(this.value ** other.value);
+    }
+    if (other instanceof Function) {
+      return this.operatorFunc(other, "^");
+    }
     return this;
   }
 

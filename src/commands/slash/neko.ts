@@ -1,6 +1,6 @@
+import command from "$lib/discord/commands/slash";
 import { incCount } from "$lib/users";
 import { EmbedBuilder } from "discord.js";
-import command from "$lib/discord/commands/slash";
 import { fetchRandom, type NB_CATEGORIES } from "nekos-best.js";
 
 const CATEGORIES: NB_CATEGORIES[] = [
@@ -48,7 +48,9 @@ export default command(
     const {
       results: [result],
     } = await fetchRandom(category);
-    if (!result) return i.editReply("No results found");
+    if (!result) {
+      return i.editReply("No results found");
+    }
 
     const {
       url,
@@ -65,8 +67,12 @@ export default command(
         text: "Powered by nekos.best",
         iconURL: "https://nekos.best/favicon.png",
       });
-    if (source_url) embed.setURL(source_url);
-    if (anime_name) embed.setTitle(anime_name);
+    if (source_url) {
+      embed.setURL(source_url);
+    }
+    if (anime_name) {
+      embed.setTitle(anime_name);
+    }
 
     await i.editReply({ embeds: [embed] });
     return incCount(i.user.id, "weeb");

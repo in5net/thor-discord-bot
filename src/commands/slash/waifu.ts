@@ -1,6 +1,6 @@
+import command from "$lib/discord/commands/slash";
 import { incCount } from "$lib/users";
 import { ChannelType, EmbedBuilder, type ColorResolvable } from "discord.js";
-import command from "$lib/discord/commands/slash";
 import got from "got";
 import { z } from "zod";
 
@@ -52,11 +52,12 @@ export default command(
         i.channel?.type === ChannelType.GuildAnnouncement ||
         i.channel?.type === ChannelType.GuildVoice) &&
       !i.channel.nsfw
-    )
+    ) {
       return i.reply({
         content: "This isn't a nsfw channel you cheeky boi",
         ephemeral: true,
       });
+    }
     await i.deferReply();
 
     const data = await got("https://api.waifu.im/search", {
@@ -66,7 +67,9 @@ export default command(
       },
     }).json();
     const [image] = dataSchema.parse(data).images;
-    if (!image) throw new Error("No waifu found");
+    if (!image) {
+      throw new Error("No waifu found");
+    }
 
     const embed = new EmbedBuilder()
       .setTitle(image.tags.map(t => t.name).join(", "))
@@ -79,11 +82,12 @@ export default command(
         iconURL: "https://waifu.im/favicon.ico",
       })
       .setTimestamp(new Date(image.uploaded_at));
-    if (image.source)
+    if (image.source) {
       embed.setAuthor({
         name: image.source,
         url: image.source,
       });
+    }
 
     await i.editReply({ embeds: [embed] });
     return incCount(i.user.id, "weeb");

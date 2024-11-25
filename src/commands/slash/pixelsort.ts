@@ -1,5 +1,5 @@
-import { AttachmentBuilder } from "discord.js";
 import command from "$lib/discord/commands/slash";
+import { AttachmentBuilder } from "discord.js";
 
 export default command(
   {
@@ -18,7 +18,9 @@ export default command(
       image?.url || i.user.displayAvatarURL({ extension: "png", size: 512 });
     const { loadImage, createCanvas } = await import("@napi-rs/canvas");
     const img = await loadImage(url).catch(() => null);
-    if (!img) return i.reply("Could not load image");
+    if (!img) {
+      return i.reply("Could not load image");
+    }
 
     const { width, height } = img;
     const canvas = createCanvas(width, height);

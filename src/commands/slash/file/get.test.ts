@@ -1,6 +1,6 @@
+import { getRandomFile } from "./shared";
 import assert from "node:assert";
 import test from "node:test";
-import { getRandomFile } from "./shared";
 
 await test("get random file", async () => {
   const file1 = await getRandomFile();

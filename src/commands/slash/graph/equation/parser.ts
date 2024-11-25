@@ -34,8 +34,9 @@ export default class Parser {
 
   expect(strs: string | string[]): never {
     let message: string;
-    if (typeof strs === "string") message = strs;
-    else
+    if (typeof strs === "string") {
+      message = strs;
+    } else {
       switch (strs.length) {
         case 1: {
           message = strs[0] || "";
@@ -52,6 +53,7 @@ export default class Parser {
           this.error(`Expected ${begin.join(", ")}, or ${strs.at(-1)}`);
         }
       }
+    }
 
     this.error(`Expected ${message}`);
   }
@@ -74,7 +76,9 @@ export default class Parser {
   }
 
   parse(): Node {
-    if (this.eof()) return [];
+    if (this.eof()) {
+      return [];
+    }
     return this.expr();
   }
 
@@ -163,13 +167,16 @@ export default class Parser {
     const atom = this.atom();
 
     if (this.token.is("grouping", "(")) {
-      if (!(atom instanceof IdentifierNode)) this.expect("identifier");
+      if (!(atom instanceof IdentifierNode)) {
+        this.expect("identifier");
+      }
 
       this.advance();
       const args: Node[] = [];
 
-      if (this.token.is("grouping", ")")) this.advance();
-      else {
+      if (this.token.is("grouping", ")")) {
+        this.advance();
+      } else {
         args.push(this.expr());
 
         while ((this.token as Token).is("operator", ",")) {
@@ -177,8 +184,9 @@ export default class Parser {
           args.push(this.expr());
         }
 
-        if (!(this.token as Token).is("grouping", ")"))
+        if (!(this.token as Token).is("grouping", ")")) {
           this.expect(["','", "')'"]);
+        }
         this.advance();
       }
 
@@ -204,31 +212,36 @@ export default class Parser {
 
       const expr = this.expr();
 
-      if (!this.token.is("grouping", ")")) this.expect("')'");
+      if (!this.token.is("grouping", ")")) {
+        this.expect("')'");
+      }
       this.advance();
 
       rtn = expr;
     } else if (token.is("grouping")) {
       const leftGroupingToken = token as Token<"grouping", LeftGrouping>;
-      if (!leftGroupingToken)
+      if (!leftGroupingToken) {
         this.expect(Object.keys(groupings).map(char => `'./${char}'`));
+      }
       this.advance();
 
       const expr = this.expr();
 
       const rightGrouping = groupings[leftGroupingToken.value];
-      if (!this.token.is("grouping", rightGrouping))
+      if (!this.token.is("grouping", rightGrouping)) {
         this.expect(`'./{rightGrouping}'`);
+      }
       const rightGroupingToken = this.token as Token<"grouping", RightGrouping>;
       this.advance();
 
       rtn = new GroupingNode(expr, [leftGroupingToken, rightGroupingToken]);
-    } else
+    } else {
       this.expect([
         "number",
         "identifier",
         ...Object.keys(groupings).map(char => `'./${char}'`),
       ]);
+    }
 
     return rtn;
   }
@@ -240,7 +253,9 @@ export default class Parser {
       operators.includes((this.token as Token<"operator", BinaryOp>).value)
     ) {
       const { token } = this;
-      if (token.is("operator", ":") && !this.nextToken.is("number")) break;
+      if (token.is("operator", ":") && !this.nextToken.is("number")) {
+        break;
+      }
       this.advance();
       result = new BinaryOpNode(
         result,

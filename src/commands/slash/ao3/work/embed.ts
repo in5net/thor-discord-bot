@@ -1,4 +1,3 @@
-import { env } from "node:process";
 import {
   categories,
   contentWarnings,
@@ -8,6 +7,7 @@ import {
   type Work,
 } from "../api";
 import { createEmbedBuilder } from "../embed";
+import { env } from "node:process";
 
 export function createWorkEmbedBuilder(
   {
@@ -34,28 +34,37 @@ export function createWorkEmbedBuilder(
     .setThumbnail(
       `https://${env.FILES_DOMAIN}/ao3/squares/${symbols.rating}_${symbols.category}_${symbols.warning}_${symbols.complete}.png`,
     );
-  if (rating) embed.addFields({ name: "Rating", value: ratings[rating] });
-  if (warnings.length)
+  if (rating) {
+    embed.addFields({ name: "Rating", value: ratings[rating] });
+  }
+  if (warnings.length) {
     embed.addFields({
       name: "Warnings",
       value: warnings.map(warning => contentWarnings[warning]).join(", "),
     });
-  if (workCategories.length)
+  }
+  if (workCategories.length) {
     embed.addFields({
       name: "Categories",
       value: workCategories.map(category => categories[category]).join(", "),
     });
-  if (relationships.length)
+  }
+  if (relationships.length) {
     embed.addFields({ name: "Relationships", value: relationships.join(", ") });
-  if (characters.length)
+  }
+  if (characters.length) {
     embed.addFields({ name: "Characters", value: characters.join(", ") });
-  if (tags.length) embed.addFields({ name: "Tags", value: tags.join(", ") });
+  }
+  if (tags.length) {
+    embed.addFields({ name: "Tags", value: tags.join(", ") });
+  }
   embed.addFields({ name: "Language", value: language });
-  if (series)
+  if (series) {
     embed.addFields({
       name: "Series",
       value: `[${series.title}](https://archiveofourown.org/series/${series.id})`,
     });
+  }
 
   embed.addFields({
     name: "Stats:",

@@ -1,5 +1,5 @@
-import { getVoice } from "$src/music/voice-manager";
 import command from "$lib/discord/commands/slash";
+import { getVoice } from "$src/music/voice-manager";
 
 export default command(
   {
@@ -8,7 +8,9 @@ export default command(
   },
   async i => {
     const { guildId } = i;
-    if (!guildId) return;
+    if (!guildId) {
+      return;
+    }
     const voice = getVoice(guildId);
 
     return i.reply(

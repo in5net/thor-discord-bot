@@ -56,8 +56,12 @@ part1 = {
       response(times, wrong) {
         const text =
           "you wait for a while, to steel yourself for the challenge that waits ahead";
-        if (!times) return { text, effect: "good" };
-        if (wrong) return { text, effect: "bad" };
+        if (!times) {
+          return { text, effect: "good" };
+        }
+        if (wrong) {
+          return { text, effect: "bad" };
+        }
         return { text, effect: "wrong" };
       },
       next: () => part1,
@@ -88,7 +92,9 @@ part2 = {
       response(_times, wrong) {
         const text =
           "The passage to the right abruptly stops, and you have to go back…";
-        if (wrong) return { text: `${text} This is tiring…`, effect: "bad" };
+        if (wrong) {
+          return { text: `${text} This is tiring…`, effect: "bad" };
+        }
         return { text, effect: "wrong" };
       },
       next: () => part2,

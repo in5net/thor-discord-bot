@@ -1,7 +1,7 @@
-import { map } from "@iz7n/std/math";
-import { AttachmentBuilder } from "discord.js";
 import command from "$lib/discord/commands/slash";
 import runner from "./equation";
+import { map } from "@iz7n/std/math";
+import { AttachmentBuilder } from "discord.js";
 
 const size = 512;
 const ticks = 20;

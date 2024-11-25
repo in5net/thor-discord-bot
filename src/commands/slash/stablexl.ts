@@ -27,7 +27,9 @@ export default command(
   },
   async (i, { prompt, num_outputs }) => {
     const BITS_PRICE = BITS_PER_IMAGE * num_outputs;
-    if (i.user.bot) return i.reply(`Bots cannot use ${NAME}`);
+    if (i.user.bot) {
+      return i.reply(`Bots cannot use ${NAME}`);
+    }
 
     const user = await db.query.users.findFirst({
       columns: {
@@ -37,10 +39,11 @@ export default command(
     });
     if (!user?.admin) {
       const bits = await getBits(i.user.id);
-      if (bits < BITS_PRICE)
+      if (bits < BITS_PRICE) {
         return i.reply(
           `You need ${BITS_PRICE - bits} more bits to use ${NAME}`,
         );
+      }
     }
 
     await i.reply(`**${prompt}**

@@ -1,11 +1,11 @@
-import { AttachmentBuilder } from "discord.js";
 import command from "$lib/discord/commands/slash";
+import { AttachmentBuilder } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";
 import { nanoid } from "nanoid";
 import { createReadStream } from "node:fs";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import path from "node:path";
 
 const size = 512;
 
@@ -39,7 +39,7 @@ export default command(
   async (i, { iterations, cell_size, fps }) => {
     await i.deferReply();
 
-    const temporaryDir = join(tmpdir(), nanoid());
+    const temporaryDir = path.join(tmpdir(), nanoid());
     await mkdir(temporaryDir);
 
     const { createCanvas } = await import("@napi-rs/canvas");
@@ -61,7 +61,9 @@ export default command(
         for (let index = 0; index < length; index++) {
           const x = i * cell_size;
           const y = index * cell_size;
-          if (grid[i]?.[index]) ctx.fillRect(x, y, cell_size, cell_size);
+          if (grid[i]?.[index]) {
+            ctx.fillRect(x, y, cell_size, cell_size);
+          }
         }
       }
 
@@ -74,20 +76,23 @@ export default command(
           const state = grid[x]?.[y] || false;
           const neighbors = countNeighbors(x, y);
 
-          if (!state && neighbors === 3) next[x]![y] = true;
-          else if (state && (neighbors < 2 || neighbors > 3))
+          if (!state && neighbors === 3) {
+            next[x]![y] = true;
+          } else if (state && (neighbors < 2 || neighbors > 3)) {
             next[x]![y] = false;
-          else next[x]![y] = state;
+          } else {
+            next[x]![y] = state;
+          }
         }
       }
 
       grid = next;
 
-      const path = join(
+      const framePath = path.join(
         temporaryDir,
         `frame${iter.toString().padStart(4, "0")}.png`,
       );
-      await writeFile(path, canvas.toBuffer("image/png"));
+      await writeFile(framePath, canvas.toBuffer("image/png"));
 
       await new Promise(resolve => setImmediate(resolve));
     }
@@ -98,7 +103,9 @@ export default command(
         for (let index = -1; index < 2; index++) {
           const col = (x + i + length) % length;
           const row = (y + index + length) % length;
-          if ((i || index) && grid[col]?.[row]) sum++;
+          if ((i || index) && grid[col]?.[row]) {
+            sum++;
+          }
         }
       }
 
@@ -116,9 +123,11 @@ export default command(
         .on("error", reject),
     );
 
-    const outputPath = join(temporaryDir, "output.mp4");
+    const outputPath = path.join(temporaryDir, "output.mp4");
     const stream = createReadStream(outputPath);
-    stream.once("close", async () => rm(temporaryDir, { recursive: true }));
+    stream.once("close", () => {
+      void rm(temporaryDir, { recursive: true });
+    });
 
     console.log("Done");
     return i.editReply({

@@ -1,8 +1,8 @@
-import { createEmbed } from "$lib/embed";
 import db, { contains, eq } from "$lib/database/drizzle";
 import { issues } from "$lib/database/schema";
-import { time } from "discord.js";
 import command from "$lib/discord/commands/slash";
+import { createEmbed } from "$lib/embed";
+import { time } from "discord.js";
 
 export default command(
   {
@@ -37,7 +37,9 @@ export default command(
       },
       where: eq(issues.id, id),
     });
-    if (!issue) return i.reply("Issue not found");
+    if (!issue) {
+      return i.reply("Issue not found");
+    }
     const { createdAt, name, type, desc, closedAt } = issue;
 
     const embed = createEmbed()
@@ -47,8 +49,8 @@ export default command(
         {
           name: "Type",
           value: `${
-            type === "Bug" ? "🐛"
-            : type === "Feature" ? "✨"
+            type === "bug" ? "🐛"
+            : type === "feature" ? "✨"
             : "🔧"
           } ${type}`,
         },
@@ -57,7 +59,9 @@ export default command(
           value: time(createdAt),
         },
       );
-    if (closedAt) embed.addFields({ name: "Closed", value: time(closedAt) });
+    if (closedAt) {
+      embed.addFields({ name: "Closed", value: time(closedAt) });
+    }
     return i.reply({
       embeds: [embed],
     });

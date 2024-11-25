@@ -1,7 +1,7 @@
-import { createEmbed } from "$lib/embed";
 import db, { eq } from "$lib/database/drizzle";
 import { issues, users } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
+import { createEmbed } from "$lib/embed";
 
 export default command(
   {
@@ -26,10 +26,11 @@ export default command(
     const userExists = !!(await db.query.users.findFirst({
       where: eq(users.id, i.user.id),
     }));
-    if (!userExists)
+    if (!userExists) {
       await db.insert(users).values({
         id: i.user.id,
       });
+    }
 
     const [{ id } = { id: "" }] = await db
       .insert(issues)

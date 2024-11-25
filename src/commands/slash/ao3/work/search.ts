@@ -1,3 +1,4 @@
+import command from "$lib/discord/commands/slash";
 import {
   getUser,
   searchCharacters,
@@ -13,7 +14,6 @@ import {
   searchWorks,
 } from "../api/work/search";
 import { createWorkEmbedBuilder } from "./embed";
-import command from "$lib/discord/commands/slash";
 
 export default command(
   {
@@ -148,8 +148,9 @@ export default command(
       order,
     });
 
-    if (works.length === 0)
+    if (works.length === 0) {
       return i.reply({ content: "No results found", ephemeral: true });
+    }
 
     const embeds = await Promise.all(
       works.slice(0, 5).map(async work => {

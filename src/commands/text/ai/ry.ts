@@ -1,8 +1,10 @@
 import db, { eq, gte, and, desc } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
-import { filter, openai } from "$lib/openai";
+import { filter } from "$lib/openai";
+import { openai } from "@ai-sdk/openai";
 import { ttlCache } from "@iz7n/std/fn";
+import { generateText } from "ai";
 import ms from "ms";
 import { readFile } from "node:fs/promises";
 import { env } from "node:process";
@@ -52,8 +54,10 @@ export default command(
       orderBy: desc(context.createdAt),
     });
 
-    const response = await openai.completions.create({
-      model: "gpt-3.5-turbo-instruct",
+    const result = await generateText({
+      model: openai("gpt-3.5-turbo-instruct", {
+        user: author.id,
+      }),
       prompt: `${await description()} Current time: ${new Date().toLocaleString()}
 
 ${previous
@@ -65,13 +69,13 @@ ${env.NAME}: ${a}`,
 You: ${prompt}
 ${env.NAME}:`,
       temperature: 0.9,
-      max_tokens: 1024,
-      frequency_penalty: 0.5,
-      presence_penalty: 0.5,
-      stop: ["You:"],
-      user: author.id,
+      maxTokens: 1024,
+      frequencyPenalty: 0.5,
+      presencePenalty: 0.5,
+      stopSequences: ["You:"],
     });
-    const reply = response.choices?.[0]?.text || "";
+
+    const reply = result.text;
     await message.channel.send(reply);
 
     const channelExists = await db.query.channels.findFirst({

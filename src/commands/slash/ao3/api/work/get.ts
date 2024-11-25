@@ -1,11 +1,13 @@
-import { load } from "cheerio";
 import ORIGIN from "../origin";
+import { load } from "cheerio";
 
 export const query = `${ORIGIN}/works/`;
 const ao3Regex = new RegExp(`${query}(\\d+)`);
 
 export function getWorkId(url: string): string {
-  if (!ao3Regex.test(url)) return "";
+  if (!ao3Regex.test(url)) {
+    return "";
+  }
   return url.replace(query, "").split(/[#/?]/)[0] || "";
 }
 

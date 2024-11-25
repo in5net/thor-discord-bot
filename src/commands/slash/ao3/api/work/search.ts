@@ -1,5 +1,3 @@
-import { objectKeys } from "@iz7n/std/object";
-import { load } from "cheerio";
 import ORIGIN from "../origin";
 import {
   contentWarnings,
@@ -9,6 +7,8 @@ import {
 } from "./get";
 import type languages from "./languages";
 import { type Language } from "./languages";
+import { objectKeys } from "@iz7n/std/object";
+import { load } from "cheerio";
 
 interface Work extends IWork {
   summary: string;
@@ -190,50 +190,87 @@ export async function searchWorks({
     readonly [key: keyof SearchParams, value: string | string[]]
   > = [];
 
-  if (query) searchParams.push(["work_search[query]", query]);
-  if (title) searchParams.push(["work_search[title]", title]);
-  if (author) searchParams.push(["work_search[creators]", author]);
-  if (date) searchParams.push(["work_search[revised_at]", date]);
-  if (complete)
+  if (query) {
+    searchParams.push(["work_search[query]", query]);
+  }
+  if (title) {
+    searchParams.push(["work_search[title]", title]);
+  }
+  if (author) {
+    searchParams.push(["work_search[creators]", author]);
+  }
+  if (date) {
+    searchParams.push(["work_search[revised_at]", date]);
+  }
+  if (complete) {
     searchParams.push(["work_search[complete]", complete ? "T" : "F"]);
-  if (crossovers)
+  }
+  if (crossovers) {
     searchParams.push(["work_search[crossover]", crossovers ? "T" : "F"]);
-  if (singleChapter)
+  }
+  if (singleChapter) {
     searchParams.push([
       "work_search[single_chapter]",
       singleChapter ? "1" : "0",
     ]);
-  if (words) searchParams.push(["work_search[word_count]", words.toString()]);
-  if (language) searchParams.push(["work_search[language_id]", language]);
-  if (fandoms) searchParams.push(["work_search[fandom_names]", fandoms]);
-  if (rating) searchParams.push(["include_work_search[rating_ids]", rating]);
-  if (warnings)
+  }
+  if (words) {
+    searchParams.push(["work_search[word_count]", words.toString()]);
+  }
+  if (language) {
+    searchParams.push(["work_search[language_id]", language]);
+  }
+  if (fandoms) {
+    searchParams.push(["work_search[fandom_names]", fandoms]);
+  }
+  if (rating) {
+    searchParams.push(["include_work_search[rating_ids]", rating]);
+  }
+  if (warnings) {
     searchParams.push(
       ...warnings.map(
         warning =>
           ["include_work_search[archive_warning_ids][]", warning] as const,
       ),
     );
-  if (categories)
+  }
+  if (categories) {
     searchParams.push(
       ...categories.map(
         category => ["include_work_search[category_ids][]", category] as const,
       ),
     );
-  if (characters)
+  }
+  if (characters) {
     searchParams.push(["work_search[character_names]", characters]);
-  if (relationships)
+  }
+  if (relationships) {
     searchParams.push(["work_search[relationship_names]", relationships]);
-  if (tags) searchParams.push(["work_search[freeform_names]", tags]);
-  if (hits) searchParams.push(["work_search[hits]", hits.toString()]);
-  if (kudos) searchParams.push(["work_search[kudos_count]", kudos.toString()]);
-  if (comments)
+  }
+  if (tags) {
+    searchParams.push(["work_search[freeform_names]", tags]);
+  }
+  if (hits) {
+    searchParams.push(["work_search[hits]", hits.toString()]);
+  }
+  if (kudos) {
+    searchParams.push(["work_search[kudos_count]", kudos.toString()]);
+  }
+  if (comments) {
     searchParams.push(["work_search[comments_count]", comments.toString()]);
-  if (bookmarks)
+  }
+  if (bookmarks) {
     searchParams.push(["work_search[bookmarks_count]", bookmarks.toString()]);
-  if (orderBy) searchParams.push(["work_search[sort_column]", orderBy]);
-  if (order) searchParams.push(["work_search[sort_direction]", order]);
-  if (page) searchParams.push(["page", page.toString()]);
+  }
+  if (orderBy) {
+    searchParams.push(["work_search[sort_column]", orderBy]);
+  }
+  if (order) {
+    searchParams.push(["work_search[sort_direction]", order]);
+  }
+  if (page) {
+    searchParams.push(["page", page.toString()]);
+  }
 
   for (const [key, value] of searchParams) {
     url.searchParams.append(key, value.toString());
@@ -354,7 +391,9 @@ export async function searchWorks({
         },
         symbols: { rating, category, warning, complete },
       };
-      if (rating !== "none") data.rating = rating;
+      if (rating !== "none") {
+        data.rating = rating;
+      }
       return data;
     })
     .get();

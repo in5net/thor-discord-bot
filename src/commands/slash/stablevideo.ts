@@ -32,7 +32,9 @@ export default command(
     },
   },
   async (i, { input_image, frames, fps }) => {
-    if (i.user.bot) return i.reply(`Bots cannot use ${NAME}`);
+    if (i.user.bot) {
+      return i.reply(`Bots cannot use ${NAME}`);
+    }
 
     const user = await db.query.users.findFirst({
       columns: {
@@ -42,14 +44,14 @@ export default command(
     });
     if (!user?.admin) {
       const bits = await getBits(i.user.id);
-      if (bits < BITS_PRICE)
+      if (bits < BITS_PRICE) {
         return i.reply(
           `You need ${BITS_PRICE - bits} more bits to use ${NAME}`,
         );
+      }
     }
 
-    await i.reply(`**${prompt}**
-Running ${NAME}...`);
+    await i.reply(`Running ${NAME}...`);
 
     const outputs = await replicate.run(
       "stability-ai/stable-video-diffusion:3f0457e4619daac51203dedb472816fd4af51f3149fa7a9e0b5ffcf1b8172438",

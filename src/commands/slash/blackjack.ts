@@ -1,3 +1,4 @@
+import command from "$lib/discord/commands/slash";
 import { sum } from "@iz7n/std/stats";
 import {
   ActionRowBuilder,
@@ -5,7 +6,6 @@ import {
   EmbedBuilder,
   StringSelectMenuBuilder,
 } from "discord.js";
-import command from "$lib/discord/commands/slash";
 
 const values = {
   // Spades
@@ -139,15 +139,13 @@ export default command(
     const deck = Object.keys(values) as Card[];
     const player: Card[] = [];
     const dealer: Card[] = [];
-    let playerScore = 0;
-    let dealerScore = 0;
 
     player.push(takeRandom(deck));
     dealer.push(takeRandom(deck));
     player.push(takeRandom(deck));
     dealer.push(takeRandom(deck));
-    playerScore = cards2Score(player);
-    dealerScore = cards2Score(dealer);
+    let playerScore = cards2Score(player);
+    let dealerScore = cards2Score(dealer);
 
     const embed = new EmbedBuilder()
       .setTitle("Blackjack")
@@ -194,7 +192,9 @@ export default command(
           time: 60_000,
         })
         .catch(() => null);
-      if (!int) return i.followUp("Blackjack ran out of time ⏱");
+      if (!int) {
+        return i.followUp("Blackjack ran out of time ⏱");
+      }
 
       await int.update({});
       const [action = ""] = int.values;
@@ -209,9 +209,13 @@ export default command(
         }
 
         break;
-      } else return i.followUp("Invalid action");
+      } else {
+        return i.followUp("Invalid action");
+      }
 
-      if (playerScore > threshold) break;
+      if (playerScore > threshold) {
+        break;
+      }
       if (dealerScore <= standScore) {
         dealer.push(takeRandom(deck));
         dealerScore = cards2Score(dealer);
@@ -229,11 +233,17 @@ export default command(
       },
     );
     let value = "";
-    if (playerScore > threshold) value = `You went over ${threshold}!`;
-    else if (dealerScore > threshold) value = `Dealer went over ${threshold}!`;
-    else if (playerScore === dealerScore) value = "It was a draw!";
-    else if (playerScore > dealerScore) value = "You won!";
-    else value = "You lost!";
+    if (playerScore > threshold) {
+      value = `You went over ${threshold}!`;
+    } else if (dealerScore > threshold) {
+      value = `Dealer went over ${threshold}!`;
+    } else if (playerScore === dealerScore) {
+      value = "It was a draw!";
+    } else if (playerScore > dealerScore) {
+      value = "You won!";
+    } else {
+      value = "You lost!";
+    }
     embed.addFields(
       { name: "Dealer score", value: dealerScore.toString() },
       {

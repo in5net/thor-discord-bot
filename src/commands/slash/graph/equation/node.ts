@@ -35,7 +35,9 @@ export class UnaryOpNode implements Node {
 
   toString(): string {
     const operatorString = this.operator.value;
-    if (this.postfix) return `(${this.node}${operatorString})`;
+    if (this.postfix) {
+      return `(${this.node}${operatorString})`;
+    }
     return `(${operatorString}${this.node})`;
   }
 }

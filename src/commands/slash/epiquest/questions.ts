@@ -1,6 +1,7 @@
-import { random } from "@iz7n/std/random";
 import items, { type Item } from "./items";
 import { type Response } from "./types";
+import { remove } from "@iz7n/std/array";
+import { choice, choices } from "@iz7n/std/random";
 
 interface Answer {
   text: string | (() => string);
@@ -237,12 +238,13 @@ const questions: Array<{
         text: "Use your trusty tool belt!",
         emoji: "🛠",
         response(inventory) {
-          if (inventory.length === 0)
+          const item = choice(inventory);
+          if (!item) {
             return {
               text: "The tool belt has nothing on it, so you just stand there…",
               effect: "bad",
             };
-          const item = random(inventory);
+          }
           const index = inventory.indexOf(item);
           inventory.splice(index, 1);
           return {
@@ -264,7 +266,7 @@ const questions: Array<{
         emoji: "⏱",
         response(inventory) {
           inventory.push("emotional baggage");
-          return `As soon as you start talking, the {item} tells you to remember {random}. The two of you have an emotional moment reminiscing about {random}. Afterwards, you go your separate ways, ${random(
+          return `As soon as you start talking, the {item} tells you to remember {random}. The two of you have an emotional moment reminiscing about {random}. Afterwards, you go your separate ways, ${choice(
             ["dreading", "looking foreward to", "ready for"],
           )} your next encounter. (You got emotional baggage)`;
         },
@@ -299,7 +301,7 @@ const questions: Array<{
       },
       {
         text: () =>
-          `You’ll never catch me coppers! I’m off to ${random([
+          `You’ll never catch me coppers! I’m off to ${choice([
             "Pennsylvania, where the going is great!",
             "Omaha, you won’t find me there!",
             "I’ll escape from you no matter the place!",
@@ -367,10 +369,7 @@ const questions: Array<{
         emoji: "🔫",
         response() {
           const letters = ["e", "r", "f"];
-          const choices = Array.from({ length: 3 })
-            .fill(0)
-            .map(() => random(letters));
-          return `Could be nothin’, but okay. N${choices} gun)`;
+          return `Could be nothin’, but okay. N${choices(letters, 3).join("")} gun)`;
         },
       },
       {
@@ -458,9 +457,8 @@ const questions: Array<{
         emoji: "🧪",
         response(inventory) {
           for (let i = 0; i < 2; i++) {
-            const item = random(inventory);
-            const index = inventory.indexOf(item);
-            inventory.splice(index, 1);
+            const item = choice(inventory);
+            remove(inventory, item);
           }
 
           return "Well, then you don’t deserve THESE!!";
@@ -470,12 +468,12 @@ const questions: Array<{
         text: name,
         emoji,
         response(inventory: string[], item: Item) {
-          if (name === item.name)
+          if (name === item.name) {
             return "You have the memory of a goodfish! Congrats!";
+          }
           for (let i = 0; i < 2; i++) {
-            const item = random(inventory);
-            const index = inventory.indexOf(item);
-            inventory.splice(index, 1);
+            const item = choice(inventory);
+            remove(inventory, item);
           }
 
           return "Well, then you don’t deserve THESE!!";
@@ -485,9 +483,8 @@ const questions: Array<{
         text: "No….",
         emoji: "❌",
         response(inventory) {
-          const item = random(inventory);
-          const index = inventory.indexOf(item);
-          inventory.splice(index, 1);
+          const item = choice(inventory);
+          remove(inventory, item);
           return "Well, at least you’re honest.";
         },
       },

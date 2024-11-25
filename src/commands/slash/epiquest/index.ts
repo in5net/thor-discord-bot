@@ -1,4 +1,9 @@
+import command from "$lib/discord/commands/slash";
+import logger from "$lib/logger";
 import { getText } from "$lib/y7";
+import items from "./items";
+import { part, type Part } from "./labyrinth";
+import questions from "./questions";
 import { choice } from "@iz7n/std/random";
 import {
   ActionRowBuilder,
@@ -6,13 +11,8 @@ import {
   EmbedBuilder,
   StringSelectMenuBuilder,
 } from "discord.js";
-import command from "$lib/discord/commands/slash";
-import logger from "$lib/logger";
 import ms from "ms";
 import { env } from "node:process";
-import items from "./items";
-import { part, type Part } from "./labyrinth";
-import questions from "./questions";
 
 export default command(
   {
@@ -42,8 +42,9 @@ export default command(
         )
         .setDescription(`${i.user.username}'s epiquest`)
         .setColor(env.COLOR);
-      if (inventory.length)
+      if (inventory.length) {
         embed.addFields({ name: "Inventory", value: inventory.join("\n") });
+      }
 
       const row = new ActionRowBuilder().addComponents(
         new StringSelectMenuBuilder()
@@ -65,7 +66,9 @@ export default command(
           time: ms("1 min"),
         })
         .catch(() => null);
-      if (!int) return i.followUp("Epiquest ran out of time ⏱");
+      if (!int) {
+        return i.followUp("Epiquest ran out of time ⏱");
+      }
 
       await int.update({});
 
@@ -73,7 +76,9 @@ export default command(
         answers.find(answer => answer.emoji === int.values[0]) || answers[0];
       if (answer) {
         const { response, effect, end } = answer;
-        if (end) return i.followUp("Epiquest is over!");
+        if (end) {
+          return i.followUp("Epiquest is over!");
+        }
 
         switch (effect) {
           case "good": {
@@ -88,12 +93,14 @@ export default command(
 
         if (response) {
           let text: string;
-          if (typeof response === "string") text = response;
-          else {
+          if (typeof response === "string") {
+            text = response;
+          } else {
             const result = response(inventory, item);
-            if (typeof result === "string") text = result;
-            else {
-              text = result.text;
+            if (typeof result === "string") {
+              text = result;
+            } else {
+              ({ text } = result);
               switch (result.effect) {
                 case "good": {
                   good++;
@@ -126,16 +133,15 @@ export default command(
     const timesMap = new WeakMap<Part, Record<string, number>>();
     logger.info("labby time!");
 
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       const { text, choices } = currentPart;
 
       const embed = new EmbedBuilder()
         .setTitle(stringReplace(text))
-        .setDescription(`${i.user.username}'s epiquest`)
-        .setColor(COLOR);
-      if (inventory.length)
+        .setDescription(`${i.user.username}'s epiquest`);
+      if (inventory.length) {
         embed.addFields({ name: "Inventory", value: inventory.join("\n") });
+      }
 
       const row = new ActionRowBuilder().addComponents(
         new StringSelectMenuBuilder()
@@ -157,7 +163,9 @@ export default command(
           time: ms("1 min"),
         })
         .catch(() => null);
-      if (!int) return i.followUp("Epiquest ran out of time ⏱");
+      if (!int) {
+        return i.followUp("Epiquest ran out of time ⏱");
+      }
 
       await int.update({});
 
@@ -189,18 +197,22 @@ export default command(
 
           case "wrong": {
             wrong++;
-            if (wrong >= 3) bad++;
+            if (wrong >= 3) {
+              bad++;
+            }
           }
         }
 
         if (response) {
           let text: string;
-          if (typeof response === "string") text = response;
-          else {
+          if (typeof response === "string") {
+            text = response;
+          } else {
             const result = response(t, wrong >= 3);
-            if (typeof result === "string") text = result;
-            else {
-              text = result.text;
+            if (typeof result === "string") {
+              text = result;
+            } else {
+              ({ text } = result);
               switch (result.effect) {
                 case "good": {
                   good++;
@@ -214,7 +226,9 @@ export default command(
 
                 case "wrong": {
                   wrong++;
-                  if (wrong >= 3) bad++;
+                  if (wrong >= 3) {
+                    bad++;
+                  }
                 }
               }
             }
@@ -232,8 +246,11 @@ export default command(
         }
 
         const nextPart = choice.next?.(t);
-        if (nextPart) currentPart = nextPart;
-        else break;
+        if (nextPart) {
+          currentPart = nextPart;
+        } else {
+          break;
+        }
       }
     }
 

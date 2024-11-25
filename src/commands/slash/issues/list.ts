@@ -1,7 +1,7 @@
-import { createEmbed } from "$lib/embed";
 import db, { and, eq, isNotNull } from "$lib/database/drizzle";
 import { issues } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
+import { createEmbed } from "$lib/embed";
 
 export default command(
   {

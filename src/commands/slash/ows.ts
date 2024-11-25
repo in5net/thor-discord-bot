@@ -9,7 +9,9 @@ export default command(
   },
   async i => {
     const { guildId } = i;
-    if (!guildId) return;
+    if (!guildId) {
+      return;
+    }
     await db.insert(oneWordStory).values({
       guildId,
     });

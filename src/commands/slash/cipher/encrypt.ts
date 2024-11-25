@@ -26,7 +26,7 @@ const tildeCode = "~".codePointAt(0) || 0;
 const codeRange = tildeCode - spaceCode;
 
 export function encrypt(message: string, offset: number) {
-  const codes = message.split("").map((char, i) => {
+  const codes = [...message].map((char, i) => {
     const code = char.codePointAt(0) || 0;
     const codeFromSpace = code - spaceCode;
     const encryptedCode = codeFromSpace + offset + (offset > 0 ? i : -i);

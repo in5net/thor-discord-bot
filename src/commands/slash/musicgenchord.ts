@@ -37,7 +37,9 @@ export default command(
   },
   async (i, { prompt, text_chords, bpm, time_sig }) => {
     const BITS_PRICE = COST;
-    if (i.user.bot) return i.reply(`Bots cannot use ${NAME}`);
+    if (i.user.bot) {
+      return i.reply(`Bots cannot use ${NAME}`);
+    }
 
     if (env.NODE_ENV === "production") {
       const user = await db.query.users.findFirst({
@@ -48,10 +50,11 @@ export default command(
       });
       if (!user?.admin) {
         const bits = await getBits(i.user.id);
-        if (bits < BITS_PRICE)
+        if (bits < BITS_PRICE) {
           return i.reply(
             `You need ${BITS_PRICE - bits} more bits to use ${NAME}`,
           );
+        }
       }
     }
 
@@ -78,13 +81,14 @@ export default command(
           classifier_free_guidance: 3,
         },
         wait: {
+          mode: "poll",
           interval: 5000,
         },
       },
-      async prediction => {
+      prediction => {
         switch (prediction.status) {
           case "starting": {
-            await i.editReply({
+            void i.editReply({
               content: `${NAME}
 **${prompt}**
 Starting...`,
@@ -93,7 +97,7 @@ Starting...`,
           }
 
           case "processing": {
-            await i.editReply({
+            void i.editReply({
               content: `${NAME}
 **${prompt}**
 Processing... ${prediction.logs
@@ -114,7 +118,8 @@ Processing... ${prediction.logs
       files: [url],
     });
 
-    if (env.NODE_ENV === "production")
+    if (env.NODE_ENV === "production") {
       await subtractBits(i.user.id, BITS_PRICE);
+    }
   },
 );

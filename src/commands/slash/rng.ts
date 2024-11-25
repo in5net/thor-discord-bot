@@ -18,9 +18,13 @@ export default command(
   },
   async (i, { min, max }) => {
     let n: number;
-    if (min === undefined) n = Math.floor(Math.random() * 10) + 1;
-    else if (max === undefined) n = Math.floor(Math.random() * min) + 1;
-    else n = Math.floor(Math.random() * (max - min + 1)) + min;
+    if (min === undefined) {
+      n = Math.floor(Math.random() * 10) + 1;
+    } else if (max === undefined) {
+      n = Math.floor(Math.random() * min) + 1;
+    } else {
+      n = Math.floor(Math.random() * (max - min + 1)) + min;
+    }
     return i.reply(n.toString());
   },
 );

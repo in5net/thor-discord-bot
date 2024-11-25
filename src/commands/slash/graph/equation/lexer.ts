@@ -5,10 +5,10 @@ import Token, {
   type TokenMap,
 } from "./token";
 
-const WHITESPACE = /[ \t\r]/;
+const WHITESPACE = /[\t\r ]/;
 const DIGITS = /\d/;
 // Letters, underscore, $ & greek letters
-const LETTERS = /[a-zA-Z_$\u0391-\u03C9∞]/;
+const LETTERS = /[$A-Z_a-z\u0391-\u03C9∞]/;
 const SUPERSCRIPT =
   "ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖʳˢᵗᵘᵛʷˣʸᶻᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᴿˢᵀᵁⱽᵂˣʸᶻ⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾";
 const NORMALSCRIPT =
@@ -55,15 +55,22 @@ export default class Lexer {
   nextToken(): Token {
     while (!this.eof()) {
       const { char } = this;
-      if (WHITESPACE.test(char)) this.advance();
-      else if (DIGITS.test(char)) return this.number();
-      else if (SUPERSCRIPT.includes(char)) return this.superscript();
-      else if (LETTERS.test(char)) return this.word();
-      else if (operators.includes(char as Operator)) return this.operator();
-      else if (Object.entries(groupings).flat().includes(char)) {
+      if (WHITESPACE.test(char)) {
+        this.advance();
+      } else if (DIGITS.test(char)) {
+        return this.number();
+      } else if (SUPERSCRIPT.includes(char)) {
+        return this.superscript();
+      } else if (LETTERS.test(char)) {
+        return this.word();
+      } else if (operators.includes(char as Operator)) {
+        return this.operator();
+      } else if (Object.entries(groupings).flat().includes(char)) {
         this.advance();
         return new Token("grouping", char);
-      } else this.error(`Illegal character './{char}'`);
+      } else {
+        this.error(`Illegal character './{char}'`);
+      }
     }
 
     return Token.EOF;
@@ -90,37 +97,41 @@ export default class Lexer {
   }
 
   number(): Token<"number"> {
-    let string_ = this.char;
+    let str = this.char;
     let decimals = 0;
     this.advance();
 
     while (DIGITS.test(this.char) || [".", "_"].includes(this.char)) {
-      if (this.char === "_") continue;
-      if (this.char === "." && ++decimals > 1) break;
+      if (this.char === "_") {
+        continue;
+      }
+      if (this.char === "." && ++decimals > 1) {
+        break;
+      }
 
-      string_ += this.char;
+      str += this.char;
       this.advance();
     }
 
-    return new Token("number", Number.parseFloat(string_));
+    return new Token("number", Number.parseFloat(str));
   }
 
   word(): Token<"identifier"> {
-    let string_ = this.char;
+    let str = this.char;
     this.advance();
 
     while ([LETTERS, DIGITS].some(regex => regex.test(this.char))) {
-      string_ += this.char;
+      str += this.char;
       this.advance();
     }
 
-    return new Token("identifier", string_);
+    return new Token("identifier", str);
   }
 
   operator(): Token<"operator"> {
-    const string_ = this.char;
+    const str = this.char;
     this.advance();
 
-    return new Token("operator", string_ as Operator);
+    return new Token("operator", str as Operator);
   }
 }

@@ -1,3 +1,8 @@
+import Interpreter from "./interpreter";
+import Lexer from "./lexer";
+import Parser from "./parser";
+import Scope from "./scope";
+import { Function, Number } from "./values";
 import {
   acot,
   acoth,
@@ -12,11 +17,6 @@ import {
   sec,
   sech,
 } from "@iz7n/std/math";
-import Interpreter from "./interpreter";
-import Lexer from "./lexer";
-import Parser from "./parser";
-import Scope from "./scope";
-import { Function, Number } from "./values";
 
 export default function runner(source: string): (x: number) => number {
   const lexer = new Lexer(source);
@@ -73,7 +73,9 @@ export default function runner(source: string): (x: number) => number {
   return (x: number) => {
     scope.set("x", new Number(x));
     const value = interpreter.visit(ast, scope);
-    if (!(value instanceof Number)) return globalThis.Number.NaN;
+    if (!(value instanceof Number)) {
+      return globalThis.Number.NaN;
+    }
     return value.value;
   };
 }

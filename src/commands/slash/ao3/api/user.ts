@@ -1,11 +1,13 @@
-import { load } from "cheerio";
 import ORIGIN from "./origin";
+import { load } from "cheerio";
 
 const query = `${ORIGIN}/users/`;
 const ao3Regex = new RegExp(`${query}(.+)`);
 
 export function getNameFromURL(url: string): string {
-  if (!ao3Regex.test(url)) return "";
+  if (!ao3Regex.test(url)) {
+    return "";
+  }
   return url.replace(query, "").split(/[#/?]/)[0] || "";
 }
 
@@ -22,7 +24,9 @@ export async function getUser(name: string): Promise<User> {
   const $ = load(html);
 
   let iconURL = $("img.icon").attr("src") || "";
-  if (!iconURL.startsWith("http")) iconURL = `${ORIGIN}${iconURL}`;
+  if (!iconURL.startsWith("http")) {
+    iconURL = `${ORIGIN}${iconURL}`;
+  }
 
   return {
     name,

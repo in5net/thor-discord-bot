@@ -1,3 +1,4 @@
+import command from "$lib/discord/commands/slash";
 import { swap } from "@iz7n/std/array";
 import { sleep } from "@iz7n/std/async";
 import { map } from "@iz7n/std/math";
@@ -5,13 +6,12 @@ import { objectKeys } from "@iz7n/std/object";
 import { randomInt } from "@iz7n/std/random";
 import { max } from "@iz7n/std/stats";
 import { AttachmentBuilder } from "discord.js";
-import command from "$lib/discord/commands/slash";
 import ffmpeg from "fluent-ffmpeg";
 import { nanoid } from "nanoid";
 import { createReadStream } from "node:fs";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import path from "node:path";
 
 const size = 512;
 const algorithms = {
@@ -73,10 +73,12 @@ export default command(
     if (
       ["bubble", "cocktail", "cycle", "selection"].includes(algorithm) &&
       length > 50
-    )
+    ) {
       return i.reply("This algorithm is very slow for large arrays 💀");
-    if (["gnome", "insertion"].includes(algorithm) && length > 200)
+    }
+    if (["gnome", "insertion"].includes(algorithm) && length > 200) {
       return i.reply("This algorithm is kinda slow for large arrays 💀");
+    }
     await i.deferReply();
     let active: number[] = [];
     let index = 0;
@@ -88,7 +90,7 @@ export default command(
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, size, size);
 
-    const temporaryDir = join(tmpdir(), nanoid());
+    const temporaryDir = path.join(tmpdir(), nanoid());
     await mkdir(temporaryDir);
 
     const randomNumberArray = Array.from<number>({ length })
@@ -96,7 +98,9 @@ export default command(
       .map((_, i) => i + 1);
     const m = max(randomNumberArray);
 
-    if (show_shuffle) await render();
+    if (show_shuffle) {
+      await render();
+    }
     for (const [i, j] of shuffle(randomNumberArray)) {
       if (show_shuffle) {
         active = [i, j];
@@ -145,11 +149,11 @@ export default command(
         ctx.fillRect(x, y, w, h);
       }
 
-      const path = join(
+      const framePath = path.join(
         temporaryDir,
         `frame${(index++).toString().padStart(4, "0")}.png`,
       );
-      await writeFile(path, await canvas.encode("png"));
+      await writeFile(framePath, await canvas.encode("png"));
     }
 
     const name = `${algorithm}_sort_${length}.mp4`;
@@ -164,9 +168,11 @@ export default command(
         .on("error", reject),
     );
 
-    const outputPath = join(temporaryDir, name);
+    const outputPath = path.join(temporaryDir, name);
     const stream = createReadStream(outputPath);
-    stream.once("close", async () => rm(temporaryDir, { recursive: true }));
+    stream.once("close", () => {
+      void rm(temporaryDir, { recursive: true });
+    });
 
     return i.editReply({
       files: [new AttachmentBuilder(stream, { name })],
@@ -193,7 +199,9 @@ function* bubble<T>(
   const { length } = array;
   for (let i = 0; i < length; i++) {
     for (let j = 0; j < length - 1 - i; j++) {
-      if (compare(array[j]!, array[j + 1]!) > 0) swap(array, j, j + 1);
+      if (compare(array[j]!, array[j + 1]!) > 0) {
+        swap(array, j, j + 1);
+      }
       yield [j, j + 1];
     }
   }
@@ -208,13 +216,17 @@ function* cocktail<T>(
   let end = length - 1;
   while (start < end) {
     for (let i = start; i < end; i++) {
-      if (compare(array[i]!, array[i + 1]!) > 0) swap(array, i, i + 1);
+      if (compare(array[i]!, array[i + 1]!) > 0) {
+        swap(array, i, i + 1);
+      }
       yield [i, i + 1];
     }
 
     end--;
     for (let i = end; i > start; i--) {
-      if (compare(array[i]!, array[i - 1]!) < 0) swap(array, i, i - 1);
+      if (compare(array[i]!, array[i - 1]!) < 0) {
+        swap(array, i, i - 1);
+      }
       yield [i, i - 1];
     }
 
@@ -230,11 +242,15 @@ function* selection<T>(
   for (let i = 0; i < length; i++) {
     let min = i;
     for (let j = i + 1; j < length; j++) {
-      if (compare(array[j]!, array[min]!) < 0) min = j;
+      if (compare(array[j]!, array[min]!) < 0) {
+        min = j;
+      }
       yield [j];
     }
 
-    if (min !== i) swap(array, i, min);
+    if (min !== i) {
+      swap(array, i, min);
+    }
     yield [i, min];
   }
 }
@@ -260,14 +276,22 @@ function* quick<T>(
 ): SortingGenerator {
   const { length } = array;
   function* sort(left: number, right: number): SortingGenerator {
-    if (left >= right) return;
+    if (left >= right) {
+      return;
+    }
     const pivot = array[left];
     let i = left + 1;
     let j = right;
     while (i <= j) {
-      while (i <= right && compare(array[i]!, pivot!) <= 0) i++;
-      while (j > left && compare(array[j]!, pivot!) > 0) j--;
-      if (i < j) swap(array, i, j);
+      while (i <= right && compare(array[i]!, pivot!) <= 0) {
+        i++;
+      }
+      while (j > left && compare(array[j]!, pivot!) > 0) {
+        j--;
+      }
+      if (i < j) {
+        swap(array, i, j);
+      }
       yield [left, i, j];
     }
 
@@ -305,7 +329,9 @@ function* merge<T>(
 ): SortingGenerator {
   const { length } = array;
   function* mergeSort(left: number, right: number): SortingGenerator {
-    if (left >= right) return;
+    if (left >= right) {
+      return;
+    }
     const mid = Math.floor((left + right) / 2);
     yield* mergeSort(left, mid);
     yield* mergeSort(mid + 1, right);
@@ -358,10 +384,12 @@ function* heap<T>(
     const left = 2 * i + 1;
     const right = 2 * i + 2;
     let largest = i;
-    if (left < length && compare(array[left]!, array[largest]!) > 0)
+    if (left < length && compare(array[left]!, array[largest]!) > 0) {
       largest = left;
-    if (right < length && compare(array[right]!, array[largest]!) > 0)
+    }
+    if (right < length && compare(array[right]!, array[largest]!) > 0) {
       largest = right;
+    }
     if (largest !== i) {
       swap(array, i, largest);
       yield [i, largest];
@@ -407,9 +435,12 @@ function* gnome<T>(
   const { length } = array;
   let i = 0;
   while (i < length) {
-    if (!i) i++;
-    if (compare(array[i]!, array[i - 1]!) > 0) i++;
-    else {
+    if (!i) {
+      i++;
+    }
+    if (compare(array[i]!, array[i - 1]!) > 0) {
+      i++;
+    } else {
       swap(array, i, i - 1);
       yield [i, i - 1];
       i--;
@@ -427,24 +458,34 @@ function* cycle<T>(
 
     let pos = start;
     for (let i = start + 1; i < length; i++) {
-      if (compare(array[i]!, item) < 0) pos++;
+      if (compare(array[i]!, item) < 0) {
+        pos++;
+      }
       yield [start, i];
     }
 
-    if (pos === start) continue;
+    if (pos === start) {
+      continue;
+    }
 
-    while (item === array[pos]) pos++;
+    while (item === array[pos]) {
+      pos++;
+    }
     [array[pos], item] = [item, array[pos]!];
     yield [start, pos];
 
     while (pos !== start) {
       pos = start;
       for (let i = start + 1; i < length; i++) {
-        if (compare(array[i]!, item) < 0) pos++;
+        if (compare(array[i]!, item) < 0) {
+          pos++;
+        }
         yield [start, i];
       }
 
-      while (item === array[pos]) pos++;
+      while (item === array[pos]) {
+        pos++;
+      }
       [array[pos], item] = [item, array[pos]!];
       yield [start, pos];
     }

@@ -1,7 +1,7 @@
-import { memo } from "@iz7n/std/fn";
-import { AttachmentBuilder } from "discord.js";
 import command from "$lib/discord/commands/slash";
 import logger from "$lib/logger";
+import { memo } from "@iz7n/std/fn";
+import { AttachmentBuilder } from "discord.js";
 
 const font = "Impact";
 const registerFont = memo(async () => {

@@ -37,7 +37,7 @@ export default command(
     let width: number;
     let height: number;
     if (image) {
-      url = image.url;
+      ({ url } = image);
       width = image.width || 0;
       height = image.height || 0;
       if (

@@ -1,7 +1,7 @@
-import { createEmbed } from "$lib/embed";
 import db, { and, contains, eq } from "$lib/database/drizzle";
 import { issues } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
+import { createEmbed } from "$lib/embed";
 import { env } from "node:process";
 
 export default command(
@@ -49,7 +49,9 @@ export default command(
       },
       where: eq(issues.id, issue),
     });
-    if (!result) return i.reply("Issue not found");
+    if (!result) {
+      return i.reply("Issue not found");
+    }
 
     await db
       .update(issues)

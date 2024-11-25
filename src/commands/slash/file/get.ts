@@ -1,5 +1,5 @@
-import { getRandomFile, sendFile, types } from "./shared";
 import command from "$lib/discord/commands/slash";
+import { getRandomFile, sendFile, types } from "./shared";
 import { env } from "node:process";
 
 export default command(
@@ -20,15 +20,18 @@ export default command(
     },
   },
   async (i, { type, googas }) => {
-    if (googas)
+    if (googas) {
       return i.reply(
         ["googas.mp4", "gradi.png"]
           .map(name => `https://${env.FILES_DOMAIN}/discord/${name}`)
           .join(" "),
       );
+    }
 
     const file = await getRandomFile(type);
-    if (!file) return i.reply("No file found");
+    if (!file) {
+      return i.reply("No file found");
+    }
     return sendFile(i, file);
   },
 );

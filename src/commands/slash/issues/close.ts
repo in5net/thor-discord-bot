@@ -1,7 +1,7 @@
-import { createEmbed } from "$lib/embed";
 import db, { and, contains, eq, isNull } from "$lib/database/drizzle";
 import { issues } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
+import { createEmbed } from "$lib/embed";
 import { env } from "node:process";
 
 export default command(
@@ -32,8 +32,9 @@ export default command(
     },
   },
   async (i, { issue, reason }) => {
-    if (i.user.id !== env.OWNER_ID)
+    if (i.user.id !== env.OWNER_ID) {
       return i.reply("Only my owner can update issues");
+    }
 
     const result = await db.query.issues.findFirst({
       columns: {
@@ -41,7 +42,9 @@ export default command(
       },
       where: eq(issues.id, issue),
     });
-    if (!result) return i.reply("Issue not found");
+    if (!result) {
+      return i.reply("Issue not found");
+    }
 
     await db
       .update(issues)

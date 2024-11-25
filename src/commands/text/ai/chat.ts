@@ -1,10 +1,11 @@
 import db, { and, desc, eq, gte } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
-import { filter, openai } from "$lib/openai";
+import { filter } from "$lib/openai";
+import { openai } from "@ai-sdk/openai";
 import { throttle } from "@iz7n/std/async";
 import { ttlCache } from "@iz7n/std/fn";
-import { OpenAIStream as openAIStream } from "ai";
+import { streamText } from "ai";
 import { type Message } from "discord.js";
 import ms from "ms";
 import { readFile } from "node:fs/promises";
@@ -65,16 +66,24 @@ export default command(
       orderBy: desc(context.createdAt),
     });
 
-    const stream = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      stream: true,
-      max_tokens: 1024,
-      user: author.id,
+    let reply = "";
+    let responseMessage: Message | undefined;
+    const send = throttle(async () => {
+      if (reply) {
+        if (responseMessage) {
+          await responseMessage.edit(reply);
+        } else {
+          responseMessage = await channel.send(reply);
+        }
+      }
+    }, 500);
+    const result = streamText({
+      model: openai.chat("gpt-3.5-turbo-0125", {
+        user: author.id,
+      }),
+      maxTokens: 1024,
+      system: `${await system()} Current date: ${new Date().toDateString()}`,
       messages: [
-        {
-          role: "system",
-          content: `${await system()} Current date: ${new Date().toDateString()}`,
-        },
         {
           role: "assistant",
           content: await description(),
@@ -89,24 +98,10 @@ export default command(
         { role: "user", content: prompt },
       ],
     });
-
-    let reply = "";
-    let responseMessage: Message | undefined;
-    const send = throttle(async () => {
-      if (reply) {
-        if (responseMessage) {
-          await responseMessage.edit(reply);
-        } else {
-          responseMessage = await channel.send(reply);
-        }
-      }
-    }, 500);
-    openAIStream(stream, {
-      async onToken(token) {
-        reply += token;
-        send();
-      },
-    });
+    for await (const textPart of result.textStream) {
+      reply += textPart;
+      send();
+    }
 
     const channelExists = await db.query.channels.findFirst({
       columns: {

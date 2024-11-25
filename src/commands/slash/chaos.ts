@@ -1,7 +1,7 @@
+import command from "$lib/discord/commands/slash";
 import { Vec2, vec2 } from "@iz7n/std/math";
 import { choice } from "@iz7n/std/random";
 import { AttachmentBuilder } from "discord.js";
-import command from "$lib/discord/commands/slash";
 
 const size = 1024;
 const r = size / 2;

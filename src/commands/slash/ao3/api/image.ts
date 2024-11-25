@@ -1,5 +1,5 @@
-import { type Image } from "@napi-rs/canvas";
 import { type Work, symbolsOrigin } from "./work";
+import { type Image } from "@napi-rs/canvas";
 
 const imageCache = new Map<string, Image>();
 

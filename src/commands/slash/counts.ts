@@ -1,6 +1,6 @@
+import command from "$lib/discord/commands/slash";
 import { getUser } from "$lib/users";
 import { EmbedBuilder } from "discord.js";
-import command from "$lib/discord/commands/slash";
 
 export default command(
   {
@@ -16,14 +16,16 @@ export default command(
   async (i, { user = i.user }) => {
     const data = await getUser(user.id);
     const embed = new EmbedBuilder().setTitle(`${user.username}'s counts`);
-    if (data?.counts)
+    if (data?.counts) {
       embed.addFields(
         ...Object.entries(data.counts).map(([name, count]) => ({
           name,
           value: `${count}`,
         })),
       );
-    else embed.setDescription("No counts found");
+    } else {
+      embed.setDescription("No counts found");
+    }
     return i.reply({ embeds: [embed], ephemeral: true });
   },
 );

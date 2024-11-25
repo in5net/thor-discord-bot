@@ -1,6 +1,6 @@
+import command from "$lib/discord/commands/slash";
 import GL from "$lib/gl";
 import { AttachmentBuilder } from "discord.js";
-import command from "$lib/discord/commands/slash";
 import glsl from "glslify";
 
 const size = 512;

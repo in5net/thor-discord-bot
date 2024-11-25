@@ -1,16 +1,16 @@
 import { getBits, subtractBits } from "$lib/ai/shared";
-import { openai } from "$lib/openai";
 import db, { eq } from "$lib/database/drizzle";
 import { users } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
+import { openai } from "$lib/openai";
+import { BITS_PRICE } from "./shared";
 import got from "got";
 import { nanoid } from "nanoid";
 import { createReadStream, createWriteStream } from "node:fs";
 import { mkdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import path from "node:path";
 import { pipeline } from "node:stream/promises";
-import { BITS_PRICE } from "./shared";
 
 export default command(
   {
@@ -30,7 +30,9 @@ export default command(
     },
   },
   async (i, { image, n }) => {
-    if (i.user.bot) return i.reply("Bots cannot use DALL·E 2");
+    if (i.user.bot) {
+      return i.reply("Bots cannot use DALL·E 2");
+    }
     const cost = BITS_PRICE * n;
 
     const user = await db.query.users.findFirst({
@@ -41,23 +43,25 @@ export default command(
     });
     if (!user?.admin) {
       const bits = await getBits(i.user.id);
-      if (bits < cost)
+      if (bits < cost) {
         return i.reply(`You need ${cost - bits} more bits to use DALL·E 2`);
+      }
     }
 
     if (
       image.contentType !== "image/png" ||
       image.size > 1024 * 1024 * 4 ||
       image.width !== image.height
-    )
+    ) {
       return i.reply("Image must be a PNG, under 4MB, and square");
+    }
     await i.deferReply();
 
     const request = got.stream(image.proxyURL);
 
-    const temporaryDir = join(tmpdir(), nanoid());
+    const temporaryDir = path.join(tmpdir(), nanoid());
     await mkdir(temporaryDir);
-    const filePath = join(temporaryDir, "input.png");
+    const filePath = path.join(temporaryDir, "input.png");
     await pipeline(request, createWriteStream(filePath));
 
     const { data } = await openai.images.createVariation({

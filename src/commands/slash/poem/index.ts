@@ -1,11 +1,11 @@
+import command from "$lib/discord/commands/slash";
 import { parse } from "$lib/rcpt";
+import { randomPerson } from "./person";
 import { choice, randomInt } from "@iz7n/std/random";
 import { capitalize } from "@iz7n/std/string";
-import command from "$lib/discord/commands/slash";
 import { readdirSync } from "node:fs";
 import { readFile } from "node:fs/promises";
-import { join } from "node:path";
-import { randomPerson } from "./person";
+import path from "node:path";
 
 const themesPath = new URL("../../../../assets/poem/themes", import.meta.url)
   .pathname;
@@ -34,7 +34,7 @@ export default command(
     const poemSource = await readFile(poemPath, "utf8");
     const poemSections = parse(poemSource);
 
-    const themePath = join(themesPath, `${theme}.rcpt`);
+    const themePath = path.join(themesPath, `${theme}.rcpt`);
     const themeSource = await readFile(themePath, "utf8");
     const themeSections = parse(themeSource);
 
@@ -46,9 +46,11 @@ export default command(
 
     function visit(section: string[]): string {
       const line = choice(section) || "";
-      return line.replaceAll(/<([a-z- \d]+)>/g, (_, key: string) => {
+      return line.replaceAll(/<([\d a-z-]+)>/g, (_, key: string) => {
         const remembered = memory.get(key);
-        if (remembered) return remembered;
+        if (remembered) {
+          return remembered;
+        }
 
         const [name = "", option] = key.split(" ");
         let text: string;
@@ -77,8 +79,12 @@ export default command(
           }
         }
 
-        if (option === "rep") return `${text}\n${text}`;
-        if (option === "rem") memory.set(name, text);
+        if (option === "rep") {
+          return `${text}\n${text}`;
+        }
+        if (option === "rem") {
+          memory.set(name, text);
+        }
         return text;
       });
     }

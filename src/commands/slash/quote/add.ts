@@ -1,8 +1,8 @@
 import db, { eq } from "$lib/database/drizzle";
 import { files, fileTags, users } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
-import logger from "$lib/logger";
 import { prepareTaggedFile } from "$lib/files";
+import logger from "$lib/logger";
 import got from "got";
 import { createWriteStream } from "node:fs";
 import { pipeline } from "node:stream/promises";

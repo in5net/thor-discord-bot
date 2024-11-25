@@ -1,5 +1,3 @@
-/* eslint-disable ts/no-confusing-void-expression */
-/* eslint-disable ts/ban-types */
 import type Node from "./node";
 import {
   type BinaryOpNode,
@@ -51,7 +49,9 @@ export default class Interpreter implements ExecuteIndex {
     scope: Scope,
   ): Value {
     const value = scope.get(name);
-    if (!value) this.error(`'./{name}' is not defined`);
+    if (!value) {
+      this.error(`'./{name}' is not defined`);
+    }
     return value;
   }
 
@@ -62,9 +62,13 @@ export default class Interpreter implements ExecuteIndex {
     const value = this.visit(node, scope);
 
     const func = value[operator];
-    if (!func) Value.illegalUnaryOp(value, operator);
+    if (!func) {
+      Value.illegalUnaryOp(value, operator);
+    }
     const returnValue = func.call(value) as Value | undefined;
-    if (!returnValue) Value.illegalUnaryOp(value, operator);
+    if (!returnValue) {
+      Value.illegalUnaryOp(value, operator);
+    }
     return returnValue;
   }
 
@@ -76,15 +80,21 @@ export default class Interpreter implements ExecuteIndex {
     const rightValue = this.visit(right, scope);
 
     const func = leftValue[operator];
-    if (!func) Value.illegalBinaryOp(leftValue, operator, rightValue);
+    if (!func) {
+      Value.illegalBinaryOp(leftValue, operator, rightValue);
+    }
     const value = func.call(leftValue, rightValue) as Value | undefined;
-    if (!value) Value.illegalBinaryOp(leftValue, operator, rightValue);
+    if (!value) {
+      Value.illegalBinaryOp(leftValue, operator, rightValue);
+    }
     return value;
   }
 
   visitFuncCallNode({ name, args }: FuncCallNode, scope: Scope): Value {
     const func = this.visit(name, scope);
-    if (!(func instanceof Function)) this.error(`${name} is not a function`);
+    if (!(func instanceof Function)) {
+      this.error(`${name} is not a function`);
+    }
     const argValues = args.map(arg => this.visit(arg, scope));
     const argNums = argValues.map(arg =>
       arg instanceof Number ? arg.value : globalThis.Number.NaN,
@@ -101,9 +111,13 @@ export default class Interpreter implements ExecuteIndex {
     const operator = (left.value + right.value) as Exclude<GroupingOp, "[]">;
 
     const func = value[operator];
-    if (!func) Value.illegalUnaryOp(value, operator);
+    if (!func) {
+      Value.illegalUnaryOp(value, operator);
+    }
     const returnValue = func.call(value) as Value | undefined;
-    if (!returnValue) Value.illegalUnaryOp(value, operator);
+    if (!returnValue) {
+      Value.illegalUnaryOp(value, operator);
+    }
     return returnValue;
   }
 }

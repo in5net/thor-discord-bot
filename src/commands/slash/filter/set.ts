@@ -1,9 +1,9 @@
-import { getVoice } from "$src/music/voice-manager";
-import { pipe } from "@iz7n/std/fn";
-import { collect, pick } from "@iz7n/std/iter";
 import db, { contains, eq } from "$lib/database/drizzle";
 import { audioFilters } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
+import { getVoice } from "$src/music/voice-manager";
+import { pipe } from "@iz7n/std/fn";
+import { collect, pick } from "@iz7n/std/iter";
 
 export default command(
   {
@@ -28,7 +28,9 @@ export default command(
   },
   async (i, { filter }) => {
     const { guildId } = i;
-    if (!guildId) return;
+    if (!guildId) {
+      return;
+    }
     const voice = getVoice(guildId);
 
     const audioFilter = await db.query.audioFilters.findFirst({
@@ -37,7 +39,9 @@ export default command(
       },
       where: eq(audioFilters.name, filter),
     });
-    if (!audioFilter) return i.reply(`Filter \`${filter}\` not found`);
+    if (!audioFilter) {
+      return i.reply(`Filter \`${filter}\` not found`);
+    }
 
     await voice.setFilters([audioFilter.value]);
     return i.reply(`🎚️ Set filters to \`${filter}\``);

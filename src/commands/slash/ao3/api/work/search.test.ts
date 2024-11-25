@@ -1,6 +1,6 @@
+import { Category, OrderBy, searchWorks } from "./search";
 import assert from "node:assert";
 import test from "node:test";
-import { Category, OrderBy, searchWorks } from "./search";
 
 await test("search work", async () => {
   const works = await searchWorks({

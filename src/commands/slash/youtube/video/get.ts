@@ -1,7 +1,7 @@
-import { formatTime } from "$lib/time";
-import { createEmbedBuilder } from "../embed";
 import command from "$lib/discord/commands/slash";
 import logger from "$lib/logger";
+import { formatTime } from "$lib/time";
+import { createEmbedBuilder } from "../embed";
 import Innertube from "youtubei.js";
 
 export default command(
@@ -48,18 +48,25 @@ export default command(
             inline: true,
           },
         );
-      if (title) embed.setTitle(title);
-      if (channel) embed.setAuthor(channel);
+      if (title) {
+        embed.setTitle(title);
+      }
+      if (channel) {
+        embed.setAuthor(channel);
+      }
       const thumb = thumbnail[0]?.url;
-      if (thumb) embed.setThumbnail(thumb);
+      if (thumb) {
+        embed.setThumbnail(thumb);
+      }
 
       const maxDesc = 1024;
-      if (description)
+      if (description) {
         embed.setDescription(
           description.length < maxDesc ?
             description
           : `${description.slice(0, maxDesc - 3)}...`,
         );
+      }
 
       return await i.reply({
         embeds: [embed],

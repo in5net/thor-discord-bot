@@ -1,7 +1,7 @@
-import { createEmbedBuilder } from "../embed";
-import { type APIEmbedField } from "discord.js";
 import command from "$lib/discord/commands/slash";
 import logger from "$lib/logger";
+import { createEmbedBuilder } from "../embed";
+import { type APIEmbedField } from "discord.js";
 import Innertube from "youtubei.js";
 
 export default command(
@@ -28,11 +28,12 @@ export default command(
       const videos = search.videos.slice(0, limit);
 
       const fields: APIEmbedField[] = [];
-      for (const [i, video] of videos.entries())
+      for (const [i, video] of videos.entries()) {
         fields.push({
           name: `${i + 1}. ${video.title.toString()}`,
           value: `https://youtu.be/${video.key("id").string()}`,
         });
+      }
 
       const embed = createEmbedBuilder()
         .setTitle(`Search results for "${query}"`)

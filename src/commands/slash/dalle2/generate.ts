@@ -1,8 +1,8 @@
 import { getBits, subtractBits } from "$lib/ai/shared";
-import { openai } from "$lib/openai";
 import db, { eq } from "$lib/database/drizzle";
 import { users } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
+import { openai } from "$lib/openai";
 import { BITS_PRICE } from "./shared";
 
 export default command(
@@ -23,7 +23,9 @@ export default command(
     },
   },
   async (i, { prompt, n }) => {
-    if (i.user.bot) return i.reply("Bots cannot use DALL·E 2");
+    if (i.user.bot) {
+      return i.reply("Bots cannot use DALL·E 2");
+    }
     const cost = BITS_PRICE * n;
 
     const user = await db.query.users.findFirst({
@@ -34,8 +36,9 @@ export default command(
     });
     if (!user?.admin) {
       const bits = await getBits(i.user.id);
-      if (bits < cost)
+      if (bits < cost) {
         return i.reply(`You need ${cost - bits} more bits to do this`);
+      }
     }
 
     await i.deferReply();

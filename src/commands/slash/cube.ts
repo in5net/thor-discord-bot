@@ -1,14 +1,14 @@
+import command from "$lib/discord/commands/slash";
 import GL from "$lib/gl";
 import { renderProgressBar } from "$lib/progress";
 import { sleep } from "@iz7n/std/async";
-import { AttachmentBuilder, Message } from "discord.js";
-import command from "$lib/discord/commands/slash";
+import { type Message, AttachmentBuilder } from "discord.js";
 import { mat4 } from "gl-matrix";
 import { nanoid } from "nanoid";
-import { env } from "node:process";
-import path from "node:path";
-import { pipeline } from "node:stream/promises";
 import { createWriteStream } from "node:fs";
+import path from "node:path";
+import { env } from "node:process";
+import { pipeline } from "node:stream/promises";
 
 export default command(
   {
@@ -102,7 +102,7 @@ export default command(
       gif ?
         await gl.gifStream(frames, {
           fps,
-          render(t) {
+          async render(t) {
             angle = Math.PI * t * speed;
             return render();
           },
@@ -112,7 +112,7 @@ export default command(
           lowres: true,
           audioPath: new URL("../../../assets/cube/cube.ogg", import.meta.url)
             .pathname,
-          render(t) {
+          async render(t) {
             angle = Math.PI * t * speed;
             return render();
           },
