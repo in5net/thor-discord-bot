@@ -1,5 +1,5 @@
-import { getRandomFile, sendFile } from "../../slash/file/shared";
 import command from "$lib/discord/commands/text";
+import { getRandomFile, sendFile } from "../../slash/file/shared";
 
 export default command(
   {
@@ -9,7 +9,9 @@ export default command(
   },
   async ({ message }) => {
     const file = await getRandomFile("video");
-    if (!file) return message.reply("No file found");
+    if (!file) {
+      return message.reply("No file found");
+    }
     return sendFile(message, file);
   },
 );
