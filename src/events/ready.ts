@@ -1,5 +1,5 @@
-import { ActivityType } from "discord.js";
 import event from "$lib/discord/event";
+import { ActivityType } from "discord.js";
 import process, { env, version } from "node:process";
 
 const { NAME } = env;

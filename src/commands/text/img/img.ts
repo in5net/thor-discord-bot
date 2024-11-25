@@ -1,7 +1,7 @@
 import { buildMessage } from "$lib/customsearch";
+import db from "$lib/database/drizzle";
+import { imageSearches } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
-import db from "$src/lib/database/drizzle";
-import { imageSearches } from "$src/lib/database/schema";
 
 export default command(
   {

@@ -1,10 +1,39 @@
+import {
+  type Node,
+  CommandError,
+  getNodeRange,
+  Lexer,
+  Parser,
+  stringifyNode,
+} from "$lib/command";
+import db, { and, desc, eq } from "$lib/database/drizzle";
+import {
+  commandExecutions,
+  oneWordStory,
+  oneWordStoryEntry,
+  randomResponses,
+} from "$lib/database/schema";
+import type { ArgumentValue, TextCommand } from "$lib/discord/commands/text";
+import event from "$lib/discord/event";
+import { getCommandUsage } from "$lib/discord/help";
 import { emojiRegex } from "$lib/emoji";
+import logger from "$lib/logger";
 import { incCount } from "$lib/users";
+import { getRandomResponses, getThemes } from "$src/responses";
+import { handleWordleMessage } from "../commands/text/games/wordle";
+import { pipe } from "@iz7n/std/fn";
+import { pick } from "@iz7n/std/iter";
 import { choice, randomInt, shuffle } from "@iz7n/std/random";
 import { sum } from "@iz7n/std/stats";
-import { quote, userMention, type Message } from "discord.js";
-import event from "$lib/discord/event";
-import { handleTextCommand } from "$lib/discord/events/message-create";
+import * as deepl from "deepl-node";
+import {
+  type TextBasedChannel,
+  EmbedBuilder,
+  quote,
+  userMention,
+  type Message,
+} from "discord.js";
+import Fuse from "fuse.js";
 import {
   anyOf,
   caseInsensitive,
@@ -19,17 +48,6 @@ import {
   whitespace,
 } from "magic-regexp";
 import { env } from "node:process";
-import { handleWordleMessage } from "../commands/text/games/wordle";
-import { pipe } from "@iz7n/std/fn";
-import { pick } from "@iz7n/std/iter";
-import db, { and, desc, eq } from "$lib/database/drizzle";
-import {
-  oneWordStory,
-  oneWordStoryEntry,
-  randomResponses,
-} from "$lib/database/schema";
-import * as deepl from "deepl-node";
-import { getRandomResponses, getThemes } from "$src/responses";
 
 const prefix = env.PREFIX;
 const prefixRegex = createRegExp(exactly(prefix).times(1).at.lineStart(), [
@@ -50,7 +68,9 @@ export default event(
   { name: "messageCreate" },
   async ({ client, args: [message] }) => {
     const { content, channel, author, reference } = message;
-    if (author.bot || !("send" in channel)) return;
+    if (author.bot || !("send" in channel)) {
+      return;
+    }
     const lowercase = content.toLowerCase();
     const noWhitespace = lowercase.replaceAll(whitespaceRegex, "");
     if (
@@ -74,19 +94,22 @@ export default event(
           ({ optionalPrefix }, name) =>
             optionalPrefix && lowercase.startsWith(name),
         )
-      )
+      ) {
         await handleTextCommand(message);
+      }
 
       if ("name" in channel) {
         if (
           ["general", "thor", "slimevr"].some(name =>
             channel.name.includes(name),
           )
-        )
+        ) {
           await handleRandomResponse(message);
+        }
 
-        if (channel.name === "one-word-story")
+        if (channel.name === "one-word-story") {
           await handleOneWordStory(message);
+        }
       }
 
       if (reference?.messageId && ["translate", "tl"].includes(lowercase)) {
@@ -116,14 +139,365 @@ export default event(
   },
 );
 
+async function handleTextCommand(message: Message) {
+  const { client, content, channel } = message;
+
+  try {
+    const ast = parseContent(content);
+
+    for (const pipedCommands of ast.value) {
+      let output: string | undefined;
+      for (const commandNode of pipedCommands.value) {
+        const { name, args } = commandNode.value;
+
+        const trueArguments: Node[] = [name];
+        if (output !== undefined) {
+          trueArguments.push({
+            type: "str",
+            value: { type: "str", value: output, range: [0, 0] },
+          });
+        }
+        trueArguments.push(...args);
+        let command: TextCommand | undefined;
+        const commandNames: string[] = [];
+        let commandName = "";
+        for (const arg of [name, ...args]) {
+          if (arg.type === "ident") {
+            const subcommandName = (arg as Node<"ident">).value.value;
+            commandNames.push(subcommandName);
+            const lowerArgument = subcommandName.toLowerCase();
+            const subcommand = client.textCommands.find(
+              // eslint-disable-next-line no-loop-func
+              ({ aliases }, name) =>
+                name.startsWith(commandName) &&
+                (name === lowerArgument || aliases?.includes(lowerArgument)),
+            );
+            if (!subcommand) {
+              break;
+            }
+            commandName = `${commandName} ${subcommandName}`.trimStart();
+            trueArguments.shift();
+            command = subcommand;
+          }
+        }
+
+        const fullName = commandNames.join(" ");
+        if (command) {
+          if (
+            command.permissions?.includes("vc") &&
+            !message.member?.voice.channel
+          ) {
+            await message.reply(`You are not in a voice channel`);
+          } else {
+            const result = await runCommand(
+              fullName,
+              command,
+              trueArguments,
+              message,
+            );
+            output = typeof result === "string" ? result : undefined;
+          }
+        } else {
+          const list = [...client.textCommands.entries()]
+            .map(([name, command]) => ({ name, ...command }))
+            .sort((a, b) => a.name.localeCompare(b.name));
+          const fuse = new Fuse(list, {
+            keys: ["name", "aliases"],
+            threshold: 0.2,
+          });
+          const [suggestion] = fuse.search(fullName, { limit: 1 });
+          if (suggestion) {
+            await channel.send(
+              `${
+                Math.random() < 0.1 ? "No" : `IDK what \`${fullName}\` is`
+              }. Did you mean \`${suggestion.item.name}\`${
+                suggestion.item.aliases ?
+                  `(${suggestion.item.aliases
+                    .map(alias => `\`${alias}\``)
+                    .join(", ")})`
+                : ""
+              }?`,
+            );
+          }
+        }
+      }
+      if (typeof output === "string") {
+        await message.channel.send(output);
+      }
+    }
+  } catch (error) {
+    await sendError(
+      message.channel,
+      error instanceof CommandError ?
+        new TypeError(`\`\`\`${error.format(content)}\`\`\``, {
+          cause: error,
+        })
+      : error,
+    );
+  }
+}
+
+/** @throws {CommandError} */
+export function parseContent(content: string) {
+  try {
+    const lexer = new Lexer(content);
+    const tokens = lexer.lex();
+    const parser = new Parser(tokens);
+    const ast = parser.parse();
+    return ast;
+  } catch (error) {
+    console.error(error);
+    throw error instanceof CommandError ?
+        new TypeError(`\`\`\`${error.format(content)}\`\`\``, {
+          cause: error,
+        })
+      : error;
+  }
+}
+
+export async function runCommand(
+  name: string,
+  command: TextCommand,
+  trueArguments: Node[],
+  message: Message,
+) {
+  const { client, author, channelId } = message;
+  const parsedArguments = parseArgs(name, command, trueArguments, message);
+
+  const result = await command.exec({
+    message,
+    args: parsedArguments as Record<string, ArgumentValue>,
+    client,
+  });
+  await db
+    .insert(commandExecutions)
+    .values({
+      name,
+      type: "text",
+      userId: author.id,
+      messageId: message.id,
+      channelId,
+      guildId: message.guildId,
+    })
+    .catch(() => null);
+  return result;
+}
+
+function parseArgs(
+  commandName: string,
+  command: TextCommand,
+  trueArguments: Node[],
+  message: Message,
+) {
+  const parsedArguments: Record<string, ArgumentValue | undefined> = {};
+  for (const [name, argument] of Object.entries(command.args)) {
+    let value: ArgumentValue | undefined;
+    const { min = Number.NEGATIVE_INFINITY, max = Number.POSITIVE_INFINITY } =
+      argument;
+    switch (argument.type) {
+      case "int": {
+        const node = trueArguments.shift();
+        if (!node) {
+          break;
+        }
+
+        if (node?.type !== "int") {
+          throw new CommandError(
+            `Argument \`${name}\` must be an integer`,
+            getNodeRange(node),
+          );
+        }
+
+        const typedNode = node as Node<"int">;
+        const n = typedNode.value.value;
+        const small = n < min;
+        const big = n > max;
+        if (small || big) {
+          throw new CommandError(
+            `Argument \`${name}\` must be ${
+              small && big ? `between ${min} and ${max}`
+              : small ? `no less than ${min}`
+              : `no more than ${max}`
+            }`,
+            getNodeRange(node),
+          );
+        }
+        value = n;
+
+        break;
+      }
+
+      case "float": {
+        const node = trueArguments.shift();
+        if (!node) {
+          break;
+        }
+
+        if (node?.type !== "int" && node?.type !== "float") {
+          throw new CommandError(
+            `Argument \`${name}\` must be an number`,
+            getNodeRange(node),
+          );
+        }
+
+        const typedNode = node as Node<"int" | "float">;
+        const n = typedNode.value.value;
+        const small = n < min;
+        const big = n > max;
+        if (small || big) {
+          throw new CommandError(
+            `Argument \`${name}\` must be ${
+              small && big ? `between ${min} and ${max}`
+              : small ? `no less than ${min}`
+              : `no more than ${max}`
+            }`,
+            getNodeRange(node),
+          );
+        }
+        value = n;
+
+        break;
+      }
+
+      case "word": {
+        const node = trueArguments.shift();
+        if (node) {
+          value = stringifyNode(node);
+          const small = value.length < min;
+          const big = value.length > max;
+          if (small || big) {
+            throw new CommandError(
+              `Argument \`${name}\` must be ${
+                small && big ? `between ${min} and ${max}`
+                : small ? `no less than ${min}`
+                : `no more than ${max}`
+              } characters long`,
+              getNodeRange(node),
+            );
+          }
+        }
+
+        break;
+      }
+
+      case "words": {
+        const argumentStrs = [...trueArguments];
+        if (argumentStrs.length) {
+          value = argumentStrs.map(stringifyNode).filter(Boolean);
+        }
+        break;
+      }
+
+      case "text": {
+        const argumentStrs = [...trueArguments];
+        if (argumentStrs.length) {
+          value = argumentStrs.map(stringifyNode).join(" ");
+          const small = value.length < min;
+          const big = value.length > max;
+
+          if (small || big) {
+            const first = argumentStrs[0];
+            throw new CommandError(
+              `Argument \`${name}\` must be ${
+                small && big ? `between ${min} and ${max}`
+                : small ? `no less than ${min}`
+                : `no more than ${max}`
+              } characters long`,
+              first ?
+                [
+                  getNodeRange(first)[0],
+                  getNodeRange(argumentStrs.at(-1) || first)[1],
+                ]
+              : [0, 0],
+            );
+          }
+        }
+
+        break;
+      }
+
+      case "image": {
+        const file = message.attachments.first();
+        if (file) {
+          if (
+            typeof file.width === "number" &&
+            typeof file.height === "number"
+          ) {
+            // @ts-expect-error should be fine, but TypeScript is being dumb
+            value = file;
+          } else {
+            throw new TypeError(`Argument \`${name}\` must be an image file`);
+          }
+        } else if (argument.default === "user") {
+          const size = 512;
+          const url = message.author.displayAvatarURL({ size });
+          value = {
+            url,
+            proxyURL: url,
+            width: size,
+            height: size,
+          };
+        }
+        break;
+      }
+
+      case "video": {
+        const file = message.attachments.first();
+        if (file) {
+          value = file.url;
+        }
+      }
+    }
+
+    if (value === undefined && argument.default !== undefined) {
+      value = argument.default;
+    }
+    if (!argument.optional && value === undefined) {
+      throw new Error(`Argument \`${name}\` is required
+
+Usage: \`${getCommandUsage(commandName, command)}\`${
+        command.examples ?
+          `
+Examples: \`\`\`${command.examples
+            .map(args => `${env.PREFIX}${commandName} ${args}`)
+            .join("\n")}\`\`\``
+        : ""
+      }`);
+    }
+    parsedArguments[name] = value;
+  }
+
+  return parsedArguments;
+}
+
+async function sendError(channel: TextBasedChannel, error: unknown) {
+  try {
+    await channel.send({
+      embeds: [
+        new EmbedBuilder()
+          .setColor("Red")
+          .setTitle("Error")
+          .setDescription(error instanceof Error ? error.message : `${error}`)
+          .setTimestamp(),
+      ],
+    });
+  } catch (error) {
+    logger.error("Failed to send error:", error);
+  }
+}
+
 async function handleRandomResponse(message: Message) {
   const { cleanContent, author, channel, member } = message;
   const lowercase = cleanContent.toLowerCase();
 
-  if (cleanContent.length === 5) await handleWordleMessage(message);
+  if (cleanContent.length === 5) {
+    await handleWordleMessage(message);
+  }
   await handleDiceMessage(message);
 
-  if (lowercase.includes("ratio")) await incCount(author.id, "ratio");
+  if (lowercase.includes("ratio")) {
+    await incCount(author.id, "ratio");
+  }
   if (["noway", "norway"].includes(lowercase.replace(" ", ""))) {
     await channel.send(Math.random() < 0.1 ? "Norway" : "no way");
     await incCount(author.id, "no_way");
@@ -167,8 +541,9 @@ async function handleRandomResponse(message: Message) {
         .join(" ")
         .replaceAll(responseVariableRegex, match => {
           const variable = match.slice(1, -1);
-          if (variable === "name")
+          if (variable === "name") {
             return member?.displayName || author.username;
+          }
           const props = variable.split(".");
           let value: any = getThemes();
           for (const prop of props) {
@@ -207,12 +582,17 @@ async function handleDiceMessage(message: Message) {
     if (count > 0 && sides > 0) {
       const rolls = Array.from({ length: count }, () => {
         let n = randomInt(1, sides);
-        if (operator === "+") n += modifier;
-        else if (operator === "-") n -= modifier;
+        if (operator === "+") {
+          n += modifier;
+        } else if (operator === "-") {
+          n -= modifier;
+        }
         return n;
       });
       let msg = rolls.join(", ");
-      if (count > 1) msg = `${sum(rolls)} = ${msg}`;
+      if (count > 1) {
+        msg = `${sum(rolls)} = ${msg}`;
+      }
       await channel.send(msg);
     }
   }
@@ -220,7 +600,9 @@ async function handleDiceMessage(message: Message) {
 
 async function handleOneWordStory(message: Message) {
   const { content, guildId, author } = message;
-  if (!guildId) return;
+  if (!guildId) {
+    return;
+  }
 
   const [word, word2] = content.trim().split(" ");
   if (!word || word2 || word.length > 32) {
@@ -289,28 +671,36 @@ async function handleHaiku(message: Message) {
     syllables: syllable(word),
   }));
   const totalSyllables = pipe(syllables, pick("syllables"), sum);
-  if (totalSyllables !== 5 + 7 + 5) return;
+  if (totalSyllables !== 5 + 7 + 5) {
+    return;
+  }
 
-  let line1: string[] = [];
+  const line1: string[] = [];
   for (let i = 0; i < 5; ) {
     const word = syllables.shift();
-    if (!word || i + word.syllables > 5) return;
+    if (!word || i + word.syllables > 5) {
+      return;
+    }
     line1.push(word.word);
     i += word.syllables;
   }
 
-  let line2: string[] = [];
+  const line2: string[] = [];
   for (let i = 0; i < 7; ) {
     const word = syllables.shift();
-    if (!word || i + word.syllables > 7) return;
+    if (!word || i + word.syllables > 7) {
+      return;
+    }
     line2.push(word.word);
     i += word.syllables;
   }
 
-  let line3: string[] = [];
+  const line3: string[] = [];
   for (let i = 0; i < 5; ) {
     const word = syllables.shift();
-    if (!word || i + word.syllables > 5) return;
+    if (!word || i + word.syllables > 5) {
+      return;
+    }
     line3.push(word.word);
     i += word.syllables;
   }

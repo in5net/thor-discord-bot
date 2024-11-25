@@ -6,6 +6,7 @@ export class CommandError extends Error {
     readonly range: Range,
   ) {
     super(message);
+    this.name = "CommandError";
   }
 
   format(source: string) {
@@ -24,7 +25,9 @@ export class CommandError extends Error {
       }
 
       lineStartIndex += line.length;
-      if (end < lineStartIndex) break;
+      if (end < lineStartIndex) {
+        break;
+      }
     }
 
     return `${relevantLines.join("\n")}

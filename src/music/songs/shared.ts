@@ -70,7 +70,7 @@ export abstract class Song implements SongJSON {
 
   async _prepare(_listeners?: GetResourceListeners) {}
 
-  prepare(listeners?: GetResourceListeners) {
+  async prepare(listeners?: GetResourceListeners) {
     if (this.preparePromise) {
       return this.preparePromise;
     }

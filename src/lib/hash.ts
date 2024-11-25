@@ -11,13 +11,13 @@ export function strTo16x16(input: string): boolean[][] {
     Array.from<boolean>({ length: size }).fill(false),
   );
 
-  for (const [i, char] of digest.split("").entries()) {
+  for (const [i, char] of [...digest].entries()) {
     const byte = Number.parseInt(char, 16);
-    for (let index_ = 0; index_ < 4; index_++) {
-      const index = i * 4 + index_;
+    for (let offset = 0; offset < 4; offset++) {
+      const index = i * 4 + offset;
       const x = index % size;
       const y = Math.floor(index / size);
-      const bit = (byte >> index_) & 1;
+      const bit = (byte >> offset) & 1;
 
       grid[x]![y] = !!bit;
     }

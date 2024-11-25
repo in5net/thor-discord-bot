@@ -16,8 +16,9 @@ export class Parser {
 
   expect(strs: string | string[], start: number): never {
     let message: string;
-    if (typeof strs === "string") message = strs;
-    else
+    if (typeof strs === "string") {
+      message = strs;
+    } else {
       switch (strs.length) {
         case 1: {
           message = strs[0]!;
@@ -34,6 +35,7 @@ export class Parser {
           this.error(`Expected ${begin.join(", ")}, or ${strs.at(-1)}`, start);
         }
       }
+    }
 
     this.error(`Expected ${message}`, start);
   }
@@ -60,8 +62,8 @@ export class Parser {
     return this.token.type === "eof";
   }
 
-  parse(): Node<"$lib/commands"> {
-    const commands: Node<"pipedCommands">[] = [];
+  parse(): Node<"commands"> {
+    const commands: Array<Node<"pipedCommands">> = [];
 
     this.skipNewlines();
 
@@ -69,12 +71,15 @@ export class Parser {
 
     let moreStatements = true;
 
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       const newlines = this.skipNewlines();
-      if (newlines === 0) moreStatements = false;
+      if (newlines === 0) {
+        moreStatements = false;
+      }
 
-      if (!moreStatements) break;
+      if (!moreStatements) {
+        break;
+      }
 
       const statement = this.pipeline();
       if (!statement) {
@@ -85,7 +90,7 @@ export class Parser {
       commands.push(statement);
     }
 
-    return { type: "$lib/commands", value: commands };
+    return { type: "commands", value: commands };
   }
 
   pipeline(): Node<"pipedCommands"> {
@@ -99,7 +104,7 @@ export class Parser {
     return { type: "pipedCommands", value: commands };
   }
 
-  command(): Node<"$lib/command"> {
+  command(): Node<"command"> {
     if (this.token.type === "minus") {
       this.advance();
     }
@@ -117,7 +122,7 @@ export class Parser {
       args.push(arg);
     }
 
-    return { type: "$lib/command", value: { name, args } };
+    return { type: "command", value: { name, args } };
   }
 
   atom() {

@@ -57,12 +57,11 @@ export default class Stream extends TypedEmitter<{
         this.connection = joinVoiceChannel({
           channelId: channel.id,
           guildId: channel.guildId,
-          // @ts-expect-error @discordjs/voice adapter has incorrect type
           adapterCreator: channel.guild.voiceAdapterCreator,
         });
         this.connection
           // eslint-disable-next-line ts/no-misused-promises
-          .on(VoiceConnectionStatus.Disconnected, () => this.join())
+          .on(VoiceConnectionStatus.Disconnected, async () => this.join())
           .subscribe(player);
         await entersState(this.connection, VoiceConnectionStatus.Ready, 30_000);
       }

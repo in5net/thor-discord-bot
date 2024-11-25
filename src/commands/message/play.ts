@@ -1,12 +1,14 @@
-import { getVoice } from "$src/music/voice-manager";
 import command from "$lib/discord/commands/message";
+import { getVoice } from "$src/music/voice-manager";
 import { createRegExp, letter, oneOrMore } from "magic-regexp";
 import { env } from "node:process";
 
 export default command("Play", async i => {
   const message = i.targetMessage;
   const { guildId, content } = message;
-  if (!guildId) return;
+  if (!guildId) {
+    return;
+  }
   const voice = getVoice(guildId);
 
   const queries = content.replace(

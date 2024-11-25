@@ -1,5 +1,5 @@
-import voices from "$src/music/voice-manager";
 import event from "$lib/discord/event";
+import voices from "$src/music/voice-manager";
 import ms from "ms";
 import { env } from "node:process";
 
@@ -10,16 +10,19 @@ export default event(
   { name: "voiceStateUpdate" },
   async ({ args: [oldState] }) => {
     const members = oldState.channel?.members;
-    if (!members?.has(env.DISCORD_ID)) return;
+    if (!members?.has(env.DISCORD_ID)) {
+      return;
+    }
 
     const guildId = oldState.guild.id;
     if (members.size === 1) {
       const timeout = timeouts.get(guildId);
-      if (timeout) timeout.refresh();
-      else {
+      if (timeout) {
+        timeout.refresh();
+      } else {
         timeouts.set(
           guildId,
-          setTimeout(async () => {
+          setTimeout(() => {
             const voice = voices.get(guildId);
             voice?.stop();
             timeouts.delete(guildId);

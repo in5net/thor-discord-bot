@@ -1,9 +1,8 @@
 import "./env";
-
 import { deploy } from "$lib/discord/commands/deploy";
 import logger from "$lib/logger";
-import { env } from "node:process";
 import { messageCommands, slashCommands } from "./commands";
+import { env } from "node:process";
 
 logger.info("$lib/commands registering...", env.DISCORD_ID);
 

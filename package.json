@@ -71,7 +71,7 @@
     "zx": "^8.2.2"
   },
   "devDependencies": {
-    "@iz7n/eslint-config": "^0.12.1",
+    "@iz7n/eslint-config": "^0.12.2",
     "@iz7n/prettier-config": "^1.4.0",
     "@total-typescript/ts-reset": "^0.6.1",
     "@types/better-sqlite3": "^7.6.11",

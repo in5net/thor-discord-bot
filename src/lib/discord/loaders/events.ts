@@ -3,11 +3,11 @@ import { type Event, type EventListener } from "../event";
 import { noTestGlob } from "./shared";
 import { pluralize } from "@iz7n/std/string";
 import { type Client, type ClientEvents } from "discord.js";
-import { join } from "node:path";
+import path from "node:path";
 
 export async function loadDiscordEvents(dirPath: string, client: Client) {
   dirPath = dirPath.replaceAll("\\", "/");
-  const globPattern = join(dirPath, "**/*.ts");
+  const globPattern = path.join(dirPath, "**/*.ts");
   const filePaths = await noTestGlob(globPattern);
   if (!filePaths.length) {
     return;

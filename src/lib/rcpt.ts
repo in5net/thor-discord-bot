@@ -3,10 +3,11 @@ export function parse(source: string) {
   const sections: Record<string, string[]> = {};
   let sectionName: string | undefined;
   for (const line of lines) {
-    if (line.startsWith("***")) sectionName = line.split(" ").pop();
-    else if (sectionName) {
+    if (line.startsWith("***")) {
+      sectionName = line.split(" ").pop();
+    } else if (sectionName) {
       let section = sections[sectionName];
-      if (!section) section = sections[sectionName] = [];
+      section ||= sections[sectionName] = [];
       section.push(line);
     }
   }

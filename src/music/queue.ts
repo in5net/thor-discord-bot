@@ -1,4 +1,3 @@
-/* eslint-disable ts/no-floating-promises */
 import { createEmbed } from "$lib/embed";
 import logger from "$lib/logger";
 import { formatTime } from "$lib/time";
@@ -203,7 +202,7 @@ export default class Queue extends Array<SongType> {
         } else if (customId === "next") {
           page++;
         }
-        send();
+        await send();
         await i.update({ files: [] }).catch();
       });
   }

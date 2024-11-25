@@ -82,6 +82,7 @@ const supplemental = [
   .flat()
   .join("|");
 
+// eslint-disable-next-line regexp/no-dupe-disjunctions, regexp/prefer-character-class, regexp/no-useless-range
 const rsEmoji = `(?:${supplemental})`;
 
 // eslint-disable-next-line no-misleading-character-class

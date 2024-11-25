@@ -58,7 +58,7 @@ export default command(
       usage.push([command, ...(commandManual.aliases || [])].join("/"));
     }
 
-    if (commandManual)
+    if (commandManual) {
       usage.push(
         ...Object.entries(commandManual.args).map(
           ([name, { type, optional, default: default_ }]) =>
@@ -67,7 +67,9 @@ export default command(
             }>`,
         ),
       );
-    else return channel.send(`No help found for command \`${args.join(" ")}\``);
+    } else {
+      return channel.send(`No help found for command \`${args.join(" ")}\``);
+    }
 
     const embed = new EmbedBuilder()
       .setTitle(`${env.NAME} Help: ${args.join(" ")}`)
@@ -78,13 +80,14 @@ export default command(
         value: `\`${env.PREFIX}${usage.join(" ")}\``,
       });
 
-    if (commandManuals.size)
+    if (commandManuals.size) {
       embed.addFields({
         name: "Subcommands",
         value: Object.keys(commandManuals)
           .map(name => `\`${name}\``)
           .join(", "),
       });
+    }
     return channel.send({ embeds: [embed] });
   },
 );

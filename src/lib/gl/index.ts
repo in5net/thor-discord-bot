@@ -1,3 +1,7 @@
+import GIF from "./gif";
+import Texture from "./texture";
+import { sleep } from "@iz7n/std/async";
+import type { Awaitable } from "@iz7n/std/types";
 import ffmpeg from "fluent-ffmpeg";
 import createContext from "gl";
 import {
@@ -10,12 +14,8 @@ import { Buffer } from "node:buffer";
 import { createReadStream, createWriteStream, type ReadStream } from "node:fs";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import path from "node:path";
 import { PNG } from "pngjs";
-import GIF from "./gif";
-import Texture from "./texture";
-import { Awaitable } from "@iz7n/std/types";
-import { sleep } from "@iz7n/std/async";
 
 interface GLShader {
   shader: WebGLShader;
@@ -158,11 +158,12 @@ export default class GL {
 
     // Check for shader errors
     gl.compileShader(shader);
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
       console.error(
         "Error compiling vertex shader:",
         gl.getShaderInfoLog(shader),
       );
+    }
 
     this.vertexShader = { shader, source };
     return shader;
@@ -180,11 +181,12 @@ export default class GL {
 
     // Check for shader errors
     gl.compileShader(shader);
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
       console.error(
         "Error compiling fragment shader:",
         gl.getShaderInfoLog(shader),
       );
+    }
 
     this.fragmentShader = { shader, source };
     return shader;
@@ -207,12 +209,14 @@ export default class GL {
 
     // Check for program errors
     gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS))
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
       console.error("Error linking program:", gl.getProgramInfoLog(program));
+    }
 
     gl.validateProgram(program);
-    if (!gl.getProgramParameter(program, gl.VALIDATE_STATUS))
+    if (!gl.getProgramParameter(program, gl.VALIDATE_STATUS)) {
       console.error("Error validating program:", gl.getProgramInfoLog(program));
+    }
 
     this.program = program;
     gl.useProgram(program);
@@ -288,13 +292,15 @@ export default class GL {
    */
   getAttributeLocation(name: string): GLint {
     // Attribute location is already cached
-    if (Object.prototype.hasOwnProperty.call(this.attributeLocations, name))
+    if (Object.hasOwn(this.attributeLocations, name)) {
       return this.attributeLocations[name]!;
+    }
 
     // Need to find the attribute location
     const attributeLocation = this.gl.getAttribLocation(this.program, name);
-    if (attributeLocation !== -1)
+    if (attributeLocation !== -1) {
       this.attributeLocations[name] = attributeLocation;
+    }
     return attributeLocation;
   }
 
@@ -302,15 +308,17 @@ export default class GL {
    * Gets the location of a uniform
    * @param name the name of the uniform
    */
-  // eslint-disable-next-line @typescript-eslint/ban-types
   getUniformLocation(name: string): WebGLUniformLocation | null {
     // Uniform location is already cached
-    if (Object.prototype.hasOwnProperty.call(this.uniformLocations, name))
+    if (Object.hasOwn(this.uniformLocations, name)) {
       return this.uniformLocations[name]!;
+    }
 
     // Need to find the uniform location
     const uniformLocation = this.gl.getUniformLocation(this.program, name);
-    if (uniformLocation !== null) this.uniformLocations[name] = uniformLocation;
+    if (uniformLocation !== null) {
+      this.uniformLocations[name] = uniformLocation;
+    }
     return uniformLocation;
   }
 
@@ -550,8 +558,11 @@ export default class GL {
   bindTextures(gifIndex: number): void {
     const { gl, textures } = this;
     for (const [i, texture] of textures.entries()) {
-      if (texture instanceof Texture) texture.activate(gl, i);
-      else texture.setFrame(gl, gifIndex, i);
+      if (texture instanceof Texture) {
+        texture.activate(gl, i);
+      } else {
+        texture.setFrame(gl, gifIndex, i);
+      }
     }
   }
 
@@ -599,17 +610,21 @@ export default class GL {
   ): Promise<ReadStream> {
     const { width, height } = this;
 
-    const temporaryDir = join(tmpdir(), nanoid());
+    const temporaryDir = path.join(tmpdir(), nanoid());
     await mkdir(temporaryDir);
-    const path = join(temporaryDir, `cube.gif`);
+    const gifPath = path.join(temporaryDir, `cube.gif`);
 
-    const writeStream = createWriteStream(path);
+    const writeStream = createWriteStream(gifPath);
 
     const { default: GIFEncoder } = await import("gif-encoder");
     const encoder = new GIFEncoder(width, height);
     encoder.writeHeader();
-    if (!noRepeat) encoder.setRepeat(0);
-    if (quality !== undefined) encoder.setQuality(quality);
+    if (!noRepeat) {
+      encoder.setRepeat(0);
+    }
+    if (quality !== undefined) {
+      encoder.setQuality(quality);
+    }
     encoder.setFrameRate(fps);
 
     for (let i = 0; i < frames; i++) {
@@ -626,8 +641,10 @@ export default class GL {
     encoder.finish();
     writeStream.end(encoder.read());
 
-    const stream = createReadStream(path);
-    stream.once("close", async () => rm(temporaryDir, { recursive: true }));
+    const stream = createReadStream(gifPath);
+    stream.once("close", () => {
+      void rm(temporaryDir, { recursive: true });
+    });
     return stream;
   }
 
@@ -651,7 +668,7 @@ export default class GL {
     const ctx = canvas.getContext("2d");
     const imageData = ctx.createImageData(width, height);
 
-    const temporaryDir = join(tmpdir(), nanoid());
+    const temporaryDir = path.join(tmpdir(), nanoid());
     await mkdir(temporaryDir);
 
     for (let i = 0; i < frames; i++) {
@@ -662,11 +679,11 @@ export default class GL {
       imageData.data.set(this.buffer());
       ctx.putImageData(imageData, 0, 0);
 
-      const path = join(
+      const framePath = path.join(
         temporaryDir,
         `frame${i.toString().padStart(4, "0")}.png`,
       );
-      await writeFile(path, canvas.toBuffer("image/png"));
+      await writeFile(framePath, canvas.toBuffer("image/png"));
 
       await sleep();
     }
@@ -676,7 +693,9 @@ export default class GL {
         .input("frame%04d.png")
         .fps(fps)
         .videoCodec("libx264");
-      if (lowres) cmd.videoFilter("scale=-1:360").videoBitrate("144k");
+      if (lowres) {
+        cmd.videoFilter("scale=-1:360").videoBitrate("144k");
+      }
       return cmd.save("output.mp4").on("end", resolve).on("error", reject);
     });
 
@@ -692,9 +711,11 @@ export default class GL {
         .on("end", resolve)
         .on("error", reject),
     );
-    const outputPath = join(temporaryDir, "full.mp4");
+    const outputPath = path.join(temporaryDir, "full.mp4");
     const stream = createReadStream(outputPath);
-    stream.once("close", async () => rm(temporaryDir, { recursive: true }));
+    stream.once("close", () => {
+      void rm(temporaryDir, { recursive: true });
+    });
     return stream;
   }
 

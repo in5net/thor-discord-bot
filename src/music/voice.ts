@@ -304,7 +304,7 @@ ${pipe(
 
     await song.prepare({
       // eslint-disable-next-line ts/no-misused-promises
-      ondownloading: () => this.send(`⏬ Downloading ${song.title}...`),
+      ondownloading: async () => this.send(`⏬ Downloading ${song.title}...`),
     });
     const resource = await song.getResource({
       filters: stream.filters,
@@ -323,7 +323,7 @@ ${pipe(
     }
   }
 
-  prepareNextSong() {
+  async prepareNextSong() {
     const nextSong = this.queue[this.queue.currentIndex + 1];
     if (nextSong) {
       return nextSong.prepare();
@@ -334,7 +334,7 @@ ${pipe(
     return this.queue.songEmbed(n - 1);
   }
 
-  getLyrics(query?: string) {
+  async getLyrics(query?: string) {
     if (query) {
       return getLyrics(query);
     }
@@ -350,7 +350,7 @@ ${pipe(
     return "No song playing";
   }
 
-  setFilters(filters?: string[]) {
+  async setFilters(filters?: string[]) {
     return this.stream.setFilters(filters);
   }
 }

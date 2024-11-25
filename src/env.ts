@@ -43,5 +43,5 @@ const result = EnvironmentVariables.safeParse(env);
 if (result.success) {
   logger.debug("✅ Environment variables verified");
 } else {
-  throw new Error(`❌ Environment variables not verified: ${result.error}`);
+  throw new Error("❌ Environment variables not verified:", result.error);
 }

@@ -163,8 +163,8 @@ importers:
         version: 8.2.2
     devDependencies:
       '@iz7n/eslint-config':
-        specifier: ^0.12.1
-        version: 0.12.1(eslint@9.15.0)(svelte@5.2.7)(typescript@5.6.3)
+        specifier: ^0.12.2
+        version: 0.12.2(eslint@9.15.0)(svelte@5.2.7)(typescript@5.6.3)
       '@iz7n/prettier-config':
         specifier: ^1.4.0
         version: 1.4.0(prettier@3.3.3)(svelte@5.2.7)
@@ -872,8 +872,8 @@ packages:
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
 
-  '@iz7n/eslint-config@0.12.1':
-    resolution: {integrity: sha512-qI/Otq5ZYKM6SaDn93CnFmMpKoRB8UYIEoLgoSZu9P+MuLmgdCM4mCyYIXNpvWAHfNQS3FQ7AI6uJIK86755dA==}
+  '@iz7n/eslint-config@0.12.2':
+    resolution: {integrity: sha512-D8ZWevEZxiIDH748BdhM1GtyAeoUipuj7y43GMJssxcbKiYnbkIDWLW+RMwvEHdUhb0Ok60cDAbGFI2jzRHzsQ==}
     peerDependencies:
       eslint: ^9.10.0
       eslint-plugin-svelte: '>=2.35.1'
@@ -4089,7 +4089,7 @@ snapshots:
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
 
-  '@iz7n/eslint-config@0.12.1(eslint@9.15.0)(svelte@5.2.7)(typescript@5.6.3)':
+  '@iz7n/eslint-config@0.12.2(eslint@9.15.0)(svelte@5.2.7)(typescript@5.6.3)':
     dependencies:
       '@antfu/install-pkg': 0.4.1
       '@clack/prompts': 0.8.2

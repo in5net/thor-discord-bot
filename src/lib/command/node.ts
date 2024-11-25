@@ -11,7 +11,7 @@ export interface NodeMap {
     name: Node<"ident">;
     args: Node[];
   };
-  pipedCommands: Array<Node<"$lib/command">>;
+  pipedCommands: Array<Node<"command">>;
   commands: Array<Node<"pipedCommands">>;
   eof?: never;
 }
@@ -34,8 +34,8 @@ export function stringifyNode(node: Node): string {
       return typedNode.value.value.toString();
     }
 
-    case "$lib/command": {
-      const typedNode = node as Node<"$lib/command">;
+    case "command": {
+      const typedNode = node as Node<"command">;
       return `<command ${typedNode.value.name.value.value}>`;
     }
 
@@ -44,7 +44,7 @@ export function stringifyNode(node: Node): string {
       return typedNode.value.map(stringifyNode).join(" | ");
     }
 
-    case "$lib/commands": {
+    case "commands": {
       return "<commands>";
     }
 
@@ -67,8 +67,8 @@ export function getNodeRange(node: Node): Range {
       return typedNode.value.range;
     }
 
-    case "$lib/command": {
-      const typedNode = node as Node<"$lib/command">;
+    case "command": {
+      const typedNode = node as Node<"command">;
       return [
         typedNode.value.name.value.range[0],
         getNodeRange(typedNode.value.args.at(-1) || typedNode.value.name)[1],
@@ -79,17 +79,25 @@ export function getNodeRange(node: Node): Range {
       const typedNode = node as Node<"pipedCommands">;
       const first = typedNode.value.at(0);
       const last = typedNode.value.at(-1);
-      if (!first) return [0, 0];
-      if (!last) return getNodeRange(first);
+      if (!first) {
+        return [0, 0];
+      }
+      if (!last) {
+        return getNodeRange(first);
+      }
       return [getNodeRange(first)[0], getNodeRange(last)[1]];
     }
 
-    case "$lib/commands": {
-      const typedNode = node as Node<"$lib/commands">;
+    case "commands": {
+      const typedNode = node as Node<"commands">;
       const first = typedNode.value.at(0);
       const last = typedNode.value.at(-1);
-      if (!first) return [0, 0];
-      if (!last) return getNodeRange(first);
+      if (!first) {
+        return [0, 0];
+      }
+      if (!last) {
+        return getNodeRange(first);
+      }
       return [getNodeRange(first)[0], getNodeRange(last)[1]];
     }
 

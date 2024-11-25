@@ -207,7 +207,7 @@ ${title} (${url})
     });
   }
 
-  static fromId(id: string, requester: Requester): Promise<SpotifySong> {
+  static async fromId(id: string, requester: Requester): Promise<SpotifySong> {
     const url = SpotifySong.id2URL(id);
     return this.fromURL(url, requester);
   }

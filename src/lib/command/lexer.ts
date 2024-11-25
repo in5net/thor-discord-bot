@@ -1,7 +1,7 @@
 import { CommandError } from "./error";
 import { type Str, type Token } from "./token";
 
-const WHITESPACE = /[ \t\r]/;
+const WHITESPACE = /[\t\r ]/;
 const DIGITS = /\d/;
 const ESCAPE_CHARS: Record<string, string | undefined> = {
   "\\": "\\",
@@ -45,7 +45,9 @@ export class Lexer {
   }
 
   nextToken(): Token {
-    while (WHITESPACE.test(this.char)) this.advance();
+    while (WHITESPACE.test(this.char)) {
+      this.advance();
+    }
 
     const { char } = this;
     const start = this.index;
@@ -90,8 +92,12 @@ export class Lexer {
       }
 
       default: {
-        if (DIGITS.test(char)) return this.number();
-        if (/\S/.test(char)) return this.word();
+        if (DIGITS.test(char)) {
+          return this.number();
+        }
+        if (/\S/.test(char)) {
+          return this.word();
+        }
         this.error(`Invalid character '${char}'`, this.index);
       }
     }
@@ -105,8 +111,12 @@ export class Lexer {
     this.advance();
 
     while (DIGITS.test(this.char) || [".", "_"].includes(this.char)) {
-      if (this.char === "_") continue;
-      if (this.char === "." && ++decimals > 1) break;
+      if (this.char === "_") {
+        continue;
+      }
+      if (this.char === "." && ++decimals > 1) {
+        break;
+      }
 
       str += this.char;
       this.advance();
@@ -132,8 +142,9 @@ export class Lexer {
       if (escapeCharacter) {
         str += ESCAPE_CHARS[this.char] || this.char;
         escapeCharacter = false;
-      } else if (this.char === "\\") escapeCharacter = true;
-      else if (this.char === "{") {
+      } else if (this.char === "\\") {
+        escapeCharacter = true;
+      } else if (this.char === "{") {
         fragments.push({
           type: "str",
           value: str,
@@ -151,29 +162,34 @@ export class Lexer {
         }
 
         tokens.push(token);
-        if ((this.char as string) !== "}")
+        if ((this.char as string) !== "}") {
           this.error(
             "When putting expressions in strings, you must wrap the expression in curly braces '{}'. It seems like you forgot the ending '}'.",
             start,
           );
+        }
         fragments.push(tokens);
-      } else str += this.char;
+      } else {
+        str += this.char;
+      }
 
       this.advance();
     }
 
-    if (str)
+    if (str) {
       fragments.push({
         type: "str",
         value: str,
         range: [fragmentStart, this.index],
       });
+    }
 
-    if (this.char !== '"')
+    if (this.char !== '"') {
       this.error(
         `Strings must start and end with '"'. It seems like you forgot the ending '"'.`,
         start,
       );
+    }
     this.advance();
     return {
       type: "str",
@@ -194,12 +210,13 @@ export class Lexer {
     }
 
     const end = this.index;
-    if (["true", "false"].includes(str))
+    if (["true", "false"].includes(str)) {
       return {
         type: "bool",
         value: str === "true",
         range: [start, end],
       };
+    }
     return { type: "ident", value: str, range: [start, end] };
   }
 }

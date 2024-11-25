@@ -1,8 +1,8 @@
-import { YouTubeSong } from "$src/music/songs";
-import { getVoice } from "$src/music/voice-manager";
 import db, { and, eq } from "$lib/database/drizzle";
 import { youtubeSearches } from "$lib/database/schema";
 import event from "$lib/discord/event";
+import { YouTubeSong } from "$src/music/songs";
+import { getVoice } from "$src/music/voice-manager";
 import { env } from "node:process";
 
 const numberEmojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"];
@@ -10,7 +10,9 @@ const numberEmojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"];
 export default event(
   { name: "messageReactionAdd" },
   async ({ args: [{ message, emoji }, user] }) => {
-    if (user.bot) return;
+    if (user.bot) {
+      return;
+    }
 
     const { guild, channelId } = message;
     if (guild) {
@@ -31,7 +33,9 @@ export default event(
           const member = await guild.members.fetch(user.id);
           if (id && member.voice.channel) {
             const voice = getVoice(guild.id);
-            if (message.partial) message = await message.fetch();
+            if (message.partial) {
+              message = await message.fetch();
+            }
             voice.setChannels(message);
             const song = await YouTubeSong.fromId(id, {
               uid: user.id,
@@ -44,6 +48,8 @@ export default event(
       }
     }
 
-    if (user.id === env.OWNER_ID) await message.react(emoji);
+    if (user.id === env.OWNER_ID) {
+      await message.react(emoji);
+    }
   },
 );

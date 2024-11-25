@@ -3,11 +3,11 @@ import { isSlashCommand, type SlashCommand } from "../commands/slash";
 import { noTestGlob } from "./shared";
 import { pluralize } from "@iz7n/std/string";
 import { Collection } from "discord.js";
-import { join } from "node:path";
+import path from "node:path";
 
 export async function loadSlashCommands(dirPath: string) {
   dirPath = dirPath.replaceAll("\\", "/");
-  const globPattern = join(dirPath, "**/*.ts");
+  const globPattern = path.join(dirPath, "**/*.ts");
   const filePaths = await noTestGlob(globPattern);
 
   const commands = new Collection<string, SlashCommand>();

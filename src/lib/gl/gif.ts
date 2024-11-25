@@ -17,7 +17,9 @@ export default class GIF {
   setFrame(gl: WebGLRenderingContext, index: number, unit = 0): void {
     const { textures } = this;
     const texture = textures[index % textures.length];
-    if (!texture) return;
+    if (!texture) {
+      return;
+    }
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.activeTexture(gl.TEXTURE0 + unit);
   }
