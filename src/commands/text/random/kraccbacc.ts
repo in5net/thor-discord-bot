@@ -1,6 +1,7 @@
 import db, { eq, and, isNotNull, lt, sql, or } from "$lib/database/drizzle";
 import { files, fileTags } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
+import { getFileUrl } from "$lib/files";
 
 export default command(
   {

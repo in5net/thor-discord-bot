@@ -1,5 +1,5 @@
-import { AttachmentBuilder } from "discord.js";
 import command from "$lib/discord/commands/text";
+import { AttachmentBuilder } from "discord.js";
 
 const size = 16;
 
@@ -22,9 +22,12 @@ export default command(
     const canvas = createCanvas(size, size);
     const ctx = canvas.getContext("2d");
 
-    if (code.startsWith("#")) code = code.slice(1);
-    if (![3, 4, 6, 8].includes(code.length))
+    if (code.startsWith("#")) {
+      code = code.slice(1);
+    }
+    if (![3, 4, 6, 8].includes(code.length)) {
       return message.reply("Invalid hex code");
+    }
 
     ctx.fillStyle = `#${code}`;
     ctx.fillRect(0, 0, size, size);

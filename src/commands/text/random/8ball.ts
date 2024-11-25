@@ -1,5 +1,5 @@
-import { choice } from "@iz7n/std/random";
 import command from "$lib/discord/commands/text";
+import { choice } from "@iz7n/std/random";
 
 const answers = [
   "As I see it, yes.",

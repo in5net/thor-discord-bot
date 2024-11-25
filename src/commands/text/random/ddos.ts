@@ -1,6 +1,6 @@
+import command from "$lib/discord/commands/text";
 import { sleep } from "@iz7n/std/async";
 import { random, randomInt } from "@iz7n/std/random";
-import command from "$lib/discord/commands/text";
 
 export default command(
   {

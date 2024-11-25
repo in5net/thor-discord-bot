@@ -1,13 +1,13 @@
+import command from "$lib/discord/commands/text";
 import { sleep } from "@iz7n/std/async";
 import { Vec2, vec2 } from "@iz7n/std/math";
 import { AttachmentBuilder } from "discord.js";
-import command from "$lib/discord/commands/text";
 import ffmpeg from "fluent-ffmpeg";
 import { nanoid } from "nanoid";
 import { createReadStream } from "node:fs";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import path from "node:path";
 
 const startGrid: number[][] = [
   [1, 2, 3],
@@ -38,10 +38,13 @@ export default command(
       message.author.displayAvatarURL({ extension: "png", size: 256 });
     const { loadImage, createCanvas } = await import("@napi-rs/canvas");
     const img = await loadImage(url).catch(() => null);
-    if (!img) return message.reply("Could not load image");
+    if (!img) {
+      return message.reply("Could not load image");
+    }
     const { width, height } = img;
-    if (width > 512 || height > 512)
+    if (width > 512 || height > 512) {
       return message.reply("Image is too large (max 512x512)");
+    }
 
     message = await message.reply("Processing...");
 
@@ -53,16 +56,16 @@ export default command(
     const cellWidth = width / 3;
     const cellHeight = height / 3;
 
-    const temporaryDir = join(tmpdir(), nanoid());
+    const temporaryDir = path.join(tmpdir(), nanoid());
     await mkdir(temporaryDir);
 
     let index = 0;
     async function write() {
-      const path = join(
+      const framePath = path.join(
         temporaryDir,
         `frame${(index++).toString().padStart(4, "0")}.png`,
       );
-      await writeFile(path, await canvas.encode("png"));
+      await writeFile(framePath, await canvas.encode("png"));
       await sleep(0);
     }
 
@@ -74,7 +77,7 @@ export default command(
         const n = row[x]!;
         const sx = (n - 1) % 3;
         const sy = Math.floor((n - 1) / 3);
-        if (n !== 9)
+        if (n !== 9) {
           ctx.drawImage(
             img,
             sx * cellWidth,
@@ -86,6 +89,7 @@ export default command(
             cellWidth,
             cellHeight,
           );
+        }
       }
     }
 
@@ -98,8 +102,11 @@ export default command(
         const row = grid[y]!;
         for (let x = 0; x < 3; x++) {
           const n = row[x];
-          if (n === move) start.set([x, y]);
-          else if (n === 9) target.set([x, y]);
+          if (n === move) {
+            start.set([x, y]);
+          } else if (n === 9) {
+            target.set([x, y]);
+          }
         }
       }
 
@@ -154,9 +161,11 @@ export default command(
         .on("error", reject),
     );
 
-    const outputPath = join(temporaryDir, name);
+    const outputPath = path.join(temporaryDir, name);
     const stream = createReadStream(outputPath);
-    stream.once("close", async () => rm(temporaryDir, { recursive: true }));
+    stream.once("close", () => {
+      void rm(temporaryDir, { recursive: true });
+    });
 
     return message.edit({
       files: [new AttachmentBuilder(stream, { name })],

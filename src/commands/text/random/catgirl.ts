@@ -1,6 +1,6 @@
+import command from "$lib/discord/commands/text";
 import { incCount } from "$lib/users";
 import { EmbedBuilder } from "discord.js";
-import command from "$lib/discord/commands/text";
 import got from "got";
 import { z } from "zod";
 

@@ -61,12 +61,7 @@ export default command(
     const morse = message
       .toLowerCase()
       .split(" ")
-      .map(word =>
-        word
-          .split("")
-          .map(c => codes[c] || "")
-          .join(" "),
-      )
+      .map(word => [...word].map(c => codes[c] || "").join(" "))
       .join(" / ");
     return morse;
   },

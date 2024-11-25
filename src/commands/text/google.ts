@@ -1,6 +1,6 @@
 import { api } from "$lib/customsearch";
-import { EmbedBuilder, hyperlink } from "discord.js";
 import command from "$lib/discord/commands/text";
+import { EmbedBuilder, hyperlink } from "discord.js";
 import { env } from "node:process";
 
 export default command(

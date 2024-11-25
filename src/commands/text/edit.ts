@@ -1,19 +1,18 @@
+import command from "$lib/discord/commands/text";
 import GL from "$lib/gl";
 import { renderProgressBar } from "$lib/progress";
+import { easeOutElastic, easeOutQuart, linear } from "@iz7n/std/easing";
 import { pipe } from "@iz7n/std/fn";
 import { map, pick } from "@iz7n/std/iter";
-import { easeOutElastic, easeOutQuart, linear } from "@iz7n/std/easing";
 import * as math from "@iz7n/std/math";
 import { sum } from "@iz7n/std/stats";
-import { AttachmentBuilder, Message } from "discord.js";
-import command from "$lib/discord/commands/text";
+import { type Message, AttachmentBuilder } from "discord.js";
 import { mat4 } from "gl-matrix";
 import { nanoid } from "nanoid";
-import { env } from "node:process";
-import path from "node:path";
 import { createWriteStream } from "node:fs";
+import path from "node:path";
+import { env } from "node:process";
 import { pipeline } from "node:stream/promises";
-import got from "got";
 
 const fps = 24;
 
@@ -58,11 +57,11 @@ export default command(
     gl.uniform("projectionMatrix", "mat4", projectionMatrix);
     const modelViewMatrix = mat4.create();
 
-    const animations: {
+    const animations: Array<{
       time: number;
       ease?: (t: number) => number;
       render?: (t: number) => Promise<void>;
-    }[] = [
+    }> = [
       {
         time: 0.6,
         ease: easeOutQuart,

@@ -1,6 +1,6 @@
 import db, { sql, eq } from "$lib/database/drizzle";
-import command from "$lib/discord/commands/text";
 import { files, fileTags } from "$lib/database/schema";
+import command from "$lib/discord/commands/text";
 import { getFileUrl } from "$lib/files";
 
 export default command(

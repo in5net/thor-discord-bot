@@ -1,5 +1,5 @@
-import { generatePlanFromQuery } from "$src/music/plan";
 import command from "$lib/discord/commands/text";
+import { generatePlanFromQuery } from "$src/music/plan";
 
 export default command(
   {

@@ -8,7 +8,10 @@ export default musicCommand(
   },
   async ({ message, voice }) => {
     voice.setChannels(message);
-    voice.stream.join();
-    if (voice.queue.length) await voice.play();
+    // eslint-disable-next-line unicorn/require-array-join-separator
+    await voice.stream.join();
+    if (voice.queue.length) {
+      await voice.play();
+    }
   },
 );

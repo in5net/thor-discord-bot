@@ -1,8 +1,8 @@
+import logger from "$lib/logger";
 import woof from "$lib/woof";
 import { type SongType } from "$src/music/songs";
-import { quantify } from "@iz7n/std/string";
-import logger from "$lib/logger";
 import musicCommand from "./command";
+import { quantify } from "@iz7n/std/string";
 
 export default musicCommand(
   {
@@ -22,8 +22,9 @@ export default musicCommand(
 
     const indices: number[] = [];
     for (const str of ns) {
-      if (str === "last") indices.push(queue.length - 1);
-      else if (str.includes("-")) {
+      if (str === "last") {
+        indices.push(queue.length - 1);
+      } else if (str.includes("-")) {
         const [startStr = "1", endStr = "1"] = str.split("-");
         const start = Number.parseInt(startStr);
         const end = Number.parseInt(endStr);
@@ -39,14 +40,17 @@ export default musicCommand(
     logger.debug("indices:", indices);
 
     for (const i of indices) {
-      if (Number.isNaN(i) || i < 0 || i >= queue.length)
+      if (Number.isNaN(i) || i < 0 || i >= queue.length) {
         return message.reply(`${woof()}, please provide a valid numbers`);
+      }
     }
 
     const songs: Array<[index: number, song: SongType]> = [];
     for (const i of indices) {
       const song = queue.remove(i);
-      if (song) songs.push([i, song]);
+      if (song) {
+        songs.push([i, song]);
+      }
     }
 
     return voice.send(

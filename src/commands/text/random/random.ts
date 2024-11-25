@@ -1,5 +1,5 @@
-import { AttachmentBuilder } from "discord.js";
 import command from "$lib/discord/commands/text";
+import { AttachmentBuilder } from "discord.js";
 
 const size = 128;
 

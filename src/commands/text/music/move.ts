@@ -24,14 +24,24 @@ export default musicCommand(
     const i = from === "last" ? length - 1 : Number.parseInt(from) - 1;
     const index = to === "last" ? length - 1 : Number.parseInt(to) - 1;
 
-    if (Number.isNaN(i))
+    if (Number.isNaN(i)) {
       return message.reply(`${woof()}, \`#from\` is not an integer`);
-    if (Number.isNaN(index))
+    }
+    if (Number.isNaN(index)) {
       return message.reply(`${woof()}, \`#to\` is not an integer`);
-    if (i < 0) return message.reply(`${woof()}, \`#from\` is too small`);
-    if (index < 0) return message.reply(`${woof()}, \`#to\` is too small`);
-    if (i >= length) return message.reply(`${woof()}, \`#from\` is too big`);
-    if (index >= length) return message.reply(`${woof()}, \`#to\` is too big`);
+    }
+    if (i < 0) {
+      return message.reply(`${woof()}, \`#from\` is too small`);
+    }
+    if (index < 0) {
+      return message.reply(`${woof()}, \`#to\` is too small`);
+    }
+    if (i >= length) {
+      return message.reply(`${woof()}, \`#from\` is too big`);
+    }
+    if (index >= length) {
+      return message.reply(`${woof()}, \`#to\` is too big`);
+    }
 
     return voice.move(i, index);
   },

@@ -1,6 +1,6 @@
+import command from "$lib/discord/commands/text";
 import { strTo16x16 } from "$lib/hash";
 import { AttachmentBuilder } from "discord.js";
-import command from "$lib/discord/commands/text";
 
 const size = 16;
 const zoom = 4;

@@ -1,5 +1,5 @@
-import { getText } from "$lib/y7";
 import command from "$lib/discord/commands/text";
+import { getText } from "$lib/y7";
 
 export default command(
   {

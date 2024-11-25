@@ -20,7 +20,7 @@ export default musicCommand(
     const songs = await voice.getSongsFromQuery(message, queries);
     voice.queue.unshift(...songs);
 
-    if (songs.length)
+    if (songs.length) {
       await voice.channel?.send(
         `⏏️ Added ${songs
           .map(song => song.title)
@@ -29,6 +29,7 @@ export default musicCommand(
           songs.length > 10 ? ", ..." : ""
         } to the front of the queue`,
       );
+    }
 
     return voice.play(true);
   },

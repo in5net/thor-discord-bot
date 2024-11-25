@@ -1,5 +1,5 @@
-import { EmbedBuilder } from "discord.js";
 import command from "$lib/discord/commands/text";
+import { EmbedBuilder } from "discord.js";
 import got from "got";
 import { z } from "zod";
 
@@ -20,7 +20,9 @@ export default command(
   async ({ message }) => {
     const data = await got("https://api.thecatapi.com/v1/images/search").json();
     const [cat] = dataSchema.parse(data);
-    if (!cat) throw new Error("No cat found");
+    if (!cat) {
+      throw new Error("No cat found");
+    }
 
     const embed = new EmbedBuilder()
       .setTitle("Cat")

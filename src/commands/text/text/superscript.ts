@@ -16,8 +16,7 @@ export default command(
     examples: ["can you believe it"],
   },
   async ({ args: { message } }) => {
-    const converted = message
-      .split("")
+    const converted = [...message]
       .map(char => {
         const index = chars.indexOf(char);
         return superscript[index] || char;

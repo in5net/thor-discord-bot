@@ -1,5 +1,5 @@
-import { EmbedBuilder, version } from "discord.js";
 import command from "$lib/discord/commands/text";
+import { EmbedBuilder, version } from "discord.js";
 import { cpus, freemem, totalmem } from "node:os";
 import { arch, memoryUsage, platform, uptime, versions } from "node:process";
 

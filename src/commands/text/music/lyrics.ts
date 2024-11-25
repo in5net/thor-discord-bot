@@ -1,6 +1,6 @@
+import command from "$lib/discord/commands/text";
 import { getVoice } from "$src/music/voice-manager";
 import { AttachmentBuilder } from "discord.js";
-import command from "$lib/discord/commands/text";
 import { Buffer } from "node:buffer";
 
 export default command(
@@ -18,12 +18,16 @@ export default command(
   },
   async ({ message, args: { song_name } }) => {
     const { guildId } = message;
-    if (!guildId) return;
+    if (!guildId) {
+      return;
+    }
     const voice = getVoice(guildId);
 
     voice.setChannels(message);
     const lyrics = await voice.getLyrics(song_name);
-    if (lyrics.length <= 2000) return voice.send(lyrics);
+    if (lyrics.length <= 2000) {
+      return voice.send(lyrics);
+    }
     return voice.send({
       files: [
         new AttachmentBuilder(Buffer.from(lyrics), { name: "lyrics.txt" }),

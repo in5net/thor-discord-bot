@@ -1,5 +1,5 @@
-import { AudioPlayerStatus } from "@discordjs/voice";
 import musicCommand from "./command";
+import { AudioPlayerStatus } from "@discordjs/voice";
 
 export default musicCommand(
   {
@@ -10,8 +10,11 @@ export default musicCommand(
   async ({ voice }) => {
     const paused =
       voice.stream.player.state.status === AudioPlayerStatus.Paused;
-    if (paused) voice.stream.player.unpause();
-    else voice.stream.player.pause(true);
+    if (paused) {
+      voice.stream.player.unpause();
+    } else {
+      voice.stream.player.pause(true);
+    }
     return voice.channel?.send(paused ? "⏯️ Resumed" : "⏸️ Paused");
   },
 );

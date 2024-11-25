@@ -56,11 +56,12 @@ export default command(
       model: "gpt-3.5-turbo-instruct",
       prompt: `${await description()} Current time: ${new Date().toLocaleString()}
 
-${previous.map(
-  ({ question: q, answer: a }) => `You: ${q}
-${env.NAME}: ${a}
-`,
-)}
+${previous
+  .map(
+    ({ question: q, answer: a }) => `You: ${q}
+${env.NAME}: ${a}`,
+  )
+  .join("\n")}
 You: ${prompt}
 ${env.NAME}:`,
       temperature: 0.9,

@@ -1,5 +1,5 @@
-import { incCount } from "$lib/users";
 import command from "$lib/discord/commands/text";
+import { incCount } from "$lib/users";
 import { env } from "node:process";
 
 export default command(

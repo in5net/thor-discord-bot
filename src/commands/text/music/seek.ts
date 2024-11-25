@@ -1,6 +1,5 @@
 import { parseTime } from "$lib/time";
 import musicCommand from "./command";
-import play from "play-dl";
 
 export default musicCommand(
   {
@@ -17,10 +16,9 @@ export default musicCommand(
   async ({ message, args: { time }, voice }) => {
     const seconds = parseTime(time);
     const { queue } = voice;
-    if (!queue?.current && "send" in message.channel)
+    if (!queue?.current && "send" in message.channel) {
       return message.channel.send("No song is playing");
-
-    if (play.is_expired()) await play.refreshToken();
+    }
 
     return voice.seek(seconds);
   },

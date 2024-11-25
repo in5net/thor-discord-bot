@@ -1,6 +1,6 @@
+import command from "$lib/discord/commands/text";
 import { choice } from "@iz7n/std/random";
 import { type Message, type Snowflake } from "discord.js";
-import command from "$lib/discord/commands/text";
 import { readFileSync } from "node:fs";
 
 const words = readFileSync(
@@ -24,7 +24,9 @@ export default command(
 
 export async function handleWordleMessage({ channel, content }: Message) {
   const word = channel2Word.get(channel.id);
-  if (!word) return;
+  if (!word) {
+    return;
+  }
 
   const guess = content.toLowerCase();
   if (guess === word) {
@@ -33,13 +35,16 @@ export async function handleWordleMessage({ channel, content }: Message) {
 ${guess} is correct!`);
   }
 
-  const colors = guess
-    .split("")
+  const colors = [...guess]
     .map((letter, i) => {
-      if (letter === word[i]) return "🟩";
+      if (letter === word[i]) {
+        return "🟩";
+      }
       const index = word.lastIndexOf(letter);
-      if (index > -1) {
-        if (guess[index] === word[index]) return "⬛️";
+      if (index !== -1) {
+        if (guess[index] === word[index]) {
+          return "⬛️";
+        }
         return "🟨";
       }
 
