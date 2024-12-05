@@ -5,7 +5,10 @@
   "prettier": "@iz7n/prettier-config",
   "main": "./src/main.ts",
   "scripts": {
-    "dev": "tsx watch src/main.ts",
+    "sync": "svelte-kit sync",
+    "dev": "tsx watch src/main.ts & vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
     "start": "tsx src/main.ts",
     "debug": "tsx --inspect-brk src/main.ts",
     "fmt": "prettier . --write --cache --ignore-unknown",
@@ -13,6 +16,8 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "lint:fix-dry": "eslint --fix-dry-run",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "deploy": "tsx src/deploy.ts"
@@ -73,6 +78,9 @@
   "devDependencies": {
     "@iz7n/eslint-config": "^0.13.1",
     "@iz7n/prettier-config": "^1.4.0",
+    "@sveltejs/adapter-node": "^5.2.9",
+    "@sveltejs/kit": "^2.9.0",
+    "@sveltejs/vite-plugin-svelte": "^5.0.1",
     "@total-typescript/ts-reset": "^0.6.1",
     "@types/better-sqlite3": "^7.6.12",
     "@types/fluent-ffmpeg": "^2.1.27",
@@ -84,8 +92,12 @@
     "@types/pngjs": "^6.0.5",
     "drizzle-kit": "^0.28.1",
     "eslint": "9.15.0",
+    "eslint-plugin-svelte": "^2.46.1",
     "pino-pretty": "^13.0.0",
     "prettier": "^3.4.1",
-    "typescript": "5.7.2"
+    "svelte": "^5.6.2",
+    "svelte-check": "^4.1.1",
+    "typescript": "5.7.2",
+    "vite": "^6.0.2"
   }
 }

@@ -9,4 +9,10 @@ chatgpt-system.txt
 !.env.project
 !.env.vault
 
-.flaskenv*
+
+# Output
+.svelte-kit/
+build/
+
+# Vite
+vite.config.[j|t]s.timestamp-*

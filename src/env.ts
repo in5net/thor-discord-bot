@@ -20,6 +20,7 @@ const EnvironmentVariables = z.object({
   NAME: z.string(),
   PREFIX: z.string(),
   COLOR: z.string().startsWith("#"),
+  PORT: z.coerce.number(),
 
   DISCORD_ID: z.string(),
   DISCORD_TOKEN: z.string(),

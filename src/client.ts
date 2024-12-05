@@ -2,6 +2,7 @@ import type { MessageCommand } from "$lib/discord/commands/message";
 import type { SlashCommand } from "$lib/discord/commands/slash";
 import type { TextCommand } from "$lib/discord/commands/text";
 import { loadDiscordEvents } from "$lib/discord/loaders/events";
+import { handler } from "../build/handler.js";
 import {
   messageCommands,
   slashCommands,
@@ -18,8 +19,9 @@ import {
   type Collection,
 } from "discord.js";
 import ms from "ms";
-import process from "node:process";
 import { scheduleJob } from "node-schedule";
+import { createServer } from "node:http";
+import process, { env } from "node:process";
 
 const { NAME, DISCORD_TOKEN } = process.env;
 console.log(`⏳ ${NAME} is starting...`);
@@ -93,6 +95,10 @@ client.messageCommands = messageCommands;
 client.buttonHandlers = buttonHandlers;
 
 await client.login(DISCORD_TOKEN);
+
+const server = createServer();
+server.on("request", handler);
+server.listen(env.PORT);
 
 const webhook = new WebhookClient({ url: process.env.WEBHOOK_URL });
 
