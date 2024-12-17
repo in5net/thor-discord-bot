@@ -1,6 +1,7 @@
 import db, { and, desc, eq, gte } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
+import logger from "$lib/logger";
 import { throttle } from "@iz7n/std/async";
 import { ttlCache } from "@iz7n/std/fn";
 import { type Message } from "discord.js";
@@ -71,11 +72,10 @@ export default command(
         }
       }
     }, 5000);
-    console.log("Starting chat...");
+    logger.info("Starting chat...");
     const start = performance.now();
     const response = await ollama.chat({
       model: "gdisney/orca2-uncensored",
-      options: {},
       messages: [
         {
           role: "system",
@@ -95,15 +95,16 @@ export default command(
         { role: "user", content: prompt },
       ],
       stream: true,
+      keep_alive: "15m",
     });
-    console.log("Running chat...");
+    logger.info("Running chat...");
     for await (const part of response) {
       reply += part.message.content;
       send();
     }
     const end = performance.now();
     const diff = end - start;
-    console.log(`Chat finished in ${Math.round(diff)}ms`);
+    logger.info(`Chat finished in ${Math.round(diff)}ms`);
 
     const channelExists = await db.query.channels.findFirst({
       columns: {
