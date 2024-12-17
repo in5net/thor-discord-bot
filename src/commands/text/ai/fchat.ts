@@ -2,23 +2,10 @@ import db, { and, desc, eq, gte } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
 import logger from "$lib/logger";
+import { description, uncensoredSystem } from "./shared";
 import { throttle } from "@iz7n/std/async";
-import { ttlCache } from "@iz7n/std/fn";
 import { type Message } from "discord.js";
-import ms from "ms";
-import { readFile } from "node:fs/promises";
 import ollama from "ollama";
-
-const systemPath = new URL(
-  "../../../../uncensored-system.txt",
-  import.meta.url,
-);
-const descPath = new URL("../../../../chatgpt-desc.txt", import.meta.url);
-const system = ttlCache(async () => readFile(systemPath, "utf8"), ms("10 min"));
-const description = ttlCache(
-  async () => readFile(descPath, "utf8"),
-  ms("10 min"),
-);
 
 const model = "llama3.2:1b";
 
@@ -75,7 +62,7 @@ export default command(
       messages: [
         {
           role: "system",
-          content: await system(),
+          content: await uncensoredSystem(),
         },
         {
           role: "assistant",
