@@ -8,20 +8,14 @@ import ms from "ms";
 import { readFile } from "node:fs/promises";
 import ollama from "ollama";
 
-const chatGPTSystemPath = new URL(
-  "../../../../chatgpt-system.txt",
+const systemPath = new URL(
+  "../../../../uncensored-system.txt",
   import.meta.url,
 );
-const chatGPTDescPath = new URL(
-  "../../../../chatgpt-desc.txt",
-  import.meta.url,
-);
-const system = ttlCache(
-  async () => readFile(chatGPTSystemPath, "utf8"),
-  ms("10 min"),
-);
+const descPath = new URL("../../../../chatgpt-desc.txt", import.meta.url);
+const system = ttlCache(async () => readFile(systemPath, "utf8"), ms("10 min"));
 const description = ttlCache(
-  async () => readFile(chatGPTDescPath, "utf8"),
+  async () => readFile(descPath, "utf8"),
   ms("10 min"),
 );
 
@@ -76,7 +70,7 @@ export default command(
       messages: [
         {
           role: "system",
-          content: `${await system()} Current date: ${new Date().toDateString()}`,
+          content: await system(),
         },
         {
           role: "assistant",

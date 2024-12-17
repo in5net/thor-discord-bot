@@ -4,7 +4,7 @@ logs/
 cache/
 .data/
 *-desc.txt
-chatgpt-system.txt
+*-system.txt
 .env*
 !.env.project
 !.env.vault
