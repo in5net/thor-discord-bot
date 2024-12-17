@@ -60,6 +60,7 @@
     "nanoid": "5.0.9",
     "nekos-best.js": "^6.3.0",
     "node-schedule": "^2.1.1",
+    "ollama": "^0.5.11",
     "openai": "^4.76.3",
     "owofire": "^1.0.4",
     "pino": "^9.5.0",

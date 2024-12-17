@@ -2,13 +2,12 @@ import db, { and, desc, eq, gte } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
 import { filter } from "$lib/openai";
-import { openai } from "@ai-sdk/openai";
 import { throttle } from "@iz7n/std/async";
 import { ttlCache } from "@iz7n/std/fn";
-import { streamText } from "ai";
 import { type Message } from "discord.js";
 import ms from "ms";
 import { readFile } from "node:fs/promises";
+import ollama from "ollama";
 
 const chatGPTSystemPath = new URL(
   "../../../../chatgpt-system.txt",
@@ -29,7 +28,7 @@ const description = ttlCache(
 
 export default command(
   {
-    desc: "Talk to ChatGPT",
+    desc: "Talk to Ollama",
     optionalPrefix: true,
     args: {
       prompt: {
@@ -41,7 +40,7 @@ export default command(
     examples: ["hi", "what is the meaning of life?"],
   },
   async ({ message, args: { prompt } }) => {
-    const { channelId, channel, author, guildId } = message;
+    const { channelId, channel, guildId } = message;
 
     if (prompt === "CLEAR") {
       await db.delete(channels).where(eq(channels.id, channelId));
@@ -77,13 +76,14 @@ export default command(
         }
       }
     }, 500);
-    const result = streamText({
-      model: openai.chat("gpt-3.5-turbo-0125", {
-        user: author.id,
-      }),
-      maxTokens: 1024,
-      system: `${await system()} Current date: ${new Date().toDateString()}`,
+    const response = await ollama.chat({
+      model: "gdisney/orca2-uncensored",
+      options: {},
       messages: [
+        {
+          role: "system",
+          content: `${await system()} Current date: ${new Date().toDateString()}`,
+        },
         {
           role: "assistant",
           content: await description(),
@@ -97,9 +97,10 @@ export default command(
         ),
         { role: "user", content: prompt },
       ],
+      stream: true,
     });
-    for await (const textPart of result.textStream) {
-      reply += textPart;
+    for await (const part of response) {
+      reply += part.message.content;
       send();
     }
 
