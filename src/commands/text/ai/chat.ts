@@ -76,6 +76,8 @@ export default command(
         }
       }
     }, 500);
+    console.log("Starting chat...");
+    const start = performance.now();
     const response = await ollama.chat({
       model: "gdisney/orca2-uncensored",
       options: {},
@@ -99,10 +101,14 @@ export default command(
       ],
       stream: true,
     });
+    console.log("Running chat...");
     for await (const part of response) {
       reply += part.message.content;
       send();
     }
+    const end = performance.now();
+    const diff = end - start;
+    console.log(`Chat finished in ${Math.round(diff)}ms`);
 
     const channelExists = await db.query.channels.findFirst({
       columns: {
