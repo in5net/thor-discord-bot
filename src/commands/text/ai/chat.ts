@@ -104,7 +104,7 @@ export default command(
     }
     const end = performance.now();
     const diff = end - start;
-    logger.info(`Chat finished in ${Math.round(diff)}ms`);
+    logger.info(`Chat finished in ${(diff / 1000).toFixed(1)}s`);
 
     const channelExists = await db.query.channels.findFirst({
       columns: {
