@@ -1,36 +1,44 @@
-import db, { and, desc, eq, gte } from "$lib/database/drizzle";
+import db, { eq, gte, and, desc } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
-import logger from "$lib/logger";
+import { filter } from "$lib/openai";
+import logger from "$src/lib/logger";
 import { description } from "./shared";
+import { createOpenAI } from "@ai-sdk/openai";
 import { throttle } from "@iz7n/std/async";
+import { streamText } from "ai";
 import { env } from "node:process";
-import ollama from "ollama";
 
-const model = "local";
+const openai = createOpenAI({
+  baseURL: "http://localhost:11434/v1",
+  compatibility: "compatible",
+});
+
+const model = "llama.cpp";
 
 export default command(
   {
-    desc: "Talk to Ollama",
+    desc: "Talk to llama.cpp",
     optionalPrefix: true,
     args: {
       prompt: {
         type: "text",
         desc: "The prompt to send",
-        max: 256,
+        max: 512,
       },
     },
-    examples: ["hi", "what is the meaning of life?"],
+    examples: ["do you love lean?", "what's 77 + 33?"],
   },
   async ({ message, args: { prompt } }) => {
     const { channelId, channel, guildId } = message;
-    if (!("send" in channel)) {
-      return;
-    }
 
     if (prompt === "CLEAR") {
       await db.delete(channels).where(eq(channels.id, channelId));
       return message.reply("Context cleared");
+    }
+
+    if (!(await filter(prompt))) {
+      return message.reply("Your text did not pass the content filter");
     }
 
     const minCreatedAt = new Date();
@@ -56,9 +64,9 @@ export default command(
       }
     }, 3000);
     const start = performance.now();
-    const response = await ollama.generate({
-      model,
-      prompt: `${await description()}
+    const result = streamText({
+      model: openai(""),
+      prompt: `${await description()} Current time: ${new Date().toLocaleString()}
 
 ${previous
   .map(
@@ -68,20 +76,17 @@ ${env.NAME}: ${a}`,
   .join("\n")}
 You: ${prompt}
 ${env.NAME}:`,
-      stream: true,
-      keep_alive: "15m",
-      options: {
-        temperature: 0.9,
-        num_predict: 1024,
-        frequency_penalty: 0.5,
-        presence_penalty: 0.5,
-        stop: ["You:"],
-      },
+      temperature: 0.9,
+      maxTokens: 128,
+      frequencyPenalty: 0.5,
+      presencePenalty: 0.5,
+      stopSequences: ["You:"],
     });
     logger.info(`Running ${model}...`);
     await responseMessage.edit("*Running...*");
-    for await (const part of response) {
-      reply += part.response;
+
+    for await (const textPart of result.textStream) {
+      reply += textPart;
       send();
     }
     const end = performance.now();
