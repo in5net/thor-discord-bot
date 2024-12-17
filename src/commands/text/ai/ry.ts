@@ -9,7 +9,7 @@ import { streamText } from "ai";
 import { env } from "node:process";
 
 const openai = createOpenAI({
-  baseURL: "http://localhost:11434/v1",
+  baseURL: "http://localhost:1277/v1",
   compatibility: "compatible",
 });
 
