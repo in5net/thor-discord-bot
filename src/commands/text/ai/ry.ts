@@ -72,7 +72,7 @@ ${env.NAME}:`,
       maxTokens: 128,
       frequencyPenalty: 0.5,
       presencePenalty: 0.5,
-      stopSequences: ["You:", "Assistant:"],
+      stopSequences: ["You:", "Assistant:", `${env.NAME}:`],
     });
 
     for await (const textPart of result.textStream) {
