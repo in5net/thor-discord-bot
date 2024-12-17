@@ -56,8 +56,8 @@ export default command(
     });
 
     let reply = "";
-    logger.info(`Starting ${model}...`);
-    const responseMessage = await channel.send("*Starting...*");
+    logger.info(`Running ${model}...`);
+    const responseMessage = await channel.send("*Running...*");
     const send = throttle(async () => {
       if (reply) {
         await responseMessage.edit(reply);
@@ -82,8 +82,6 @@ ${env.NAME}:`,
       presencePenalty: 0.5,
       stopSequences: ["You:"],
     });
-    logger.info(`Running ${model}...`);
-    await responseMessage.edit("*Running...*");
 
     for await (const textPart of result.textStream) {
       reply += textPart;
