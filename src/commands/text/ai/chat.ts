@@ -1,7 +1,6 @@
 import db, { and, desc, eq, gte } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
-import { filter } from "$lib/openai";
 import { throttle } from "@iz7n/std/async";
 import { ttlCache } from "@iz7n/std/fn";
 import { type Message } from "discord.js";
@@ -45,10 +44,6 @@ export default command(
     if (prompt === "CLEAR") {
       await db.delete(channels).where(eq(channels.id, channelId));
       return message.reply("Context cleared");
-    }
-
-    if (!(await filter(prompt))) {
-      return message.reply("Your text did not pass the content filter");
     }
 
     const minCreatedAt = new Date();
