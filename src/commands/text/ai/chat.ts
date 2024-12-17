@@ -70,7 +70,7 @@ export default command(
           responseMessage = await channel.send(reply);
         }
       }
-    }, 500);
+    }, 5000);
     console.log("Starting chat...");
     const start = performance.now();
     const response = await ollama.chat({
