@@ -28,7 +28,7 @@ export default command(
     }
 
     if (prompt === "CLEAR") {
-      await db.delete(channels).where(eq(channels.id, channelId));
+      await db.delete(context).where(eq(context.channelId, channelId));
       return message.reply("Context cleared");
     }
 
@@ -72,7 +72,14 @@ export default command(
       maxTokens: 128,
       frequencyPenalty: 0.5,
       presencePenalty: 0.5,
-      stopSequences: ["<|im_start", "<|im_end", "|im_start", "|im_end"],
+      stopSequences: [
+        "<|im_start",
+        "<|im_end",
+        "|im_start",
+        "|im_end",
+        "Q:",
+        "A:",
+      ],
     });
 
     for await (const textPart of result.textStream) {
