@@ -2,7 +2,7 @@ import db, { eq, gte, and, desc } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
 import logger from "$src/lib/logger";
-import { openai, uncensoredSystem } from "./shared";
+import { openai, system } from "./shared";
 import { throttle } from "@iz7n/std/async";
 import { streamText } from "ai";
 
@@ -57,7 +57,7 @@ export default command(
     const start = performance.now();
     const result = streamText({
       model: openai.chat(""),
-      system: await uncensoredSystem(),
+      system: await system(),
       messages: [
         ...previous.flatMap(
           ({ question: q, answer: a }) =>
