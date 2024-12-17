@@ -1,7 +1,6 @@
 import db, { eq, gte, and, desc } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
-import { filter } from "$lib/openai";
 import logger from "$src/lib/logger";
 import { description } from "./shared";
 import { createOpenAI } from "@ai-sdk/openai";
@@ -31,14 +30,13 @@ export default command(
   },
   async ({ message, args: { prompt } }) => {
     const { channelId, channel, guildId } = message;
+    if (!("send" in channel)) {
+      return;
+    }
 
     if (prompt === "CLEAR") {
       await db.delete(channels).where(eq(channels.id, channelId));
       return message.reply("Context cleared");
-    }
-
-    if (!(await filter(prompt))) {
-      return message.reply("Your text did not pass the content filter");
     }
 
     const minCreatedAt = new Date();
@@ -80,7 +78,7 @@ ${env.NAME}:`,
       maxTokens: 128,
       frequencyPenalty: 0.5,
       presencePenalty: 0.5,
-      stopSequences: ["You:"],
+      stopSequences: ["You:", "Assistant:"],
     });
 
     for await (const textPart of result.textStream) {
