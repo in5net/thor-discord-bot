@@ -2,10 +2,9 @@ import db, { eq, gte, and, desc } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
 import logger from "$src/lib/logger";
-import { description, openai } from "./shared";
+import { openai, uncensoredSystem } from "./shared";
 import { throttle } from "@iz7n/std/async";
 import { streamText } from "ai";
-import { env } from "node:process";
 
 const model = "llama.cpp";
 
@@ -57,17 +56,18 @@ export default command(
     }, 3000);
     const start = performance.now();
     const result = streamText({
-      model: openai(""),
-      prompt: `${await description()} Current time: ${new Date().toLocaleString()}
-
-${previous
-  .map(
-    ({ question: q, answer: a }) => `You: ${q}
-${env.NAME}: ${a}`,
-  )
-  .join("\n")}
-You: ${prompt}
-${env.NAME}:`,
+      model: openai.chat(""),
+      system: await uncensoredSystem(),
+      messages: [
+        ...previous.flatMap(
+          ({ question: q, answer: a }) =>
+            [
+              { role: "user", content: q },
+              { role: "assistant", content: a },
+            ] as const,
+        ),
+        { role: "user", content: prompt },
+      ],
       temperature: 0.9,
       maxTokens: 128,
       frequencyPenalty: 0.5,
