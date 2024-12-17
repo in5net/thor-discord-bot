@@ -4,7 +4,6 @@ import command from "$lib/discord/commands/text";
 import logger from "$lib/logger";
 import { description, uncensoredSystem } from "./shared";
 import { throttle } from "@iz7n/std/async";
-import { type Message } from "discord.js";
 import ollama from "ollama";
 
 const model = "llama3.2:1b";
@@ -45,17 +44,13 @@ export default command(
     });
 
     let reply = "";
-    let responseMessage: Message | undefined;
+    logger.info(`Starting ${model}...`);
+    const responseMessage = await channel.send("*Starting...*");
     const send = throttle(async () => {
       if (reply) {
-        if (responseMessage) {
-          await responseMessage.edit(reply);
-        } else {
-          responseMessage = await channel.send(reply);
-        }
+        await responseMessage.edit(reply);
       }
     }, 3000);
-    logger.info(`Starting ${model}...`);
     const start = performance.now();
     const response = await ollama.chat({
       model,
@@ -80,6 +75,7 @@ export default command(
       stream: true,
     });
     logger.info(`Running ${model}...`);
+    await responseMessage.edit("*Running...*");
     for await (const part of response) {
       reply += part.message.content;
       send();
