@@ -73,6 +73,12 @@ export default command(
         { role: "user", content: prompt },
       ],
       stream: true,
+      options: {
+        temperature: 0.9,
+        num_predict: 1024,
+        frequency_penalty: 0.5,
+        presence_penalty: 0.5,
+      },
     });
     logger.info(`Running ${model}...`);
     await responseMessage.edit("*Running...*");

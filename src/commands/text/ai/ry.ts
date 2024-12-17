@@ -1,43 +1,36 @@
-import db, { eq, gte, and, desc } from "$lib/database/drizzle";
+import db, { and, desc, eq, gte } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
-import { filter } from "$lib/openai";
-import { openai } from "@ai-sdk/openai";
-import { ttlCache } from "@iz7n/std/fn";
-import { generateText } from "ai";
-import ms from "ms";
-import { readFile } from "node:fs/promises";
+import logger from "$lib/logger";
+import { description } from "./shared";
+import { throttle } from "@iz7n/std/async";
 import { env } from "node:process";
+import ollama from "ollama";
 
-const gpt3DescPath = new URL("../../../../gpt3-desc.txt", import.meta.url);
-const description = ttlCache(
-  async () => readFile(gpt3DescPath, "utf8"),
-  ms("10 min"),
-);
+const model = "local";
 
 export default command(
   {
-    desc: "Talk to GPT-3.5",
+    desc: "Talk to Ollama",
     optionalPrefix: true,
     args: {
       prompt: {
         type: "text",
         desc: "The prompt to send",
-        max: 512,
+        max: 256,
       },
     },
-    examples: ["do you love lean?", "what's 77 + 33?"],
+    examples: ["hi", "what is the meaning of life?"],
   },
   async ({ message, args: { prompt } }) => {
-    const { channelId, channel, author, guildId } = message;
+    const { channelId, channel, guildId } = message;
+    if (!("send" in channel)) {
+      return;
+    }
 
     if (prompt === "CLEAR") {
       await db.delete(channels).where(eq(channels.id, channelId));
       return message.reply("Context cleared");
-    }
-
-    if (!(await filter(prompt))) {
-      return message.reply("Your text did not pass the content filter");
     }
 
     const minCreatedAt = new Date();
@@ -54,11 +47,18 @@ export default command(
       orderBy: desc(context.createdAt),
     });
 
-    const result = await generateText({
-      model: openai("gpt-3.5-turbo-instruct", {
-        user: author.id,
-      }),
-      prompt: `${await description()} Current time: ${new Date().toLocaleString()}
+    let reply = "";
+    logger.info(`Starting ${model}...`);
+    const responseMessage = await channel.send("*Starting...*");
+    const send = throttle(async () => {
+      if (reply) {
+        await responseMessage.edit(reply);
+      }
+    }, 3000);
+    const start = performance.now();
+    const response = await ollama.generate({
+      model,
+      prompt: `${await description()}
 
 ${previous
   .map(
@@ -68,15 +68,25 @@ ${env.NAME}: ${a}`,
   .join("\n")}
 You: ${prompt}
 ${env.NAME}:`,
-      temperature: 0.9,
-      maxTokens: 1024,
-      frequencyPenalty: 0.5,
-      presencePenalty: 0.5,
-      stopSequences: ["You:"],
+      stream: true,
+      keep_alive: "15m",
+      options: {
+        temperature: 0.9,
+        num_predict: 1024,
+        frequency_penalty: 0.5,
+        presence_penalty: 0.5,
+        stop: ["You:"],
+      },
     });
-
-    const reply = result.text;
-    await message.channel.send(reply);
+    logger.info(`Running ${model}...`);
+    await responseMessage.edit("*Running...*");
+    for await (const part of response) {
+      reply = part.response;
+      send();
+    }
+    const end = performance.now();
+    const diff = end - start;
+    logger.info(`${model} finished in ${(diff / 1000).toFixed(1)}s`);
 
     const channelExists = await db.query.channels.findFirst({
       columns: {
