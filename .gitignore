@@ -3,7 +3,7 @@ node_modules/
 logs/
 cache/
 .data/
-ai-*.txt
+chat-*.txt
 .env*
 
 # Output
