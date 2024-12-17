@@ -2,8 +2,9 @@ import db, { and, desc, eq, gte } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
 import logger from "$lib/logger";
-import { description, uncensoredSystem } from "./shared";
+import { description } from "./shared";
 import { throttle } from "@iz7n/std/async";
+import { env } from "node:process";
 import ollama from "ollama";
 
 const model = "local";
@@ -23,6 +24,9 @@ export default command(
   },
   async ({ message, args: { prompt } }) => {
     const { channelId, channel, guildId } = message;
+    if (!("send" in channel)) {
+      return;
+    }
 
     if (prompt === "CLEAR") {
       await db.delete(channels).where(eq(channels.id, channelId));
@@ -52,26 +56,18 @@ export default command(
       }
     }, 3000);
     const start = performance.now();
-    const response = await ollama.chat({
+    const response = await ollama.generate({
       model,
-      messages: [
-        {
-          role: "system",
-          content: await uncensoredSystem(),
-        },
-        {
-          role: "assistant",
-          content: await description(),
-        },
-        ...previous.flatMap(
-          ({ question: q, answer: a }) =>
-            [
-              { role: "user", content: q },
-              { role: "assistant", content: a },
-            ] as const,
-        ),
-        { role: "user", content: prompt },
-      ],
+      prompt: `${await description()}
+
+${previous
+  .map(
+    ({ question: q, answer: a }) => `You: ${q}
+${env.NAME}: ${a}`,
+  )
+  .join("\n")}
+You: ${prompt}
+${env.NAME}:`,
       stream: true,
       keep_alive: "15m",
       options: {
@@ -79,12 +75,13 @@ export default command(
         num_predict: 1024,
         frequency_penalty: 0.5,
         presence_penalty: 0.5,
+        stop: ["You:", "Assistant:"],
       },
     });
     logger.info(`Running ${model}...`);
     await responseMessage.edit("*Running...*");
     for await (const part of response) {
-      reply += part.message.content;
+      reply += part.response;
       send();
     }
     const end = performance.now();
