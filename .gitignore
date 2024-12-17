@@ -3,12 +3,8 @@ node_modules/
 logs/
 cache/
 .data/
-*-desc.txt
-*-system.txt
+ai-*.txt
 .env*
-!.env.project
-!.env.vault
-
 
 # Output
 .svelte-kit/

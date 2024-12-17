@@ -5,13 +5,16 @@ import { readFile } from "node:fs/promises";
 
 const relativeRootPath = "../../../..";
 
-const systemPath = new URL(`${relativeRootPath}/system.txt`, import.meta.url);
+const systemPath = new URL(
+  `${relativeRootPath}/chat-system.txt`,
+  import.meta.url,
+);
 export const system = ttlCache(
   async () => readFile(systemPath, "utf8"),
   ms("10 min"),
 );
 
-const descPath = new URL(`${relativeRootPath}/desc.txt`, import.meta.url);
+const descPath = new URL(`${relativeRootPath}/chat-desc.txt`, import.meta.url);
 export const description = ttlCache(
   async () => readFile(descPath, "utf8"),
   ms("10 min"),
