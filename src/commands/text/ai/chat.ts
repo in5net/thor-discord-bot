@@ -73,7 +73,7 @@ export default command(
           responseMessage = await channel.send(reply);
         }
       }
-    }, 5000);
+    }, 3000);
     logger.info(`Starting ${model}...`);
     const start = performance.now();
     const response = await ollama.chat({
