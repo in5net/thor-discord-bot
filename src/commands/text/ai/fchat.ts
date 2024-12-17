@@ -26,7 +26,7 @@ const description = ttlCache(
   ms("10 min"),
 );
 
-const model = "gdisney/orca2-uncensored";
+const model = "llama3.2:1b";
 
 export default command(
   {
