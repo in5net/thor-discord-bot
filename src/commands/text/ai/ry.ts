@@ -81,7 +81,7 @@ ${env.NAME}:`,
     logger.info(`Running ${model}...`);
     await responseMessage.edit("*Running...*");
     for await (const part of response) {
-      reply = part.response;
+      reply += part.response;
       send();
     }
     const end = performance.now();
