@@ -101,19 +101,19 @@ export default event(
         )
       ) {
         await handleTextCommand(message);
-      }
-
-      for (const textCommand of client.textCommands.values()) {
-        if (
-          textCommand.botsAlwaysExecChannels?.includes(channel.name) &&
-          author.bot
-        ) {
-          // TODO: make this smarter, just a quick thing for now
-          await textCommand.exec({
-            message,
-            args: { prompt: cleanContent },
-            client,
-          });
+      } else {
+        for (const textCommand of client.textCommands.values()) {
+          if (
+            textCommand.botsAlwaysExecChannels?.includes(channel.name) &&
+            author.bot
+          ) {
+            // TODO: make this smarter, just a quick thing for now
+            await textCommand.exec({
+              message,
+              args: { prompt: cleanContent },
+              client,
+            });
+          }
         }
       }
 
