@@ -79,7 +79,7 @@ export default command(
 
       await message.reply(result.text);
     } else {
-      const responseMessage = await channel.send("*Running...*");
+      const responseMessage = await message.reply("*Running...*");
       const send = throttle(async () => {
         if (reply) {
           await responseMessage.edit(reply);
