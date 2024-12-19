@@ -77,7 +77,7 @@ export default command(
         ],
       });
 
-      await channel.send(result.text);
+      await message.reply(result.text);
     } else {
       const responseMessage = await channel.send("*Running...*");
       const send = throttle(async () => {
