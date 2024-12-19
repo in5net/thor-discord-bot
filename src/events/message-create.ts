@@ -68,7 +68,11 @@ export default event(
   { name: "messageCreate" },
   async ({ client, args: [message] }) => {
     const { content, cleanContent, channel, author, reference } = message;
-    if (!channel.isTextBased() || channel.isDMBased()) {
+    if (
+      !channel.isTextBased() ||
+      channel.isDMBased() ||
+      author.id === client.user?.id
+    ) {
       return;
     }
 
@@ -78,8 +82,7 @@ export default event(
       !author.bot &&
       ["among", "imposter", "imposta", "amogus", "mongus"].some(str =>
         noWhitespace.includes(str),
-      ) &&
-      author.id !== client.user?.id
+      )
     ) {
       await incCount(author.id, "salad_mundus");
     } else {
