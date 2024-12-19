@@ -67,13 +67,15 @@ const translator = new deepl.Translator(env.DEEPL_API_KEY);
 export default event(
   { name: "messageCreate" },
   async ({ client, args: [message] }) => {
-    const { content, channel, author, reference } = message;
-    if (author.bot || !("send" in channel)) {
+    const { content, cleanContent, channel, author, reference } = message;
+    if (!channel.isTextBased() || channel.isDMBased()) {
       return;
     }
+
     const lowercase = content.toLowerCase();
     const noWhitespace = lowercase.replaceAll(whitespaceRegex, "");
     if (
+      !author.bot &&
       ["among", "imposter", "imposta", "amogus", "mongus"].some(str =>
         noWhitespace.includes(str),
       ) &&
@@ -96,6 +98,24 @@ export default event(
         )
       ) {
         await handleTextCommand(message);
+      }
+
+      for (const textCommand of client.textCommands.values()) {
+        if (
+          textCommand.botsAlwaysExecChannels?.includes(channel.name) &&
+          author.bot
+        ) {
+          // TODO: make this smarter, just a quick thing for now
+          await textCommand.exec({
+            message,
+            args: { prompt: cleanContent },
+            client,
+          });
+        }
+      }
+
+      if (author.bot) {
+        return;
       }
 
       if ("name" in channel) {
@@ -139,7 +159,7 @@ export default event(
   },
 );
 
-async function handleTextCommand(message: Message) {
+async function handleTextCommand(message: Message<true>) {
   const { client, content, channel } = message;
 
   try {

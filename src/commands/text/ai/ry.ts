@@ -4,7 +4,7 @@ import command from "$lib/discord/commands/text";
 import logger from "$src/lib/logger";
 import { openai, system } from "./shared";
 import { throttle } from "@iz7n/std/async";
-import { streamText } from "ai";
+import { generateText, streamText } from "ai";
 
 const model = "llama.cpp";
 
@@ -12,6 +12,7 @@ export default command(
   {
     desc: "Talk to llama.cpp",
     optionalPrefix: true,
+    botsAlwaysExecChannels: ["💣botwar🤖"],
     args: {
       prompt: {
         type: "text",
@@ -22,10 +23,7 @@ export default command(
     examples: ["do you love lean?", "what's 77 + 33?"],
   },
   async ({ message, args: { prompt } }) => {
-    const { channelId, channel, guildId } = message;
-    if (!("send" in channel)) {
-      return;
-    }
+    const { channelId, channel, author, guildId } = message;
 
     if (prompt === "CLEAR") {
       await db.delete(context).where(eq(context.channelId, channelId));
@@ -48,26 +46,11 @@ export default command(
 
     let reply = "";
     logger.info(`Running ${model}...`);
-    const responseMessage = await channel.send("*Running...*");
-    const send = throttle(async () => {
-      if (reply) {
-        await responseMessage.edit(reply);
-      }
-    }, 3000);
     const start = performance.now();
-    const result = streamText({
+
+    const settings = {
       model: openai.chat(""),
       system: await system(),
-      messages: [
-        ...previous.flatMap(
-          ({ question: q, answer: a }) =>
-            [
-              { role: "user", content: q },
-              { role: "assistant", content: a },
-            ] as const,
-        ),
-        { role: "user", content: prompt },
-      ],
       temperature: 0.9,
       maxTokens: 128,
       frequencyPenalty: 0.5,
@@ -80,12 +63,54 @@ export default command(
         "Q:",
         "A:",
       ],
-    });
+    };
 
-    for await (const textPart of result.textStream) {
-      reply += textPart;
-      send();
+    if (author.bot) {
+      await channel.sendTyping();
+
+      const result = await generateText({
+        ...settings,
+        messages: [
+          ...previous.flatMap(
+            ({ question: q, answer: a }) =>
+              [
+                { role: "user", content: q },
+                { role: "assistant", content: a },
+              ] as const,
+          ),
+          { role: "user", content: prompt },
+        ],
+      });
+
+      await channel.send(result.text);
+    } else {
+      const responseMessage = await channel.send("*Running...*");
+      const send = throttle(async () => {
+        if (reply) {
+          await responseMessage.edit(reply);
+        }
+      }, 3000);
+
+      const result = streamText({
+        ...settings,
+        messages: [
+          ...previous.flatMap(
+            ({ question: q, answer: a }) =>
+              [
+                { role: "user", content: q },
+                { role: "assistant", content: a },
+              ] as const,
+          ),
+          { role: "user", content: prompt },
+        ],
+      });
+
+      for await (const textPart of result.textStream) {
+        reply += textPart;
+        send();
+      }
     }
+
     const end = performance.now();
     const diff = end - start;
     logger.info(`${model} finished in ${(diff / 1000).toFixed(1)}s`);

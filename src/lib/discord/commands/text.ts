@@ -1,4 +1,12 @@
-import { type Awaitable, type Client, type Message } from "discord.js";
+import type {
+  Awaitable,
+  Client,
+  Message,
+  TextBasedChannel,
+  PartialGroupDMChannel,
+  DMChannel,
+  PartialDMChannel,
+} from "discord.js";
 
 interface ArgumentTypeMap {
   int: number;
@@ -52,8 +60,15 @@ export type ArgumentValue<T extends Argument = Argument> =
   : T["optional"] extends true ? ArgumentTypeMap[T["type"]] | undefined
   : ArgumentTypeMap[T["type"]];
 
+export type TextBasedGuildChannel = Exclude<
+  TextBasedChannel,
+  PartialGroupDMChannel | DMChannel | PartialDMChannel
+>;
+
 export type Exec<T extends Arguments> = (params: {
-  message: Message;
+  message: Exclude<Message<true>, "channel"> & {
+    channel: TextBasedGuildChannel;
+  };
   args: {
     [I in keyof T]: ArgumentValue<T[I]>;
   };
@@ -65,6 +80,7 @@ export interface TextCommandParams<T extends Arguments> {
   aliases?: string[];
   desc: string;
   optionalPrefix?: boolean;
+  botsAlwaysExecChannels?: string[];
   args: T;
   examples?: string[];
   permissions?: Permission[];
