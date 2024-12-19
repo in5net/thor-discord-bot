@@ -31,7 +31,7 @@ export default command(
     }
 
     const minCreatedAt = new Date();
-    minCreatedAt.setMinutes(minCreatedAt.getMinutes() - 5);
+    minCreatedAt.setMinutes(minCreatedAt.getMinutes() - 15);
     const previous = await db.query.context.findMany({
       columns: {
         question: true,
@@ -52,7 +52,7 @@ export default command(
       model: openai.chat(""),
       system: await system(),
       temperature: 0.9,
-      maxTokens: 128,
+      maxTokens: 1024,
       frequencyPenalty: 0.5,
       presencePenalty: 0.5,
       stopSequences: [
