@@ -1,4 +1,4 @@
-import db, { eq, gte, and, desc } from "$lib/database/drizzle";
+import db, { eq, desc } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
 import logger from "$src/lib/logger";
@@ -30,18 +30,13 @@ export default command(
       return message.reply("Context cleared");
     }
 
-    const minCreatedAt = new Date();
-    minCreatedAt.setMinutes(minCreatedAt.getMinutes() - 15);
     const previous = await db.query.context.findMany({
       columns: {
         question: true,
         answer: true,
       },
-      where: and(
-        gte(context.createdAt, minCreatedAt),
-        eq(context.channelId, channelId),
-      ),
       orderBy: desc(context.createdAt),
+      limit: 5,
     });
 
     let reply = "";
