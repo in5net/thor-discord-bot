@@ -3,8 +3,7 @@ import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
 import logger from "$src/lib/logger";
 import { openai, system } from "./shared";
-import { throttle } from "@iz7n/std/async";
-import { generateText, streamText } from "ai";
+import { generateText } from "ai";
 
 const model = "llama.cpp";
 
@@ -23,7 +22,7 @@ export default command(
     examples: ["do you love lean?", "what's 77 + 33?"],
   },
   async ({ message, args: { prompt } }) => {
-    const { channelId, channel, author, guildId } = message;
+    const { channelId, channel, guildId } = message;
 
     if (prompt === "CLEAR") {
       await db.delete(context).where(eq(context.channelId, channelId));
@@ -39,7 +38,6 @@ export default command(
       limit: 5,
     });
 
-    let reply = "";
     logger.info(`Running ${model}...`);
     const start = performance.now();
 
@@ -60,51 +58,27 @@ export default command(
       ],
     };
 
-    if (author.bot) {
-      await channel.sendTyping();
+    const handle = setInterval(() => {
+      channel.sendTyping().catch(() => {});
+    }, 3000);
 
-      const result = await generateText({
-        ...settings,
-        messages: [
-          ...previous.flatMap(
-            ({ question: q, answer: a }) =>
-              [
-                { role: "user", content: q },
-                { role: "assistant", content: a },
-              ] as const,
-          ),
-          { role: "user", content: prompt },
-        ],
-      });
+    const result = await generateText({
+      ...settings,
+      messages: [
+        ...previous.flatMap(
+          ({ question: q, answer: a }) =>
+            [
+              { role: "user", content: q },
+              { role: "assistant", content: a },
+            ] as const,
+        ),
+        { role: "user", content: prompt },
+      ],
+    });
 
-      await message.reply(result.text);
-    } else {
-      const responseMessage = await message.reply("*Running...*");
-      const send = throttle(async () => {
-        if (reply) {
-          await responseMessage.edit(reply);
-        }
-      }, 3000);
+    clearInterval(handle);
 
-      const result = streamText({
-        ...settings,
-        messages: [
-          ...previous.flatMap(
-            ({ question: q, answer: a }) =>
-              [
-                { role: "user", content: q },
-                { role: "assistant", content: a },
-              ] as const,
-          ),
-          { role: "user", content: prompt },
-        ],
-      });
-
-      for await (const textPart of result.textStream) {
-        reply += textPart;
-        send();
-      }
-    }
+    await message.reply(result.text);
 
     const end = performance.now();
     const diff = end - start;
@@ -127,7 +101,7 @@ export default command(
     return db.insert(context).values({
       channelId,
       question: prompt,
-      answer: reply,
+      answer: result.text,
     });
   },
 );
