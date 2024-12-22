@@ -36,7 +36,6 @@ const EnvironmentVariables = z.object({
   GENIUS_TOKEN: z.string(),
 
   REPLICATE_TOKEN: z.string(),
-  OPENAI_API_KEY: z.string(),
   DEEPL_API_KEY: z.string(),
 });
 
