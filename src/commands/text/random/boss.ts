@@ -12,7 +12,7 @@ export default command(
     const [file] = await db
       .select({ id: files.id, name: files.name })
       .from(files)
-      .fullJoin(fileTags, eq(files.id, fileTags.fileId))
+      .innerJoin(fileTags, eq(files.id, fileTags.fileId))
       .where(eq(fileTags.name, "boss"))
       .orderBy(sql`random()`)
       .limit(1);

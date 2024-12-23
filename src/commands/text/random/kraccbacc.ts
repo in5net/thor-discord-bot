@@ -14,7 +14,7 @@ export default command(
     const [video] = await db
       .select({ id: files.id, name: files.name })
       .from(files)
-      .fullJoin(fileTags, eq(files.id, fileTags.fileId))
+      .innerJoin(fileTags, eq(files.id, fileTags.fileId))
       .where(
         and(
           eq(fileTags.name, "kraccbacc"),

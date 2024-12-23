@@ -12,7 +12,7 @@ export default command(
     const [image] = await db
       .select({ name: files.name })
       .from(files)
-      .fullJoin(fileTags, eq(files.id, fileTags.fileId))
+      .innerJoin(fileTags, eq(files.id, fileTags.fileId))
       .where(and(eq(fileTags.name, "y7"), ne(files.ext, ".gif")))
       .orderBy(sql`random()`)
       .limit(1);
