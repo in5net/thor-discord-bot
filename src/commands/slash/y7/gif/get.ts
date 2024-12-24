@@ -1,4 +1,4 @@
-import db, { eq, sql, and } from "$lib/database/drizzle";
+import db, { eq, sql, and, not } from "$lib/database/drizzle";
 import { files, fileTags } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
 import { env } from "node:process";
@@ -14,11 +14,7 @@ export default command(
       .from(files)
       .innerJoin(fileTags, eq(files.id, fileTags.fileId))
       .where(
-        and(
-          eq(fileTags.name, "y7"),
-          eq(files.ext, ".gif"),
-          eq(files.nsfw, true),
-        ),
+        and(eq(fileTags.name, "y7"), eq(files.ext, ".gif"), not(files.nsfw)),
       )
       .orderBy(sql`random()`)
       .limit(1);

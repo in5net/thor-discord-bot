@@ -1,4 +1,4 @@
-import db, { and, contains, eq, ne } from "$lib/database/drizzle";
+import db, { and, contains, eq, ne, not } from "$lib/database/drizzle";
 import { files, fileTags } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
 import { pipe } from "@iz7n/std/fn";
@@ -22,7 +22,7 @@ export default command(
                 eq(fileTags.name, "y7"),
                 contains(files.name, search),
                 ne(files.ext, ".gif"),
-                eq(files.nsfw, false),
+                not(files.nsfw),
               ),
             )
             .orderBy(files.name)

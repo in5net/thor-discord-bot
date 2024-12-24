@@ -1,4 +1,4 @@
-import db, { and, contains, eq } from "$lib/database/drizzle";
+import db, { and, contains, eq, not } from "$lib/database/drizzle";
 import { files, fileTags } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
 import { env } from "node:process";
@@ -20,7 +20,7 @@ export default command(
                 eq(fileTags.name, "y7"),
                 contains(files.name, search),
                 eq(files.ext, ".gif"),
-                eq(files.nsfw, false),
+                not(files.nsfw),
               ),
             )
             .orderBy(files.name)
