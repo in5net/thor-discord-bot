@@ -1,48 +1,40 @@
 import type { Handle } from "@sveltejs/kit";
+import {
+  type RESTGetAPIUserResult,
+  RouteBases,
+  Routes,
+} from "discord-api-types/v10";
 
-const DISCORD_API_URL = "https://discordapp.com/api";
-
+// eslint-disable-next-line ts/unbound-method
 export const handle: Handle = async ({ event, resolve }) => {
   const {
     url: { origin },
     cookies,
   } = event;
-  const disco_refresh_token = cookies.get("disco_refresh_token");
-  const disco_access_token = cookies.get("disco_access_token");
+  const access_token = cookies.get("discord_access_token");
+  const refresh_token = cookies.get("discord_refresh_token");
 
-  if (disco_refresh_token) {
-    if (disco_access_token) {
-      console.log("setting discord user via access token..");
-      const request = await fetch(`${DISCORD_API_URL}/users/@me`, {
-        headers: { Authorization: `Bearer ${disco_access_token}` },
+  if (refresh_token) {
+    if (access_token) {
+      const userResponse = await fetch(RouteBases.api + Routes.user(), {
+        headers: { Authorization: `Bearer ${access_token}` },
       });
+      const user = (await userResponse.json()) as RESTGetAPIUserResult;
 
-      // returns a discord user if JWT was valid
-      const response = await request.json();
-
-      if (response.id) {
-        event.locals.authUser = response;
-      }
+      event.locals.user = user;
     } else {
-      const discord_request = await fetch(
-        `${origin}/auth/refresh?code=${disco_refresh_token}`,
+      const response = await fetch(
+        `${origin}/auth/refresh?code=${refresh_token}`,
       );
-      const discord_response = await discord_request.json();
+      const token = await response.json();
 
-      if (discord_response.disco_access_token) {
-        console.log("setting discord user via refresh token..");
-        const request = await fetch(`${DISCORD_API_URL}/users/@me`, {
-          headers: {
-            Authorization: `Bearer ${discord_response.disco_access_token}`,
-          },
+      if (token.discord_access_token) {
+        const userResponse = await fetch(RouteBases.api + Routes.user(), {
+          headers: { Authorization: `Bearer ${access_token}` },
         });
+        const user = (await userResponse.json()) as RESTGetAPIUserResult;
 
-        // returns a discord user if JWT was valid
-        const response = await request.json();
-
-        if (response.id) {
-          event.locals.authUser = response;
-        }
+        event.locals.user = user;
       }
     }
   }
