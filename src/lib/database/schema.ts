@@ -190,11 +190,15 @@ export const filesRelations = relations(files, ({ many }) => ({
   tags: many(fileTags),
 }));
 
-export const fileTags = sqliteTable("file_tags", t => ({
-  id: t.integer().primaryKey({ autoIncrement: true }),
-  fileId: t.text().notNull(),
-  name: t.text().notNull(),
-}));
+export const fileTags = sqliteTable(
+  "file_tags",
+  t => ({
+    id: t.integer().primaryKey({ autoIncrement: true }),
+    fileId: t.text().notNull(),
+    name: t.text().notNull(),
+  }),
+  t => [namedIndex(t.name, t.fileId)],
+);
 export const fileTagsRelations = relations(fileTags, ({ one }) => ({
   file: one(files, {
     fields: [fileTags.fileId],
