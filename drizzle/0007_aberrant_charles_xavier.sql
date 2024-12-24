@@ -1,0 +1,1 @@
+CREATE INDEX `file_tags_name_fileId_idx` ON `file_tags` (`name`,`file_id`);
