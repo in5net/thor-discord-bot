@@ -1,4 +1,5 @@
 /* eslint-disable ts/no-use-before-define */
+import type { SongJSONType } from "$src/music/songs";
 import { createId as cuid2 } from "@paralleldrive/cuid2";
 import { relations, sql } from "drizzle-orm";
 import {
@@ -171,6 +172,48 @@ export const users = sqliteTable("users", t => ({
 export const usersRelations = relations(users, ({ many }) => ({
   issues: many(issues),
   chessGames: many(chessGames),
+}));
+
+export const playlists = sqliteTable(
+  "playlists",
+  t => ({
+    id: t.text().primaryKey().$default(cuid2),
+    createdAt,
+    userId: t
+      .text()
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    name: t.text().notNull(),
+  }),
+  t => [namedIndex(t.userId, t.name)],
+);
+export const playlistsRelations = relations(playlists, ({ one, many }) => ({
+  user: one(users, {
+    fields: [playlists.userId],
+    references: [users.id],
+  }),
+  songs: many(songs),
+}));
+
+export const songs = sqliteTable(
+  "songs",
+  t => ({
+    id: t.text().primaryKey().$default(cuid2),
+    createdAt,
+    playlistId: t
+      .text()
+      .notNull()
+      .references(() => playlists.id, { onDelete: "cascade" }),
+    order: t.integer().notNull(),
+    data: t.text({ mode: "json" }).notNull().$type<SongJSONType>(),
+  }),
+  t => [namedIndex(t.playlistId)],
+);
+export const songsRelations = relations(songs, ({ one }) => ({
+  playlist: one(playlists, {
+    fields: [songs.playlistId],
+    references: [playlists.id],
+  }),
 }));
 
 export const ratios = sqliteTable("ratios", t => ({
