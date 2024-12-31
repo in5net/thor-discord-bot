@@ -94,7 +94,11 @@ export default command(
           "A:",
         ],
       }),
-    });
+    }).catch(() => {});
+    if (!response) {
+      return;
+    }
+
     clearInterval(handle);
 
     const result = await response.json();

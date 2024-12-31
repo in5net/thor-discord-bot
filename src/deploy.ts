@@ -4,7 +4,7 @@ import logger from "$lib/logger";
 import { messageCommands, slashCommands } from "./commands";
 import { env } from "node:process";
 
-logger.info("$lib/commands registering...", env.DISCORD_ID);
+logger.info("commands registering...", env.DISCORD_ID);
 
 await deploy(
   { slash: slashCommands, message: messageCommands },
@@ -12,5 +12,5 @@ await deploy(
   env.DISCORD_ID,
 );
 
-logger.info(slashCommands.size, "slash commands registered");
-logger.info(messageCommands.size, "message commands registered");
+logger.info(`${slashCommands.size} slash commands registered`);
+logger.info(`${messageCommands.size} message commands registered`);
