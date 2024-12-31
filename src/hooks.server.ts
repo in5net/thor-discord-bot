@@ -5,7 +5,6 @@ import {
   Routes,
 } from "discord-api-types/v10";
 
-// eslint-disable-next-line ts/unbound-method
 export const handle: Handle = async ({ event, resolve }) => {
   const {
     url: { origin },
@@ -28,7 +27,7 @@ export const handle: Handle = async ({ event, resolve }) => {
       );
       const token = await response.json();
 
-      if (token.discord_access_token) {
+      if (token.access_token) {
         const userResponse = await fetch(RouteBases.api + Routes.user(), {
           headers: { Authorization: `Bearer ${access_token}` },
         });

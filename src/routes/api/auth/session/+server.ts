@@ -1,11 +1,13 @@
 import { DISCORD_ID, DISCORD_CLIENT_SECRET } from "$env/static/private";
 import { tokenSchema } from "../shared";
-import { error, redirect, type RequestHandler } from "@sveltejs/kit";
-import { OAuth2Routes, RouteBases } from "discord-api-types/v10";
+import type { RequestHandler } from "./$types";
+import { error, redirect } from "@sveltejs/kit";
+import { OAuth2Routes } from "discord-api-types/v10";
 import ms from "ms";
 
 export const GET: RequestHandler = async ({
   url: { origin, searchParams },
+  fetch,
   cookies,
 }) => {
   const code = searchParams.get("code");
@@ -13,7 +15,7 @@ export const GET: RequestHandler = async ({
     error(400, "code missing");
   }
 
-  const response = await fetch(RouteBases.api + OAuth2Routes.tokenURL, {
+  const response = await fetch(OAuth2Routes.tokenURL, {
     method: "POST",
     body: new URLSearchParams({
       grant_type: "authorization_code",
@@ -51,10 +53,10 @@ export const GET: RequestHandler = async ({
   redirect(302, "/");
 };
 
-export const DELETE: RequestHandler = async ({ cookies }) => {
+export const DELETE: RequestHandler = async ({ fetch, cookies }) => {
   const access_token = cookies.get("discord_access_token");
   if (access_token) {
-    await fetch(RouteBases.api + OAuth2Routes.tokenRevocationURL, {
+    await fetch(OAuth2Routes.tokenRevocationURL, {
       method: "POST",
       body: new URLSearchParams({
         token: access_token,

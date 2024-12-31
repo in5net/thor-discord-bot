@@ -1,11 +1,13 @@
 import { DISCORD_CLIENT_SECRET, DISCORD_ID } from "$env/static/private";
 import { tokenSchema } from "../shared";
-import { error, json, type RequestHandler } from "@sveltejs/kit";
-import { OAuth2Routes, RouteBases } from "discord-api-types/v10";
+import type { RequestHandler } from "./$types";
+import { error, json } from "@sveltejs/kit";
+import { OAuth2Routes } from "discord-api-types/v10";
 import ms from "ms";
 
 export const POST: RequestHandler = async ({
   url: { searchParams },
+  fetch,
   cookies,
 }) => {
   const refresh_token = searchParams.get("code");
@@ -13,7 +15,7 @@ export const POST: RequestHandler = async ({
     error(500, "No refresh token found");
   }
 
-  const response = await fetch(RouteBases.api + OAuth2Routes.tokenURL, {
+  const response = await fetch(OAuth2Routes.tokenURL, {
     method: "POST",
     body: new URLSearchParams({
       grant_type: "refresh_token",

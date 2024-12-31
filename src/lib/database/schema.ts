@@ -184,6 +184,7 @@ export const playlists = sqliteTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     name: t.text().notNull(),
+    songs: t.text({ mode: "json" }).notNull().$type<SongJSONType[]>(),
   }),
   t => [namedIndex(t.userId, t.name)],
 );
