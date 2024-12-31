@@ -95,11 +95,10 @@ export default command(
         ],
       }),
     }).catch(() => {});
+    clearInterval(handle);
     if (!response) {
       return;
     }
-
-    clearInterval(handle);
 
     const result = await response.json();
 
