@@ -2,8 +2,26 @@ import db, { eq, desc } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
 import logger from "$src/lib/logger";
-import { openai, system } from "./shared";
-import { generateText } from "ai";
+import { ttlCache } from "@iz7n/std/fn";
+import ms from "ms";
+import { readFile } from "node:fs/promises";
+
+const relativeRootPath = "../../../..";
+
+const systemPath = new URL(
+  `${relativeRootPath}/chat-system.txt`,
+  import.meta.url,
+);
+export const system = ttlCache(
+  async () => readFile(systemPath, "utf8"),
+  ms("10 min"),
+);
+
+const descPath = new URL(`${relativeRootPath}/chat-desc.txt`, import.meta.url);
+export const description = ttlCache(
+  async () => readFile(descPath, "utf8"),
+  ms("10 min"),
+);
 
 const model = "llama.cpp";
 
@@ -41,44 +59,49 @@ export default command(
     logger.info(`Running ${model}...`);
     const start = performance.now();
 
-    const settings = {
-      model: openai.chat(""),
-      system: await system(),
-      temperature: 0.9,
-      maxTokens: 1024,
-      frequencyPenalty: 0.5,
-      presencePenalty: 0.5,
-      stopSequences: [
-        "<|im_start",
-        "<|im_end",
-        "|im_start",
-        "|im_end",
-        "Q:",
-        "A:",
-      ],
-    };
-
     const handle = setInterval(() => {
       channel.sendTyping().catch(() => {});
     }, 3000);
 
-    const result = await generateText({
-      ...settings,
-      messages: [
-        ...previous.flatMap(
-          ({ question: q, answer: a }) =>
-            [
-              { role: "user", content: q },
-              { role: "assistant", content: a },
-            ] as const,
-        ),
-        { role: "user", content: prompt },
-      ],
+    const response = await fetch("http://localhost:1277/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "",
+        messages: [
+          ...previous.flatMap(
+            ({ question: q, answer: a }) =>
+              [
+                { role: "user", content: q },
+                { role: "assistant", content: a },
+              ] as const,
+          ),
+          { role: "user", content: prompt },
+        ],
+        system: await system(),
+        temperature: 0.9,
+        max_tokens: 1024,
+        frequency_penalty: 0.5,
+        presence_penalty: 0.5,
+        stop_sequences: [
+          "<|im_start",
+          "<|im_end",
+          "|im_start",
+          "|im_end",
+          "Q:",
+          "A:",
+        ],
+      }),
     });
-
     clearInterval(handle);
 
-    await message.reply(result.text);
+    const result = await response.json();
+
+    const text = String(result.choices[0].message.content);
+
+    await message.reply(text);
 
     const end = performance.now();
     const diff = end - start;
@@ -101,7 +124,7 @@ export default command(
     return db.insert(context).values({
       channelId,
       question: prompt,
-      answer: result.text,
+      answer: text,
     });
   },
 );

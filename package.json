@@ -23,7 +23,6 @@
     "deploy": "tsx src/deploy.ts"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^1.0.8",
     "@discordjs/opus": "^0.9.0",
     "@discordjs/rest": "2.4.0",
     "@discordjs/voice": "0.18.0",
@@ -31,7 +30,6 @@
     "@iz7n/std": "^0.2.0",
     "@napi-rs/canvas": "0.1.65",
     "@paralleldrive/cuid2": "^2.2.2",
-    "ai": "^4.0.18",
     "better-sqlite3": "^11.7.0",
     "chalk-template": "^1.1.0",
     "cheerio": "1.0.0",
