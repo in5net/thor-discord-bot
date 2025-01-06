@@ -1,5 +1,5 @@
 <script lang="ts">
-  const { children } = $props();
+  export let data;
 
   async function logout() {
     await fetch("/api/auth/session", {
@@ -8,6 +8,12 @@
   }
 </script>
 
-<button onclick={logout}>Logout</button>
+<nav>
+  <button on:click={logout}>Logout</button>
+  <a href="/playlists">Playlists</a>
+  {#if data.dbUser?.admin}
+    <a href="/random-responses">Random responses</a>
+  {/if}
+</nav>
 
-{@render children()}
+<slot />

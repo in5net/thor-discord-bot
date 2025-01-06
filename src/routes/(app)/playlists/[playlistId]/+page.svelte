@@ -4,14 +4,12 @@
   import { dndzone } from "svelte-dnd-action";
   import { flip } from "svelte/animate";
 
-  const { data } = $props();
-  const { playlistId } = data;
-  let name = $state(data.name);
-  let songs = $state(data.songs);
+  export let data;
+  let { playlistId, name, songs } = data;
 
   let oldName = name;
   let oldSongs = [...songs];
-  const canSave = $derived(name !== oldName || deepEquals(songs, oldSongs));
+  $: canSave = name !== oldName || deepEquals(songs, oldSongs);
 
   const flipDurationMs = 300;
   function handleDndCards(e: CustomEvent<{ items: typeof songs }>) {
@@ -33,11 +31,11 @@
 
 <input type="text" bind:value={name} />
 
-<button disabled={!canSave} onclick={save}>Save</button>
+<button disabled={!canSave} on:click={save}>Save</button>
 
 <ol
-  onconsider={handleDndCards}
-  onfinalize={handleDndCards}
+  on:consider={handleDndCards}
+  on:finalize={handleDndCards}
   use:dndzone={{ items: songs, flipDurationMs }}
 >
   {#each songs as { id, data: { title, duration } } (id)}

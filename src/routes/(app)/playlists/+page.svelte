@@ -1,5 +1,5 @@
 <script lang="ts">
-  const { data } = $props();
+  export let data;
   const { playlists } = data;
 </script>
 

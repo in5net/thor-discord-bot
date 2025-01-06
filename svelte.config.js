@@ -6,7 +6,9 @@ const config = {
   preprocess: vitePreprocess(),
   kit: {
     adapter: adapter(),
+    alias: {
+      $src: new URL("src", import.meta.url).pathname,
+    },
   },
 };
-
 export default config;

@@ -1,1 +1,1 @@
-<a href="/api/login">Login</a>
+<a href="/api/auth/login">Login</a>
