@@ -1,0 +1,1 @@
+ALTER TABLE `playlists` ADD `songs` text NOT NULL;
