@@ -1,10 +1,11 @@
-import { DATABASE_URL } from "$env/static/private";
 import * as schema from "./schema";
 import { like, type AnyColumn } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/better-sqlite3";
+import { env } from "node:process";
+import "../../env";
 
 const db = drizzle({
-  connection: DATABASE_URL,
+  connection: env.DATABASE_URL,
   schema,
   casing: "snake_case",
 });
