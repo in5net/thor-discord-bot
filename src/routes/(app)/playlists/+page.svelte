@@ -6,6 +6,6 @@
 <h3>Playlists</h3>
 <ul>
   {#each playlists as { id, name }}
-    <li><a href="./{id}">{name}</a></li>
+    <li><a href="/playlists/{id}">{name}</a></li>
   {/each}
 </ul>

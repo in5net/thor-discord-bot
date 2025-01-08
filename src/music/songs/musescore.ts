@@ -4,7 +4,6 @@ import { parseTime } from "$lib/time";
 import {
   type GetResourceListeners,
   type GetResourceOptions,
-  type Requester,
   type SongJSON,
   Song,
   streamFileWithOptions,
@@ -77,16 +76,14 @@ export class MusescoreSong extends Song {
     title,
     description,
     duration,
-    requester,
   }: {
     id: string;
     url: string;
     title: string;
     description: string;
     duration: number;
-    requester: Requester;
   }) {
-    super({ title, duration, requester });
+    super({ title, duration });
     this.id = id;
     this.url = url;
     this.description = description;
@@ -118,17 +115,19 @@ ${title} (${url})`);
     };
   }
 
-  static fromJSON(
-    { id, url, title, description, duration }: MusescoreJSON,
-    requester: Requester,
-  ): MusescoreSong {
+  static fromJSON({
+    id,
+    url,
+    title,
+    description,
+    duration,
+  }: MusescoreJSON): MusescoreSong {
     return new MusescoreSong({
       id,
       url,
       title,
       description,
       duration,
-      requester,
     });
   }
 
@@ -146,10 +145,7 @@ ${title} (${url})`);
     return embed;
   }
 
-  static async fromURL(
-    url: string,
-    requester: Requester,
-  ): Promise<MusescoreSong> {
+  static async fromURL(url: string): Promise<MusescoreSong> {
     const metadata = await muse(url);
     return new MusescoreSong({
       id: metadata.id.toString(),
@@ -157,7 +153,6 @@ ${title} (${url})`);
       title: metadata.title,
       description: metadata.description,
       duration: parseTime(metadata.duration),
-      requester,
     });
   }
 

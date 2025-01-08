@@ -11,15 +11,7 @@ export const load: PageServerLoad = async ({
   const playlist = await db.query.playlists.findFirst({
     columns: {
       name: true,
-    },
-    with: {
-      songs: {
-        columns: {
-          id: true,
-          order: true,
-          data: true,
-        },
-      },
+      songs: true,
     },
     where: and(eq(playlists.id, playlistId), eq(playlists.userId, user.id)),
   });
@@ -29,9 +21,6 @@ export const load: PageServerLoad = async ({
 
   return {
     playlistId,
-    name: playlist.name,
-    songs: playlist.songs
-      .sort(x => x.order)
-      .map(({ id, data }) => ({ id, data })),
+    ...playlist,
   };
 };

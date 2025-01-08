@@ -1,4 +1,12 @@
+import logger from "$lib/logger";
 import { getPlayDl } from "./play";
+import {
+  MusescoreSong,
+  SpotifySong,
+  URLSong,
+  YouTubeSong,
+  type SongType,
+} from "./songs";
 import type { Awaitable } from "@iz7n/std/types";
 import type { Message } from "discord.js";
 import {
@@ -142,4 +150,115 @@ export function splitQueries(query: string) {
   }
 
   return queries;
+}
+
+export async function getSongsFromQuery(query: string) {
+  const queries = query ? splitQueries(query) : [];
+
+  const songs: SongType[] = [];
+  const songsCache = new Map<string, SongType[]>();
+  const play = await getPlayDl(true);
+
+  const matchers: Array<{
+    name: string;
+    check: (query: string) => Awaitable<boolean>;
+    getSongs: (query: string) => Awaitable<SongType[]>;
+  }> = [
+    {
+      name: "YouTube playlist url",
+      check: query => play.yt_validate(query) === "playlist",
+      async getSongs(query) {
+        const id = play.extractID(query);
+        const { songs } = await YouTubeSong.fromPlaylistId(id);
+        return songs;
+      },
+    },
+    {
+      name: "YouTube video url",
+      check: query => play.yt_validate(query) === "video",
+      async getSongs(query) {
+        const song = await YouTubeSong.fromURL(query);
+        return [song];
+      },
+    },
+    {
+      name: "YouTube channel url",
+      check: query => YOUTUBE_CHANNEL_REGEX.test(query),
+      async getSongs(query) {
+        const id = YOUTUBE_CHANNEL_REGEX.exec(query)?.[2] || "";
+        const videos = await YouTubeSong.fromChannelId(id);
+        return videos;
+      },
+    },
+    {
+      name: "Spotify song url",
+      check: query => play.sp_validate(query) === "track",
+      async getSongs(query) {
+        const song = await SpotifySong.fromURL(query);
+        return [song];
+      },
+    },
+    {
+      name: "Spotify album/playlist url",
+      check: query =>
+        ["album", "playlist"].includes(play.sp_validate(query) as string),
+      async getSongs(query) {
+        const songs = await SpotifySong.fromListURL(query);
+        return songs;
+      },
+    },
+    {
+      name: "Musescore song",
+      check: query => MUSESCORE_REGEX.test(query),
+      async getSongs(query) {
+        const song = await MusescoreSong.fromURL(query);
+        return [song];
+      },
+    },
+    {
+      name: "song url",
+      check: query => URL_REGEX.test(query),
+      getSongs(query) {
+        const song = URLSong.fromURL(query);
+        return [song];
+      },
+    },
+    {
+      name: "YouTube query",
+      check: () => true,
+      async getSongs(query) {
+        const song = await YouTubeSong.fromSearch(query);
+        return [song];
+      },
+    },
+  ];
+
+  const errors: Array<{
+    index: number;
+    name: string;
+    query: string;
+  }> = [];
+  for (const [index, query] of queries.entries()) {
+    const mds = songsCache.get(query);
+    if (mds) {
+      songs.push(...mds);
+      continue;
+    }
+
+    for (const { name, check, getSongs } of matchers) {
+      if (await check(query)) {
+        try {
+          const chunk = await getSongs(query);
+          songs.push(...chunk);
+          songsCache.set(query, chunk);
+          break;
+        } catch (error) {
+          logger.error(error);
+          errors.push({ index, name, query });
+        }
+      }
+    }
+  }
+
+  return { songs, errors };
 }

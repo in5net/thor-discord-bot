@@ -6,6 +6,7 @@ import {
   YOUTUBE_CHANNEL_REGEX,
   MUSESCORE_REGEX,
   splitQueries,
+  getSongsFromQuery,
 } from "./plan";
 import { getPlayDl } from "./play";
 import Queue from "./queue";
@@ -101,109 +102,18 @@ export default class Voice extends TypedEmitter<{
 
     await this.queueFiles(attachments.values(), requester);
 
-    const queries = query ? splitQueries(query) : [];
+    if (query) {
+      const { songs, errors } = await getSongsFromQuery(query);
 
-    const songs: SongType[] = [];
-    const songsCache = new Map<string, SongType[]>();
-    const play = await getPlayDl(true);
-
-    const matchers: Array<{
-      name: string;
-      check: (query: string) => Awaitable<boolean>;
-      getSongs: (query: string) => Awaitable<SongType[]>;
-    }> = [
-      {
-        name: "YouTube playlist url",
-        check: query => play.yt_validate(query) === "playlist",
-        async getSongs(query) {
-          const id = play.extractID(query);
-          const { songs } = await YouTubeSong.fromPlaylistId(id, requester);
-          return songs;
-        },
-      },
-      {
-        name: "YouTube video url",
-        check: query => play.yt_validate(query) === "video",
-        async getSongs(query) {
-          const song = await YouTubeSong.fromURL(query, requester);
-          return [song];
-        },
-      },
-      {
-        name: "YouTube channel url",
-        check: query => YOUTUBE_CHANNEL_REGEX.test(query),
-        async getSongs(query) {
-          const id = YOUTUBE_CHANNEL_REGEX.exec(query)?.[2] || "";
-          const videos = await YouTubeSong.fromChannelId(id, requester);
-          return videos;
-        },
-      },
-      {
-        name: "Spotify song url",
-        check: query => play.sp_validate(query) === "track",
-        async getSongs(query) {
-          const song = await SpotifySong.fromURL(query, requester);
-          return [song];
-        },
-      },
-      {
-        name: "Spotify album/playlist url",
-        check: query =>
-          ["album", "playlist"].includes(play.sp_validate(query) as string),
-        async getSongs(query) {
-          const songs = await SpotifySong.fromListURL(query, requester);
-          return songs;
-        },
-      },
-      {
-        name: "Musescore song",
-        check: query => MUSESCORE_REGEX.test(query),
-        async getSongs(query) {
-          const song = await MusescoreSong.fromURL(query, requester);
-          return [song];
-        },
-      },
-      {
-        name: "song url",
-        check: query => URL_REGEX.test(query),
-        getSongs(query) {
-          const song = URLSong.fromURL(query, requester);
-          return [song];
-        },
-      },
-      {
-        name: "YouTube query",
-        check: () => true,
-        async getSongs(query) {
-          const song = await YouTubeSong.fromSearch(query, requester);
-          return [song];
-        },
-      },
-    ];
-
-    for (const query of queries) {
-      const mds = songsCache.get(query);
-      if (mds) {
-        songs.push(...mds);
-        continue;
+      if (errors.length) {
+        await this.send(`🚫 Error:
+${errors.map(({ name, query }) => `Invalid ${name}: ${query}`).join("\n")}`);
       }
 
-      for (const { name, check, getSongs } of matchers) {
-        if (await check(query)) {
-          try {
-            const chunk = await getSongs(query);
-            songs.push(...chunk);
-            songsCache.set(query, chunk);
-            break;
-          } catch (error) {
-            logger.error(error);
-            await this.send(`🚫 Invalid ${name}`);
-          }
-        }
-      }
+      return songs;
     }
 
-    return songs;
+    return [];
   }
 
   async queueFiles(attachments: Iterable<Attachment>, requester: Requester) {
@@ -211,7 +121,8 @@ export default class Voice extends TypedEmitter<{
     for (const { url } of attachments) {
       let song = urlSongsCache.get(url);
       if (!song) {
-        song = URLSong.fromURL(url, requester);
+        song = URLSong.fromURL(url);
+        song.requester = requester;
         urlSongsCache.set(url, song);
       }
 

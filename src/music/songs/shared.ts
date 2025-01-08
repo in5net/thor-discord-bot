@@ -34,7 +34,7 @@ export type SongState = "unprepared" | "preparing" | "ready";
 export abstract class Song implements SongJSON {
   title: string;
   duration: number;
-  requester: Requester;
+  requester?: Requester;
   start = 0;
   state: SongState = "unprepared";
   private preparePromise?: Promise<void>;
@@ -49,7 +49,7 @@ export abstract class Song implements SongJSON {
   }: {
     title: string;
     duration: number;
-    requester: Requester;
+    requester?: Requester;
   }) {
     this.title = title;
     this.duration = duration;
@@ -63,7 +63,7 @@ export abstract class Song implements SongJSON {
   getEmbed() {
     const { title, requester, iconURL } = this;
     return new EmbedBuilder().setTitle(title).setFooter({
-      text: `Requested by ${requester.name}`,
+      text: requester ? `Requested by ${requester.name}` : ":3",
       iconURL,
     });
   }

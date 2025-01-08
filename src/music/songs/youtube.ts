@@ -5,7 +5,6 @@ import {
   type Album,
   type GetResourceListeners,
   type GetResourceOptions,
-  type Requester,
   type SongJSON,
   Song,
   streamFileWithOptions,
@@ -107,7 +106,6 @@ export class YouTubeSong extends Song {
     time,
     thumbnail,
     channel,
-    requester,
   }: {
     id: string;
     title: string;
@@ -116,9 +114,8 @@ export class YouTubeSong extends Song {
     time?: number;
     thumbnail?: string;
     channel?: Channel;
-    requester: Requester;
   }) {
-    super({ title, duration, requester });
+    super({ title, duration });
     this.id = id;
     this.description = description;
     this.time = time;
@@ -166,10 +163,15 @@ ${title} (${url})
     };
   }
 
-  static fromJSON(
-    { id, title, description, duration, time, thumbnail, channel }: YouTubeJSON,
-    requester: Requester,
-  ): YouTubeSong {
+  static fromJSON({
+    id,
+    title,
+    description,
+    duration,
+    time,
+    thumbnail,
+    channel,
+  }: YouTubeJSON): YouTubeSong {
     return new YouTubeSong({
       id,
       title,
@@ -178,7 +180,6 @@ ${title} (${url})
       time,
       thumbnail,
       channel,
-      requester,
     });
   }
 
@@ -206,7 +207,7 @@ ${title} (${url})
     return embed;
   }
 
-  static async fromId(id: string, requester: Requester): Promise<YouTubeSong> {
+  static async fromId(id: string): Promise<YouTubeSong> {
     try {
       const youtube = await Innertube.create();
       const {
@@ -231,21 +232,17 @@ ${title} (${url})
               title: channel.name,
             }
           : undefined,
-        requester,
       });
     } catch (error) {
       logger.error(error);
-      return new YouTubeSong({ id, title: "", duration: 0, requester });
+      return new YouTubeSong({ id, title: "", duration: 0 });
     }
   }
 
-  static async fromURL(
-    url: string,
-    requester: Requester,
-  ): Promise<YouTubeSong> {
+  static async fromURL(url: string): Promise<YouTubeSong> {
     const play = await getPlayDl();
     const id = play.extractID(url);
-    const song = await this.fromId(id, requester);
+    const song = await this.fromId(id);
     const timeRegex = createRegExp("?t=", oneOrMore(digit).as("seconds"));
     const matches = url.match(timeRegex);
     if (matches?.groups.seconds) {
@@ -254,10 +251,7 @@ ${title} (${url})
     return song;
   }
 
-  static async fromSearch(
-    query: string,
-    requester: Requester,
-  ): Promise<YouTubeSong> {
+  static async fromSearch(query: string): Promise<YouTubeSong> {
     const youtube = await Innertube.create();
     const { videos } = await youtube.search(query, { type: "video" });
     const { id, title, description, duration, best_thumbnail } = z
@@ -279,14 +273,10 @@ ${title} (${url})
       description,
       duration: duration.seconds,
       thumbnail: best_thumbnail.url,
-      requester,
     });
   }
 
-  static async fromPlaylistId(
-    id: string,
-    requester: Requester,
-  ): Promise<YouTubeAlbum> {
+  static async fromPlaylistId(id: string): Promise<YouTubeAlbum> {
     const youtube = await Innertube.create();
     const {
       info: { title = "", description },
@@ -305,7 +295,6 @@ ${title} (${url})
           title: title.toString(),
           duration: seconds,
           thumbnail: thumbnail?.url,
-          requester,
         }),
       );
     }
@@ -317,10 +306,7 @@ ${title} (${url})
     };
   }
 
-  static async fromChannelId(
-    id: string,
-    requester: Requester,
-  ): Promise<YouTubeSong[]> {
+  static async fromChannelId(id: string): Promise<YouTubeSong[]> {
     const youtube = await Innertube.create();
     const channel = await youtube.getChannel(id);
     const { videos } = await channel.getVideos();
@@ -342,7 +328,6 @@ ${title} (${url})
             title: channel.title || "",
             thumbnail: channel.metadata.thumbnail?.[0]?.url || "",
           },
-          requester,
         }),
       );
     }

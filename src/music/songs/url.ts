@@ -3,7 +3,6 @@ import logger from "$lib/logger";
 import {
   type GetResourceListeners,
   type GetResourceOptions,
-  type Requester,
   type SongJSON,
   Song,
   streamFileWithOptions,
@@ -47,11 +46,8 @@ export interface URLJSON extends SongJSON {
   url: string;
 }
 export class URLSong extends Song {
-  constructor(
-    public url: string,
-    requester: Requester,
-  ) {
-    super({ title: url.split("/").pop() || url, duration: 0, requester });
+  constructor(public url: string) {
+    super({ title: url.split("/").pop() || url, duration: 0 });
   }
 
   get iconURL() {
@@ -73,16 +69,16 @@ ${title} (${url})`);
     return { type: "url", url, title, duration };
   }
 
-  static fromJSON({ url }: URLJSON, requester: Requester): URLSong {
-    return new URLSong(url, requester);
+  static fromJSON({ url }: URLJSON): URLSong {
+    return new URLSong(url);
   }
 
   override getEmbed() {
     return super.getEmbed().setColor("Blue").setURL(this.url);
   }
 
-  static fromURL(url: string, requester: Requester): URLSong {
-    return new URLSong(url, requester);
+  static fromURL(url: string): URLSong {
+    return new URLSong(url);
   }
 
   override async _prepare(listeners?: GetResourceListeners) {

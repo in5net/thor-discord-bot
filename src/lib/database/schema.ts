@@ -188,32 +188,10 @@ export const playlists = sqliteTable(
   }),
   t => [namedIndex(t.userId, t.name)],
 );
-export const playlistsRelations = relations(playlists, ({ one, many }) => ({
+export const playlistsRelations = relations(playlists, ({ one }) => ({
   user: one(users, {
     fields: [playlists.userId],
     references: [users.id],
-  }),
-  songs: many(songs),
-}));
-
-export const songs = sqliteTable(
-  "songs",
-  t => ({
-    id: t.text().primaryKey().$default(cuid2),
-    createdAt,
-    playlistId: t
-      .text()
-      .notNull()
-      .references(() => playlists.id, { onDelete: "cascade" }),
-    order: t.integer().notNull(),
-    data: t.text({ mode: "json" }).notNull().$type<SongJSONType>(),
-  }),
-  t => [namedIndex(t.playlistId)],
-);
-export const songsRelations = relations(songs, ({ one }) => ({
-  playlist: one(playlists, {
-    fields: [songs.playlistId],
-    references: [playlists.id],
   }),
 }));
 

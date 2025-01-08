@@ -3,7 +3,6 @@ import { getPlayDl } from "../play";
 import {
   type GetResourceListeners,
   type GetResourceOptions,
-  type Requester,
   type SongJSON,
   Song,
 } from "./shared";
@@ -53,7 +52,6 @@ export class SpotifySong extends Song {
     thumbnail,
     artist,
     album,
-    requester,
   }: {
     id: string;
     title: string;
@@ -68,9 +66,8 @@ export class SpotifySong extends Song {
       id: string;
       name: string;
     };
-    requester: Requester;
   }) {
-    super({ title, duration, requester });
+    super({ title, duration });
     this.id = id;
     this.ytId = ytId;
     this.thumbnail = thumbnail;
@@ -138,10 +135,15 @@ ${title} (${url})
     };
   }
 
-  static fromJSON(
-    { id, ytId, title, duration, thumbnail, artist, album }: SpotifyJSON,
-    requester: Requester,
-  ): SpotifySong {
+  static fromJSON({
+    id,
+    ytId,
+    title,
+    duration,
+    thumbnail,
+    artist,
+    album,
+  }: SpotifyJSON): SpotifySong {
     return new SpotifySong({
       id,
       ytId,
@@ -150,7 +152,6 @@ ${title} (${url})
       thumbnail,
       artist,
       album,
-      requester,
     });
   }
 
@@ -172,10 +173,7 @@ ${title} (${url})
     return embed;
   }
 
-  static async fromURL(
-    url: string,
-    requester: Requester,
-  ): Promise<SpotifySong> {
+  static async fromURL(url: string): Promise<SpotifySong> {
     const play = await getPlayDl();
     if (play.sp_validate(url) !== "track") {
       throw new Error("Invalid URL");
@@ -203,19 +201,15 @@ ${title} (${url})
       thumbnail: thumbnail?.url,
       artist,
       album,
-      requester,
     });
   }
 
-  static async fromId(id: string, requester: Requester): Promise<SpotifySong> {
+  static async fromId(id: string): Promise<SpotifySong> {
     const url = SpotifySong.id2URL(id);
-    return this.fromURL(url, requester);
+    return this.fromURL(url);
   }
 
-  static async fromListURL(
-    url: string,
-    requester: Requester,
-  ): Promise<SpotifySong[]> {
+  static async fromListURL(url: string): Promise<SpotifySong[]> {
     const play = await getPlayDl();
     const type = play.sp_validate(url);
     if (type !== "album" && type !== "playlist") {
@@ -224,9 +218,7 @@ ${title} (${url})
 
     const spotify = (await play.spotify(url)) as SpotifyAlbum | SpotifyPlaylist;
     const tracks = await spotify.all_tracks();
-    return Promise.all(
-      tracks.map(async track => SpotifySong.fromId(track.id, requester)),
-    );
+    return Promise.all(tracks.map(async track => SpotifySong.fromId(track.id)));
   }
 
   override async _prepare(listeners?: GetResourceListeners) {

@@ -7,29 +7,36 @@ import { z } from "zod";
 
 const bodySchema = z.object({
   name: z.string(),
+  songs: z.array(z.record(z.any())),
 });
 
 export const POST: RequestHandler = async ({ request, locals: { user } }) => {
+  console.log("POST");
   if (!user) {
     error(400, "You are not logged in");
   }
 
   const body = await request.json();
-  const { name } = bodySchema.parse(body);
+  const { name, songs } = bodySchema.parse(body);
 
   const id = createId();
   await db.transaction(async tx => {
-    const existingPlaylist = await db.query.playlists.findFirst({
+    const existingPlaylist = await tx.query.playlists.findFirst({
       columns: {
         name: true,
       },
       where: and(eq(playlists.userId, user.id), eq(playlists.name, name)),
     });
-    if (!existingPlaylist) {
+    if (existingPlaylist) {
       error(404, "A playlist with that name already exists");
     }
 
-    await tx.insert(playlists).data({ id, name });
+    await tx.insert(playlists).values({
+      id,
+      userId: user.id,
+      name,
+      songs,
+    });
   });
 
   return json({ id });
