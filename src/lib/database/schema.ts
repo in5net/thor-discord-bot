@@ -417,3 +417,8 @@ export const chessGamesRelations = relations(chessGames, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export const kv = sqliteTable("kv", t => ({
+  key: t.text().primaryKey(),
+  value: t.text().notNull(),
+}));
