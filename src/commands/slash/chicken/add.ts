@@ -28,13 +28,14 @@ export default command(
       return i.reply("You are not an admin");
     }
 
-    const { id, path, ext, url } = await prepareTaggedFile(name);
+    const { id, path, subPath, ext, url } = await prepareTaggedFile(name);
     const request = got.stream(proxyURL);
     await pipeline(request, createWriteStream(path));
 
     await db.transaction(async tx => {
       await tx.insert(files).values({
         id,
+        path: subPath,
         name,
         ext,
       });

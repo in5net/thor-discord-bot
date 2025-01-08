@@ -225,6 +225,7 @@ export const ratios = sqliteTable("ratios", t => ({
 
 export const files = sqliteTable("files", t => ({
   id: t.text().primaryKey(),
+  path: t.text().notNull(),
   name: t.text().notNull(),
   ext: t.text().notNull(),
   nsfw: boolean("nsfw").notNull().default(false),
@@ -238,7 +239,10 @@ export const fileTags = sqliteTable(
   "file_tags",
   t => ({
     id: t.integer().primaryKey({ autoIncrement: true }),
-    fileId: t.text().notNull(),
+    fileId: t
+      .text()
+      .notNull()
+      .references(() => files.id, { onDelete: "cascade" }),
     name: t.text().notNull(),
   }),
   t => [namedIndex(t.name, t.fileId)],

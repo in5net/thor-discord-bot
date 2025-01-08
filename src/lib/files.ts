@@ -14,6 +14,7 @@ export async function prepareTaggedFile(name: string) {
   return {
     id,
     path: filePath,
+    subPath,
     ext: path.parse(filePath).ext,
     url: `https://${env.FILES_DOMAIN}/${subPath}`,
   };
