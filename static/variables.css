@@ -1,0 +1,39 @@
+:root {
+  --text: #02030c;
+  --tet-hover: #191c3f;
+  --background: #f8f9fe;
+  --primary: #2339e1;
+  --secondary: #dc8bef;
+  --accent: #e853df;
+
+  --item: rgb(255, 255, 255);
+  --item-hover: rgba(0, 0, 0, 0.03);
+
+  --modal-frame: rgba(0, 0, 0, 0.38);
+  --modal-surface: #ffffff;
+  --shadow: rgb(103, 103, 103);
+  --shadow-header: rgb(34, 45, 56);
+
+  --white-black: white;
+  --black-white: black;
+}
+
+[data-theme="dark"] {
+  --text: #f2f3fd;
+  --text-hover: #9b9ec3;
+  --background: #010309;
+  --primary: #1e34dc;
+  --secondary: #621075;
+  --accent: #ab17a1;
+
+  --item: rgb(40, 40, 40);
+  --item-hover: rgba(255, 255, 255, 0.1);
+
+  --modal-frame: rgba(0, 0, 0, 0.75);
+  --modal-surface: #181819;
+  --shadow: transparent;
+  --shadow-header: transparent;
+
+  --white-black: black;
+  --black-white: white;
+}

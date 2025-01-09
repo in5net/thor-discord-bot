@@ -8,10 +8,11 @@ export const load: PageServerLoad = async ({ parent }) => {
     columns: {
       id: true,
       name: true,
+      songs: true,
     },
     where: eq(playlists.userId, user.id),
   });
   return {
-    playlists: results,
+    playlists: results.map(x => ({ ...x, songs: x.songs.length })),
   };
 };

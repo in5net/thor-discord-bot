@@ -1,4 +1,7 @@
 <script lang="ts">
+  import Item from "$src/lib/list/Item.svelte";
+  import List from "$src/lib/list/List.svelte";
+
   import { goto } from "$app/navigation";
   import { formatTime } from "$lib/time";
   import type { SongJSONType } from "$src/music/songs";
@@ -6,6 +9,7 @@
   import { nanoid } from "nanoid";
   import { dndzone } from "svelte-dnd-action";
   import { flip } from "svelte/animate";
+  import Modal from "$src/lib/Modal.svelte";
 
   export let id = "";
   export let name = "";
@@ -60,34 +64,45 @@
   }
 </script>
 
-<input type="text" bind:value={name} />
+<label class="mb">
+  Playlist name:
+  <input type="text" bind:value={name} />
+</label>
 
-<button disabled={!canSave} on:click={save}>Save</button>
+<div class="mb">
+  <button disabled={!canSave} on:click={save}>Save</button>
+  <button on:click={() => (showAdd = true)}>Add</button>
+</div>
 
-<button on:click={() => (showAdd = true)}>Add</button>
-
-<ol
-  on:consider={handleDndCards}
-  on:finalize={handleDndCards}
-  use:dndzone={{ items, flipDurationMs }}
->
-  {#each items as { id, song: { title, duration } } (id)}
-    <li animate:flip={{ duration: flipDurationMs }}>
-      {formatTime(duration)} - {title}
-      <button on:click={() => (items = items.filter(x => x.id !== id))}>
-        Remove
-      </button>
-    </li>
-  {/each}
-</ol>
+<List>
+  <div
+    on:consider={handleDndCards}
+    on:finalize={handleDndCards}
+    use:dndzone={{ items, flipDurationMs }}
+  >
+    {#each items as { id, song: { title, duration } }, i (id)}
+      <div animate:flip={{ duration: flipDurationMs }}>
+        <Item label="{i + 1}. {formatTime(duration)} - {title}">
+          <button on:click={() => (items = items.filter(x => x.id !== id))}>
+            Remove
+          </button>
+        </Item>
+      </div>
+    {/each}
+  </div>
+</List>
 
 {#if showAdd}
-  <div>
+  <Modal disabled={!query} on:action={add} on:close={() => (showAdd = false)}>
     <label>
       Query:
       <textarea bind:value={query} />
     </label>
-    <button on:click={() => (showAdd = false)}>Cancel</button>
-    <button disabled={!query} on:click={add}>Add</button>
-  </div>
+  </Modal>
 {/if}
+
+<style>
+  .mb {
+    margin-bottom: 8px;
+  }
+</style>

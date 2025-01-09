@@ -1,4 +1,6 @@
 <script lang="ts">
+  import RandomResponse from "../RandomResponse.svelte";
+
   import { deepEquals } from "@iz7n/std/object";
 
   export let data;
@@ -12,22 +14,12 @@
 </script>
 
 <form action="?/save" method="POST">
-  <label>
-    Triggers:
-    <input name="words" type="text" bind:value={words} />
-  </label>
-  <label>
-    Responses:
-    <input name="responses" type="text" bind:value={responses} />
-  </label>
-  <label>
-    Chance:
-    <input name="chance" type="number" bind:value={chance} />%
-  </label>
-  <label>
-    Cooldown:
-    <input name="cooldown" type="number" bind:value={cooldown} />s
-  </label>
-  <button disabled={!canSave}>Save</button>
+  <RandomResponse
+    extraCanSave={canSave}
+    bind:words
+    bind:responses
+    bind:cooldown
+    bind:chance
+  />
   <button formaction="?/delete">Delete</button>
 </form>

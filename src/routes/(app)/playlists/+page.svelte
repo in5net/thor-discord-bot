@@ -1,11 +1,22 @@
 <script lang="ts">
+  import Item from "$src/lib/list/Item.svelte";
+  import List from "$src/lib/list/List.svelte";
+
+  import { goto } from "$app/navigation";
+  import { quantify } from "@iz7n/std/string";
+
   export let data;
   const { playlists } = data;
 </script>
 
-<h3>Playlists</h3>
-<ul>
-  {#each playlists as { id, name }}
-    <li><a href="/playlists/{id}">{name}</a></li>
+<a href="/playlists/add">Add</a>
+
+<List title="Playlists">
+  {#each playlists as { id, name, songs }}
+    <Item
+      description={quantify("song", songs)}
+      label={name}
+      on:click={() => goto(`/playlists/${id}`)}
+    />
   {/each}
-</ul>
+</List>
