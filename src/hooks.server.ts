@@ -24,6 +24,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     } else {
       const response = await fetch(
         `${origin}/api/auth/refresh?code=${refresh_token}`,
+        { method: "POST" },
       );
       const token = await response.json();
 
