@@ -23,7 +23,7 @@ export const handle: Handle = async ({ event, resolve }) => {
       event.locals.user = user;
     } else {
       const response = await fetch(
-        `${origin}/auth/refresh?code=${refresh_token}`,
+        `${origin}/api/auth/refresh?code=${refresh_token}`,
       );
       const token = await response.json();
 
