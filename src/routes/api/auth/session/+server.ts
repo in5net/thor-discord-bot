@@ -31,7 +31,7 @@ export const GET: RequestHandler = async ({
   const data = await response.json();
   const result = tokenSchema.safeParse(data);
   if (result.error) {
-    error(302, result.error);
+    error(500, result.error);
   }
   const token = result.data;
 
