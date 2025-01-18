@@ -278,26 +278,36 @@ ${title} (${url})
 
   static async fromPlaylistId(id: string): Promise<YouTubeAlbum> {
     const youtube = await Innertube.create();
-    const {
-      info: { title = "", description },
-      videos,
-    } = await youtube.getPlaylist(id);
     const songs: YouTubeSong[] = [];
-    for (const {
-      id,
-      title,
-      duration: { seconds },
-      thumbnails: [thumbnail],
-    } of videosSchema.parse(videos)) {
-      songs.push(
-        new YouTubeSong({
-          id,
-          title: title.toString(),
-          duration: seconds,
-          thumbnail: thumbnail?.url,
-        }),
-      );
-    }
+
+    let playlist: Awaited<ReturnType<typeof youtube.getPlaylist>> | undefined;
+    let title: string;
+    let description: string | undefined;
+
+    do {
+      if (playlist) {
+        playlist = await playlist.getContinuation();
+      } else {
+        playlist = await youtube.getPlaylist(id);
+      }
+      ({ title = "", description } = playlist.info);
+
+      for (const {
+        id,
+        title,
+        duration: { seconds },
+        thumbnails: [thumbnail],
+      } of videosSchema.parse(playlist.videos)) {
+        songs.push(
+          new YouTubeSong({
+            id,
+            title: title.toString(),
+            duration: seconds,
+            thumbnail: thumbnail?.url,
+          }),
+        );
+      }
+    } while (playlist.has_continuation);
 
     return {
       name: title,
