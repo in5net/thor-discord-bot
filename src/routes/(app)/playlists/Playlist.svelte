@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Modal from "$lib/Modal.svelte";
   import Item from "$src/lib/list/Item.svelte";
   import List from "$src/lib/list/List.svelte";
 
@@ -9,7 +10,6 @@
   import { nanoid } from "nanoid";
   import { dndzone } from "svelte-dnd-action";
   import { flip } from "svelte/animate";
-  import Modal from "$src/lib/Modal.svelte";
 
   export let id = "";
   export let name = "";
@@ -93,7 +93,12 @@
 </List>
 
 {#if showAdd}
-  <Modal disabled={!query} on:action={add} on:close={() => (showAdd = false)}>
+  <Modal
+    btnLabel="Save"
+    disabled={!query}
+    on:action={add}
+    on:close={() => (showAdd = false)}
+  >
     <label>
       Query:
       <textarea bind:value={query} />

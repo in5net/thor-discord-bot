@@ -1,6 +1,4 @@
 <script generics="ButtonLabel extends string | undefined" lang="ts">
-
-import type IconType from "$generated/IconType";
   import { createEventDispatcher } from "svelte";
   import { fade, scale } from "svelte/transition";
 
@@ -9,7 +7,7 @@ import type IconType from "$generated/IconType";
   type ButtonType = "primary" | "hm-system";
   type $$Props = {
     btnType?: ButtonType;
-    btnIcon?: IconType;
+    btnIcon?: string;
     btnLabel?: ButtonLabel;
     disabled?: boolean;
     message?: string;
