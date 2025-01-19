@@ -129,7 +129,6 @@ export default command(
       void rm(temporaryDir, { recursive: true });
     });
 
-    console.log("Done");
     return i.editReply({
       files: [new AttachmentBuilder(stream)],
     });

@@ -20,7 +20,6 @@ export const PUT: RequestHandler = async ({
 
   const body = await request.json();
   const playlist = bodySchema.parse(body);
-  console.log(playlist);
 
   await db.transaction(async tx => {
     const existingPlaylist = await tx.query.playlists.findFirst({

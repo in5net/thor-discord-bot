@@ -11,7 +11,6 @@ const bodySchema = z.object({
 });
 
 export const POST: RequestHandler = async ({ request, locals: { user } }) => {
-  console.log("POST");
   if (!user) {
     error(400, "You are not logged in");
   }
