@@ -1,4 +1,7 @@
 <script lang="ts">
+  import Button from "$src/lib/Button.svelte";
+  import Textarea from "$src/lib/Textarea.svelte";
+
   export let words = "";
   export let responses = "";
   export let chance = 10;
@@ -8,18 +11,8 @@
   $: canSave = !!words && !!responses && extraCanSave;
 </script>
 
-<div>
-  <label>
-    Triggers:
-    <textarea name="words" bind:value={words} />
-  </label>
-</div>
-<div>
-  <label>
-    Responses:
-    <textarea name="responses" bind:value={responses} />
-  </label>
-</div>
+<Textarea name="words" label="Triggers" bind:value={words} />
+<Textarea name="responses" label="Responses" bind:value={responses} />
 <div>
   <label>
     Chance:
@@ -32,4 +25,4 @@
     <input name="cooldown" type="number" bind:value={cooldown} />s
   </label>
 </div>
-<button disabled={!canSave}>Save</button>
+<Button disabled={!canSave}>Save</Button>

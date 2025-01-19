@@ -1,22 +1,13 @@
-<script generics="ButtonLabel extends string | undefined" lang="ts">
+<script lang="ts">
+  import Button from "./Button.svelte";
+
   import { createEventDispatcher } from "svelte";
   import { fade, scale } from "svelte/transition";
 
-  const dispatch = createEventDispatcher();
-
-  type ButtonType = "primary" | "hm-system";
-  type $$Props = {
-    btnType?: ButtonType;
-    btnIcon?: string;
-    btnLabel?: ButtonLabel;
-    disabled?: boolean;
-    message?: string;
-    helper?: string;
-    spinner?: boolean;
-    percent?: number;
-    done?: boolean;
-  } & (ButtonLabel extends string ? { spinner: boolean }
-  : { spinner?: boolean });
+  const dispatch = createEventDispatcher<{
+    action: void;
+    close: void;
+  }>();
 
   export let btnLabel: string | undefined = undefined;
   export let disabled = false;
@@ -37,9 +28,9 @@
     }}
   >
     <div class="close">
-      <button disabled={spinner} on:click={() => dispatch("close")}
-        >Close</button
-      >
+      <Button disabled={spinner} on:click={() => dispatch("close")}>
+        Close
+      </Button>
     </div>
     <div class="overflow">
       <div class="content">
@@ -49,14 +40,9 @@
         {/if}
         {#if btnLabel}
           <div class="grid fr-max mt">
-            <div class="grid max-fr">
-              <button {disabled} on:click={() => dispatch("action")}>
-                {btnLabel}
-              </button>
-              <button disabled={spinner} on:click={() => dispatch("close")}>
-                Cancel
-              </button>
-            </div>
+            <Button {disabled} on:click={() => dispatch("action")}>
+              {btnLabel}
+            </Button>
             <div>
               <slot name="button" />
             </div>

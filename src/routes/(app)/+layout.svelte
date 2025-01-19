@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Button from "$src/lib/Button.svelte";
   import Icon from "$src/lib/Icon.svelte";
 
   import { darkMode } from "./dark-mode";
@@ -14,7 +15,7 @@
 
 <div class="container">
   <header>
-    <button class="logout-button" on:click={logout}>Logout</button>
+    <Button on:click={logout}>Logout</Button>
     <nav>
       <a href="/playlists">Playlists</a>
       {#if data.dbUser?.admin}
@@ -46,14 +47,6 @@
     background-color: var(--secondary);
     height: 60px;
     padding: 0 20px 0 15px;
-  }
-  .logout-button {
-    border: 1px solid var(--accent);
-    border-radius: 4px;
-    padding: 2px 4px;
-    outline: none;
-    background: none;
-    cursor: pointer;
   }
   .theme-button {
     border: 0;

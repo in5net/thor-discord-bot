@@ -1,7 +1,10 @@
 <script lang="ts">
   import Modal from "$lib/Modal.svelte";
+  import Button from "$src/lib/Button.svelte";
+  import Input from "$src/lib/Input.svelte";
   import Item from "$src/lib/list/Item.svelte";
   import List from "$src/lib/list/List.svelte";
+  import Textarea from "$src/lib/Textarea.svelte";
 
   import { goto } from "$app/navigation";
   import { formatTime } from "$lib/time";
@@ -64,14 +67,11 @@
   }
 </script>
 
-<label class="mb">
-  Playlist name:
-  <input type="text" bind:value={name} />
-</label>
+<Input label="Playlist name" bind:value={name} />
 
 <div class="mb">
-  <button disabled={!canSave} on:click={save}>Save</button>
-  <button on:click={() => (showAdd = true)}>Add</button>
+  <Button disabled={!canSave} on:click={save}>Save</Button>
+  <Button on:click={() => (showAdd = true)}>Add</Button>
 </div>
 
 <List>
@@ -83,9 +83,9 @@
     {#each items as { id, song: { title, duration } }, i (id)}
       <div animate:flip={{ duration: flipDurationMs }}>
         <Item label="{i + 1}. {formatTime(duration)} - {title}">
-          <button on:click={() => (items = items.filter(x => x.id !== id))}>
+          <Button on:click={() => (items = items.filter(x => x.id !== id))}>
             Remove
-          </button>
+          </Button>
         </Item>
       </div>
     {/each}
@@ -99,10 +99,7 @@
     on:action={add}
     on:close={() => (showAdd = false)}
   >
-    <label>
-      Query:
-      <textarea bind:value={query} />
-    </label>
+    <Textarea label="Query" bind:value={query} />
   </Modal>
 {/if}
 
