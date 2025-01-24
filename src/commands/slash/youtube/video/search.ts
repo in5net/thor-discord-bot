@@ -44,7 +44,7 @@ export default command(
         )
         .addFields(fields);
 
-      return await i.reply({
+      return i.reply({
         embeds: [embed],
       });
     } catch (error) {

@@ -24,7 +24,7 @@ export default command(
         .setURL(authorURL)
         .setThumbnail(iconURL);
 
-      return await i.reply({ embeds: [embed] });
+      return i.reply({ embeds: [embed] });
     } catch (error) {
       logger.error(error);
       return i.reply({ content: "Invalid AO3 url", ephemeral: true });

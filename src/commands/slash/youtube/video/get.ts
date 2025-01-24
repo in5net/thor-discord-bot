@@ -68,7 +68,7 @@ export default command(
         );
       }
 
-      return await i.reply({
+      return i.reply({
         embeds: [embed],
       });
     } catch (error) {
