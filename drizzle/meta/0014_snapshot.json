@@ -76,53 +76,37 @@
       "indexes": {
         "attachments_messageId_idx": {
           "name": "attachments_messageId_idx",
-          "columns": [
-            "message_id"
-          ],
+          "columns": ["message_id"],
           "isUnique": false
         },
         "attachments_channelId_idx": {
           "name": "attachments_channelId_idx",
-          "columns": [
-            "channel_id"
-          ],
+          "columns": ["channel_id"],
           "isUnique": false
         },
         "attachments_guildId_idx": {
           "name": "attachments_guildId_idx",
-          "columns": [
-            "guild_id"
-          ],
+          "columns": ["guild_id"],
           "isUnique": false
         },
         "attachments_ext_idx": {
           "name": "attachments_ext_idx",
-          "columns": [
-            "ext"
-          ],
+          "columns": ["ext"],
           "isUnique": false
         },
         "attachments_bot_idx": {
           "name": "attachments_bot_idx",
-          "columns": [
-            "bot"
-          ],
+          "columns": ["bot"],
           "isUnique": false
         },
         "attachments_nsfw_idx": {
           "name": "attachments_nsfw_idx",
-          "columns": [
-            "nsfw"
-          ],
+          "columns": ["nsfw"],
           "isUnique": false
         },
         "attachments_ext_bot_nsfw_idx": {
           "name": "attachments_ext_bot_nsfw_idx",
-          "columns": [
-            "ext",
-            "bot",
-            "nsfw"
-          ],
+          "columns": ["ext", "bot", "nsfw"],
           "isUnique": false
         }
       },
@@ -131,12 +115,8 @@
           "name": "attachments_message_id_messages_id_fk",
           "tableFrom": "attachments",
           "tableTo": "messages",
-          "columnsFrom": [
-            "message_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["message_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -144,12 +124,8 @@
           "name": "attachments_channel_id_channels_id_fk",
           "tableFrom": "attachments",
           "tableTo": "channels",
-          "columnsFrom": [
-            "channel_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["channel_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -157,12 +133,8 @@
           "name": "attachments_guild_id_guilds_id_fk",
           "tableFrom": "attachments",
           "tableTo": "guilds",
-          "columnsFrom": [
-            "guild_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["guild_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -232,16 +204,12 @@
       "indexes": {
         "channels_guildId_idx": {
           "name": "channels_guildId_idx",
-          "columns": [
-            "guild_id"
-          ],
+          "columns": ["guild_id"],
           "isUnique": false
         },
         "channels_deleted_idx": {
           "name": "channels_deleted_idx",
-          "columns": [
-            "deleted"
-          ],
+          "columns": ["deleted"],
           "isUnique": false
         }
       },
@@ -250,12 +218,8 @@
           "name": "channels_guild_id_guilds_id_fk",
           "tableFrom": "channels",
           "tableTo": "guilds",
-          "columnsFrom": [
-            "guild_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["guild_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -368,30 +332,22 @@
       "indexes": {
         "users_created_at_idx": {
           "name": "users_created_at_idx",
-          "columns": [
-            "created_at"
-          ],
+          "columns": ["created_at"],
           "isUnique": false
         },
         "command_executions_name_idx": {
           "name": "command_executions_name_idx",
-          "columns": [
-            "name"
-          ],
+          "columns": ["name"],
           "isUnique": false
         },
         "command_executions_messageId_idx": {
           "name": "command_executions_messageId_idx",
-          "columns": [
-            "message_id"
-          ],
+          "columns": ["message_id"],
           "isUnique": false
         },
         "command_executions_channelId_idx": {
           "name": "command_executions_channelId_idx",
-          "columns": [
-            "channel_id"
-          ],
+          "columns": ["channel_id"],
           "isUnique": false
         }
       },
@@ -474,10 +430,7 @@
       "indexes": {
         "file_tags_name_fileId_idx": {
           "name": "file_tags_name_fileId_idx",
-          "columns": [
-            "name",
-            "file_id"
-          ],
+          "columns": ["name", "file_id"],
           "isUnique": false
         }
       },
@@ -486,12 +439,8 @@
           "name": "file_tags_file_id_files_id_fk",
           "tableFrom": "file_tags",
           "tableTo": "files",
-          "columnsFrom": [
-            "file_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["file_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -575,9 +524,7 @@
       "indexes": {
         "guilds_deleted_idx": {
           "name": "guilds_deleted_idx",
-          "columns": [
-            "deleted"
-          ],
+          "columns": ["deleted"],
           "isUnique": false
         }
       },
@@ -713,9 +660,7 @@
       "indexes": {
         "issues_userId_idx": {
           "name": "issues_userId_idx",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         }
       },
@@ -785,9 +730,7 @@
       "indexes": {
         "members_guildId_idx": {
           "name": "members_guildId_idx",
-          "columns": [
-            "guild_id"
-          ],
+          "columns": ["guild_id"],
           "isUnique": false
         }
       },
@@ -796,12 +739,8 @@
           "name": "members_guild_id_guilds_id_fk",
           "tableFrom": "members",
           "tableTo": "guilds",
-          "columnsFrom": [
-            "guild_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["guild_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -874,23 +813,17 @@
       "indexes": {
         "messages_authorId_idx": {
           "name": "messages_authorId_idx",
-          "columns": [
-            "author_id"
-          ],
+          "columns": ["author_id"],
           "isUnique": false
         },
         "messages_channelId_idx": {
           "name": "messages_channelId_idx",
-          "columns": [
-            "channel_id"
-          ],
+          "columns": ["channel_id"],
           "isUnique": false
         },
         "messages_guildId_idx": {
           "name": "messages_guildId_idx",
-          "columns": [
-            "guild_id"
-          ],
+          "columns": ["guild_id"],
           "isUnique": false
         }
       },
@@ -1036,10 +969,7 @@
       "indexes": {
         "playlists_userId_name_idx": {
           "name": "playlists_userId_name_idx",
-          "columns": [
-            "user_id",
-            "name"
-          ],
+          "columns": ["user_id", "name"],
           "isUnique": false
         }
       },
@@ -1048,12 +978,8 @@
           "name": "playlists_user_id_users_id_fk",
           "tableFrom": "playlists",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1145,9 +1071,7 @@
       "indexes": {
         "ratios_content_unique": {
           "name": "ratios_content_unique",
-          "columns": [
-            "content"
-          ],
+          "columns": ["content"],
           "isUnique": true
         }
       },
@@ -1309,11 +1233,7 @@
       "indexes": {
         "youtube_searches_guildId_channelId_messageId_idx": {
           "name": "youtube_searches_guildId_channelId_messageId_idx",
-          "columns": [
-            "guild_id",
-            "channel_id",
-            "message_id"
-          ],
+          "columns": ["guild_id", "channel_id", "message_id"],
           "isUnique": false
         }
       },
