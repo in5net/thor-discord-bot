@@ -19,7 +19,7 @@ export default command(
     const { loadImage, createCanvas } = await import("@napi-rs/canvas");
     const img = await loadImage(url).catch(() => null);
     if (!img) {
-      return i.reply("Could not load image");
+      return i.editReply("Could not load image");
     }
 
     const { width, height } = img;

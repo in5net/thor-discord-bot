@@ -18,7 +18,7 @@ export default command(
       .orderBy(sql`random()`)
       .limit(1);
     if (!quote) {
-      return i.reply("No quote found");
+      return i.editReply("No quote found");
     }
     await i.deleteReply();
 
