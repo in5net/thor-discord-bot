@@ -1,4 +1,4 @@
-import { getSongsFromQuery } from "$src/music/plan";
+import { getItemsFromQuery } from "$src/music/plan";
 import type { RequestHandler } from "./$types";
 import { error, json } from "@sveltejs/kit";
 
@@ -15,7 +15,7 @@ export const GET: RequestHandler = async ({
     error(400, "You must pass a '?q='");
   }
 
-  const result = await getSongsFromQuery(query);
+  const result = await getItemsFromQuery(query);
 
   return json(result);
 };

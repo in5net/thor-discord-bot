@@ -8,17 +8,18 @@
 
   import { goto } from "$app/navigation";
   import { formatTime } from "$lib/time";
-  import type { SongJSONType } from "$src/music/songs";
+  import type { PlaylistItemJSON } from "$src/music/songs";
   import { deepEquals } from "@iz7n/std/object";
+  import { sum } from "@iz7n/std/stats";
   import { nanoid } from "nanoid";
   import { dndzone } from "svelte-dnd-action";
   import { flip } from "svelte/animate";
 
   export let id = "";
   export let name = "";
-  export let songs: SongJSONType[] = [];
+  export let songs: PlaylistItemJSON[] = [];
 
-  let items = songs.map(song => ({ id: nanoid(), song }));
+  let items = songs.map(item => ({ id: nanoid(), item }));
 
   const oldName = name;
   const oldItems = [...items];
@@ -38,14 +39,14 @@
     const result = await response.json();
 
     const { songs } = result;
-    items = [...items, ...songs.map(song => ({ id: nanoid(), song }))];
+    items = [...items, ...songs.map(item => ({ id: nanoid(), item }))];
 
     query = "";
     showAdd = false;
   }
 
   async function save() {
-    const songs = items.map(x => x.song);
+    const songs = items.map(x => x.item);
     if (id) {
       await fetch(`/api/playlist/${id}`, {
         method: "PUT",
@@ -80,13 +81,25 @@
     on:finalize={handleDndCards}
     use:dndzone={{ items, flipDurationMs }}
   >
-    {#each items as { id, song: { title, duration } }, i (id)}
+    {#each items as { id, item }, i (id)}
       <div animate:flip={{ duration: flipDurationMs }}>
-        <Item label="{i + 1}. {formatTime(duration)} - {title}">
-          <Button on:click={() => (items = items.filter(x => x.id !== id))}>
-            Remove
-          </Button>
-        </Item>
+        {#if item.type === "playlist"}
+          <Item
+            label="{i + 1}. PLAYLIST: {formatTime(
+              sum(item.songs.map(x => x.duration)),
+            )} - {item.name}"
+          >
+            <Button on:click={() => (items = items.filter(x => x.id !== id))}>
+              Remove
+            </Button>
+          </Item>
+        {:else}
+          <Item label="{i + 1}. {formatTime(item.duration)} - {item.title}">
+            <Button on:click={() => (items = items.filter(x => x.id !== id))}>
+              Remove
+            </Button>
+          </Item>
+        {/if}
       </div>
     {/each}
   </div>
