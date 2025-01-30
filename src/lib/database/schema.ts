@@ -1,5 +1,5 @@
 /* eslint-disable ts/no-use-before-define */
-import type { SongJSONType } from "$src/music/songs";
+import type { PlaylistItemJSON } from "$src/music/songs";
 import { createId as cuid2 } from "@paralleldrive/cuid2";
 import { relations, sql } from "drizzle-orm";
 import {
@@ -184,7 +184,7 @@ export const playlists = sqliteTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     name: t.text().notNull(),
-    songs: t.text({ mode: "json" }).notNull().$type<SongJSONType[]>(),
+    songs: t.text({ mode: "json" }).notNull().$type<PlaylistItemJSON[]>(),
   }),
   t => [namedIndex(t.userId, t.name)],
 );

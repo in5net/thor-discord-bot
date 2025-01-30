@@ -1,30 +1,15 @@
 import { getLyrics } from "$lib/genius";
 import logger from "$lib/logger";
 import { formatTime } from "$lib/time";
-import {
-  URL_REGEX,
-  YOUTUBE_CHANNEL_REGEX,
-  MUSESCORE_REGEX,
-  splitQueries,
-  getSongsFromQuery,
-} from "./plan";
-import { getPlayDl } from "./play";
+import { getSongsFromQuery } from "./plan";
 import Queue from "./queue";
-import {
-  MusescoreSong,
-  SpotifySong,
-  URLSong,
-  YouTubeSong,
-  type Requester,
-  type SongType,
-} from "./songs";
+import { SpotifySong, URLSong, type Requester } from "./songs";
 import Stream from "./stream";
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { pipe } from "@iz7n/std/fn";
 import { collect, map, take } from "@iz7n/std/iter";
 import { shuffle } from "@iz7n/std/random";
 import { quantify } from "@iz7n/std/string";
-import { type Awaitable } from "@iz7n/std/types";
 import {
   type MessagePayload,
   ChannelType,

@@ -5,7 +5,7 @@ import {
   SpotifySong,
   URLSong,
   YouTubeSong,
-  type SongType,
+  type PlaylistItem,
 } from "./songs";
 import type { Awaitable } from "@iz7n/std/types";
 import type { Message } from "discord.js";
@@ -152,31 +152,31 @@ export function splitQueries(query: string) {
   return queries;
 }
 
-export async function getSongsFromQuery(query: string) {
+export async function getItemsFromQuery(query: string) {
   const queries = query ? splitQueries(query) : [];
 
-  const songs: SongType[] = [];
-  const songsCache = new Map<string, SongType[]>();
+  const items: PlaylistItem[] = [];
+  const itemsCache = new Map<string, PlaylistItem[]>();
   const play = await getPlayDl(true);
 
   const matchers: Array<{
     name: string;
     check: (query: string) => Awaitable<boolean>;
-    getSongs: (query: string) => Awaitable<SongType[]>;
+    getItems: (query: string) => Awaitable<PlaylistItem[]>;
   }> = [
     {
       name: "YouTube playlist url",
       check: query => play.yt_validate(query) === "playlist",
-      async getSongs(query) {
+      async getItems(query) {
         const id = play.extractID(query);
-        const { songs } = await YouTubeSong.fromPlaylistId(id);
-        return songs;
+        const playlist = await YouTubeSong.fromPlaylistId(id);
+        return [{ ...playlist, id, type: "playlist" }];
       },
     },
     {
       name: "YouTube video url",
       check: query => play.yt_validate(query) === "video",
-      async getSongs(query) {
+      async getItems(query) {
         const song = await YouTubeSong.fromURL(query);
         return [song];
       },
@@ -184,7 +184,7 @@ export async function getSongsFromQuery(query: string) {
     {
       name: "YouTube channel url",
       check: query => YOUTUBE_CHANNEL_REGEX.test(query),
-      async getSongs(query) {
+      async getItems(query) {
         const id = YOUTUBE_CHANNEL_REGEX.exec(query)?.[2] || "";
         const videos = await YouTubeSong.fromChannelId(id);
         return videos;
@@ -193,7 +193,7 @@ export async function getSongsFromQuery(query: string) {
     {
       name: "Spotify song url",
       check: query => play.sp_validate(query) === "track",
-      async getSongs(query) {
+      async getItems(query) {
         const song = await SpotifySong.fromURL(query);
         return [song];
       },
@@ -202,7 +202,7 @@ export async function getSongsFromQuery(query: string) {
       name: "Spotify album/playlist url",
       check: query =>
         ["album", "playlist"].includes(play.sp_validate(query) as string),
-      async getSongs(query) {
+      async getItems(query) {
         const songs = await SpotifySong.fromListURL(query);
         return songs;
       },
@@ -210,7 +210,7 @@ export async function getSongsFromQuery(query: string) {
     {
       name: "Musescore song",
       check: query => MUSESCORE_REGEX.test(query),
-      async getSongs(query) {
+      async getItems(query) {
         const song = await MusescoreSong.fromURL(query);
         return [song];
       },
@@ -218,7 +218,7 @@ export async function getSongsFromQuery(query: string) {
     {
       name: "song url",
       check: query => URL_REGEX.test(query),
-      getSongs(query) {
+      getItems(query) {
         const song = URLSong.fromURL(query);
         return [song];
       },
@@ -226,7 +226,7 @@ export async function getSongsFromQuery(query: string) {
     {
       name: "YouTube query",
       check: () => true,
-      async getSongs(query) {
+      async getItems(query) {
         const song = await YouTubeSong.fromSearch(query);
         return [song];
       },
@@ -239,18 +239,18 @@ export async function getSongsFromQuery(query: string) {
     query: string;
   }> = [];
   for (const [index, query] of queries.entries()) {
-    const mds = songsCache.get(query);
+    const mds = itemsCache.get(query);
     if (mds) {
-      songs.push(...mds);
+      items.push(...mds);
       continue;
     }
 
-    for (const { name, check, getSongs } of matchers) {
+    for (const { name, check, getItems: getSongs } of matchers) {
       if (await check(query)) {
         try {
           const chunk = await getSongs(query);
-          songs.push(...chunk);
-          songsCache.set(query, chunk);
+          items.push(...chunk);
+          itemsCache.set(query, chunk);
           break;
         } catch (error) {
           logger.error(error);
@@ -259,6 +259,16 @@ export async function getSongsFromQuery(query: string) {
       }
     }
   }
+
+  return { items, errors };
+}
+
+export async function getSongsFromQuery(query: string) {
+  const { items, errors } = await getItemsFromQuery(query);
+
+  const songs: PlaylistItem[] = items.flatMap(item =>
+    "type" in item ? item.songs : [item],
+  );
 
   return { songs, errors };
 }

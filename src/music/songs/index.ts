@@ -10,7 +10,25 @@ export * from "./url";
 export * from "./youtube";
 
 export type SongType = YouTubeSong | SpotifySong | MusescoreSong | URLSong;
+export type PlaylistItem =
+  | SongType
+  | {
+      type: "playlist";
+      id: string;
+      name: string;
+      description?: string;
+      songs: SongType[];
+    };
 export type SongJSONType = YouTubeJSON | SpotifyJSON | MusescoreJSON | URLJSON;
+export type PlaylistItemJSON =
+  | SongJSONType
+  | {
+      type: "playlist";
+      id: string;
+      name: string;
+      description?: string;
+      songs: SongJSONType[];
+    };
 
 export function fromJSON(json: SongJSONType): SongType {
   switch (json.type) {
