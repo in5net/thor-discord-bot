@@ -12,13 +12,13 @@ const numberEmojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"];
 export default event(
   { name: "messageReactionAdd" },
   async ({ args: [{ message, emoji }, user] }) => {
-    console.log(user);
     if (user.bot) {
       return;
     }
 
-    console.log(user.dmChannel, emoji.name);
-
+    if (message.partial) {
+      message = await message.fetch();
+    }
     const { guild, channel, channelId, author, attachments } = message;
     if (guild) {
       const numberIndex = numberEmojis.indexOf(emoji.name || "");
@@ -38,9 +38,6 @@ export default event(
           const member = await guild.members.fetch(user.id);
           if (id && member.voice.channel) {
             const voice = getVoice(guild.id);
-            if (message.partial) {
-              message = await message.fetch();
-            }
             voice.setChannels(message);
             const song = await YouTubeSong.fromId(id);
             song.requester = {
@@ -51,12 +48,12 @@ export default event(
             await voice.play();
           }
         }
-      } else if (emoji.name === "🔖" && user.dmChannel) {
+      } else if (emoji.name === "🔖") {
         const embed = new EmbedBuilder();
         if (author) {
           embed.setTitle(author.displayName).setAuthor({
             name: author.displayName,
-            iconURL: author.defaultAvatarURL,
+            iconURL: author.displayAvatarURL({ size: 64 }),
           });
         }
         embed
@@ -91,7 +88,7 @@ export default event(
           ),
         });
 
-        const bookmarkMessage = await user.dmChannel.send({
+        const bookmarkMessage = await user.send({
           embeds: [embed],
         });
         await bookmarkMessage.pin();
@@ -105,6 +102,7 @@ export default event(
       message.author?.id === env.DISCORD_ID
     ) {
       await message.delete();
+      return;
     }
 
     if (user.id === env.OWNER_ID) {

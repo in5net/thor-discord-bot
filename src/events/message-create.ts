@@ -67,6 +67,9 @@ const translator = new deepl.Translator(env.DEEPL_API_KEY);
 export default event(
   { name: "messageCreate" },
   async ({ client, args: [message] }) => {
+    if (message.partial) {
+      message = await message.fetch();
+    }
     const { content, cleanContent, channel, author, reference } = message;
     if (
       !channel.isTextBased() ||
