@@ -56,7 +56,12 @@ const client = new Client({
     "GuildVoiceStates",
     "DirectMessageReactions",
   ],
-  partials: [Partials.Message, Partials.Channel, Partials.Reaction],
+  partials: [
+    Partials.Message,
+    Partials.Channel,
+    Partials.Reaction,
+    Partials.User,
+  ],
   makeCache: Options.cacheWithLimits({
     ...Options.DefaultMakeCacheSettings,
     AutoModerationRuleManager: 0,
