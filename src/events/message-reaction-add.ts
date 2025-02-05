@@ -67,7 +67,7 @@ export default event(
             firstAttactment &&
             includesAny(
               [firstAttactment.name.split(".").at(-1)],
-              ["png", "jpg", "webp", "gif"],
+              ["png", "jpg", "webp"],
             )
           ) {
             embed.setImage(firstAttactment.proxyURL);
