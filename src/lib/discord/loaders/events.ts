@@ -36,7 +36,7 @@ function createEventListener<T extends keyof ClientEvents>(
     try {
       await listener({ client, args });
     } catch (error) {
-      logger.error(`Error caught for event ${name}: ${error}`);
+      console.error(`Error caught for event ${name}:`, error);
     }
   };
 }

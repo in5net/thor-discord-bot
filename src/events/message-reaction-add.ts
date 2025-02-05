@@ -48,20 +48,25 @@ export default event(
             await voice.play();
           }
         }
-      } else if (emoji.name === "🔖") {
-        const embed = new EmbedBuilder();
+        return;
+      }
+      if (emoji.name === "🔖") {
+        const embed = new EmbedBuilder()
+          .setTitle(`Bookmark from ${guild.name}`)
+          .setColor(env.COLOR)
+          .setTimestamp(message.createdAt);
         if (author) {
           embed.setTitle(author.displayName).setAuthor({
             name: author.displayName,
             iconURL: author.displayAvatarURL({ size: 64 }),
           });
         }
-        embed
-          .setTitle(`Bookmark from ${guild.name}`)
-          .setDescription(message.content)
-          .setTimestamp(message.createdAt);
+        if (message.content.length) {
+          embed.setDescription(message.content);
+        }
         if (attachments.size) {
           const firstAttactment = attachments.first();
+          console.log(firstAttactment);
           if (
             attachments.size === 1 &&
             firstAttactment &&
@@ -93,6 +98,7 @@ export default event(
         });
         await bookmarkMessage.pin();
         await bookmarkMessage.react("❌");
+        return;
       }
     }
 
