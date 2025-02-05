@@ -66,7 +66,6 @@ export default event(
         }
         if (attachments.size) {
           const firstAttactment = attachments.first();
-          console.log(firstAttactment);
           if (
             attachments.size === 1 &&
             firstAttactment &&
