@@ -91,8 +91,8 @@
   }
   .end {
     justify-self: end;
-    display: grid;
-    grid-template-columns: max-content;
+    display: flex;
+    gap: 8px;
   }
   @media screen and (max-width: 500px) {
     .li {

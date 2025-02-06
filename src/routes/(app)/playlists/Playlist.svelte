@@ -38,7 +38,7 @@
     );
     const result = await response.json();
 
-    const { songs } = result;
+    const { items: songs } = result;
     items = [...items, ...songs.map(item => ({ id: nanoid(), item }))];
 
     query = "";
@@ -89,12 +89,29 @@
               sum(item.songs.map(x => x.duration)),
             )} - {item.name}"
           >
+            <Button
+              on:click={() =>
+                window.open(
+                  `https://youtube.com/playlist?list=${item.id}`,
+                  "_blank",
+                )}
+            >
+              Open
+            </Button>
             <Button on:click={() => (items = items.filter(x => x.id !== id))}>
               Remove
             </Button>
           </Item>
         {:else}
           <Item label="{i + 1}. {formatTime(item.duration)} - {item.title}">
+            {#if item.type === "youtube"}
+              <Button
+                on:click={() =>
+                  window.open(`https://youtu.be/${item.id}`, "_blank")}
+              >
+                Open
+              </Button>
+            {/if}
             <Button on:click={() => (items = items.filter(x => x.id !== id))}>
               Remove
             </Button>

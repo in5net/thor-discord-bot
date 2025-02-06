@@ -13,6 +13,13 @@ export const load: PageServerLoad = async ({ parent }) => {
     where: eq(playlists.userId, user.id),
   });
   return {
-    playlists: results.map(x => ({ ...x, songs: x.songs.length })),
+    playlists: results.map(x => ({
+      ...x,
+      songs: x.songs.reduce(
+        (sum, item) =>
+          item.type === "playlist" ? sum + item.songs.length : sum + 1,
+        0,
+      ),
+    })),
   };
 };
