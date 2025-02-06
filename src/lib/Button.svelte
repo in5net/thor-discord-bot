@@ -1,7 +1,8 @@
 <script lang="ts">
+  export let noBorder = false;
 </script>
 
-<button {...$$restProps} on:click>
+<button {...$$restProps} class:noBorder on:click>
   <slot />
 </button>
 
@@ -14,9 +15,15 @@
     background: none;
     color: var(--text);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
   button:disabled {
     color: var(--text-hover);
     cursor: not-allowed;
+  }
+  .noBorder {
+    border: 0;
   }
 </style>

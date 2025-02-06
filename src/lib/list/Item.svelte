@@ -6,11 +6,12 @@
   export let label: string;
   export let descriptionIcon: string | undefined = undefined;
   export let description = "";
+  export let disabled = false;
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<div class="li" class:icon role="listitem" on:click>
+<div class="li" class:icon {disabled} role="listitem" on:click>
   <div class="icon-container">
     {#if icon}
       <div style:background-color="var(--accent)" class="icon-content">

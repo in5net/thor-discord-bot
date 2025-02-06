@@ -23,9 +23,9 @@
         <a href="/random-responses">Random responses</a>
       {/if}
     </nav>
-    <button class="theme-button" on:click={() => ($darkMode = !$darkMode)}>
+    <Button noBorder on:click={() => ($darkMode = !$darkMode)}>
       <Icon type={$darkMode ? "moon" : "sun"} />
-    </button>
+    </Button>
   </header>
   <main>
     <div class="content">
@@ -47,12 +47,6 @@
     background-color: var(--secondary);
     height: 60px;
     padding: 0 20px 0 15px;
-  }
-  .theme-button {
-    border: 0;
-    outline: none;
-    background: none;
-    cursor: pointer;
   }
   main {
     overflow-y: auto;

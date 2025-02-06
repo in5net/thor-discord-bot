@@ -20,15 +20,14 @@ export type PlaylistItem =
       songs: SongType[];
     };
 export type SongJSONType = YouTubeJSON | SpotifyJSON | MusescoreJSON | URLJSON;
-export type PlaylistItemJSON =
-  | SongJSONType
-  | {
-      type: "playlist";
-      id: string;
-      name: string;
-      description?: string;
-      songs: SongJSONType[];
-    };
+export interface YoutubePlaylistJSON {
+  type: "playlist";
+  id: string;
+  name: string;
+  description?: string;
+  songs: SongJSONType[];
+}
+export type PlaylistItemJSON = SongJSONType | YoutubePlaylistJSON;
 
 export function fromJSON(json: SongJSONType): SongType {
   switch (json.type) {
