@@ -95,7 +95,6 @@ export default event(
         const bookmarkMessage = await user.send({
           embeds: [embed],
         });
-        await bookmarkMessage.pin();
         await bookmarkMessage.react("❌");
         return;
       }
