@@ -56,7 +56,7 @@ export default event(
           .setColor(env.COLOR)
           .setTimestamp(message.createdAt);
         if (author) {
-          embed.setTitle(author.displayName).setAuthor({
+          embed.setAuthor({
             name: author.displayName,
             iconURL: author.displayAvatarURL({ size: 64 }),
           });
