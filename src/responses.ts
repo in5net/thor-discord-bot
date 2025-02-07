@@ -1,6 +1,6 @@
 import db from "$lib/database/drizzle";
-import { map } from "@iz7n/std/iter";
-import { objectFromEntries } from "@iz7n/std/object";
+import { map } from "@in5net/std/iter";
+import { objectFromEntries } from "@in5net/std/object";
 
 export async function getRandomResponses() {
   const randomResponses = await db.query.randomResponses.findMany();

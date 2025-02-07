@@ -7,7 +7,7 @@ import {
 } from "./get";
 import type languages from "./languages";
 import { type Language } from "./languages";
-import { objectKeys } from "@iz7n/std/object";
+import { objectKeys } from "@in5net/std/object";
 import { load } from "cheerio";
 
 interface Work extends IWork {

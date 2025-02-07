@@ -1,7 +1,7 @@
 import db, { sql } from "$lib/database/drizzle";
 import command from "$lib/discord/commands/slash";
 import { incCount } from "$lib/users";
-import { shuffle } from "@iz7n/std/random";
+import { shuffle } from "@in5net/std/random";
 
 const NUM_RATIOS = 50;
 

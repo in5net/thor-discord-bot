@@ -1,7 +1,7 @@
 import command from "$lib/discord/commands/slash";
 import GL from "$lib/gl";
 import { renderProgressBar } from "$lib/progress";
-import { sleep } from "@iz7n/std/async";
+import { sleep } from "@in5net/std/async";
 import { type Message, AttachmentBuilder } from "discord.js";
 import { mat4 } from "gl-matrix";
 import { nanoid } from "nanoid";

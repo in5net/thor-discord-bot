@@ -16,7 +16,7 @@ import {
   csch,
   sec,
   sech,
-} from "@iz7n/std/math";
+} from "@in5net/std/math";
 
 export default function runner(source: string): (x: number) => number {
   const lexer = new Lexer(source);

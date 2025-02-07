@@ -2,7 +2,7 @@
   "name": "thor-discord-bot",
   "type": "module",
   "packageManager": "pnpm@9.15.0",
-  "prettier": "@iz7n/prettier-config",
+  "prettier": "@in5net/prettier-config",
   "main": "./src/main.ts",
   "scripts": {
     "sync": "svelte-kit sync",
@@ -27,7 +27,7 @@
     "@discordjs/rest": "2.4.2",
     "@discordjs/voice": "0.18.0",
     "@googleapis/customsearch": "3.2.0",
-    "@iz7n/std": "^0.2.0",
+    "@in5net/std": "^0.16.1",
     "@napi-rs/canvas": "0.1.65",
     "@paralleldrive/cuid2": "^2.2.2",
     "better-sqlite3": "^11.7.0",
@@ -74,8 +74,8 @@
     "zx": "^8.2.4"
   },
   "devDependencies": {
-    "@iz7n/eslint-config": "^0.14.1",
-    "@iz7n/prettier-config": "^1.4.1",
+    "@in5net/eslint-config": "^0.14.2",
+    "@in5net/prettier-config": "^1.4.2",
     "@sveltejs/adapter-node": "^5.2.10",
     "@sveltejs/kit": "^2.11.1",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",

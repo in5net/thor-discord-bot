@@ -1,7 +1,7 @@
 <script lang="ts">
   import RandomResponse from "../RandomResponse.svelte";
 
-  import { deepEquals } from "@iz7n/std/object";
+  import { deepEquals } from "@in5net/std/object";
 
   export let data;
   const { response } = data;

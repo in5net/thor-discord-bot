@@ -2,7 +2,7 @@ import logger from "$lib/logger";
 import woof from "$lib/woof";
 import { type SongType } from "$src/music/songs";
 import musicCommand from "./command";
-import { quantify } from "@iz7n/std/string";
+import { quantify } from "@in5net/std/string";
 
 export default musicCommand(
   {

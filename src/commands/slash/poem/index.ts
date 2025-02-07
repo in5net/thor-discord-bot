@@ -1,8 +1,8 @@
 import command from "$lib/discord/commands/slash";
 import { parse } from "$lib/rcpt";
 import { randomPerson } from "./person";
-import { choice, randomInt } from "@iz7n/std/random";
-import { capitalize } from "@iz7n/std/string";
+import { choice, randomInt } from "@in5net/std/random";
+import { capitalize } from "@in5net/std/string";
 import { readdirSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";

@@ -6,10 +6,10 @@ import Queue from "./queue";
 import { SpotifySong, URLSong, type Requester } from "./songs";
 import Stream from "./stream";
 import { AudioPlayerStatus } from "@discordjs/voice";
-import { pipe } from "@iz7n/std/fn";
-import { collect, map, take } from "@iz7n/std/iter";
-import { shuffle } from "@iz7n/std/random";
-import { quantify } from "@iz7n/std/string";
+import { pipe } from "@in5net/std/fn";
+import { collect, map, take } from "@in5net/std/iter";
+import { shuffle } from "@in5net/std/random";
+import { quantify } from "@in5net/std/string";
 import {
   type MessagePayload,
   ChannelType,

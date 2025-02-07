@@ -1,11 +1,11 @@
 import command from "$lib/discord/commands/text";
 import GL from "$lib/gl";
 import { renderProgressBar } from "$lib/progress";
-import { easeOutElastic, easeOutQuart, linear } from "@iz7n/std/easing";
-import { pipe } from "@iz7n/std/fn";
-import { map, pick } from "@iz7n/std/iter";
-import * as math from "@iz7n/std/math";
-import { sum } from "@iz7n/std/stats";
+import { easeOutElastic, easeOutQuart, linear } from "@in5net/std/easing";
+import { pipe } from "@in5net/std/fn";
+import { map, pick } from "@in5net/std/iter";
+import * as math from "@in5net/std/math";
+import { sum } from "@in5net/std/stats";
 import { type Message, AttachmentBuilder } from "discord.js";
 import { mat4 } from "gl-matrix";
 import { nanoid } from "nanoid";

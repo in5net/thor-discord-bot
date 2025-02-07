@@ -21,10 +21,10 @@ import logger from "$lib/logger";
 import { incCount } from "$lib/users";
 import { getRandomResponses, getThemes } from "$src/responses";
 import { handleWordleMessage } from "../commands/text/games/wordle";
-import { pipe } from "@iz7n/std/fn";
-import { pick } from "@iz7n/std/iter";
-import { choice, randomInt, shuffle } from "@iz7n/std/random";
-import { sum } from "@iz7n/std/stats";
+import { pipe } from "@in5net/std/fn";
+import { pick } from "@in5net/std/iter";
+import { choice, randomInt, shuffle } from "@in5net/std/random";
+import { sum } from "@in5net/std/stats";
 import * as deepl from "deepl-node";
 import {
   type TextBasedChannel,

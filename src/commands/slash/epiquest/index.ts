@@ -4,7 +4,7 @@ import { getText } from "$lib/y7";
 import items from "./items";
 import { part, type Part } from "./labyrinth";
 import questions from "./questions";
-import { choice } from "@iz7n/std/random";
+import { choice } from "@in5net/std/random";
 import {
   ActionRowBuilder,
   ComponentType,

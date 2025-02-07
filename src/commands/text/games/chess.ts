@@ -1,7 +1,7 @@
 import db, { eq } from "$lib/database/drizzle";
 import { chessGames } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
-import { choice } from "@iz7n/std/random";
+import { choice } from "@in5net/std/random";
 
 export default command(
   {

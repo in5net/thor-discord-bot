@@ -1,6 +1,6 @@
 import command from "$lib/discord/commands/text";
-import { sleep } from "@iz7n/std/async";
-import { Vec2, vec2 } from "@iz7n/std/math";
+import { sleep } from "@in5net/std/async";
+import { Vec2, vec2 } from "@in5net/std/math";
 import { AttachmentBuilder } from "discord.js";
 import ffmpeg from "fluent-ffmpeg";
 import { nanoid } from "nanoid";

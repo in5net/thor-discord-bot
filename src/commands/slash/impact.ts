@@ -1,6 +1,6 @@
 import command from "$lib/discord/commands/slash";
 import logger from "$lib/logger";
-import { memo } from "@iz7n/std/fn";
+import { memo } from "@in5net/std/fn";
 import { AttachmentBuilder } from "discord.js";
 
 const font = "Impact";

@@ -3,7 +3,7 @@ import { playlists } from "$lib/database/schema";
 import command from "$lib/discord/commands/slash";
 import { fromJSON } from "$src/music/songs";
 import { getVoice } from "$src/music/voice-manager";
-import { shuffle } from "@iz7n/std/random";
+import { shuffle } from "@in5net/std/random";
 import { ChannelType, GuildMember } from "discord.js";
 
 export default command(

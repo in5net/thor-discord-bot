@@ -3,7 +3,7 @@ import { youtubeSearches } from "$lib/database/schema";
 import event from "$lib/discord/event";
 import { YouTubeSong } from "$src/music/songs";
 import { getVoice } from "$src/music/voice-manager";
-import { includesAny } from "@iz7n/std/array";
+import { includesAny } from "@in5net/std/array";
 import { EmbedBuilder, hyperlink, messageLink } from "discord.js";
 import { env } from "node:process";
 

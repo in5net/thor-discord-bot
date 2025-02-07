@@ -1,7 +1,7 @@
 import logger from "$lib/logger";
 import { type Event, type EventListener } from "../event";
 import { noTestGlob } from "./shared";
-import { pluralize } from "@iz7n/std/string";
+import { pluralize } from "@in5net/std/string";
 import { type Client, type ClientEvents } from "discord.js";
 import path from "node:path";
 

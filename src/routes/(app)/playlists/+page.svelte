@@ -3,7 +3,7 @@
   import List from "$src/lib/list/List.svelte";
 
   import { goto } from "$app/navigation";
-  import { quantify } from "@iz7n/std/string";
+  import { quantify } from "@in5net/std/string";
 
   export let data;
   const { playlists } = data;

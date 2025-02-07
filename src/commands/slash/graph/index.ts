@@ -1,6 +1,6 @@
 import command from "$lib/discord/commands/slash";
 import runner from "./equation";
-import { map } from "@iz7n/std/math";
+import { map } from "@in5net/std/math";
 import { AttachmentBuilder } from "discord.js";
 
 const size = 512;

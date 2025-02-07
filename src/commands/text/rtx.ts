@@ -1,5 +1,5 @@
 import command from "$lib/discord/commands/text";
-import { pluralize } from "@iz7n/std/string";
+import { pluralize } from "@in5net/std/string";
 
 const RTX_4090_PRICE = 1600;
 

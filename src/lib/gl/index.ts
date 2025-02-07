@@ -1,7 +1,7 @@
 import GIF from "./gif";
 import Texture from "./texture";
-import { sleep } from "@iz7n/std/async";
-import type { Awaitable } from "@iz7n/std/types";
+import { sleep } from "@in5net/std/async";
+import type { Awaitable } from "@in5net/std/types";
 import ffmpeg from "fluent-ffmpeg";
 import createContext from "gl";
 import {

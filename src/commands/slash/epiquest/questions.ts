@@ -1,7 +1,7 @@
 import items, { type Item } from "./items";
 import { type Response } from "./types";
-import { remove } from "@iz7n/std/array";
-import { choice, choices } from "@iz7n/std/random";
+import { remove } from "@in5net/std/array";
+import { choice, choices } from "@in5net/std/random";
 
 interface Answer {
   text: string | (() => string);

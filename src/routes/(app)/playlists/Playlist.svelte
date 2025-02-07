@@ -10,8 +10,8 @@
   import { goto } from "$app/navigation";
   import { formatTime } from "$lib/time";
   import type { PlaylistItemJSON, YoutubePlaylistJSON } from "$src/music/songs";
-  import { deepEquals } from "@iz7n/std/object";
-  import { sum } from "@iz7n/std/stats";
+  import { deepEquals } from "@in5net/std/object";
+  import { sum } from "@in5net/std/stats";
   import { nanoid } from "nanoid";
   import { dndzone } from "svelte-dnd-action";
   import { flip } from "svelte/animate";

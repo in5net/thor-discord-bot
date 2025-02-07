@@ -2,7 +2,7 @@ import db, { eq, desc } from "$lib/database/drizzle";
 import { channels, context } from "$lib/database/schema";
 import command from "$lib/discord/commands/text";
 import logger from "$src/lib/logger";
-import { ttlCache } from "@iz7n/std/fn";
+import { ttlCache } from "@in5net/std/fn";
 import ms from "ms";
 import { readFile } from "node:fs/promises";
 
