@@ -4,7 +4,7 @@
 
   import { darkMode } from "./dark-mode";
 
-  export let data;
+  const { data, children } = $props();
 
   async function logout() {
     await fetch("/api/auth/session", {
@@ -15,7 +15,7 @@
 
 <div class="container">
   <header>
-    <Button on:click={logout}>Logout</Button>
+    <Button onclick={logout}>Logout</Button>
     <nav>
       <a href="/playlists">Playlists</a>
       {#if data.dbUser?.admin}
@@ -23,13 +23,13 @@
         <a href="/random-responses">Random responses</a>
       {/if}
     </nav>
-    <Button noBorder on:click={() => ($darkMode = !$darkMode)}>
+    <Button noBorder onclick={() => ($darkMode = !$darkMode)}>
       <Icon type={$darkMode ? "moon" : "sun"} />
     </Button>
   </header>
   <main>
     <div class="content">
-      <slot />
+      {@render children?.()}
     </div>
   </main>
 </div>

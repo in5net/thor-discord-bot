@@ -1,17 +1,32 @@
 <script lang="ts">
   import Icon from "../Icon.svelte";
 
-  export let icon: string | undefined = undefined;
-  export let color = "text";
-  export let label: string;
-  export let descriptionIcon: string | undefined = undefined;
-  export let description = "";
-  export let disabled = false;
+  interface Props {
+    icon?: string | undefined;
+    color?: string;
+    label: string;
+    descriptionIcon?: string | undefined;
+    description?: string;
+    disabled?: boolean;
+    onclick?: () => any;
+    children?: import("svelte").Snippet;
+  }
+
+  const {
+    icon = undefined,
+    color = "text",
+    label,
+    descriptionIcon = undefined,
+    description = "",
+    disabled = false,
+    onclick,
+    children,
+  }: Props = $props();
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<div class="li" class:icon {disabled} role="listitem" on:click>
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+<div class="li" class:disabled class:icon {onclick} role="listitem">
   <div class="icon-container">
     {#if icon}
       <div style:background-color="var(--accent)" class="icon-content">
@@ -36,7 +51,7 @@
     {/if}
   </div>
   <div class="end">
-    <slot />
+    {@render children?.()}
   </div>
 </div>
 
@@ -64,7 +79,7 @@
   .li:last-child .content {
     padding-top: 16px;
   }
-  &:not(:last-child) {
+  .li:not(:last-child) {
     border-bottom: 0.5px solid var(--border-light);
   }
   .icon-container {

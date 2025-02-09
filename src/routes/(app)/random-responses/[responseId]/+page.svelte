@@ -3,14 +3,14 @@
 
   import { deepEquals } from "@in5net/std/object";
 
-  export let data;
+  const { data } = $props();
   const { response } = data;
-  let { words, responses, cooldown } = response;
-  let chance = response.chance * 100;
+  let { words, responses, cooldown } = $state(response);
+  let chance = $state(response.chance * 100);
 
   const old = { words, responses, chance, cooldown };
-  $: values = { words, responses, chance, cooldown };
-  $: canSave = !deepEquals(values, old);
+  const values = $derived({ words, responses, chance, cooldown });
+  const canSave = $derived(!deepEquals(values, old));
 </script>
 
 <form action="?/save" method="POST">

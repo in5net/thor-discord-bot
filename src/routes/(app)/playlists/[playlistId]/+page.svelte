@@ -1,7 +1,7 @@
 <script lang="ts">
   import Playlist from "../Playlist.svelte";
 
-  export let data;
+  const { data } = $props();
   const { playlistId, name, songs } = data;
 </script>
 

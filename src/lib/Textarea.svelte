@@ -1,11 +1,16 @@
 <script lang="ts">
-  export let label: string;
-  export let value = "";
+  interface Props {
+    label: string;
+    value?: string;
+    [key: string]: any;
+  }
+
+  let { label, value = $bindable(""), ...rest }: Props = $props();
 </script>
 
 <label>
   <div>{label}</div>
-  <textarea {...$$restProps} bind:value />
+  <textarea {...rest} bind:value></textarea>
 </label>
 
 <style>

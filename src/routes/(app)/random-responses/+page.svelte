@@ -3,7 +3,7 @@
 
   import { goto } from "$app/navigation";
 
-  export let data;
+  const { data } = $props();
   const { randomResponses } = data;
 </script>
 
@@ -11,9 +11,9 @@
 
 <List title="Random responses">
   {#each randomResponses as { id, words, responses, chance, cooldown }}
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class="item" on:click={() => goto(`/random-responses/${id}`)}>
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="item" onclick={() => goto(`/random-responses/${id}`)}>
       <div>
         Triggers: <div class="cell-row">
           {#each words.split("|") as word}

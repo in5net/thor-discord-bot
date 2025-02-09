@@ -1,9 +1,15 @@
 <script lang="ts">
-  export let noBorder = false;
+  interface Props {
+    noBorder?: boolean;
+    children?: import("svelte").Snippet;
+    [key: string]: any;
+  }
+
+  const { noBorder = false, children, ...rest }: Props = $props();
 </script>
 
-<button {...$$restProps} class:noBorder on:click>
-  <slot />
+<button {...rest} class:noBorder>
+  {@render children?.()}
 </button>
 
 <style>

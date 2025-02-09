@@ -5,7 +5,7 @@
   import { goto } from "$app/navigation";
   import { quantify } from "@in5net/std/string";
 
-  export let data;
+  const { data } = $props();
   const { playlists } = data;
 </script>
 
@@ -16,7 +16,7 @@
     <Item
       description={quantify("song", songs)}
       label={name}
-      on:click={() => goto(`/playlists/${id}`)}
+      onclick={() => goto(`/playlists/${id}`)}
     />
   {/each}
 </List>

@@ -16,23 +16,27 @@
   import { dndzone } from "svelte-dnd-action";
   import { flip } from "svelte/animate";
 
-  export let id = "";
-  export let name = "";
-  export let songs: PlaylistItemJSON[] = [];
+  interface Props {
+    id?: string;
+    name?: string;
+    songs?: PlaylistItemJSON[];
+  }
 
-  let items = songs.map(item => ({ id: nanoid(), item }));
+  let { id = "", name = $bindable(""), songs = [] }: Props = $props();
+
+  let items = $state(songs.map(item => ({ id: nanoid(), item })));
 
   const oldName = name;
   const oldItems = [...items];
-  $: canSave = name !== oldName || !deepEquals(items, oldItems);
+  const canSave = $derived(name !== oldName || !deepEquals(items, oldItems));
 
   const flipDurationMs = 300;
   function handleDndCards(e: CustomEvent<{ items: typeof items }>) {
     ({ items } = e.detail);
   }
 
-  let showAdd = false;
-  let query = "";
+  let showAdd = $state(false);
+  let query = $state("");
   async function add() {
     const response = await fetch(
       `/api/playlist/song/query?q=${encodeURIComponent(query)}`,
@@ -46,7 +50,7 @@
     showAdd = false;
   }
 
-  let selectedPlaylist: YoutubePlaylistJSON | undefined;
+  let selectedPlaylist: YoutubePlaylistJSON | undefined = $state();
 
   async function save() {
     const songs = items.map(x => x.item);
@@ -74,11 +78,11 @@
 <Input label="Playlist name" bind:value={name} />
 
 <div class="flex mb">
-  <Button disabled={!canSave} on:click={save}>
+  <Button disabled={!canSave} onclick={save}>
     <Icon type="upload" />
     Save
   </Button>
-  <Button on:click={() => (showAdd = true)}>
+  <Button onclick={() => (showAdd = true)}>
     <Icon type="playlist-add" />
     Add
   </Button>
@@ -86,8 +90,8 @@
 
 <List>
   <div
-    on:consider={handleDndCards}
-    on:finalize={handleDndCards}
+    onconsider={handleDndCards}
+    onfinalize={handleDndCards}
     use:dndzone={{ items, flipDurationMs }}
   >
     {#each items as { id, item }, i (id)}
@@ -99,12 +103,12 @@
               sum(item.songs.map(x => x.duration)),
             )} - {item.name}"
           >
-            <Button on:click={() => (selectedPlaylist = item)}>
+            <Button onclick={() => (selectedPlaylist = item)}>
               <Icon type="modal" />
               View songs
             </Button>
             <Button
-              on:click={() =>
+              onclick={() =>
                 window.open(
                   `https://youtube.com/playlist?list=${item.id}`,
                   "_blank",
@@ -112,7 +116,7 @@
             >
               <Icon type="external-link" />
             </Button>
-            <Button on:click={() => (items = items.filter(x => x.id !== id))}>
+            <Button onclick={() => (items = items.filter(x => x.id !== id))}>
               <Icon type="x" />
             </Button>
           </Item>
@@ -123,13 +127,13 @@
           >
             {#if item.type === "youtube"}
               <Button
-                on:click={() =>
+                onclick={() =>
                   window.open(`https://youtu.be/${item.id}`, "_blank")}
               >
                 <Icon type="external-link" />
               </Button>
             {/if}
-            <Button on:click={() => (items = items.filter(x => x.id !== id))}>
+            <Button onclick={() => (items = items.filter(x => x.id !== id))}>
               <Icon type="x" />
             </Button>
           </Item>
@@ -143,15 +147,15 @@
   <Modal
     btnLabel="Save"
     disabled={!query}
-    on:action={add}
-    on:close={() => (showAdd = false)}
+    onaction={add}
+    onclose={() => (showAdd = false)}
   >
     <Textarea label="Query" bind:value={query} />
   </Modal>
 {/if}
 
 {#if selectedPlaylist}
-  <Modal on:close={() => (selectedPlaylist = undefined)}>
+  <Modal onclose={() => (selectedPlaylist = undefined)}>
     <List title={selectedPlaylist.name}>
       {#each selectedPlaylist.songs as item, i}
         <Item
@@ -161,7 +165,7 @@
         >
           {#if item.type === "youtube"}
             <Button
-              on:click={() =>
+              onclick={() =>
                 window.open(`https://youtu.be/${item.id}`, "_blank")}
             >
               <Icon type="external-link" />

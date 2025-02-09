@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script lang="ts" module>
   const icon2Path = import.meta.glob<string>("./icons/**.svg", {
     query: "?raw",
     eager: true,
@@ -7,12 +7,21 @@
 </script>
 
 <script lang="ts">
-  export let type: string;
-  export let size = 20;
-  export let color = "text";
-  export let strokeWidth = 1.5;
+  interface Props {
+    type: string;
+    size?: number;
+    color?: string;
+    strokeWidth?: number;
+  }
 
-  $: svg = icon2Path[`./icons/${type}.svg`];
+  const {
+    type,
+    size = 20,
+    color = "text",
+    strokeWidth = 1.5,
+  }: Props = $props();
+
+  const svg = $derived(icon2Path[`./icons/${type}.svg`]);
 </script>
 
 <div>

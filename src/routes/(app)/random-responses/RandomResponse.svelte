@@ -2,13 +2,23 @@
   import Button from "$src/lib/Button.svelte";
   import Textarea from "$src/lib/Textarea.svelte";
 
-  export let words = "";
-  export let responses = "";
-  export let chance = 10;
-  export let cooldown = 0;
-  export let extraCanSave = true;
+  interface Props {
+    words?: string;
+    responses?: string;
+    chance?: number;
+    cooldown?: number;
+    extraCanSave?: boolean;
+  }
 
-  $: canSave = !!words && !!responses && extraCanSave;
+  let {
+    words = $bindable(""),
+    responses = $bindable(""),
+    chance = $bindable(10),
+    cooldown = $bindable(0),
+    extraCanSave = true,
+  }: Props = $props();
+
+  const canSave = $derived(!!words && !!responses && extraCanSave);
 </script>
 
 <Textarea name="words" label="Triggers" bind:value={words} />

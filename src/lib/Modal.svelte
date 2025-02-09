@@ -1,50 +1,64 @@
 <script lang="ts">
   import Button from "./Button.svelte";
 
-  import { createEventDispatcher } from "svelte";
   import { fade, scale } from "svelte/transition";
 
-  const dispatch = createEventDispatcher<{
-    action: void;
-    close: void;
-  }>();
+  interface Props {
+    btnLabel?: string | undefined;
+    disabled?: boolean;
+    message?: string;
+    spinner?: boolean;
+    onclick?: () => any;
+    onaction?: () => any;
+    onclose?: () => any;
+    children?: import("svelte").Snippet;
+    button?: import("svelte").Snippet;
+  }
 
-  export let btnLabel: string | undefined = undefined;
-  export let disabled = false;
-  export let message = "";
-  export let spinner = false;
+  const {
+    btnLabel = undefined,
+    disabled = false,
+    message = "",
+    spinner = false,
+    onclick,
+    onaction,
+    onclose,
+    children,
+    button,
+  }: Props = $props();
 </script>
 
 <div class="frame no-print" transition:fade={{ duration: 300 }}>
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
   <div
     class="container medium"
+    onclick={event => {
+      event.stopPropagation();
+      onclick?.();
+    }}
     role="dialog"
-    on:click|stopPropagation
     transition:scale={{
       start: 0.85,
       duration: 300,
     }}
   >
     <div class="close">
-      <Button disabled={spinner} on:click={() => dispatch("close")}>
-        Close
-      </Button>
+      <Button disabled={spinner} onclick={onclose}>Close</Button>
     </div>
     <div class="overflow">
       <div class="content">
-        <slot />
+        {@render children?.()}
         {#if message}
           <p>{message}</p>
         {/if}
         {#if btnLabel}
           <div class="grid fr-max mt">
-            <Button {disabled} on:click={() => dispatch("action")}>
+            <Button {disabled} onclick={onaction}>
               {btnLabel}
             </Button>
             <div>
-              <slot name="button" />
+              {@render button?.()}
             </div>
           </div>
         {/if}
