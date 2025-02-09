@@ -2,7 +2,7 @@ import { existsSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import pino, { type TransportTargetOptions } from "pino";
 
-const logsPath = new URL("../../../logs", import.meta.url).pathname;
+const logsPath = new URL("../../logs", import.meta.url).pathname;
 if (!existsSync(logsPath)) {
   mkdirSync(logsPath);
 }
