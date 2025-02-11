@@ -16,6 +16,6 @@ export default musicCommand(
   },
   async ({ message, args: { queries }, voice }) => {
     await voice.add(message, queries);
-    await voice.move(voice.queue.length - 1, 0);
+    await voice.move(voice.queue.length - 1, voice.queue.currentIndex + 1);
   },
 );
