@@ -53,8 +53,11 @@ export default command(
       return i.reply("Playlist not found");
     }
 
-    const songs = playlist.songs.map(song => fromJSON(song));
+    const songs = playlist.songs.flatMap(song =>
+      song.type === "playlist" ? song.songs.map(fromJSON) : fromJSON(song),
+    );
     for (const song of songs) {
+      console.log(song);
       song.requester = {
         uid: user.id,
         name: member.displayName,
