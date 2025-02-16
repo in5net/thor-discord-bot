@@ -1,5 +1,5 @@
 /* eslint-disable ts/no-use-before-define */
-import type { PlaylistItemJSON } from "$src/music/songs";
+import type { PlaylistItemJSON, SongJSONType } from "$src/music/songs";
 import { createId as cuid2 } from "@paralleldrive/cuid2";
 import { relations, sql } from "drizzle-orm";
 import {
@@ -193,6 +193,16 @@ export const playlistsRelations = relations(playlists, ({ one }) => ({
     fields: [playlists.userId],
     references: [users.id],
   }),
+}));
+
+export const queues = sqliteTable("queues", t => ({
+  guildId: t.text().primaryKey(),
+  voiceChannelId: t.text().notNull(),
+  textChannelId: t.text(),
+  songs: t.text({ mode: "json" }).notNull().$type<SongJSONType[]>(),
+  index: t.integer().notNull(),
+  seek: t.integer().notNull(),
+  loop: t.integer({ mode: "boolean" }).notNull(),
 }));
 
 export const ratios = sqliteTable("ratios", t => ({

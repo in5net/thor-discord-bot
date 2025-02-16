@@ -11,6 +11,7 @@ import { collect, map, take } from "@in5net/std/iter";
 import { shuffle } from "@in5net/std/random";
 import { quantify } from "@in5net/std/string";
 import {
+  type VoiceChannel,
   type MessagePayload,
   ChannelType,
   type Attachment,
@@ -66,6 +67,10 @@ export default class Voice extends TypedEmitter<{
     if (voiceChannel?.type === ChannelType.GuildVoice) {
       this.stream.channel = voiceChannel;
     }
+  }
+
+  setVoiceChannel(channel: VoiceChannel) {
+    this.stream.channel = channel;
   }
 
   async send(message: string | MessagePayload | MessageCreateOptions) {
@@ -183,7 +188,7 @@ ${pipe(
     this.emit("stop");
   }
 
-  async play(skip = false) {
+  async play(skip = false, seek?: number) {
     const { stream } = this;
     if (stream.player.state.status === AudioPlayerStatus.Playing && !skip) {
       // eslint-disable-next-line ts/no-floating-promises
@@ -204,6 +209,7 @@ ${pipe(
     });
     const resource = await song.getResource({
       filters: stream.filters,
+      seek,
     });
     await stream.play(resource);
     // eslint-disable-next-line ts/no-floating-promises

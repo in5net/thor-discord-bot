@@ -1,6 +1,8 @@
 import { createEmbed } from "$lib/embed";
 import logger from "$lib/logger";
 import { formatTime } from "$lib/time";
+import db, { eq } from "$src/lib/database/drizzle";
+import { queues } from "$src/lib/database/schema";
 import { type SongType } from "./songs";
 import type Voice from "./voice";
 import { remove } from "@in5net/std/array";
@@ -52,6 +54,51 @@ export default class Queue extends Array<SongType> {
     return this[this.currentIndex];
   }
 
+  private async write() {
+    const { guildId } = this.voice;
+    const voiceChannelId = this.voice.stream.channel?.id;
+    if (!voiceChannelId) {
+      return;
+    }
+
+    const where = eq(queues.guildId, guildId);
+    const existingQueue = await db.query.queues.findFirst({
+      columns: { guildId: true },
+      where,
+    });
+    if (existingQueue) {
+      await db
+        .update(queues)
+        .set({
+          voiceChannelId,
+          songs: this.map(x => x.toJSON()),
+          index: this.currentIndex,
+          seek: 0,
+          loop: this.loop,
+        })
+        .where(where);
+    } else {
+      await db.insert(queues).values({
+        guildId,
+        voiceChannelId,
+        songs: this.map(x => x.toJSON()),
+        index: this.currentIndex,
+        seek: 0,
+        loop: this.loop,
+      });
+    }
+  }
+
+  set(songs: SongType[]) {
+    super.push(...songs);
+  }
+
+  override push(...songs: SongType[]): number {
+    const length = super.push(...songs);
+    this.write().catch(console.error);
+    return length;
+  }
+
   dequeue(song?: SongType) {
     if (song) {
       remove(this, song);
@@ -59,18 +106,21 @@ export default class Queue extends Array<SongType> {
       this.shift();
     }
     this.changeEmitter.emit("change");
+    this.write().catch(() => {});
   }
 
   clear() {
     this.length = 0;
     this.currentIndex = -1;
     this.changeEmitter.emit("change");
+    this.write().catch(() => {});
   }
 
   reset() {
     this.clear();
     this.loop = false;
     this.changeEmitter.removeAllListeners();
+    this.write().catch(() => {});
   }
 
   hasNext() {
@@ -94,6 +144,7 @@ export default class Queue extends Array<SongType> {
       this.currentIndex = 0;
     }
     changeEmitter.emit("change");
+    this.write().catch(() => {});
     return this.current;
   }
 
@@ -104,6 +155,7 @@ export default class Queue extends Array<SongType> {
       this.currentIndex = length - 1;
     }
     changeEmitter.emit("change");
+    this.write().catch(() => {});
     return this.current;
   }
 
@@ -111,6 +163,7 @@ export default class Queue extends Array<SongType> {
     shuffle(this);
     this.currentIndex = 0;
     this.changeEmitter.emit("change");
+    this.write().catch(() => {});
   }
 
   move(from: number, to: number) {
@@ -122,6 +175,7 @@ export default class Queue extends Array<SongType> {
       this.splice(to, 0, item);
     }
     this.changeEmitter.emit("change");
+    this.write().catch(() => {});
   }
 
   remove(index: number) {
@@ -130,11 +184,13 @@ export default class Queue extends Array<SongType> {
       this.currentIndex--;
     }
     this.changeEmitter.emit("change");
+    this.write().catch(() => {});
     return song;
   }
 
   toggleLoop() {
     this.loop = !this.loop;
+    this.write().catch(() => {});
   }
 
   async embed(channel: TextChannel, seconds?: number) {
