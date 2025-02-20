@@ -2,10 +2,10 @@
   import Icon from "../Icon.svelte";
 
   interface Props {
-    icon?: string | undefined;
+    icon?: string;
     color?: string;
     label: string;
-    descriptionIcon?: string | undefined;
+    descriptionIcon?: string;
     description?: string;
     disabled?: boolean;
     onclick?: () => any;
@@ -13,11 +13,11 @@
   }
 
   const {
-    icon = undefined,
+    icon,
     color = "text",
     label,
-    descriptionIcon = undefined,
-    description = "",
+    descriptionIcon,
+    description,
     disabled = false,
     onclick,
     children,

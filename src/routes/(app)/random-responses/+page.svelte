@@ -37,18 +37,19 @@
 
 <style>
   .item {
-    border: 1px solid black;
+    border-bottom: 1px solid var(--accent);
+    padding: 4px;
     cursor: pointer;
     display: grid;
     grid-template-columns: 1fr 150px;
   }
   .cell-row {
     display: flex;
-    gap: 3px;
+    gap: 6px;
   }
   .cell {
-    border: 1px solid gray;
+    border: 1px solid var(--black-white);
     border-radius: 3px;
-    background-color: lightgray;
+    background-color: var(--secondary);
   }
 </style>
