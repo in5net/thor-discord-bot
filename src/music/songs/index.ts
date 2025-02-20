@@ -18,6 +18,12 @@ export type PlaylistItem =
       name: string;
       description?: string;
       songs: SongType[];
+    }
+  | {
+      type: "group";
+      id: string;
+      name: string;
+      songs: SongType[];
     };
 export type SongJSONType = YouTubeJSON | SpotifyJSON | MusescoreJSON | URLJSON;
 export interface YoutubePlaylistJSON {
@@ -27,7 +33,15 @@ export interface YoutubePlaylistJSON {
   description?: string;
   songs: SongJSONType[];
 }
-export type PlaylistItemJSON = SongJSONType | YoutubePlaylistJSON;
+export interface SongGroupJSON {
+  type: "group";
+  name: string;
+  songs: SongJSONType[];
+}
+export type PlaylistItemJSON =
+  | SongJSONType
+  | YoutubePlaylistJSON
+  | SongGroupJSON;
 
 export function fromJSON(json: SongJSONType): SongType {
   switch (json.type) {

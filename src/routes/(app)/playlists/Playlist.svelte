@@ -6,15 +6,20 @@
   import Item from "$src/lib/list/Item.svelte";
   import List from "$src/lib/list/List.svelte";
   import Textarea from "$src/lib/Textarea.svelte";
+  import EditSongList from "./EditSongList.svelte";
+  import SongList from "./SongList.svelte";
 
   import { goto } from "$app/navigation";
-  import { formatTime } from "$lib/time";
-  import type { PlaylistItemJSON, YoutubePlaylistJSON } from "$src/music/songs";
+  import { formatTime } from "$src/lib/time";
+  import type {
+    PlaylistItemJSON,
+    YoutubePlaylistJSON,
+    SongGroupJSON,
+  } from "$src/music/songs";
   import { deepEquals } from "@in5net/std/object";
   import { sum } from "@in5net/std/stats";
+  import { quantify } from "@in5net/std/string";
   import { nanoid } from "nanoid";
-  import { dndzone } from "svelte-dnd-action";
-  import { flip } from "svelte/animate";
 
   interface Props {
     id?: string;
@@ -30,14 +35,13 @@
   const oldItems = [...items];
   const canSave = $derived(name !== oldName || !deepEquals(items, oldItems));
 
-  const flipDurationMs = 300;
-  function handleDndCards(e: CustomEvent<{ items: typeof items }>) {
-    ({ items } = e.detail);
-  }
+  let selected: string[] = $state([]);
 
   let showAdd = $state(false);
   let query = $state("");
+  let spinner = $state(false);
   async function add() {
+    spinner = true;
     const response = await fetch(
       `/api/playlist/song/query?q=${encodeURIComponent(query)}`,
     );
@@ -48,9 +52,14 @@
 
     query = "";
     showAdd = false;
+    spinner = false;
   }
 
-  let selectedPlaylist: YoutubePlaylistJSON | undefined = $state();
+  let selectedPlaylist: YoutubePlaylistJSON | SongGroupJSON | undefined =
+    $state();
+
+  let showMove = $state(false);
+  let moveGroupId = $state("");
 
   async function save() {
     const songs = items.map(x => x.item);
@@ -86,62 +95,55 @@
     <Icon type="playlist-add" />
     Add
   </Button>
+  <Button
+    onclick={() =>
+      items.unshift({
+        id: nanoid(),
+        item: {
+          type: "group",
+          name: "New Group",
+          songs: [],
+        },
+      })}
+  >
+    Create group
+  </Button>
+  <Button disabled={!selected.length} onclick={() => (showMove = true)}>
+    Move into group
+  </Button>
 </div>
 
-<List>
-  <div
-    onconsider={handleDndCards}
-    onfinalize={handleDndCards}
-    use:dndzone={{ items, flipDurationMs }}
-  >
-    {#each items as { id, item }, i (id)}
-      <div animate:flip={{ duration: flipDurationMs }}>
-        {#if item.type === "playlist"}
-          <Item
-            icon="playlist"
-            label="{i + 1}. PLAYLIST: {formatTime(
-              sum(item.songs.map(x => x.duration)),
-            )} - {item.name}"
-          >
-            <Button onclick={() => (selectedPlaylist = item)}>
-              <Icon type="modal" />
-              View songs
-            </Button>
-            <Button
-              onclick={() =>
-                window.open(
-                  `https://youtube.com/playlist?list=${item.id}`,
-                  "_blank",
-                )}
-            >
-              <Icon type="external-link" />
-            </Button>
-            <Button onclick={() => (items = items.filter(x => x.id !== id))}>
-              <Icon type="x" />
-            </Button>
-          </Item>
-        {:else}
-          <Item
-            icon="music"
-            label="{i + 1}. {formatTime(item.duration)} - {item.title}"
-          >
-            {#if item.type === "youtube"}
-              <Button
-                onclick={() =>
-                  window.open(`https://youtu.be/${item.id}`, "_blank")}
-              >
-                <Icon type="external-link" />
-              </Button>
-            {/if}
-            <Button onclick={() => (items = items.filter(x => x.id !== id))}>
-              <Icon type="x" />
-            </Button>
-          </Item>
-        {/if}
-      </div>
-    {/each}
-  </div>
-</List>
+<SongList
+  onclick={item => {
+    if (item.type === "playlist" || item.type === "group") {
+      selectedPlaylist = item;
+    }
+  }}
+  bind:selected
+  bind:items
+/>
+
+{#if selectedPlaylist}
+  <EditSongList
+    name={selectedPlaylist.name}
+    onclose={() => (selectedPlaylist = undefined)}
+    onmoveup={songs =>
+      items.push(...songs.map(x => ({ id: nanoid(), item: x })))}
+    onsave={({ name, songs }) => {
+      const index = items.findIndex(x => x.item === selectedPlaylist);
+      items = items.with(index, {
+        id: nanoid(),
+        item: {
+          ...selectedPlaylist,
+          name,
+          songs,
+        },
+      });
+      selectedPlaylist = undefined;
+    }}
+    songs={selectedPlaylist.songs}
+  />
+{/if}
 
 {#if showAdd}
   <Modal
@@ -149,29 +151,55 @@
     disabled={!query}
     onaction={add}
     onclose={() => (showAdd = false)}
+    {spinner}
   >
     <Textarea label="Query" bind:value={query} />
   </Modal>
 {/if}
 
-{#if selectedPlaylist}
-  <Modal onclose={() => (selectedPlaylist = undefined)}>
-    <List title={selectedPlaylist.name}>
-      {#each selectedPlaylist.songs as item, i}
-        <Item
-          disabled
-          icon="music"
-          label="{i + 1}. {formatTime(item.duration)} - {item.title}"
-        >
-          {#if item.type === "youtube"}
-            <Button
-              onclick={() =>
-                window.open(`https://youtu.be/${item.id}`, "_blank")}
-            >
-              <Icon type="external-link" />
-            </Button>
-          {/if}
-        </Item>
+{#if showMove}
+  <Modal
+    btnLabel="Move"
+    disabled={!moveGroupId}
+    onaction={() => {
+      const index = items.findIndex(x => x.id === moveGroupId);
+      const item = items[index];
+      if (item?.item.type === "group") {
+        items = items
+          .with(index, {
+            id: item.id,
+            item: {
+              ...item.item,
+              songs: [
+                ...item.item.songs,
+                ...selected.map(id => items.find(x => x.id === id)?.item),
+              ],
+            },
+          })
+          .filter(x => !selected.includes(x.id));
+      }
+      moveGroupId = "";
+      selected = [];
+      showMove = false;
+    }}
+    onclose={() => {
+      moveGroupId = "";
+      showMove = false;
+    }}
+  >
+    <List title="Song groups">
+      {#each items as { id, item }}
+        {#if item.type === "group"}
+          <Item
+            checked={moveGroupId === id}
+            description="{quantify('song', item.songs.length)}・{formatTime(
+              sum(item.songs.map(x => x.duration)),
+            )}"
+            icon="playlist"
+            label=" {item.name}"
+            onclick={() => (moveGroupId = id)}
+          />
+        {/if}
       {/each}
     </List>
   </Modal>

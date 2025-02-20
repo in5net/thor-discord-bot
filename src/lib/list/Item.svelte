@@ -7,6 +7,7 @@
     label: string;
     descriptionIcon?: string;
     description?: string;
+    checked?: boolean;
     disabled?: boolean;
     onclick?: () => any;
     children?: import("svelte").Snippet;
@@ -18,7 +19,8 @@
     label,
     descriptionIcon,
     description,
-    disabled = false,
+    checked,
+    disabled,
     onclick,
     children,
   }: Props = $props();
@@ -51,6 +53,19 @@
     {/if}
   </div>
   <div class="end">
+    {#if checked !== undefined}
+      <div
+        style:background-color="var(--{checked ? 'secondary' : 'secondary'})"
+        class="circle"
+      >
+        <Icon
+          color={checked ? "white" : "white-gray"}
+          size={14}
+          strokeWidth={3}
+          type="check"
+        />
+      </div>
+    {/if}
     {@render children?.()}
   </div>
 </div>
@@ -63,24 +78,24 @@
     background-color: var(--item);
     padding-right: 10px;
     transition: background-color, 0.2s;
-  }
-  .li:hover:not(.disabled) {
-    cursor: pointer;
-    background-color: var(--item-hover);
-  }
-  .li:first-child {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-  }
-  .li:last-child {
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-  }
-  .li:last-child .content {
-    padding-top: 16px;
-  }
-  .li:not(:last-child) {
-    border-bottom: 0.5px solid var(--border-light);
+    &:hover:not(.disabled) {
+      cursor: pointer;
+      background-color: var(--item-hover);
+    }
+    &:first-child {
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+    &:last-child {
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+      .content {
+        padding-top: 16px;
+      }
+    }
+    &:not(:last-child) {
+      border-bottom: 0.5px solid var(--border-light);
+    }
   }
   .icon-container {
     height: 100%;
@@ -101,9 +116,17 @@
     display: grid;
     column-gap: 5px;
     align-items: start;
+    .icon {
+      padding-top: 1px;
+    }
   }
-  .description .icon {
-    padding-top: 1px;
+  .circle {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    height: 22px;
+    width: 22px;
+    border-radius: 11px;
   }
   .end {
     justify-self: end;

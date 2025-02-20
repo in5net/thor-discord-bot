@@ -14,6 +14,8 @@
   --shadow: rgb(103, 103, 103);
   --shadow-header: rgb(34, 45, 56);
 
+  --white: #fff;
+  --white-gray: #fff;
   --white-black: white;
   --black-white: black;
 }
@@ -34,6 +36,7 @@
   --shadow: transparent;
   --shadow-header: transparent;
 
+  --white-gray: #777;
   --white-black: black;
   --black-white: white;
 }

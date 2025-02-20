@@ -54,7 +54,9 @@ export default command(
     }
 
     const songs = playlist.songs.flatMap(song =>
-      song.type === "playlist" ? song.songs.map(fromJSON) : fromJSON(song),
+      song.type === "playlist" || song.type === "group" ?
+        song.songs.map(fromJSON)
+      : fromJSON(song),
     );
     for (const song of songs) {
       console.log(song);

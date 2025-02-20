@@ -53,13 +53,11 @@
           <p>{message}</p>
         {/if}
         {#if btnLabel}
-          <div class="grid fr-max mt">
+          <div class="flex mt">
             <Button {disabled} onclick={onaction}>
               {btnLabel}
             </Button>
-            <div>
-              {@render button?.()}
-            </div>
+            {@render button?.()}
           </div>
         {/if}
       </div>
@@ -98,5 +96,12 @@
   }
   .content {
     margin: 6px 36px 36px 36px;
+  }
+  .flex {
+    display: flex;
+    gap: 8px;
+  }
+  .mt {
+    margin-top: 12px;
   }
 </style>
