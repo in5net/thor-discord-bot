@@ -15,6 +15,7 @@ import { createRegExp, digit, oneOrMore } from "magic-regexp";
 import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
 import path from "node:path";
+import { env } from "node:process";
 import Innertube from "youtubei.js";
 import { z } from "zod";
 
@@ -125,7 +126,7 @@ export class YouTubeSong extends Song {
   }
 
   get iconURL() {
-    return "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/2560px-YouTube_full-color_icon_%282017%29.svg.png";
+    return `https://${env.FILES_DOMAIN}/icons/brand-youtube.png`;
   }
 
   get url(): string {

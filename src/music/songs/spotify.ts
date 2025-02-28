@@ -9,6 +9,7 @@ import {
 import { getYoutubeFile, streamYoutubeFile } from "./youtube";
 import { createAudioResource, StreamType } from "@discordjs/voice";
 import chalk from "chalk-template";
+import { env } from "node:process";
 import type { SpotifyAlbum, SpotifyPlaylist, SpotifyTrack } from "play-dl";
 import Innertube from "youtubei.js";
 import { z } from "zod";
@@ -76,7 +77,7 @@ export class SpotifySong extends Song {
   }
 
   get iconURL() {
-    return "https://cdn-icons-png.flaticon.com/512/2111/2111624.png";
+    return `https://${env.FILES_DOMAIN}/icons/brand-spotify.png`;
   }
 
   static id2URL(id: string): string {
