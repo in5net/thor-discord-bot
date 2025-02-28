@@ -13,6 +13,7 @@ import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
 import path from "node:path";
+import { env } from "node:process";
 
 export async function getFile(url: string, listeners?: GetResourceListeners) {
   const youtubeCachePath = await ensureCacheSubDir("songs");
@@ -51,7 +52,7 @@ export class URLSong extends Song {
   }
 
   get iconURL() {
-    return "https://static.thenounproject.com/png/2391758-200.png";
+    return `https://${env.FILES_DOMAIN}/icons/link.png`;
   }
 
   log() {

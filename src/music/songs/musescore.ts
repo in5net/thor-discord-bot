@@ -15,6 +15,7 @@ import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
 import { readdir, rename, stat } from "node:fs/promises";
 import path from "node:path";
+import { env } from "node:process";
 
 async function getMusescoreFile(
   id: string,
@@ -90,12 +91,12 @@ export class MusescoreSong extends Song {
   }
 
   get iconURL() {
-    return "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/MuseScore_Icon.svg/50px-MuseScore_Icon.svg.png";
+    return `https://${env.FILES_DOMAIN}/icons/metronome.png`;
   }
 
   log() {
     const { title, url } = this;
-    logger.debug(chalk`📺 {blue [Musescore]}
+    logger.debug(chalk`📺 {purple [Musescore]}
 ${title} (${url})`);
   }
 
