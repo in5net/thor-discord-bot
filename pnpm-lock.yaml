@@ -21,8 +21,8 @@ importers:
         specifier: 3.2.0
         version: 3.2.0(encoding@0.1.13)
       '@in5net/std':
-        specifier: ^0.16.1
-        version: 0.16.1
+        specifier: ^0.16.2
+        version: 0.16.2
       '@napi-rs/canvas':
         specifier: 0.1.67
         version: 0.1.67
@@ -157,11 +157,11 @@ importers:
         version: 8.3.2
     devDependencies:
       '@in5net/eslint-config':
-        specifier: ^0.15.0
-        version: 0.15.0(eslint-plugin-svelte@2.46.1(eslint@9.20.0)(svelte@5.19.9))(eslint@9.20.0)(svelte-eslint-parser@0.43.0(svelte@5.19.9))(typescript@5.7.3)
+        specifier: ^0.15.4
+        version: 0.15.4(eslint-plugin-svelte@2.46.1(eslint@9.20.0)(svelte@5.19.9))(eslint@9.20.0)(svelte-eslint-parser@0.43.0(svelte@5.19.9))(typescript@5.7.3)
       '@in5net/prettier-config':
-        specifier: ^1.4.2
-        version: 1.4.2(prettier@3.4.2)(svelte@5.19.9)
+        specifier: ^1.4.3
+        version: 1.4.3(prettier@3.4.2)(svelte@5.19.9)
       '@sveltejs/adapter-node':
         specifier: ^5.2.12
         version: 5.2.12(@sveltejs/kit@2.17.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.19.9)(vite@6.1.0(@types/node@22.13.1)(tsx@4.19.2)))(svelte@5.19.9)(vite@6.1.0(@types/node@22.13.1)(tsx@4.19.2)))
@@ -960,8 +960,8 @@ packages:
     resolution: {integrity: sha512-c7hNEllBlenFTHBky65mhq8WD2kbN9Q6gk0bTk8lSBvc554jpXSkST1iePudpt7+A/AQvuHs9EMqjHDXMY1lrA==}
     engines: {node: '>=18.18'}
 
-  '@in5net/eslint-config@0.15.0':
-    resolution: {integrity: sha512-PQKTReHszoXEDztF7Jf6ZccePqVYNmC/C6Qpq8JJyWP8TmlNk/HPIqfCMfFaoI1Ayk8LftqPpeVp9fIdo1mDWA==}
+  '@in5net/eslint-config@0.15.4':
+    resolution: {integrity: sha512-OmABDEVgc0MLjcNahzx6Un1v1C6FZaC5ZwN2SEWXLd5BpJL4jKMMU9pLNeNeF/KHFzPtqMQsjrt2eYNXkrCG8Q==}
     peerDependencies:
       eslint: ^9.10.0
       eslint-plugin-svelte: '>=2.35.1'
@@ -972,13 +972,13 @@ packages:
       svelte-eslint-parser:
         optional: true
 
-  '@in5net/prettier-config@1.4.2':
-    resolution: {integrity: sha512-lVjAq2DgLv76cIJRbFreTIa/X/ZL3qDvYqdgGGXQPOhKyxodTx808upJjky9b0LBGWZE6aPnckL/pXsoXS0uEA==}
+  '@in5net/prettier-config@1.4.3':
+    resolution: {integrity: sha512-yFLrOubN+LS0ChmGYW/n4TDh1epNa/Sa2lAttr0XD+imTiK/ZWHAf+A89kgEh0sllUCCDuhYee8zTz1eItK3DA==}
     peerDependencies:
       prettier: '>=3.1.0'
 
-  '@in5net/std@0.16.1':
-    resolution: {integrity: sha512-67DB8CwMnyXDq8qNl6+CR2qtv3NHc2/K7B3hLvJd6AhCapSJdhEQuqwLUwc0sJYFqzGNxbPr4D0KTSb5s/YMog==}
+  '@in5net/std@0.16.2':
+    resolution: {integrity: sha512-OvyeZAEw+sRWA5v8ROw6ZKq+Xabg5i8t8RpsIrmBa3aHRFf5xAaLYNIwgkQab42V8OZBX/0zViVNqOn6gztBlg==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -4401,7 +4401,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.1': {}
 
-  '@in5net/eslint-config@0.15.0(eslint-plugin-svelte@2.46.1(eslint@9.20.0)(svelte@5.19.9))(eslint@9.20.0)(svelte-eslint-parser@0.43.0(svelte@5.19.9))(typescript@5.7.3)':
+  '@in5net/eslint-config@0.15.4(eslint-plugin-svelte@2.46.1(eslint@9.20.0)(svelte@5.19.9))(eslint@9.20.0)(svelte-eslint-parser@0.43.0(svelte@5.19.9))(typescript@5.7.3)':
     dependencies:
       '@antfu/install-pkg': 1.0.0
       '@clack/prompts': 0.9.1
@@ -4434,14 +4434,14 @@ snapshots:
       - supports-color
       - typescript
 
-  '@in5net/prettier-config@1.4.2(prettier@3.4.2)(svelte@5.19.9)':
+  '@in5net/prettier-config@1.4.3(prettier@3.4.2)(svelte@5.19.9)':
     dependencies:
       prettier: 3.4.2
       prettier-plugin-svelte: 3.3.3(prettier@3.4.2)(svelte@5.19.9)
     transitivePeerDependencies:
       - svelte
 
-  '@in5net/std@0.16.1': {}
+  '@in5net/std@0.16.2': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:
