@@ -40,10 +40,6 @@ export default event(
             const voice = getVoice(guild.id);
             voice.setChannels(message);
             const song = await YouTubeSong.fromId(id);
-            song.requester = {
-              uid: user.id,
-              name: member.displayName,
-            };
             voice.queue.push(song);
             await voice.play();
           }

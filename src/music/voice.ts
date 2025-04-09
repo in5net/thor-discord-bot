@@ -3,7 +3,7 @@ import logger from "$lib/logger";
 import { formatTime } from "$lib/time";
 import { getSongsFromQuery } from "./plan";
 import Queue from "./queue";
-import { SpotifySong, URLSong, type Requester } from "./songs";
+import { SpotifySong, URLSong } from "./songs";
 import Stream from "./stream";
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { pipe } from "@in5net/std/fn";
@@ -84,13 +84,7 @@ export default class Voice extends TypedEmitter<{
   }
 
   async getSongsFromQuery(message: Message, query?: string) {
-    const { author, member, attachments } = message;
-    const requester = {
-      uid: author.id,
-      name: member?.nickname || author.username,
-    };
-
-    await this.queueFiles(attachments.values(), requester);
+    await this.queueFiles(message.attachments.values());
 
     if (query) {
       const { songs, errors } = await getSongsFromQuery(query);
@@ -106,13 +100,12 @@ ${errors.map(({ name, query }) => `Invalid ${name}: ${query}`).join("\n")}`);
     return [];
   }
 
-  async queueFiles(attachments: Iterable<Attachment>, requester: Requester) {
+  async queueFiles(attachments: Iterable<Attachment>) {
     const urlSongsCache = new Map<string, URLSong>();
     for (const { url } of attachments) {
       let song = urlSongsCache.get(url);
       if (!song) {
         song = URLSong.fromURL(url);
-        song.requester = requester;
         urlSongsCache.set(url, song);
       }
 

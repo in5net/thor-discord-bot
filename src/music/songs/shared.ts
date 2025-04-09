@@ -8,11 +8,6 @@ export interface SongJSON {
   duration: number; // Seconds
 }
 
-export interface Requester {
-  uid: string;
-  name: string;
-}
-
 export interface StreamOptions {
   seek?: number;
   filters?: string[];
@@ -34,7 +29,6 @@ export type SongState = "unprepared" | "preparing" | "ready";
 export abstract class Song implements SongJSON {
   title: string;
   duration: number;
-  requester?: Requester;
   start = 0;
   state: SongState = "unprepared";
   private preparePromise?: Promise<void>;
@@ -42,18 +36,9 @@ export abstract class Song implements SongJSON {
   abstract url: string;
   abstract iconURL: string;
 
-  constructor({
-    title,
-    duration,
-    requester,
-  }: {
-    title: string;
-    duration: number;
-    requester?: Requester;
-  }) {
+  constructor({ title, duration }: { title: string; duration: number }) {
     this.title = title;
     this.duration = duration;
-    this.requester = requester;
   }
 
   getMarkdown() {
@@ -61,11 +46,7 @@ export abstract class Song implements SongJSON {
   }
 
   getEmbed() {
-    const { title, requester, iconURL } = this;
-    return new EmbedBuilder().setTitle(title).setFooter({
-      text: requester ? `Requested by ${requester.name}` : ":3",
-      iconURL,
-    });
+    return new EmbedBuilder().setTitle(this.title);
   }
 
   async _prepare(_listeners?: GetResourceListeners) {}

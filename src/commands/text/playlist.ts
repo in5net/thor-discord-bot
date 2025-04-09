@@ -38,12 +38,6 @@ export default command(
         song.songs.map(fromJSON)
       : fromJSON(song),
     );
-    for (const song of songs) {
-      song.requester = {
-        uid: author.id,
-        name: member.displayName,
-      };
-    }
 
     voice.queue.push(...songs);
     await message.reply(`Loaded ${songs.length} songs`);

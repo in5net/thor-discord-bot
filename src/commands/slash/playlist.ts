@@ -58,13 +58,6 @@ export default command(
         song.songs.map(fromJSON)
       : fromJSON(song),
     );
-    for (const song of songs) {
-      console.log(song);
-      song.requester = {
-        uid: user.id,
-        name: member.displayName,
-      };
-    }
 
     voice.queue.push(...(doShuffle ? shuffle(songs) : songs));
     await i.reply(`Loaded ${songs.length} songs`);
