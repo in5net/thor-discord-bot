@@ -5,7 +5,6 @@ import { easeOutElastic, easeOutQuart, linear } from "@in5net/std/easing";
 import { pipe } from "@in5net/std/fn";
 import { map, pick } from "@in5net/std/iter";
 import * as math from "@in5net/std/math";
-import { sum } from "@in5net/std/stats";
 import { type Message, AttachmentBuilder } from "discord.js";
 import { mat4 } from "gl-matrix";
 import { nanoid } from "nanoid";
@@ -128,7 +127,7 @@ export default command(
       animations,
       pick("time"),
       map(t => Math.ceil(t * fps)),
-      sum,
+      math.sum,
     );
     let frame = 0;
     let editPromise: Promise<Message<boolean>> | undefined;

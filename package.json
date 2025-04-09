@@ -27,7 +27,7 @@
     "@discordjs/rest": "2.4.2",
     "@discordjs/voice": "0.18.0",
     "@googleapis/customsearch": "3.2.0",
-    "@in5net/std": "^0.16.2",
+    "@in5net/std": "^0.18.2",
     "@napi-rs/canvas": "0.1.67",
     "@paralleldrive/cuid2": "^2.2.2",
     "better-sqlite3": "^11.8.1",
@@ -74,7 +74,7 @@
     "zx": "^8.3.2"
   },
   "devDependencies": {
-    "@in5net/eslint-config": "^0.15.4",
+    "@in5net/eslint-config": "^0.15.5",
     "@in5net/prettier-config": "^1.4.3",
     "@sveltejs/adapter-node": "^5.2.12",
     "@sveltejs/kit": "^2.17.1",

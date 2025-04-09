@@ -16,8 +16,8 @@
     YoutubePlaylistJSON,
     SongGroupJSON,
   } from "$src/music/songs";
+  import { sum } from "@in5net/std/math";
   import { deepEquals } from "@in5net/std/object";
-  import { sum } from "@in5net/std/stats";
   import { quantify } from "@in5net/std/string";
   import { nanoid } from "nanoid";
 

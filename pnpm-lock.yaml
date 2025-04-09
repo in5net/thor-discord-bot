@@ -21,8 +21,8 @@ importers:
         specifier: 3.2.0
         version: 3.2.0(encoding@0.1.13)
       '@in5net/std':
-        specifier: ^0.16.2
-        version: 0.16.2
+        specifier: ^0.18.2
+        version: 0.18.2
       '@napi-rs/canvas':
         specifier: 0.1.67
         version: 0.1.67
@@ -157,8 +157,8 @@ importers:
         version: 8.3.2
     devDependencies:
       '@in5net/eslint-config':
-        specifier: ^0.15.4
-        version: 0.15.4(eslint-plugin-svelte@2.46.1(eslint@9.20.0)(svelte@5.19.9))(eslint@9.20.0)(svelte-eslint-parser@0.43.0(svelte@5.19.9))(typescript@5.7.3)
+        specifier: ^0.15.5
+        version: 0.15.5(eslint-plugin-svelte@2.46.1(eslint@9.20.0)(svelte@5.19.9))(eslint@9.20.0)(svelte-eslint-parser@0.43.0(svelte@5.19.9))(typescript@5.7.3)
       '@in5net/prettier-config':
         specifier: ^1.4.3
         version: 1.4.3(prettier@3.4.2)(svelte@5.19.9)
@@ -960,8 +960,8 @@ packages:
     resolution: {integrity: sha512-c7hNEllBlenFTHBky65mhq8WD2kbN9Q6gk0bTk8lSBvc554jpXSkST1iePudpt7+A/AQvuHs9EMqjHDXMY1lrA==}
     engines: {node: '>=18.18'}
 
-  '@in5net/eslint-config@0.15.4':
-    resolution: {integrity: sha512-OmABDEVgc0MLjcNahzx6Un1v1C6FZaC5ZwN2SEWXLd5BpJL4jKMMU9pLNeNeF/KHFzPtqMQsjrt2eYNXkrCG8Q==}
+  '@in5net/eslint-config@0.15.5':
+    resolution: {integrity: sha512-O8LK5u2tv3LSObZVkQ3Wnt4ujK/VyV9+meLMpISzQvkyMhgwnl+H1uijL+B9Kw1xkVkzl9ALz3zVkPC0G+VKoQ==}
     peerDependencies:
       eslint: ^9.10.0
       eslint-plugin-svelte: '>=2.35.1'
@@ -977,8 +977,8 @@ packages:
     peerDependencies:
       prettier: '>=3.1.0'
 
-  '@in5net/std@0.16.2':
-    resolution: {integrity: sha512-OvyeZAEw+sRWA5v8ROw6ZKq+Xabg5i8t8RpsIrmBa3aHRFf5xAaLYNIwgkQab42V8OZBX/0zViVNqOn6gztBlg==}
+  '@in5net/std@0.18.2':
+    resolution: {integrity: sha512-rCuPZ0tpaAfJJWpyLbnAFGzemCyxc/cv+mQBJKGqc6YRGnArnaqxg69K0veMlWzQDi7J/AUDgzQG2+RWAs4VGg==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -4401,7 +4401,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.1': {}
 
-  '@in5net/eslint-config@0.15.4(eslint-plugin-svelte@2.46.1(eslint@9.20.0)(svelte@5.19.9))(eslint@9.20.0)(svelte-eslint-parser@0.43.0(svelte@5.19.9))(typescript@5.7.3)':
+  '@in5net/eslint-config@0.15.5(eslint-plugin-svelte@2.46.1(eslint@9.20.0)(svelte@5.19.9))(eslint@9.20.0)(svelte-eslint-parser@0.43.0(svelte@5.19.9))(typescript@5.7.3)':
     dependencies:
       '@antfu/install-pkg': 1.0.0
       '@clack/prompts': 0.9.1
@@ -4441,7 +4441,7 @@ snapshots:
     transitivePeerDependencies:
       - svelte
 
-  '@in5net/std@0.16.2': {}
+  '@in5net/std@0.18.2': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:

@@ -1,5 +1,5 @@
 import command from "$lib/discord/commands/slash";
-import { sum } from "@in5net/std/stats";
+import { sum } from "@in5net/std/math";
 import {
   ActionRowBuilder,
   ComponentType,

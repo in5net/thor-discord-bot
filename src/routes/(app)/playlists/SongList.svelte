@@ -6,7 +6,7 @@
 
   import { formatTime } from "$lib/time";
   import type { PlaylistItemJSON } from "$src/music/songs";
-  import { sum } from "@in5net/std/stats";
+  import { sum } from "@in5net/std/math";
   import { quantify } from "@in5net/std/string";
   import { dndzone } from "svelte-dnd-action";
   import { flip } from "svelte/animate";

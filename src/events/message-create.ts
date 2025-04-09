@@ -23,8 +23,8 @@ import { getRandomResponses, getThemes } from "$src/responses";
 import { handleWordleMessage } from "../commands/text/games/wordle";
 import { pipe } from "@in5net/std/fn";
 import { pick } from "@in5net/std/iter";
+import { sum } from "@in5net/std/math";
 import { choice, randomInt, shuffle } from "@in5net/std/random";
-import { sum } from "@in5net/std/stats";
 import * as deepl from "deepl-node";
 import {
   type TextBasedChannel,
