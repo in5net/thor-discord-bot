@@ -3,20 +3,6 @@ import Lexer from "./lexer";
 import Parser from "./parser";
 import Scope from "./scope";
 import { Function, Number } from "./values";
-import {
-  acot,
-  acoth,
-  acsc,
-  acsch,
-  asec,
-  asech,
-  cot,
-  coth,
-  csc,
-  csch,
-  sec,
-  sech,
-} from "@in5net/std/math";
 
 export default function runner(source: string): (x: number) => number {
   const lexer = new Lexer(source);
@@ -54,21 +40,21 @@ export default function runner(source: string): (x: number) => number {
   scope.set("acosh", new Function(Math.acosh));
   scope.set("atanh", new Function(Math.atanh));
 
-  scope.set("sec", new Function(sec));
-  scope.set("csc", new Function(csc));
-  scope.set("cot", new Function(cot));
+  scope.set("sec", new Function(x => 1 / Math.cos(x)));
+  scope.set("csc", new Function(x => 1 / Math.sin(x)));
+  scope.set("cot", new Function(x => 1 / Math.tan(x)));
 
-  scope.set("asec", new Function(asec));
-  scope.set("acsc", new Function(acsc));
-  scope.set("acot", new Function(acot));
+  scope.set("asec", new Function(x => 1 / Math.acos(x)));
+  scope.set("acsc", new Function(x => 1 / Math.asin(x)));
+  scope.set("acot", new Function(x => 1 / Math.atan(x)));
 
-  scope.set("sech", new Function(sech));
-  scope.set("csch", new Function(csch));
-  scope.set("coth", new Function(coth));
+  scope.set("sech", new Function(x => 1 / Math.sinh(x)));
+  scope.set("csch", new Function(x => 1 / Math.cosh(x)));
+  scope.set("coth", new Function(x => 1 / Math.tanh(x)));
 
-  scope.set("asech", new Function(asech));
-  scope.set("acsch", new Function(acsch));
-  scope.set("acoth", new Function(acoth));
+  scope.set("asech", new Function(x => 1 / Math.acosh(x)));
+  scope.set("acsch", new Function(x => 1 / Math.asinh(x)));
+  scope.set("acoth", new Function(x => 1 / Math.atanh(x)));
 
   return (x: number) => {
     scope.set("x", new Number(x));
