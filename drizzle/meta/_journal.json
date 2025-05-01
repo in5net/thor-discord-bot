@@ -120,6 +120,20 @@
       "when": 1739672396877,
       "tag": "0016_wakeful_daredevil",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "6",
+      "when": 1746111038232,
+      "tag": "0017_far_lethal_legion",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "6",
+      "when": 1746132915431,
+      "tag": "0018_talented_wendigo",
+      "breakpoints": true
     }
   ]
 }

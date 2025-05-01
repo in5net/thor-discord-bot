@@ -5,6 +5,7 @@ import { relations, sql } from "drizzle-orm";
 import {
   index,
   integer,
+  primaryKey,
   sqliteTable,
   type SQLiteColumn,
 } from "drizzle-orm/sqlite-core";
@@ -46,15 +47,17 @@ export const guildsRelations = relations(guilds, ({ many }) => ({
 export const members = sqliteTable(
   "members",
   t => ({
-    id: t.text().primaryKey(),
+    id: t.text().notNull(),
     guildId: t
       .text()
       .notNull()
       .references(() => guilds.id, { onDelete: "cascade" }),
     bot: boolean("bot").notNull().default(false),
+    lastJoinedVcAt: timestamp("last_joined_vc_at"),
+    lastJoinedVcId: t.text(),
     removed: boolean("removed").notNull().default(false),
   }),
-  t => [namedIndex(t.guildId)],
+  t => [primaryKey({ columns: [t.id, t.guildId] }), namedIndex(t.guildId)],
 );
 export const membersRelations = relations(members, ({ one }) => ({
   guild: one(guilds, {
