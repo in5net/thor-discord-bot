@@ -26,6 +26,10 @@ export default event({ name: "ready", once: true }, async ({ client }) => {
 
   const queues = await db.query.queues.findMany();
   for (const { guildId, voiceChannelId, songs, index, seek, loop } of queues) {
+    if (!songs.length) {
+      continue;
+    }
+
     const voice = getVoice(guildId);
     const voiceChannel = await client.channels.fetch(voiceChannelId);
     if (voiceChannel?.type !== ChannelType.GuildVoice) {
