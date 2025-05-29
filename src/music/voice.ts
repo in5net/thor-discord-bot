@@ -3,7 +3,7 @@ import logger from "$lib/logger";
 import { formatTime } from "$lib/time";
 import { getSongsFromQuery } from "./plan";
 import Queue from "./queue";
-import { SpotifySong, URLSong } from "./songs";
+import { SpotifySong, URLSong, type SongType } from "./songs";
 import Stream from "./stream";
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { pipe } from "@in5net/std/fn";
@@ -184,29 +184,43 @@ ${pipe(
   async play(skip = false, seek?: number) {
     const { stream } = this;
     if (stream.player.state.status === AudioPlayerStatus.Playing && !skip) {
-      // eslint-disable-next-line ts/no-floating-promises
-      this.prepareNextSong();
+      void this.prepareNextSong();
       return;
     }
 
-    const song = this.queue.next();
+    let done = false;
+    let song: SongType | undefined;
+    while (!done) {
+      song = this.queue.next();
+      if (!song) {
+        await this.send("📭 The queue is empty");
+        this.stop();
+        return;
+      }
+
+      try {
+        await song.prepare({
+          // eslint-disable-next-line ts/no-misused-promises, no-loop-func
+          ondownloading: async () =>
+            this.send(`⏬ Downloading ${song?.title}...`),
+        });
+        done = true;
+      } catch (error) {
+        console.error(error);
+      }
+    }
     if (!song) {
       await this.send("📭 The queue is empty");
       this.stop();
       return;
     }
 
-    await song.prepare({
-      // eslint-disable-next-line ts/no-misused-promises
-      ondownloading: async () => this.send(`⏬ Downloading ${song.title}...`),
-    });
     const resource = await song.getResource({
       filters: stream.filters,
       seek,
     });
     await stream.play(resource);
-    // eslint-disable-next-line ts/no-floating-promises
-    this.prepareNextSong();
+    void this.prepareNextSong();
 
     try {
       const embed = song.getEmbed().setTitle(`▶️ Now Playing: ${song.title}`);
@@ -221,7 +235,15 @@ ${pipe(
   async prepareNextSong() {
     const nextSong = this.queue[this.queue.currentIndex + 1];
     if (nextSong) {
-      return nextSong.prepare();
+      try {
+        await nextSong.prepare();
+      } catch (error) {
+        console.error(error);
+        const index = this.queue.indexOf(nextSong);
+        if (index !== -1) {
+          this.queue.remove(index);
+        }
+      }
     }
   }
 

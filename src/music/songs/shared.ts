@@ -24,13 +24,10 @@ export interface Album<T extends Song> {
   songs: T[];
 }
 
-export type SongState = "unprepared" | "preparing" | "ready";
-
 export abstract class Song implements SongJSON {
   title: string;
   duration: number;
   start = 0;
-  state: SongState = "unprepared";
   private preparePromise?: Promise<void>;
 
   abstract url: string;
@@ -57,9 +54,6 @@ export abstract class Song implements SongJSON {
     }
     // eslint-disable-next-line no-underscore-dangle
     const preparePromise = this._prepare(listeners);
-    this.state = "preparing";
-    // eslint-disable-next-line ts/no-floating-promises
-    preparePromise.then(() => (this.state = "ready"));
     return (this.preparePromise = preparePromise);
   }
 

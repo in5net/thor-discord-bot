@@ -27,24 +27,24 @@ export async function getYoutubeFile(
   const fileName = `${id}.opus`;
   const filePath = path.join(youtubeCachePath, fileName);
 
+  const url = `https://youtube.com/watch?v=${id}`;
+
   if (!existsSync(filePath)) {
     listeners?.ondownloading?.();
     const process = spawn(
       "yt-dlp",
-      [
-        "-x",
-        "--audio-format",
-        "opus",
-        "-o",
-        fileName,
-        `https://youtube.com/watch?v=${id}`,
-      ],
+      ["-x", "--audio-format", "opus", "-o", fileName, url],
       { cwd: youtubeCachePath },
     );
     await new Promise((resolve, reject) => {
       process.on("exit", resolve);
       process.on("error", reject);
     });
+  }
+  if (!existsSync(filePath)) {
+    throw new Error(
+      `Failed to download ${url}. The video could have been taken down. smh`,
+    );
   }
 
   return filePath;
